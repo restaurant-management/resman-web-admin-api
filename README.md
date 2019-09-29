@@ -1,1 +1,0 @@
-# resman-web-admin-api
