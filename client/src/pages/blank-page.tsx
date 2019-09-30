@@ -16,7 +16,14 @@ import george_avatar from "../assets/images/george-avatar.jpg";
 import SideBar from "../components/sidebar";
 import Mmenu from "../components/mmenu";
 
-export default class BlankPage extends Component {
+export default class BlankPage extends Component<any, any> {
+    constructor(props: Readonly<{}>) {
+        super(props);
+        this.state = {
+            text: ''
+        }
+    }
+
     componentDidMount = () => {
         document.body.classList.add('bg-1');
         this.setState({showModal: true});
@@ -32,6 +39,14 @@ export default class BlankPage extends Component {
         this.loadScript('/assets/js/jquery.blockUI.js');
         this.loadScript('/assets/js/minimal.min.js');
         this.loadScript('/assets/js/run_prettifyf793.js');
+
+        fetch('/api/test').then((res: Response) => {
+            return res.json();
+        }).then((json) => {
+            this.setState({
+                text: json['message']
+            })
+        })
     };
     componentWillUnmount = () => {
         document.body.classList.remove('bg-1');
@@ -59,7 +74,7 @@ export default class BlankPage extends Component {
 
                         <div className="navbar-header col-md-2">
                             <a className="navbar-brand" href="/">
-                                <strong>HIEREN</strong>LEE
+                                <strong>RES</strong>MAN
                             </a>
                             <div className="sidebar-collapse">
                                 <a href="/#">
@@ -429,7 +444,7 @@ export default class BlankPage extends Component {
                     <div id="content" className="col-md-12">
                         <div className="pageheader">
                             <h2><i className="fa fa-file-o" style={{lineHeight: '48px', paddingLeft: 2}} />
-                                {" Blank Page "}<span> Place subtitle here...</span>
+                                {" Blank Page "}<span> {this.state.text}.</span>
                             </h2>
                             <div className="breadcrumbs">
                                 <ol className="breadcrumb">
