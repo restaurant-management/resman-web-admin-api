@@ -316,7 +316,8 @@ class Mmenu extends Component {
                                     <div className="col-xs-4 control-label">
                                         <div className="onoffswitch greensea">
                                             <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox"
-                                                   id="show-offline" checked />
+                                                   id="show-offline" checked onChange={() => {
+                                            }} />
                                             <label className="onoffswitch-label" htmlFor="show-offline">
                                                 <span className="onoffswitch-inner" />
                                                 <span className="onoffswitch-switch" />
@@ -348,7 +349,8 @@ class Mmenu extends Component {
                                     <div className="col-xs-4 control-label">
                                         <div className="onoffswitch greensea">
                                             <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox"
-                                                   id="show-history" checked />
+                                                   id="show-history" checked onChange={() => {
+                                            }} />
                                             <label className="onoffswitch-label" htmlFor="show-history">
                                                 <span className="onoffswitch-inner" />
                                                 <span className="onoffswitch-switch" />
@@ -364,7 +366,8 @@ class Mmenu extends Component {
                                     <div className="col-xs-4 control-label">
                                         <div className="onoffswitch greensea">
                                             <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox"
-                                                   id="show-location" checked />
+                                                   id="show-location" checked onChange={() => {
+                                            }} />
                                             <label className="onoffswitch-label" htmlFor="show-location">
                                                 <span className="onoffswitch-inner" />
                                                 <span className="onoffswitch-switch" />
@@ -396,7 +399,8 @@ class Mmenu extends Component {
                                     <div className="col-xs-4 control-label">
                                         <div className="onoffswitch greensea">
                                             <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox"
-                                                   id="show-unread" checked />
+                                                   id="show-unread" checked onChange={() => {
+                                            }} />
                                             <label className="onoffswitch-label" htmlFor="show-unread">
                                                 <span className="onoffswitch-inner" />
                                                 <span className="onoffswitch-switch" />
