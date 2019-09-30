@@ -31,6 +31,7 @@ export default class BlankPage extends Component {
         this.loadScript('/assets/js/jquery.videobackground.js');
         this.loadScript('/assets/js/jquery.blockUI.js');
         this.loadScript('/assets/js/minimal.min.js');
+        this.loadScript('/assets/js/run_prettifyf793.js');
     };
     componentWillUnmount = () => {
         document.body.classList.remove('bg-1');
@@ -47,9 +48,9 @@ export default class BlankPage extends Component {
 
     render() {
         return <div>
-            {/*<div className="mask">*/}
-            {/*    <div id="loader" />*/}
-            {/*</div>*/}
+            <div className="mask">
+                <div id="loader" />
+            </div>
 
             <div id={'wrap'}>
                 <div className={'row'}>
@@ -427,8 +428,8 @@ export default class BlankPage extends Component {
 
                     <div id="content" className="col-md-12">
                         <div className="pageheader">
-                            <h2><i className="fa fa-file-o" style={{'lineHeight': 48, 'paddingLeft': 2}} />
-                                Blank Page <span> Place subtitle here...</span>
+                            <h2><i className="fa fa-file-o" style={{lineHeight: '48px', paddingLeft: 2}} />
+                                {" Blank Page "}<span> Place subtitle here...</span>
                             </h2>
                             <div className="breadcrumbs">
                                 <ol className="breadcrumb">
