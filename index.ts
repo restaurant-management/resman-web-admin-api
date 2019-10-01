@@ -17,6 +17,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(logger('dev'));
 
+app.get('/api/test', (_req: Request, res: Response) =>
+    res.status(200).send({
+        message: 'Welcome to simple Nodejs Express typescript run on Heroku project',
+    }),
+);
+
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
 
@@ -24,12 +30,6 @@ if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     })
 }
-
-app.get('/api/test', (_req: Request, res: Response) =>
-    res.status(200).send({
-        message: 'Welcome to simple Nodejs Express typescript run on Heroku project',
-    }),
-);
 
 app.listen(port, () => {
     console.log('App listening on ' + port);
