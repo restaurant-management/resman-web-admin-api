@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import App from "./App";
 import BlankPage from './pages/blank-page';
 import LogIn from './pages/login';
 import Page404 from "./pages/page404";
