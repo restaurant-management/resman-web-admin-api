@@ -5,11 +5,15 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpileOnly index.ts",
+    "dev": "concurrently \"yarn server-dev\" \"yarn client\"",
     "lint": "tslint --project .",
-    "start": "concurrently \"ts-node index.ts\" \"npm start --prefix=client\"",
+    "start": "ts-node index.ts",
+    "server": "ts-node index.ts",
+    "server-dev": "ts-node-dev --respawn --transpileOnly index.ts",
+    "client": "npm start --prefix=client",
     "client-install": "npm install --prefix client",
-    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
+    "client-build": "npm run build --prefix client",
+    "heroku-postbuild": "yarn client-install && yarn client-build"
   },
   "repository": {
     "type": "git",
