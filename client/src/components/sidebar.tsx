@@ -183,44 +183,46 @@ export default class SideBar extends Component {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/#">
-                                        <i className="fa fa-caret-right" /> Profile Page
-                                        <span className="label label-greensea">new</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/#">
-                                        <i className="fa fa-caret-right" /> Weather Page
-                                        <span className="label label-greensea">new</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/#">
-                                        <i className="fa fa-caret-right" /> Front Page
-                                        <span className="label label-greensea">new</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/#">
-                                        <i className="fa fa-caret-right" /> Vertical Mail
-                                        <span className="badge badge-red">5</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/#">
-                                        <i className="fa fa-caret-right" /> Horizontal Mail
-                                        <span className="label label-greensea">mails</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/#">
-                                        <i className="fa fa-caret-right" /> Vector Maps
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/#">
-                                        <i className="fa fa-caret-right" /> Google Maps
-                                    </a>
+                                    <li>
+                                        <a href="/#">
+                                            <i className="fa fa-caret-right" /> Profile Page
+                                            <span className="label label-greensea">new</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/#">
+                                            <i className="fa fa-caret-right" /> Weather Page
+                                            <span className="label label-greensea">new</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/#">
+                                            <i className="fa fa-caret-right" /> Front Page
+                                            <span className="label label-greensea">new</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/#">
+                                            <i className="fa fa-caret-right" /> Vertical Mail
+                                            <span className="badge badge-red">5</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/#">
+                                            <i className="fa fa-caret-right" /> Horizontal Mail
+                                            <span className="label label-greensea">mails</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/#">
+                                            <i className="fa fa-caret-right" /> Vector Maps
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/#">
+                                            <i className="fa fa-caret-right" /> Google Maps
+                                        </a>
+                                    </li>
                                 </li>
                             </ul>
                         </li>
@@ -274,12 +276,10 @@ export default class SideBar extends Component {
                                                                 className="fa fa-folder" /> Menu Level 4.2 <b
                                                                 className="fa fa-plus dropdown-plus" /></a>
                                                             <ul className="dropdown-menu">
-                                                                <li><a href="/#"><i
-                                                                    className="fa fa-caret-right" /> Menu
+                                                                <li><a href="/#"><i className="fa fa-caret-right" /> Menu
                                                                     Level
                                                                     5.1</a></li>
-                                                                <li><a href="/#"><i
-                                                                    className="fa fa-caret-right" /> Menu
+                                                                <li><a href="/#"><i className="fa fa-caret-right" /> Menu
                                                                     Level
                                                                     5.2</a></li>
                                                             </ul>
@@ -349,17 +349,15 @@ export default class SideBar extends Component {
                 </li>
 
                 <li className="settings" id="general-settings">
-                    <a href="/#" className="sidebar-toggle underline" data-toggle="#general-settings">
-                        General Settings
-                        <i className="fa fa-angle-up" />
-                    </a>
+                    <a href="/#" className="sidebar-toggle underline" data-toggle="#general-settings">General Settings <i
+                        className="fa fa-angle-up" /></a>
 
                     <div className="form-group">
                         <label className="col-xs-8 control-label">Switch ON</label>
                         <div className="col-xs-4 control-label">
                             <div className="onoffswitch greensea">
                                 <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox"
-                                       id="switch-on" checked onChange={() => {}} />
+                                       id="switch-on" checked />
                                 <label className="onoffswitch-label" htmlFor="switch-on">
                                     <span className="onoffswitch-inner" />
                                     <span className="onoffswitch-switch" />

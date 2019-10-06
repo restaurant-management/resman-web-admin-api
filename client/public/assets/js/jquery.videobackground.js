@@ -796,7 +796,7 @@
         loadedCallback: null,
         resizeTo: 'document'
     };
-}(jQuery, document, window));init.apply(this, arguments);
+}(jQuery, document, window));.init.apply(this, arguments);
         }
         $.error('Method ' + method + ' does not exist on jQuery.videobackground');
     };

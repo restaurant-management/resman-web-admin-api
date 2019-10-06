@@ -6,6 +6,17 @@ import '../assets/css/jquery.mmenu.all.css';
 import '../assets/css/jquery.videobackground.css';
 import '../assets/css/bootstrap-checkbox.css';
 import '../assets/css/bootstrap-dropdown-multilevel.css';
+
+// Basic Datatable & Advanced Table
+import '../assets/css/chosen-bootstrap.css';
+import '../assets/css/chosen.min.css';
+// Basic Datatable
+import '../assets/css/ColVis.css';
+import '../assets/css/TableTools.css';
+import '../assets/css/dataTables.bootstrap.css';
+
+import '../assets/css/component.css';
+
 import '../assets/css/minimal.css';
 
 import ici_avatar from '../assets/images/ici-avatar.jpg';
@@ -15,6 +26,28 @@ import peter_avatar from "../assets/images/peter-avatar.jpg";
 import george_avatar from "../assets/images/george-avatar.jpg";
 import SideBar from "../components/sidebar";
 import Mmenu from "../components/mmenu";
+import AdvancedTable from "../components/advancedtable";
+import BasicDatatable from "../components/basicDatatable";
+import OpenModalDialog from "../components/Modals/open-modal-dialog";
+import OpenModalConfirmation from "../components/Modals/open-modal-comfirmation";
+
+import FadeInScale from "../components/Modals/fade-in-scale";
+import SlideInRight from "../components/Modals/slide-in-right";
+import SlideInBottom from "../components/Modals/slide-in-bottom";
+import RotateBottom3D from "../components/Modals/3d-rotate-bottom";
+import RotateInLeft3D from "../components/Modals/3d-rotate-in-left";
+import Flip3DHorizontal from "../components/Modals/3d-flip-horizontal";
+import Flip3DVertical from "../components/Modals/3d-flip-vertical";
+import Sign3D from "../components/Modals/3d-sign";
+import Slit3D from "../components/Modals/3d-slit";
+import Newspaper from "../components/Modals/newspaper";
+import Fall from "../components/Modals/fall";
+import SideFall from "../components/Modals/side-fall";
+import StickyUp from "../components/Modals/sticky-up";
+import SuperScaled from "../components/Modals/super-scaled";
+import JustMe from "../components/Modals/just-me";
+import Blur from "../components/Modals/blur";
+
 
 export default class BlankPage extends Component {
     componentDidMount = () => {
@@ -24,14 +57,41 @@ export default class BlankPage extends Component {
         this.loadScript('/assets/js/jquery.js');
         this.loadScript('/assets/js/bootstrap.min.js');
         this.loadScript('/assets/js/bootstrap-dropdown-multilevel.js');
+        this.loadScript('/assets/js/run_prettifyf793.js');
         this.loadScript('/assets/js/jquery.mmenu.min.js');
         this.loadScript('/assets/js/jquery.sparkline.min.js');
         this.loadScript('/assets/js/jquery.nicescroll.min.js');
         this.loadScript('/assets/js/jquery.animateNumbers.js');
         this.loadScript('/assets/js/jquery.videobackground.js');
         this.loadScript('/assets/js/jquery.blockUI.js');
+
+        //Advanced Table.
+        this.loadScript('/assets/js/chosen.jquery.min.js');
+        this.loadScript('/assets/js/advancedTable.js');
+
+        // Basic Datatable.
+        this.loadScript('/assets/js/jquery.dataTables.min.js');
+        this.loadScript('/assets/js/ColReorderWithResize.js');
+        this.loadScript('/assets/js/dataTables.colVis.min.js');
+        this.loadScript('/assets/js/ZeroClipboard.js');
+        this.loadScript('/assets/js/dataTables.tableTools.min.js');
+        this.loadScript('/assets/js/dataTables.bootstrap.js');
+        this.loadScript('/assets/js/dataTable.js');
+
+        // Modals Dialog.
+        this.loadScript('/assets/js/modal-dialog.js');
+        this.loadScript('/assets/js/jquery.jgrowl.min.js');
+        this.loadScript('/assets/js/typeahead.min.js');
+        this.loadScript('/assets/js/moment-with-langs.min.js');
+        this.loadScript('/assets/js/bootstrap-datetimepicker.min.js');
+        this.loadScript('/assets/js/jquery.nouislider.min.js');
+        this.loadScript('/assets/js/bootstrap-tabdrop.min.js');
+        this.loadScript('/assets/js/classie.js');
+        this.loadScript('/assets/js/modalEffects.js');
+        this.loadScript('/assets/js/cssParser.js');
+        this.loadScript('/assets/js/css-filters-polyfill.js');
+
         this.loadScript('/assets/js/minimal.min.js');
-        this.loadScript('/assets/js/run_prettifyf793.js');
     };
     componentWillUnmount = () => {
         document.body.classList.remove('bg-1');
@@ -49,7 +109,7 @@ export default class BlankPage extends Component {
     _renderLoad() {
         return (
             <div className="mask">
-                <div id="loader" />
+                <div id="loader"/>
             </div>
         );
     }
@@ -67,7 +127,7 @@ export default class BlankPage extends Component {
                             </a>
                             <div className="sidebar-collapse">
                                 <a href="/#">
-                                    <i className="fa fa-bars" />
+                                    <i className="fa fa-bars"/>
                                 </a>
                             </div>
                         </div>
@@ -76,14 +136,14 @@ export default class BlankPage extends Component {
                             {/*Page Refresh*/}
                             <ul className="nav navbar-nav refresh">
                                 <li className="divided">
-                                    <a href="/#" className="page-refresh"><i className="fa fa-refresh" /></a>
+                                    <a href="/#" className="page-refresh"><i className="fa fa-refresh"/></a>
                                 </li>
                             </ul>
                             {/*/Page Refresh*/}
 
                             {/*Search*/}
                             <div className="search" id="main-search">
-                                <i className="fa fa-search" /> <input type="text" placeholder="Search..." />
+                                <i className="fa fa-search"/> <input type="text" placeholder="Search..."/>
                             </div>
                             {/*/Search*/}
 
@@ -93,7 +153,7 @@ export default class BlankPage extends Component {
                                 <li className="dropdown divided">
 
                                     <a className="dropdown-toggle button" data-toggle="dropdown" href="/#">
-                                        <i className="fa fa-tasks" />
+                                        <i className="fa fa-tasks"/>
                                         <span className="label label-transparent-black">2</span>
                                     </a>
 
@@ -174,7 +234,7 @@ export default class BlankPage extends Component {
                                                 </div>
                                             </a>
                                         </li>
-                                        <li><a href="/#">Check all tasks <i className="fa fa-angle-right" /></a></li>
+                                        <li><a href="/#">Check all tasks <i className="fa fa-angle-right"/></a></li>
                                     </ul>
 
                                 </li>
@@ -182,7 +242,7 @@ export default class BlankPage extends Component {
                                 <li className="dropdown divided">
 
                                     <a className="dropdown-toggle button" data-toggle="dropdown" href="/#">
-                                        <i className="fa fa-envelope" />
+                                        <i className="fa fa-envelope"/>
                                         <span className="label label-transparent-black">1</span>
                                     </a>
 
@@ -191,7 +251,7 @@ export default class BlankPage extends Component {
                                         <li>
                                             <a className="cyan" href="/#">
                                                 <div className="profile-photo">
-                                                    <img src={ici_avatar} alt="" />
+                                                    <img src={ici_avatar} alt=""/>
                                                 </div>
                                                 <div className="message-info">
                                                     <span className="sender">Ing. Imrich Kamarel</span>
@@ -206,7 +266,7 @@ export default class BlankPage extends Component {
                                         <li>
                                             <a className="green" href="/#">
                                                 <div className="profile-photo">
-                                                    <img src={arnold_avatar} alt="" />
+                                                    <img src={arnold_avatar} alt=""/>
                                                 </div>
                                                 <div className="message-info">
                                                     <span className="sender">Arnold Karlsberg</span>
@@ -221,7 +281,7 @@ export default class BlankPage extends Component {
                                         <li>
                                             <a href="/#">
                                                 <div className="profile-photo">
-                                                    <img src={profile_photo} alt="" />
+                                                    <img src={profile_photo} alt=""/>
                                                 </div>
                                                 <div className="message-info">
                                                     <span className="sender">John Douey</span>
@@ -236,7 +296,7 @@ export default class BlankPage extends Component {
                                         <li>
                                             <a className="red" href="/#">
                                                 <div className="profile-photo">
-                                                    <img src={peter_avatar} alt="" />
+                                                    <img src={peter_avatar} alt=""/>
                                                 </div>
                                                 <div className="message-info">
                                                     <span className="sender">Peter Kay</span>
@@ -251,7 +311,7 @@ export default class BlankPage extends Component {
                                         <li>
                                             <a className="orange" href="/#">
                                                 <div className="profile-photo">
-                                                    <img src={george_avatar} alt="" />
+                                                    <img src={george_avatar} alt=""/>
                                                 </div>
                                                 <div className="message-info">
                                                     <span className="sender">George McCain</span>
@@ -265,7 +325,7 @@ export default class BlankPage extends Component {
 
 
                                         <li className="topborder"><a href="/#">Check all messages <i
-                                            className="fa fa-angle-right" /></a></li>
+                                            className="fa fa-angle-right"/></a></li>
                                     </ul>
 
                                 </li>
@@ -273,7 +333,7 @@ export default class BlankPage extends Component {
                                 <li className="dropdown divided">
 
                                     <a className="dropdown-toggle button" data-toggle="dropdown" href="/#">
-                                        <i className="fa fa-bell" />
+                                        <i className="fa fa-bell"/>
                                         <span className="label label-transparent-black">3</span>
                                     </a>
 
@@ -282,7 +342,7 @@ export default class BlankPage extends Component {
 
                                         <li>
                                             <a href="/#">
-                                                <span className="label label-green"><i className="fa fa-user" /></span>
+                                                <span className="label label-green"><i className="fa fa-user"/></span>
                                                 New user registered.
                                                 <span className="small">18 mins</span>
                                             </a>
@@ -291,7 +351,7 @@ export default class BlankPage extends Component {
                                         <li>
                                             <a href="/#">
                                                 <span className="label label-red"><i
-                                                    className="fa fa-power-off" /></span>
+                                                    className="fa fa-power-off"/></span>
                                                 Server down.
                                                 <span className="small">27 mins</span>
                                             </a>
@@ -299,7 +359,7 @@ export default class BlankPage extends Component {
 
                                         <li>
                                             <a href="/#">
-                                                <span className="label label-orange"><i className="fa fa-plus" /></span>
+                                                <span className="label label-orange"><i className="fa fa-plus"/></span>
                                                 New order.
                                                 <span className="small">36 mins</span>
                                             </a>
@@ -308,7 +368,7 @@ export default class BlankPage extends Component {
                                         <li>
                                             <a href="/#">
                                                 <span className="label label-cyan"><i
-                                                    className="fa fa-power-off" /></span>
+                                                    className="fa fa-power-off"/></span>
                                                 Server restared.
                                                 <span className="small">45 mins</span>
                                             </a>
@@ -316,13 +376,13 @@ export default class BlankPage extends Component {
 
                                         <li>
                                             <a href="/#">
-                                                <span className="label label-amethyst"><i className="fa fa-power-off" /></span>
+                                                <span className="label label-amethyst"><i className="fa fa-power-off"/></span>
                                                 Server started.
                                                 <span className="small">50 mins</span>
                                             </a>
                                         </li>
 
-                                        <li><a href="/#">Check all notifications <i className="fa fa-angle-right" /></a>
+                                        <li><a href="/#">Check all notifications <i className="fa fa-angle-right"/></a>
                                         </li>
                                     </ul>
 
@@ -330,10 +390,10 @@ export default class BlankPage extends Component {
 
                                 <li className="dropdown divided user" id="current-user">
                                     <div className="profile-photo">
-                                        <img src={profile_photo} alt="" />
+                                        <img src={profile_photo} alt=""/>
                                     </div>
                                     <a className="dropdown-toggle options" data-toggle="dropdown" href="/#">
-                                        John Douey <i className="fa fa-caret-down" />
+                                        John Douey <i className="fa fa-caret-down"/>
                                     </a>
 
                                     <ul className="dropdown-menu arrow settings">
@@ -360,7 +420,7 @@ export default class BlankPage extends Component {
 
                                         </li>
 
-                                        <li className="divider" />
+                                        <li className="divider"/>
 
 
                                         <li>
@@ -370,11 +430,11 @@ export default class BlankPage extends Component {
                                                 <div className="col-xs-4 control-label">
                                                     <div className="onoffswitch greensea small">
                                                         <input type="checkbox" name="onoffswitch"
-                                                               className="onoffswitch-checkbox" id="videobg-check" />
+                                                               className="onoffswitch-checkbox" id="videobg-check"/>
                                                         <label className="onoffswitch-label"
                                                                htmlFor="videobg-check">
-                                                            <span className="onoffswitch-inner" />
-                                                            <span className="onoffswitch-switch" />
+                                                            <span className="onoffswitch-inner"/>
+                                                            <span className="onoffswitch-switch"/>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -397,40 +457,40 @@ export default class BlankPage extends Component {
                                         </li>
 
 
-                                        <li className="divider" />
+                                        <li className="divider"/>
 
                                         <li>
-                                            <a href="/#"><i className="fa fa-user" /> Profile</a>
+                                            <a href="/#"><i className="fa fa-user"/> Profile</a>
                                         </li>
 
                                         <li>
-                                            <a href="/#"><i className="fa fa-calendar" /> Calendar</a>
+                                            <a href="/#"><i className="fa fa-calendar"/> Calendar</a>
                                         </li>
 
                                         <li>
-                                            <a href="/#"><i className="fa fa-envelope" /> Inbox <span
+                                            <a href="/#"><i className="fa fa-envelope"/> Inbox <span
                                                 className="badge badge-red" id="user-inbox">3</span></a>
                                         </li>
 
-                                        <li className="divider" />
+                                        <li className="divider"/>
 
                                         <li>
-                                            <a href="/#"><i className="fa fa-power-off" /> Logout</a>
+                                            <a href="/#"><i className="fa fa-power-off"/> Logout</a>
                                         </li>
                                     </ul>
                                 </li>
 
                                 <li>
-                                    <a href={"#mmenu"}><i className="fa fa-comments" /></a>
+                                    <a href={"#mmenu"}><i className="fa fa-comments"/></a>
                                 </li>
                             </ul>
                             {/*/Quick Actions*/}
 
-                            <SideBar />
+                            <SideBar/>
                         </div>
                     </div>
 
-                    <div id="content" className="col-md-12">
+                    <div id="content" className="col-md-12" style={{overflowY: 'scroll'}}>
                         <div className="pageheader">
                             <h2><i className="fa fa-file-o" style={{ lineHeight: '48px', paddingLeft: 2 }} />
                                 {" Blank Page "}<span> Place subtitle here...</span>
@@ -447,138 +507,47 @@ export default class BlankPage extends Component {
                         <div className="main">
                             <div className="row">
                                 <div className="col-md-12">
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
-                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <AdvancedTable/>
+                                    <BasicDatatable />
+                                    <OpenModalDialog/>
+                                    <OpenModalConfirmation/>
+                                </div>
+                            </div>
+                            <br/>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <FadeInScale/>
+                                    <SlideInRight/>
+                                    <SlideInBottom/>
+                                </div>
+                            </div>
+                            <br/>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <RotateBottom3D/>
+                                    <RotateInLeft3D/>
+                                    <Flip3DHorizontal/>
+                                    <Flip3DVertical/>
+                                    <Sign3D/>
+                                    <Slit3D/>
+                                </div>
+                            </div>
+                            <br/>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <Newspaper/>
+                                    <Fall/>
+                                    <SideFall/>
+                                    <StickyUp/>
+                                    <SuperScaled/>
+                                    <JustMe/>
+                                    <Blur/>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <Mmenu />
+                    <Mmenu/>
                 </div>
             </div>
         );
