@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../assets/css/bootstrap.min.css';
 import '../assets/css/font-awesome.min.css';
 import '../assets/css/animate.css';
@@ -19,7 +19,7 @@ import Mmenu from "../components/mmenu";
 export default class BlankPage extends Component {
     componentDidMount = () => {
         document.body.classList.add('bg-1');
-        this.setState({showModal: true});
+        this.setState({ showModal: true });
 
         this.loadScript('/assets/js/jquery.js');
         this.loadScript('/assets/js/bootstrap.min.js');
@@ -35,7 +35,7 @@ export default class BlankPage extends Component {
     };
     componentWillUnmount = () => {
         document.body.classList.remove('bg-1');
-        this.setState({showModal: false});
+        this.setState({ showModal: false });
     };
 
     loadScript = (src: string, withType: boolean = false) => {
@@ -46,12 +46,16 @@ export default class BlankPage extends Component {
         document.getElementsByTagName('body')[0].appendChild(tag);
     };
 
-    render() {
-        return <div>
+    _renderLoad() {
+        return (
             <div className="mask">
                 <div id="loader" />
             </div>
+        );
+    }
 
+    _renderWrap() {
+        return (
             <div id={'wrap'}>
                 <div className={'row'}>
                     <div className="navbar navbar-default navbar-fixed-top navbar-transparent-black mm-fixed-top"
@@ -104,7 +108,7 @@ export default class BlankPage extends Component {
                                                 <div className="progress progress-striped progress-thin">
                                                     <div className="progress-bar progress-bar-green" role="progressbar"
                                                          aria-valuenow={40} aria-valuemin={0} aria-valuemax={100}
-                                                         style={{width: '80%'}}>
+                                                         style={{ width: '80%' }}>
                                                         <span className="sr-only">40% Complete (success)</span>
                                                     </div>
                                                 </div>
@@ -119,7 +123,7 @@ export default class BlankPage extends Component {
                                                 <div className="progress progress-striped active progress-thin">
                                                     <div className="progress-bar progress-bar-cyan" role="progressbar"
                                                          aria-valuenow={45} aria-valuemin={0} aria-valuemax={100}
-                                                         style={{width: '15%'}}>
+                                                         style={{ width: '15%' }}>
                                                         <span className="sr-only">45% Complete</span>
                                                     </div>
                                                 </div>
@@ -134,7 +138,7 @@ export default class BlankPage extends Component {
                                                 <div className="progress progress-striped progress-thin">
                                                     <div className="progress-bar progress-bar-orange" role="progressbar"
                                                          aria-valuenow={45} aria-valuemin={0} aria-valuemax={100}
-                                                         style={{width: "5%"}}>
+                                                         style={{ width: "5%" }}>
                                                         <span className="sr-only">5% Complete (warning)</span>
                                                     </div>
                                                 </div>
@@ -149,7 +153,7 @@ export default class BlankPage extends Component {
                                                 <div className="progress progress-striped progress-thin">
                                                     <div className="progress-bar progress-bar-red" role="progressbar"
                                                          aria-valuenow={45} aria-valuemin={0} aria-valuemax={100}
-                                                         style={{width: "30%"}}>
+                                                         style={{ width: "30%" }}>
                                                         <span className="sr-only">30% Complete (danger)</span>
                                                     </div>
                                                 </div>
@@ -164,7 +168,7 @@ export default class BlankPage extends Component {
                                                 <div className="progress progress-striped progress-thin">
                                                     <div className="progress-bar progress-bar-amethyst"
                                                          role="progressbar" aria-valuenow={45} aria-valuemin={0}
-                                                         aria-valuemax={100} style={{width: "60%"}}>
+                                                         aria-valuemax={100} style={{ width: "60%" }}>
                                                         <span className="sr-only">60% Complete</span>
                                                     </div>
                                                 </div>
@@ -428,7 +432,7 @@ export default class BlankPage extends Component {
 
                     <div id="content" className="col-md-12">
                         <div className="pageheader">
-                            <h2><i className="fa fa-file-o" style={{lineHeight: '48px', paddingLeft: 2}} />
+                            <h2><i className="fa fa-file-o" style={{ lineHeight: '48px', paddingLeft: 2 }} />
                                 {" Blank Page "}<span> Place subtitle here...</span>
                             </h2>
                             <div className="breadcrumbs">
@@ -443,7 +447,132 @@ export default class BlankPage extends Component {
                         <div className="main">
                             <div className="row">
                                 <div className="col-md-12">
-
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
+                                    <span>Hieren Lee Le Hong Hien 16520361 hienlh1298@gmail.com</span>
                                 </div>
                             </div>
                         </div>
@@ -452,7 +581,14 @@ export default class BlankPage extends Component {
                     <Mmenu />
                 </div>
             </div>
-            <section className="videocontent" id="video" />
-        </div>
+        );
+    }
+
+    _renderVideo() {
+        return (<section className="videocontent" id="video" />);
+    }
+
+    render() {
+        return [this._renderLoad(), this._renderWrap(), this._renderVideo()];
     }
 }
