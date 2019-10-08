@@ -1,5 +1,7 @@
-export default function seedData() {
+import { seedRole } from './role.seeder';
+import { seedUser } from './user.seeder';
 
-
-    console.log('Seed data success!')
+export default async function seedData() {
+    seedRole();
+    seedUser();
 }
