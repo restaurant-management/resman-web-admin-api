@@ -13,7 +13,7 @@ export class Customer extends BaseEntity {
     public uuid: string;
 
     @Column({ unique: true })
-    public userName: string;
+    public username: string;
 
     @Column({ length: 100, nullable: true })
     public fullName: string;

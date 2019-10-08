@@ -1,8 +1,11 @@
 import { Request, Response, Router } from 'express';
+import { UserRouter } from './user.router';
+import { CustomerRouter } from './customer.router';
 
 const router = Router();
 
-// TODO Add all api router here
+router.use('/users', UserRouter);
+router.use('/customers', CustomerRouter);
 
 router.get('/test', (_req: Request, res: Response) =>
     res.status(200).send({

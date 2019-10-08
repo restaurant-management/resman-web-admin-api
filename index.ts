@@ -7,7 +7,7 @@ import { createConnections } from 'typeorm';
 
 import seedData from './src/seeder';
 import router from './src/router';
-import errorHandler from './src/helper/errorHandler';
+import errorHandler from './src/middleware/errorHandler';
 
 // Config to use environment variable
 config();
@@ -21,12 +21,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger('dev'));
 
-createConnections().then(async (_connection) => {
-    console.info('Connected database!');
-    await seedData();
-    app.use('/api', router);
-    app.use(errorHandler);
-}).catch((error) => console.log(error));
+createConnections()
+    .then(async _connection => {
+        console.info('Connected database!');
+        await seedData();
+        app.use('/api', router);
+        app.use(errorHandler);
+    })
+    .catch(error => console.log(error));
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
@@ -37,5 +39,5 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(port, () => {
-    console.log('App listening on ' + port);
+    process.env.NODE_ENV === 'production' ? console.log('App listening on ' + port) : console.log('App running on http://localhost:' + port);
 });

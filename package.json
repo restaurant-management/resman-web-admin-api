@@ -34,10 +34,12 @@
   "homepage": "https://github.com/hienlh/node-express-typescript#readme",
   "dependencies": {
     "@types/node": "^12.7.5",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "concurrently": "^4.1.2",
     "dotenv": "latest",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "pg": "^7.12.1",
     "reflect-metadata": "^0.1.13",
@@ -46,9 +48,11 @@
     "typescript": "^3.6.3"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/body-parser": "^1.17.1",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^4.17.1",
+    "@types/jsonwebtoken": "^8.3.4",
     "@types/morgan": "^1.7.37",
     "@types/pg": "^7.11.2",
     "ts-node-dev": "^1.0.0-pre.42"
