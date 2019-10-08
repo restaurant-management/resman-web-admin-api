@@ -1,9 +1,13 @@
 import { config } from 'dotenv';
 import * as bodyParser from 'body-parser';
 import express from 'express';
-import { Request, Response } from 'express';
 import logger from 'morgan';
 import path from 'path';
+import { createConnections } from 'typeorm';
+
+import seedData from './src/seeder';
+import router from './src/router';
+import errorHandler from './src/helper/errorHandler';
 
 // Config to use environment variable
 config();
@@ -17,16 +21,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger('dev'));
 
-app.get('/api/test', (_req: Request, res: Response) =>
-    res.status(200).send({
-        message: 'Welcome to simple Nodejs Express typescript run on Heroku project'
-    })
-);
+createConnections().then(async (_connection) => {
+    console.info('Connected database!');
+    await seedData();
+    app.use('/api', router);
+    app.use(errorHandler);
+}).catch((error) => console.log(error));
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
 
-    app.get('*', (_req: Request, res: Response) => {
+    app.get('*', (_req, res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     });
 }
