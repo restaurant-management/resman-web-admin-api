@@ -7,7 +7,8 @@ import '../assets/css/jquery.videobackground.css';
 import '../assets/css/bootstrap-checkbox.css';
 import '../assets/css/bootstrap-dropdown-multilevel.css';
 
-// Basic Datatable & Advanced Table
+
+
 import '../assets/css/chosen-bootstrap.css';
 import '../assets/css/chosen.min.css';
 // Basic Datatable
