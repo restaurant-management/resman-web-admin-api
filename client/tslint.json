@@ -1,0 +1,36 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "jsRules": { },
+  "rules": {
+    "max-line-length": [
+      true,
+      {
+        "limit": 120,
+        "ignore-pattern": "^import |^export {(.*?)}"
+      }
+    ],
+    "eofline": true,
+    "newline-before-return": true,
+    "no-trailing-whitespace": [
+      true,
+      "ignore-comments"
+    ],
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-leading-underscore"
+    ],
+    "trailing-comma": false,
+    "ban-ts-ignore": true,
+    "no-empty": true,
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "no-unused-variable": false
+  },
+  "rulesDirectory": [ ]
+}

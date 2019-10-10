@@ -1,0 +1,66 @@
+{
+  "name": "resman-web-api",
+  "version": "1.0.0",
+  "description": "Resman web admin api",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "dev": "concurrently \"yarn server-dev\" \"yarn client\"",
+    "lint": "tslint --project .",
+    "start": "ts-node index.ts",
+    "server": "ts-node index.ts",
+    "server-dev": "ts-node-dev --respawn --transpileOnly index.ts",
+    "client": "npm start --prefix=client",
+    "client-install": "npm install --prefix client",
+    "client-build": "npm run build --prefix client",
+    "heroku-postbuild": "yarn client-install && yarn client-build",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hienlh/node-express-typescript.git"
+  },
+  "keywords": [
+    "nodejs",
+    "expressjs",
+    "typescript",
+    "heroku"
+  ],
+  "author": "Hieren Lee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hienlh/node-express-typescript/issues"
+  },
+  "homepage": "https://github.com/hienlh/node-express-typescript#readme",
+  "dependencies": {
+    "@types/chai": "^4.2.3",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.7.5",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "concurrently": "^4.1.2",
+    "dotenv": "latest",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "pg": "^7.12.1",
+    "reflect-metadata": "^0.1.13",
+    "ts-node": "^8.4.1",
+    "typeorm": "^0.2.19",
+    "typescript": "^3.6.3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/body-parser": "^1.17.1",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^4.17.1",
+    "@types/jsonwebtoken": "^8.3.4",
+    "@types/morgan": "^1.7.37",
+    "@types/pg": "^7.11.2",
+    "@types/supertest": "^2.0.8",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.1",
+    "supertest": "^4.0.2",
+    "ts-node-dev": "^1.0.0-pre.42"
+  }
+}
