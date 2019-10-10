@@ -118,7 +118,7 @@ export default class SideBar extends Component {
                             </a>
                             <ul className="dropdown-menu">
                                 <li>
-                                    <a href="/#">
+                                    <a href="/login">
                                         <i className="fa fa-caret-right" /> Login Page
                                     </a>
                                 </li>
@@ -128,12 +128,12 @@ export default class SideBar extends Component {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/#">
+                                    <a href="/page404">
                                         <i className="fa fa-caret-right" /> Page 404
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/#">
+                                    <a href="/page500">
                                         <i className="fa fa-caret-right" /> Page 500
                                     </a>
                                 </li>
@@ -149,7 +149,7 @@ export default class SideBar extends Component {
                                     </a>
                                 </li>
                                 <li className="active">
-                                    <a href="/#">
+                                    <a href="/blank-page">
                                         <i className="fa fa-caret-right" /> Blank Page
                                         <span className="label label-greensea">new</span>
                                     </a>

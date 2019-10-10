@@ -1,33 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
+import BlankPage from "./pages/blank-page";
+import LogIn from "./pages/login";
+import Page404 from "./pages/page404";
+import Page500 from "./pages/page500";
+import WelcomePage from './pages/welcomePage';
 
-import background from './assets/images/backgrounds/1.jpg';
-
-const App: React.FC = () => {
-  return (
-    <div className="App" style={{
-      backgroundImage: `url(${background})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'left top',
-      backgroundRepeat: 'repeat, no-repeat',
-    }}>
-      <header>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-};
+class App extends Component {
+    render() {
+        return (
+            <Router>
+                <Switch>
+                    <Route path="/blank-page" component={BlankPage} />
+                    <Route path="/login" component={LogIn} />
+                    <Route path="/page500" component={Page500} />
+                    <Route path="/page404" component={Page404} />
+                    <Route path="/" exact component={WelcomePage} />
+                </Switch>
+            </Router>
+        );
+    };
+}
 
 export default App;
