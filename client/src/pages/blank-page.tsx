@@ -7,6 +7,9 @@ import '../assets/css/bootstrap.min.css';
 import '../assets/css/chosen-bootstrap.css';
 import '../assets/css/chosen.min.css';
 import '../assets/css/ColVis.css';
+import '../assets/css/dataTables.bootstrap.css';
+import '../assets/css/TableTools.css';
+
 import '../assets/css/component.css';
 import '../assets/css/component.css';
 import '../assets/css/dataTables.bootstrap.css';

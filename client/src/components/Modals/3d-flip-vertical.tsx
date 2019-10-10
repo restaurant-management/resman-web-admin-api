@@ -33,4 +33,10 @@ export default class Flip3DVertical extends Component {
             </div>
         );
     }
+
+    private _renderOverLay() {
+        return (
+            <div className='md-overlay' />
+        );
+    }
 }

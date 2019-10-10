@@ -32,4 +32,10 @@ export default class Blur extends Component {
             </div>
         );
     }
+
+    private _renderOverLay() {
+        return(
+            <div className='md-overlay'/>
+        );
+    }
 }

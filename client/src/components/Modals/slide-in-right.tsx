@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 export default class SlideInRight extends Component {
     public render() {
-        return ([this._renderSlideInRight(), this._renderModal2()]);
+        return ([this._renderSlideInRight(), this._renderModal2(), this._renderOverLay()]);
     }
 
     private _renderSlideInRight() {
@@ -30,6 +30,11 @@ export default class SlideInRight extends Component {
                     </div>
                 </div>
             </div>
+        );
+    }
+    private _renderOverLay() {
+        return (
+            <div className='md-overlay' />
         );
     }
 }

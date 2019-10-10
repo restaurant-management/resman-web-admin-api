@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 export default class SideFall extends Component {
     public render() {
-        return ([this._renderSideFall(), this._renderModal12()]);
+        return ([this._renderSideFall(), this._renderModal12(), this._renderOverLay()]);
     }
 
     private _renderSideFall() {
@@ -30,6 +30,12 @@ export default class SideFall extends Component {
                     </div>
                 </div>
             </div>
+        );
+    }
+
+    private _renderOverLay() {
+        return (
+            <div className='md-overlay' />
         );
     }
 }

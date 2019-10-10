@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 export default class FadeInScale extends Component {
     public render() {
-        return ([this._renderFadeInScale(), this._renderModal1()]);
+        return ([this._renderFadeInScale(), this._renderModal1(), this._renderOverLay()]);
     }
 
     private _renderFadeInScale() {
@@ -43,6 +43,12 @@ export default class FadeInScale extends Component {
                     </div>
                 </div>
             </div>
+        );
+    }
+
+    private _renderOverLay() {
+        return (
+            <div className='md-overlay' />
         );
     }
 }

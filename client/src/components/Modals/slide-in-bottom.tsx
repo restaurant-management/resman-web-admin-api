@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 export default class SlideInBottom extends Component {
     public render() {
-        return ([this._renderSlideInBottom(), this._renderModal3()]);
+        return([this._renderSlideInBottom(), this._renderModal3(), this._renderOverLay()]);
     }
 
     private _renderSlideInBottom() {
@@ -30,6 +30,12 @@ export default class SlideInBottom extends Component {
                     </div>
                 </div>
             </div>
+        );
+    }
+
+    private _renderOverLay() {
+        return(
+            <div className='md-overlay'/>
         );
     }
 }
