@@ -29,8 +29,8 @@ export class Application {
             if (process.env.NODE_ENV === 'production') {
                 Application._app.use(express.static('client/build'));
 
-                Application._app.get('*', (_req, res) => {
-                    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+                Application._app.get('/*', (_req, res) => {
+                    res.sendFile(path.join(process.env.PWD, 'client/build', 'index.html'));
                 });
             }
 
