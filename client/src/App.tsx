@@ -10,12 +10,10 @@ class App extends Component {
     render() {
         return (
             <Router>
-
                 <Route path="/" exact component={BlankPage} />
                 <Route path="/login" component={LogIn} />
                 <Route path="/page500" component={Page500} />
                 <Route path="/page404" component={Page404} />
-
             </Router>
         );
     };
