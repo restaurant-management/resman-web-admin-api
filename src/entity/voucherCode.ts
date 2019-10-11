@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryColumn, ManyToMany, JoinTable } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 import { Store } from './store';
 
 @Entity()
@@ -44,5 +44,5 @@ export class VoucherCode extends BaseEntity {
 
     @ManyToMany(() => Store)
     @JoinTable()
-    stores: Store[];
+    public stores: Store[];
 }

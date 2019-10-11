@@ -1,6 +1,6 @@
+import { seedFakeData } from './fakeData.seeder';
 import { seedRole } from './role.seeder';
 import { seedUser } from './user.seeder';
-import { seedFakeData } from './fakeData.seeder';
 
 export default async function seedData() {
     seedRole();

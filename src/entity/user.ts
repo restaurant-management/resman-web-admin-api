@@ -1,8 +1,8 @@
-import { BaseEntity, Column, Entity, Generated, ManyToMany, PrimaryGeneratedColumn, JoinTable, OneToMany } from 'typeorm';
+import { BaseEntity, Column, Entity, Generated, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BillHistory } from './billHistory';
 import { Role } from './role';
 import { Store } from './store';
 import { Warehouse } from './warehouse';
-import { BillHistory } from './billHistory';
 
 @Entity()
 export class User extends BaseEntity {
@@ -39,15 +39,15 @@ export class User extends BaseEntity {
 
     @ManyToMany(() => Role, { eager: true })
     @JoinTable()
-    roles: Role[];
+    public roles: Role[];
 
     @ManyToMany(() => Store)
     @JoinTable()
-    stores: Store[];
+    public stores: Store[];
 
     @ManyToMany(() => Warehouse)
     @JoinTable()
-    warehouses: Warehouse[];
+    public warehouses: Warehouse[];
 
     @OneToMany(_type => BillHistory, history => history.user)
     public billHistories: BillHistory[];

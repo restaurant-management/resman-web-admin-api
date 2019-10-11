@@ -24,7 +24,9 @@ const customerService = {
         }
 
         if (customer) {
-            if (!PasswordHandler.compare(password, customer.password)) throw new Error('Password incorrect.');
+            if (!PasswordHandler.compare(password, customer.password)) {
+                throw new Error('Password incorrect.');
+            }
 
             return jwt.sign({ uuid: customer.uuid }, process.env.JWT_SECRET_KEY, { expiresIn: `${process.env.CUSTOMER_TOKEN_EXPIRE_DAY || '10'} days` });
         }

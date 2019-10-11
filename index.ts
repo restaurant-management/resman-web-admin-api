@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
-import { Application } from './src/lib/application';
 import 'reflect-metadata';
+import { Application } from './src/lib/application';
 
 // Config to use environment variable
 config();

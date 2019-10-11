@@ -1,6 +1,6 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
-import { Store } from './store';
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DiscountCampaignDish } from './discountCampaignDish';
+import { Store } from './store';
 
 @Entity()
 export class DiscountCampaign extends BaseEntity {
@@ -27,7 +27,7 @@ export class DiscountCampaign extends BaseEntity {
 
     @ManyToMany(() => Store)
     @JoinTable()
-    stores: Store[];
+    public stores: Store[];
 
     @OneToMany(() => DiscountCampaignDish, dish => dish.discountCampaign, { nullable: false })
     public dishes: DiscountCampaignDish[];

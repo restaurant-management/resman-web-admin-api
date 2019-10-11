@@ -24,7 +24,9 @@ const userService = {
         }
 
         if (user) {
-            if (!PasswordHandler.compare(password, user.password)) throw new Error('Password incorrect.');
+            if (!PasswordHandler.compare(password, user.password)) {
+                throw new Error('Password incorrect.');
+            }
 
             return jwt.sign({ uuid: user.uuid }, process.env.JWT_SECRET_KEY, { expiresIn: `${process.env.USER_TOKEN_EXPIRE_DAY || '1'} days` });
         }

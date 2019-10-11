@@ -1,7 +1,7 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, OneToMany } from 'typeorm';
-import { User } from './user';
-import { Customer } from './customer';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BillHistory } from './billHistory';
+import { Customer } from './customer';
+import { User } from './user';
 
 @Entity()
 export class Bill extends BaseEntity {
@@ -48,7 +48,7 @@ export class Bill extends BaseEntity {
     public prepareBy: User;
 
     @ManyToOne(_type => User, { nullable: true, onDelete: 'NO ACTION' })
-    public CollectBy: User;
+    public collectBy: User;
 
     @ManyToOne(_type => Customer, customer => customer.bills, { nullable: true, onDelete: 'SET NULL' })
     @JoinColumn({ name: 'customerId' })

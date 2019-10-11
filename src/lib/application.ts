@@ -2,17 +2,16 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import logger from 'morgan';
 import path from 'path';
+import supertest, { SuperTest, Test } from 'supertest';
 import { createConnections } from 'typeorm';
 import errorHandler from '../middleware/errorHandler';
 import router from '../router';
 import seedData from '../seeder';
-import supertest, { SuperTest, Test } from 'supertest';
 
 export class Application {
-    private static _app: express.Application;
 
     public static getApp = async () => {
-        if (Application._app) return Application._app;
+        if (Application._app) { return Application._app; }
 
         Application._app = express();
 
@@ -36,9 +35,9 @@ export class Application {
 
             return Application._app;
         } catch (error) {
-            error => console.error(error);
+            console.error(error);
         }
-    };
+    }
 
     public static getTestApp = (): Promise<SuperTest<Test>> => {
         return Application.getApp()
@@ -46,5 +45,6 @@ export class Application {
             .catch(e => {
                 throw e;
             });
-    };
+    }
+    private static _app: express.Application;
 }

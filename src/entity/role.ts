@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user';
 
 @Entity()
@@ -22,5 +22,5 @@ export class Role extends BaseEntity {
     public permissions: string[];
 
     @ManyToMany(_type => User)
-    users: User[];
+    public users: User[];
 }

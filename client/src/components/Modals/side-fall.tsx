@@ -1,15 +1,19 @@
-import React, {Component} from 'react';
-export default class SideFall extends Component{
+import React, { Component } from 'react';
+export default class SideFall extends Component {
+    public render() {
+        return ([this._renderSideFall(), this._renderModal12()]);
+    }
 
-    _renderSideFall(){
-        return(
-            <button className="btn btn-drank bottommargin md-trigger" data-modal="modal-6">Side Fall</button>
+    private _renderSideFall() {
+        return (
+            <button className='btn btn-drank bottommargin md-trigger' data-modal='modal-6'>Side Fall</button>
         );
     }
-    _renderModal12() {
-        return(
-            <div className="md-modal md-effect-12 md-greensea colorize-overlay" id="modal-12">
-                <div className="md-content">
+
+    private _renderModal12() {
+        return (
+            <div className='md-modal md-effect-12 md-greensea colorize-overlay' id='modal-12'>
+                <div className='md-content'>
                     <h3>Modal Dialog</h3>
                     <div>
                         <p>This is a modal window. You can do the following things with it:</p>
@@ -22,14 +26,10 @@ export default class SideFall extends Component{
                             </li>
                             <li><strong>Close:</strong> click on the button below to close the modal.</li>
                         </ul>
-                        <button className="md-close btn btn-default">Close me!</button>
+                        <button className='md-close btn btn-default'>Close me!</button>
                     </div>
                 </div>
             </div>
-        )
-    }
-    render()
-    {
-        return([this._renderSideFall(),this._renderModal12()]);
+        );
     }
 }
