@@ -1,15 +1,25 @@
-import React, {Component} from 'react';
-export default class JustMe extends Component{
+import React, { Component } from 'react';
+export default class JustMe extends Component {
+    public render() {
+        return ([this._renderJustMe(), this._renderModal15(), this._renderOverLay()]);
+    }
 
-    _renderJustMe(){
-        return(
-            <button className="btn btn-drank bottommargin md-trigger" data-modal="modal-12">Just Me</button>
+    private _renderOverLay() {
+        return (
+            <div className='md-overlay' />
         );
     }
-    _renderModal15() {
-        return(
-            <div className="md-modal md-effect-15 md-greensea colorize-overlay" id="modal-15">
-                <div className="md-content">
+
+    private _renderJustMe() {
+        return (
+            <button className='btn btn-drank bottommargin md-trigger' data-modal='modal-12'>Just Me</button>
+        );
+    }
+
+    private _renderModal15() {
+        return (
+            <div className='md-modal md-effect-15 md-greensea colorize-overlay' id='modal-15'>
+                <div className='md-content'>
                     <h3>Modal Dialog</h3>
                     <div>
                         <p>This is a modal window. You can do the following things with it:</p>
@@ -22,20 +32,10 @@ export default class JustMe extends Component{
                             </li>
                             <li><strong>Close:</strong> click on the button below to close the modal.</li>
                         </ul>
-                        <button className="md-close btn btn-default">Close me!</button>
+                        <button className='md-close btn btn-default'>Close me!</button>
                     </div>
                 </div>
             </div>
         );
-    }
-
-    _renderOverLay(){
-        return(
-            <div className="md-overlay"/>
-        );
-    }
-    render()
-    {
-        return([this._renderJustMe(),this._renderModal15(),this._renderOverLay()]);
     }
 }

@@ -1,6 +1,6 @@
-import { BaseEntity, Column, Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { Store } from './store';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Dish } from './dish';
+import { Store } from './store';
 import { User } from './user';
 
 export enum DaySession {

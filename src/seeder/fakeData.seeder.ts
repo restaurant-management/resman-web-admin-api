@@ -1,9 +1,9 @@
-import { PasswordHandler } from '../helper/passwordHandler';
 import { Customer } from '../entity/customer';
+import { PasswordHandler } from '../helper/passwordHandler';
 
 export const seedFakeData = async () => {
     let customer = await Customer.findOne({ where: { username: 'customer' } });
-    
+
     if (!customer) {
         customer = new Customer();
         customer.username = 'customer';

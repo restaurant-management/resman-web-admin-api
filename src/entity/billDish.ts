@@ -6,7 +6,7 @@ import { Dish } from './dish';
 export class BillDish extends BaseEntity {
     @ManyToOne(_type => BillHistory, history => history.dishes, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'billHistoryId' })
-    public BillHistory: BillHistory;
+    public billHistory: BillHistory;
 
     @PrimaryColumn()
     public billHistoryId: number;

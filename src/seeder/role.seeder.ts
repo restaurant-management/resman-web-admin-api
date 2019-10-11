@@ -11,10 +11,10 @@ export const seedRole = async () => {
             .into(Role)
             .values([
                 {
-                    slug: 'administrator',
-                    name: 'Administrator',
                     level: 5,
-                    permissions: []
+                    name: 'Administrator',
+                    permissions: [],
+                    slug: 'administrator'
                 }
             ])
             .execute();

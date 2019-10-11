@@ -9,7 +9,7 @@ export const seedUser = async () => {
     const [, userCount] = await User.findAndCount();
 
     if (userCount <= 0) {
-        let newUser = new User();
+        const newUser = new User();
         newUser.username = process.env.ADMIN_USERNAME || 'admin';
         newUser.password = PasswordHandler.encode(process.env.ADMIN_PASSWORD || 'admin');
         newUser.email = 'hienlh1298@gmail.com';
