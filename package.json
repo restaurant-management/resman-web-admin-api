@@ -4,7 +4,9 @@
   "description": "Resman web admin api",
   "main": "dist/index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "test": "npm run test-server && npm run test-client",
+    "test-server": "jest",
+    "test-client": "npm run test --prefix client",
     "dev": "concurrently \"yarn server-dev\" \"yarn client\"",
     "lint": "tslint --project .",
     "start": "ts-node index.ts",
@@ -34,8 +36,7 @@
   },
   "homepage": "https://github.com/hienlh/node-express-typescript#readme",
   "dependencies": {
-    "@types/chai": "^4.2.3",
-    "@types/mocha": "^5.2.7",
+    "@types/jest": "^24.0.18",
     "@types/node": "^12.7.5",
     "@types/supertest": "^2.0.8",
     "bcryptjs": "^2.4.3",
@@ -61,8 +62,17 @@
     "@types/jsonwebtoken": "^8.3.4",
     "@types/morgan": "^1.7.37",
     "@types/pg": "^7.11.2",
-    "chai": "^4.2.0",
-    "mocha": "^6.2.1",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^24.9.0",
+    "superagent": "^5.1.0",
+    "ts-jest": "^24.1.0",
     "ts-node-dev": "^1.0.0-pre.42"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   }
 }

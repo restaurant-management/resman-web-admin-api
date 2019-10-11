@@ -1,11 +1,10 @@
-import { expect } from 'chai';
 import { SuperTest, Test } from 'supertest';
 import { Application } from '../lib/application';
 
 describe('The User Router', () => {
     let app: SuperTest<Test>;
 
-    before(async () => {
+    beforeAll(async () => {
         try {
             app = await Application.getTestApp();
         } catch (error) {
@@ -24,7 +23,7 @@ describe('The User Router', () => {
                     })
                     .expect(200)
                     .expect((res) => {
-                        expect(res.body).to.match(/.*\..*\..*/);
+                        expect(res.body).toEqual(expect.stringMatching(/.*\..*\..*/));
                     });
             });
         });
@@ -38,7 +37,7 @@ describe('The User Router', () => {
                     })
                     .expect(200)
                     .expect((res) => {
-                        expect(res.body).to.match(/.*\..*\..*/);
+                        expect(res.body).toEqual(expect.stringMatching(/.*\..*\..*/));
                     });
             });
         });
