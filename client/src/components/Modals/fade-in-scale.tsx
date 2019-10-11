@@ -9,6 +9,7 @@ export default class FadeInScale extends Component {
             <button className='btn btn-red bottommargin md-trigger' data-modal='modal-1'>Fade in &amp; Scale</button>
         );
     }
+
     private _renderModal1() {
         return (
             <div className='md-modal md-effect-1 md-cyan colorize-overlay' id='modal-1'>

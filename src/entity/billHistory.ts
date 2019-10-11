@@ -1,4 +1,13 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    OneToMany,
+    PrimaryColumn,
+    PrimaryGeneratedColumn
+} from 'typeorm';
 import { Bill } from './bill';
 import { BillDish } from './billDish';
 import { User } from './user';
@@ -28,6 +37,6 @@ export class BillHistory extends BaseEntity {
     @Column('time with time zone')
     public time: Date;
 
-    @OneToMany(_type => BillDish, billDish => billDish.BillHistory, { nullable: false })
+    @OneToMany(_type => BillDish, billDish => billDish.billHistory, { nullable: false })
     public dishes: BillDish[];
 }
