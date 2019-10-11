@@ -1,15 +1,19 @@
-import React, {Component} from 'react';
-export default class RotateBottom3D extends Component{
+import React, { Component } from 'react';
+export default class RotateBottom3D extends Component {
+    public render() {
+        return ([this._renderRotateBottom3D(), this._renderModal7()]);
+    }
 
-    _renderRotateBottom3D(){
-        return(
-            <button className="btn btn-greensea bottommargin md-trigger" data-modal="modal-14">3D Rotate Bottom</button>
+    private _renderRotateBottom3D() {
+        return (
+            <button className='btn btn-greensea bottommargin md-trigger' data-modal='modal-14'>3D Rotate Bottom</button>
         );
     }
-    _renderModal7() {
-        return(
-            <div className="md-modal md-effect-7 md-dutch colorize-overlay" id="modal-7">
-                <div className="md-content">
+
+    private _renderModal7() {
+        return (
+            <div className='md-modal md-effect-7 md-dutch colorize-overlay' id='modal-7'>
+                <div className='md-content'>
                     <h3>Modal Dialog</h3>
                     <div>
                         <p>This is a modal window. You can do the following things with it:</p>
@@ -22,14 +26,10 @@ export default class RotateBottom3D extends Component{
                             </li>
                             <li><strong>Close:</strong> click on the button below to close the modal.</li>
                         </ul>
-                        <button className="md-close btn btn-default">Close me!</button>
+                        <button className='md-close btn btn-default'>Close me!</button>
                     </div>
                 </div>
             </div>
-        )
-    }
-    render()
-    {
-        return([this._renderRotateBottom3D(),this._renderModal7()]);
+        );
     }
 }

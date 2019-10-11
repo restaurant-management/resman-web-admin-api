@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { DiscountCampaign } from './discountCampaign';
 import { Dish } from './dish';
 

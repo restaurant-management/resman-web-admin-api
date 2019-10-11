@@ -1,7 +1,7 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, PrimaryColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Bill } from './bill';
-import { User } from './user';
 import { BillDish } from './billDish';
+import { User } from './user';
 
 @Entity()
 export class BillHistory extends BaseEntity {

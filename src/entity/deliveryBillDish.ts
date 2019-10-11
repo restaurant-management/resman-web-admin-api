@@ -1,6 +1,6 @@
-import { BaseEntity, Column, Entity, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
-import { Dish } from './dish';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { DeliveryBill } from './deliveryBill';
+import { Dish } from './dish';
 
 @Entity()
 export class DeliveryBillDish extends BaseEntity {

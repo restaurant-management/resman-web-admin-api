@@ -12,4 +12,3 @@ const customerController = {
 };
 
 export { customerController as CustomerController };
-

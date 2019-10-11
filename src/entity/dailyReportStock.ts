@@ -3,7 +3,7 @@ import { DailyReport } from './dailyReport';
 import { Stock } from './stock';
 
 @Entity()
-export class dailyReportStock extends BaseEntity {
+export class DailyReportStock extends BaseEntity {
     @ManyToOne(() => DailyReport, bill => bill.stocks, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'dailyReportId' })
     public dailyReport: DailyReport;

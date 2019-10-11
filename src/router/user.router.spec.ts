@@ -19,11 +19,11 @@ describe('The User Router', () => {
                 return app
                     .get('/api/users/login')
                     .send({
+                        password: 'admin',
                         usernameOrEmail: 'admin',
-                        password: 'admin'
                     })
                     .expect(200)
-                    .expect(res => {
+                    .expect((res) => {
                         expect(res.body).to.match(/.*\..*\..*/);
                     });
             });
@@ -33,11 +33,11 @@ describe('The User Router', () => {
                 return app
                     .get('/api/users/login')
                     .send({
-                        usernameOrEmail: 'hienlh1298@gmail.com',
-                        password: 'admin'
+                        password: 'admin',
+                        usernameOrEmail: 'hienlh1298@gmail.com'
                     })
                     .expect(200)
-                    .expect(res => {
+                    .expect((res) => {
                         expect(res.body).to.match(/.*\..*\..*/);
                     });
             });

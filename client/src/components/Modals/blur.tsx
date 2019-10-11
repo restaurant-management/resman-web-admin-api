@@ -1,15 +1,19 @@
-import React, {Component} from 'react';
-export default class Blur extends Component{
+import React, { Component } from 'react';
+export default class Blur extends Component {
+    public render() {
+        return ([this._renderBlur(), this._renderModal16()]);
+    }
 
-    _renderBlur(){
-        return(
-            <button className="btn btn-drank bottommargin md-trigger" data-modal="modal-16">Blur</button>
+    private _renderBlur() {
+        return (
+            <button className='btn btn-drank bottommargin md-trigger' data-modal='modal-16'>Blur</button>
         );
     }
-    _renderModal16() {
-        return(
-            <div className="md-modal md-effect-16 md-greensea colorize-overlay" id="modal-16">
-                <div className="md-content">
+
+    private _renderModal16() {
+        return (
+            <div className='md-modal md-effect-16 md-greensea colorize-overlay' id='modal-16'>
+                <div className='md-content'>
                     <h3>Modal Dialog</h3>
                     <div>
                         <p>This is a modal window. You can do the following things with it:</p>
@@ -22,14 +26,10 @@ export default class Blur extends Component{
                             </li>
                             <li><strong>Close:</strong> click on the button below to close the modal.</li>
                         </ul>
-                        <button className="md-close btn btn-default">Close me!</button>
+                        <button className='md-close btn btn-default'>Close me!</button>
                     </div>
                 </div>
             </div>
-        )
-    }
-    render()
-    {
-        return([this._renderBlur(),this._renderModal16()]);
+        );
     }
 }

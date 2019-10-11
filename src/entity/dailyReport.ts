@@ -1,7 +1,7 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ImportBillStock } from './importBillStock';
-import { Warehouse } from './warehouse';
 import { User } from './user';
+import { Warehouse } from './warehouse';
 
 @Entity()
 export class DailyReport extends BaseEntity {

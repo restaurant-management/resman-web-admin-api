@@ -1,7 +1,7 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
-import { User } from './user';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Customer } from './customer';
 import { DeliveryBillDish } from './deliveryBillDish';
+import { User } from './user';
 
 @Entity()
 export class DeliveryBill extends BaseEntity {
