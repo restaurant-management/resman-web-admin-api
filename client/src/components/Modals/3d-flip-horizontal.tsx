@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 export default class Flip3DHorizontal extends Component {
     public render() {
-        return ([this._renderFlip3DHorizontal(), this._renderModal4()]);
+        return ([this._renderFlip3DHorizontal(), this._renderModal4(), this._renderOverLay()]);
     }
 
     private _renderFlip3DHorizontal() {
@@ -31,6 +31,11 @@ export default class Flip3DHorizontal extends Component {
                     </div>
                 </div>
             </div>
+        );
+    }
+    private _renderOverLay() {
+        return(
+            <div className='md-overlay'/>
         );
     }
 }

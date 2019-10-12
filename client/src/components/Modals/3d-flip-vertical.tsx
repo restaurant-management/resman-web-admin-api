@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 export default class Flip3DVertical extends Component {
     public render() {
-        return ([this._renderFlip3DVertical(), this._renderModal5()]);
+        return ([this._renderFlip3DVertical(), this._renderModal5(), this._renderOverLay()]);
     }
 
     private _renderFlip3DVertical() {
         return (
-            <button className='btn btn-greensea bottommargin md-trigger' data-modal='modal-9'>3D Flip
-                (vertical)</button>
+            <button className='btn btn-greensea bottommargin md-trigger' data-modal='modal-9'>
+                3D Flip (vertical)
+            </button>
         );
     }
 

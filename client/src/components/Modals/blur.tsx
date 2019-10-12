@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 export default class Blur extends Component {
     public render() {
-        return ([this._renderBlur(), this._renderModal16()]);
+        return ([this._renderBlur(), this._renderModal16(), this._renderOverLay()]);
     }
 
     private _renderBlur() {
