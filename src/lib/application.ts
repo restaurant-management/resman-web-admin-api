@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import express from 'express';
+import i18n from 'i18n';
 import logger from 'morgan';
 import path from 'path';
 import supertest, { SuperTest, Test } from 'supertest';
@@ -10,41 +11,66 @@ import seedData from '../seeder';
 
 export class Application {
 
-    public static getApp = async () => {
-        if (Application._app) { return Application._app; }
+    public static async getApp() {
+        if (this._app) { return this._app; }
 
-        Application._app = express();
+        this._app = express();
 
-        Application._app.use(bodyParser.json());
-        Application._app.use(bodyParser.urlencoded({ extended: true }));
-        Application._app.use(logger('dev'));
+        this._app.use(bodyParser.json());
+        this._app.use(bodyParser.urlencoded({ extended: true }));
+        this._app.use(logger('dev'));
+
+        this._setupMultiLanguage();
 
         try {
             await createConnections();
             await seedData();
-            Application._app.use('/api', router);
-            Application._app.use(errorHandler);
+            this._app.use('/api', router);
+            this._app.use(errorHandler);
 
             if (process.env.NODE_ENV === 'production') {
-                Application._app.use(express.static('client/build'));
+                this._app.use(express.static('client/build'));
 
-                Application._app.get('/*', (_req, res) => {
+                this._app.get('/*', (_req, res) => {
                     res.sendFile(path.join(process.env.PWD, 'client/build', 'index.html'));
                 });
             }
 
-            return Application._app;
+            return this._app;
         } catch (error) {
             console.error(error);
         }
     }
 
-    public static getTestApp = (): Promise<SuperTest<Test>> => {
-        return Application.getApp()
-            .then(app => supertest(app))
-            .catch(e => {
-                throw e;
-            });
+    public static async getTestApp(): Promise<SuperTest<Test>> {
+        try {
+            const app = await this.getApp();
+
+            return supertest(app);
+        } catch (e) {
+            throw e;
+        }
     }
     private static _app: express.Application;
+
+    private static _setupMultiLanguage() {
+        i18n.configure({
+            directory: process.env.PWD + '/src/language',
+            defaultLocale: 'en',
+            fallbacks: {
+                ['vi']: 'en'
+            },
+            cookie: 'resman_language',
+        });
+
+        this._app.use(i18n.init);
+
+        this._app.use((req, res, next) => {
+            if (req.query.lang) {
+                i18n.setLocale(req.query.lang);
+            }
+            res.locals.locale = req.getLocale();
+            next();
+        });
+    }
 }
