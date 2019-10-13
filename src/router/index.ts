@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import { __ } from 'i18n';
 import { CustomerRouter } from './customer.router';
 import { UserRouter } from './user.router';
 
@@ -9,7 +10,7 @@ router.use('/customers', CustomerRouter);
 
 router.get('/test', (_req: Request, res: Response) =>
     res.status(200).send({
-        message: 'Welcome to ResMan'
+        message: __('welcome_resman')
     })
 );
 
