@@ -18,6 +18,7 @@
     "object-literal-sort-keys": false,
     "arrow-parens": false,
     "interface-name": false,
+    "no-string-literal": false,
     "no-trailing-whitespace": [
       true,
       "ignore-comments"
