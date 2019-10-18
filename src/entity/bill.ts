@@ -26,13 +26,13 @@ export class Bill extends BaseEntity {
     @Column({ length: 20, nullable: true })
     public voucherCode: string;
 
-    @Column()
+    @Column({ nullable: true })
     public voucherValue: number;
 
     @Column({ length: 20, nullable: true })
     public discountCode: string;
 
-    @Column()
+    @Column({ nullable: true })
     public discountValue: number;
 
     @Column('float', { nullable: true })

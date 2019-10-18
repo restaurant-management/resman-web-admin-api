@@ -1,5 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { ImportBillStock } from './importBillStock';
+import { DailyReportStock } from './dailyReportStock';
 import { User } from './user';
 import { Warehouse } from './warehouse';
 
@@ -17,9 +17,8 @@ export class DailyReport extends BaseEntity {
     @UpdateDateColumn()
     public updateAt: Date;
 
-    // TODO change
-    @OneToMany(() => ImportBillStock, stock => stock.importBill, { nullable: false, onDelete: 'NO ACTION' })
-    public stocks: ImportBillStock[];
+    @OneToMany(() => DailyReportStock, stock => stock.dailyReport, { nullable: false, onDelete: 'NO ACTION' })
+    public stocks: DailyReportStock[];
 
     @ManyToOne(() => Warehouse, warehouse => warehouse.dailyReports, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'warehouseId' })
