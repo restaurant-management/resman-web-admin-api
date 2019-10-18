@@ -1,5 +1,6 @@
 import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DailyReport } from './dailyReport';
+import { ImportBill } from './importBill';
 import { Stock } from './stock';
 import { Store } from './store';
 import { User } from './user';
@@ -27,6 +28,9 @@ export class Warehouse extends BaseEntity {
     @ManyToMany(() => Stock)
     @JoinTable()
     public stocks: Stock[];
+
+    @OneToMany(() => ImportBill, importBill => importBill.warehouse)
+    public importBills: ImportBill[];
 
     @OneToMany(() => DailyReport, dailyReport => dailyReport.warehouse)
     public dailyReports: DailyReport[];

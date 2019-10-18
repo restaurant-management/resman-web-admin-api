@@ -8,9 +8,6 @@ export class DeliveryBill extends BaseEntity {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Column()
-    public tableNumber: number;
-
     @CreateDateColumn()
     public createAt: Date;
 
@@ -32,13 +29,13 @@ export class DeliveryBill extends BaseEntity {
     @Column({ length: 20, nullable: true })
     public voucherCode: string;
 
-    @Column()
+    @Column({ nullable: true })
     public voucherValue: number;
 
     @Column({ length: 20, nullable: true })
     public discountCode: string;
 
-    @Column()
+    @Column({ nullable: true })
     public discountValue: number;
 
     @Column('float', { nullable: true })
@@ -46,9 +43,6 @@ export class DeliveryBill extends BaseEntity {
 
     @Column({ nullable: true })
     public note: string;
-
-    @ManyToOne(_type => User, { nullable: false, onDelete: 'NO ACTION' })
-    public createBy: User;
 
     @ManyToOne(_type => User, { onDelete: 'NO ACTION' })
     public prepareBy: User;
