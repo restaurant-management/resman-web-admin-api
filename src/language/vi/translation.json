@@ -1,0 +1,10 @@
+{
+	"welcome_resman": "Chào mừng bạn đến với Resman",
+	"common": {},
+	"user_service": {
+		"username_or_email_incorrect": "Tài khoản hoặc mật khẩu không đúng.",
+		"password_incorrect": "Mật khẩu không đúng.",
+		"username_has_already_used": "Username đã tòn tại.",
+		"email_has_already_used": "Email đã tồn tại."
+	}
+}

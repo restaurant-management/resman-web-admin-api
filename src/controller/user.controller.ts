@@ -18,6 +18,7 @@ class UserController implements ICrudController {
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {
+        console.log(req.t('user_service.email_has_already_used'));
         UserService.create(req.body.username, req.body.email, req.body.password, req.body.phoneNumber, req.body.address,
             req.body.fullName, req.body.avatar, req.body.birthday, req.body.roles).then(value => {
                 return res.status(200).json(value);

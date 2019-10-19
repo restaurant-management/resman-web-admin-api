@@ -1,6 +1,8 @@
 import bodyParser from 'body-parser';
 import express from 'express';
-import i18n from 'i18n';
+import i18next, { TFunction } from 'i18next';
+import i18nextMiddleware from 'i18next-express-middleware';
+import Backend from 'i18next-node-fs-backend';
 import logger from 'morgan';
 import path from 'path';
 import supertest, { SuperTest, Test } from 'supertest';
@@ -22,7 +24,25 @@ export class Application {
         this._app.use(bodyParser.urlencoded({ extended: true }));
         this._app.use(logger('dev'));
 
-        this._setupMultiLanguage();
+        try {
+            await i18next
+                .use(Backend)
+                .use(i18nextMiddleware.LanguageDetector)
+                .init({
+                    backend: {
+                        loadPath: process.env.PWD + '/src/language/{{lng}}/{{ns}}.json',
+                        addPath: process.env.PWD + '/src/language/{{lng}}/{{ns}}.missing.json'
+                    },
+                    fallbackLng: 'en',
+                    preload: ['en', 'vi'],
+                    saveMissing: true,
+                    debug: true
+                });
+        } catch (error) {
+            console.error(error);
+        }
+
+        this._app.use(i18nextMiddleware.handle(i18next));
 
         try {
             await this.createTypeOrmConnection();
@@ -61,26 +81,6 @@ export class Application {
             throw e;
         }
     }
+
     private static _app: express.Application;
-
-    private static _setupMultiLanguage() {
-        i18n.configure({
-            directory: process.env.PWD + '/src/language',
-            defaultLocale: 'en',
-            fallbacks: {
-                ['vi']: 'en'
-            },
-            cookie: 'resman_language',
-        });
-
-        this._app.use(i18n.init);
-
-        this._app.use((req, res, next) => {
-            if (req.query.lang) {
-                i18n.setLocale(req.query.lang);
-            }
-            res.locals.locale = req.getLocale();
-            next();
-        });
-    }
 }

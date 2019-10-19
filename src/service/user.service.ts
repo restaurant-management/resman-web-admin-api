@@ -1,4 +1,4 @@
-import { __ } from 'i18n';
+import i18next, { t } from 'i18next';
 import jwt from 'jsonwebtoken';
 import { getConnection } from 'typeorm';
 import { Role } from '../entity/role';
@@ -27,12 +27,12 @@ class UserService {
 
         if (user) {
             if (!PasswordHandler.compare(password, user.password)) {
-                throw new Error(__('user_service.password_incorrect'));
+                throw new Error(t('user_service.password_incorrect'));
             }
 
             return jwt.sign({ uuid: user.uuid }, process.env.JWT_SECRET_KEY, { expiresIn: `${process.env.USER_TOKEN_EXPIRE_DAY || '1'} days` });
         }
-        throw new Error(__('user_service.username_or_email_incorrect'));
+        throw new Error(t('user_service.username_or_email_incorrect'));
     }
 
     public async getAll(length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
@@ -48,13 +48,13 @@ class UserService {
     public async create(username: string, email: string, password: string, phoneNumber: string, address: string,
                         fullName?: string, avatar?: string, birthday?: Date, roles?: string[]) {
         if (await User.findOne({ where: { username } })) {
-            throw new Error(__('user_service.username_has_already_used'));
+            throw new Error(t('user_service.username_has_already_used'));
         }
         if (await User.findOne({ where: { email } })) {
-            throw new Error(__('user_service.email_has_already_used'));
+            throw new Error(i18next.t('user_service.email_has_already_used'));
         }
         if (await User.findOne({ where: { phoneNumber } })) {
-            throw new Error(__('user_service.phone_number_has_already_used'));
+            throw new Error(t('user_service.phone_number_has_already_used'));
         }
 
         const listRoles: Role[] = [];
@@ -62,7 +62,7 @@ class UserService {
         for (const item of roles) {
             const role = await Role.findOne({ where: { slug: item } });
 
-            if (!role) { throw new Error(__('user_service.role_not_found.')); }
+            if (!role) { throw new Error(t('user_service.role_not_found.')); }
 
             listRoles.push(role);
         }
@@ -79,7 +79,7 @@ class UserService {
         newUser.roles = listRoles;
 
         const user = await newUser.save();
-        if (!user) { throw new Error(__('user_service.create_fail')); }
+        if (!user) { throw new Error(t('user_service.create_fail')); }
 
         return user;
     }
