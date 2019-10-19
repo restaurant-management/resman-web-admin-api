@@ -1,4 +1,5 @@
 import { getConnection } from 'typeorm';
+import { Permission } from '../entity/permission';
 import { Role } from '../entity/role';
 
 export const seedRole = async () => {
@@ -13,7 +14,7 @@ export const seedRole = async () => {
                 {
                     level: 5,
                     name: 'Administrator',
-                    permissions: [],
+                    permissions: Permission.toArray(),
                     slug: 'administrator'
                 }
             ])

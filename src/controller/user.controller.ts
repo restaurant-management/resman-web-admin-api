@@ -1,14 +1,42 @@
 import { NextFunction, Request, Response } from 'express';
+import { ICrudController } from '../lib/ICrudController';
 import { UserService } from '../service/user.service';
 
-const userController = {
-    login: async (req: Request, res: Response, next: NextFunction) => {
+class UserController implements ICrudController {
+    public async login(req: Request, res: Response, next: NextFunction) {
         UserService.authenticate(req.body.usernameOrEmail, req.body.password)
             .then(token => {
                 return res.status(200).json(token);
             })
             .catch(err => next(err));
     }
-};
+
+    public async list(req: Request, res: Response, next: NextFunction) {
+        UserService.getAll(req.query.length, req.query.page, req.query.orderId, req.query.order).then(value => {
+            return res.status(200).json(value);
+        }).catch(e => next(e));
+    }
+
+    public create(req: Request, res: Response, next: NextFunction): void {
+        UserService.create(req.body.username, req.body.email, req.body.password, req.body.phoneNumber, req.body.address,
+            req.body.fullName, req.body.avatar, req.body.birthday, req.body.roles).then(value => {
+                return res.status(200).json(value);
+            }).catch(e => next(e));
+    }
+
+    public read(_req: Request, _res: Response, _next: NextFunction): void {
+        throw new Error('Method not implemented.');
+    }
+
+    public update(_req: Request, _res: Response, _next: NextFunction): void {
+        throw new Error('Method not implemented.');
+    }
+
+    public delete(_req: Request, _res: Response, _next: NextFunction): void {
+        throw new Error('Method not implemented.');
+    }
+}
+
+const userController = new UserController();
 
 export { userController as UserController };

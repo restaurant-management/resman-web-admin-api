@@ -4,12 +4,9 @@ import { Application } from '../lib/application';
 describe('The User Router', () => {
     let app: SuperTest<Test>;
 
-    beforeAll(async () => {
-        try {
-            app = await Application.getTestApp();
-        } catch (error) {
-            console.error(error);
-        }
+    beforeAll(async (done) => {
+        app = await Application.getTestApp();
+        done();
     });
 
     describe('when user login', () => {
@@ -38,6 +35,162 @@ describe('The User Router', () => {
                     .expect(200)
                     .expect((res) => {
                         expect(res.body).toEqual(expect.stringMatching(/.*\..*\..*/));
+                    });
+            });
+        });
+    });
+
+    describe('when get all user', () => {
+        describe('with normal mode', () => {
+            it('should return OK status and json array', () => {
+                return app
+                    .get('/api/users')
+                    .expect(200)
+                    .expect((res) => {
+                        expect(res.body).toMatchObject([
+                            {
+                                address: 'Viet Nam',
+                                avatar: null,
+                                birthday: null,
+                                email: 'hienlh1298@gmail.com',
+                                fullName: null,
+                                id: 1,
+                                phoneNumber: '0123456789',
+                                roles: [
+                                    {
+                                        description: null,
+                                        id: 1,
+                                        level: 5,
+                                        name: 'Administrator',
+                                        permissions: [
+                                            'user.list',
+                                            'user.create',
+                                            'user.update',
+                                            'user.delete',
+                                            'user.import',
+                                            'user.export',
+                                            'role.list',
+                                            'role.create',
+                                            'role.update',
+                                            'role.delete',
+                                            'role.import',
+                                            'role.export',
+                                            'customer.list',
+                                            'customer.create',
+                                            'customer.update',
+                                            'customer.delete',
+                                            'customer.import',
+                                            'customer.export',
+                                            'store.list',
+                                            'store.create',
+                                            'store.update',
+                                            'store.delete',
+                                            'store.import',
+                                            'store.export',
+                                            'warehouse.list',
+                                            'warehouse.create',
+                                            'warehouse.update',
+                                            'warehouse.delete',
+                                            'warehouse.import',
+                                            'warehouse.export',
+                                            'discountCode.list',
+                                            'discountCode.create',
+                                            'discountCode.update',
+                                            'discountCode.delete',
+                                            'discountCode.import',
+                                            'discountCode.export',
+                                            'voucherCode.list',
+                                            'voucherCode.create',
+                                            'voucherCode.update',
+                                            'voucherCode.delete',
+                                            'voucherCode.import',
+                                            'voucherCode.export',
+                                            'discountCampaign.list',
+                                            'discountCampaign.create',
+                                            'discountCampaign.update',
+                                            'discountCampaign.delete',
+                                            'discountCampaign.import',
+                                            'discountCampaign.export',
+                                            'dish.list',
+                                            'dish.create',
+                                            'dish.update',
+                                            'dish.delete',
+                                            'dish.import',
+                                            'dish.export',
+                                            'dailyDish.list',
+                                            'dailyDish.create',
+                                            'dailyDish.update',
+                                            'dailyDish.delete',
+                                            'dailyDish.import',
+                                            'dailyDish.export',
+                                            'bill.list',
+                                            'bill.create',
+                                            'bill.update',
+                                            'bill.delete',
+                                            'bill.import',
+                                            'bill.export',
+                                            'deliveryBill.list',
+                                            'deliveryBill.create',
+                                            'deliveryBill.update',
+                                            'deliveryBill.delete',
+                                            'deliveryBill.import',
+                                            'deliveryBill.export',
+                                            'analysis.list',
+                                            'analysis.create',
+                                            'analysis.update',
+                                            'analysis.delete',
+                                            'analysis.import',
+                                            'analysis.export',
+                                            'stock.list',
+                                            'stock.create',
+                                            'stock.update',
+                                            'stock.delete',
+                                            'stock.import',
+                                            'stock.export',
+                                            'importBill.list',
+                                            'importBill.create',
+                                            'importBill.update',
+                                            'importBill.delete',
+                                            'importBill.import',
+                                            'importBill.export',
+                                            'dailyReport.list',
+                                            'dailyReport.create',
+                                            'dailyReport.update',
+                                            'dailyReport.delete',
+                                            'dailyReport.import',
+                                            'dailyReport.export'
+                                        ],
+                                        slug: 'administrator'
+                                    }
+                                ],
+                                username: 'admin',
+                                uuid: expect.stringMatching(/.*/)
+                            },
+                            {
+                                address: 'Viet Nam',
+                                avatar: null,
+                                birthday: null,
+                                email: 'staff@gmail.com',
+                                fullName: null,
+                                id: 2,
+                                phoneNumber: '01231234234',
+                                roles: [],
+                                username: 'staff',
+                                uuid: expect.stringMatching(/.*/)
+                            },
+                            {
+                                address: 'Viet Nam',
+                                avatar: null,
+                                birthday: null,
+                                email: 'chef@gmail.com',
+                                fullName: null,
+                                id: 3,
+                                phoneNumber: '12323123',
+                                roles: [],
+                                username: 'chef',
+                                uuid: expect.stringMatching(/.*/)
+                            }
+                        ]);
                     });
             });
         });

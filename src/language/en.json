@@ -1,3 +1,12 @@
 {
-	"welcome_resman": "Welcome to Resman"
+	"welcome_resman": "Welcome to Resman",
+	"common": {},
+	"user_service": {
+		"username_or_email_incorrect": "Username or email incorrect.",
+		"password_incorrect": "Password incorrect.",
+		"username_has_already_used": "Username has already used."
+	},
+	"user_service.username_has_already_used": "user_service.username_has_already_used",
+	"user_service.email_has_already_used": "user_service.email_has_already_used",
+	"user_service.username_or_email_incorrect": "user_service.username_or_email_incorrect"
 }
