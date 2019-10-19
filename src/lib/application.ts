@@ -67,10 +67,18 @@ export class Application {
         i18n.configure({
             directory: process.env.PWD + '/src/language',
             defaultLocale: 'en',
+            locales: ['en', 'vi'],
             fallbacks: {
-                ['vi']: 'en'
+                vi: 'en'
             },
             cookie: 'resman_language',
+            queryParameter: 'lang',
+            syncFiles: true,
+            objectNotation: true,
+            autoReload: true,
+            api: {
+                __: 't'
+            }
         });
 
         this._app.use(i18n.init);

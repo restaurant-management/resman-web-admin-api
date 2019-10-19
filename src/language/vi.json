@@ -1,3 +1,9 @@
 {
-	"welcome_resman": "Chào mừng bạn đến với Resman"
+	"welcome_resman": "Chào mừng bạn đến với Resman",
+	"user_service": {
+		"username_or_email_incorrect": "Tài khoản hoặc email không đúng.",
+		"password_incorrect": "mật khẩu không đúng.",
+		"username_has_already_used": "Tài khoản đã tồn tại.",
+		"email_has_already_used": "Email đã tồn tại."
+	}
 }

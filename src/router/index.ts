@@ -10,7 +10,7 @@ router.use('/customers', CustomerRouter);
 
 router.get('/test', (_req: Request, res: Response) =>
     res.status(200).send({
-        message: __('welcome_resman')
+        message: __('user_service.email_has_already_used')
     })
 );
 
