@@ -5,6 +5,7 @@ import BlankPage from './pages/blank-page';
 import LogIn from './pages/login';
 import Page404 from './pages/page404';
 import Page500 from './pages/page500';
+import UserManagement from './pages/userManagement';
 import WelcomePage from './pages/welcomePage';
 
 class App extends Component {
@@ -13,6 +14,7 @@ class App extends Component {
             <Router>
                 <Switch>
                     <Route path='/blank-page' component={BlankPage} />
+                    <Route path='/users' component={UserManagement} />
                     <Route path='/login' component={LogIn} />
                     <Route path='/page500' component={Page500} />
                     <Route path='/page404' component={Page404} />

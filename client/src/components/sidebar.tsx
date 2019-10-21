@@ -24,6 +24,12 @@ export default class SideBar extends Component {
                             </a>
                         </li>
 
+                        <li>
+                            <a href='/users'>
+                                <i className='fa fa-user' /> Users
+                            </a>
+                        </li>
+
                         <li className='dropdown'>
                             <a href='/#' className='dropdown-toggle' data-toggle='dropdown'>
                                 <i className='fa fa-list' /> Forms <b className='fa fa-plus dropdown-plus' />
