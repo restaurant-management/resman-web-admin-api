@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 
 import '../assets/css/animate.css';
 import '../assets/css/bootstrap-checkbox.css';
+import '../assets/css/bootstrap-colorpalette.css';
+// import '../assets/css/bootstrap-colorpicker.css';
+import '../assets/css/bootstrap-datetimepicker.css';
 import '../assets/css/bootstrap-dropdown-multilevel.css';
 import '../assets/css/bootstrap.min.css';
 import '../assets/css/chosen-bootstrap.css';
@@ -11,8 +14,13 @@ import '../assets/css/component.css';
 import '../assets/css/component.css';
 import '../assets/css/dataTables.bootstrap.css';
 import '../assets/css/font-awesome.min.css';
+import '../assets/css/jquery.fileupload.css';
 import '../assets/css/jquery.mmenu.all.css';
 import '../assets/css/jquery.videobackground.css';
+import '../assets/css/style.css';
+// import '../assets/css/summernote-bs3.css';
+// import '../assets/css/summernote.css';
+
 import '../assets/css/minimal.css';
 
 import arnold_avatar from '../assets/images/arnold-avatar.jpg';
@@ -43,6 +51,9 @@ import SlideInBottom from '../components/Modals/slide-in-bottom';
 import SlideInRight from '../components/Modals/slide-in-right';
 import StickyUp from '../components/Modals/sticky-up';
 import SuperScaled from '../components/Modals/super-scaled';
+
+import ChosenMulSelect from '../components/Modals/chosen-multiple-select';
+import DeleteComponent from '../components/Modals/delete-component';
 
 export default class BlankPage extends Component<any, any> {
     constructor(props: Readonly<{}>) {
@@ -92,6 +103,12 @@ export default class BlankPage extends Component<any, any> {
         this.loadScript('/assets/js/modalEffects.js');
         this.loadScript('/assets/js/cssParser.js');
         this.loadScript('/assets/js/css-filters-polyfill.js');
+
+        // Form Elements
+        this.loadScript('/assets/js/bootstrap-colorpalette.js');
+        this.loadScript('/assets/js/bootstrap-colorpicker.min.js');
+        this.loadScript('/assets/js/summernote.min.js');
+        this.loadScript('/assets/js/form-element.js');
 
         this.loadScript('/assets/js/minimal.min.js');
 
@@ -516,10 +533,11 @@ export default class BlankPage extends Component<any, any> {
                         <div className='main'>
                             <div className='row'>
                                 <div className='col-md-12'>
-                                    <AdvancedTable />
+                                    <OpenModalConfirmation />
+                                    <AdvancedTable /> 
                                     <BasicDatatable />
                                     <OpenModalDialog />
-                                    <OpenModalConfirmation />
+                                    <DeleteComponent />
                                 </div>
                             </div>
                             <br />
@@ -551,6 +569,13 @@ export default class BlankPage extends Component<any, any> {
                                     <SuperScaled />
                                     <JustMe />
                                     <Blur />
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <div className='row'>
+                                <div className='col-md-12'>
+                                    <ChosenMulSelect />
                                 </div>
                             </div>
                         </div>

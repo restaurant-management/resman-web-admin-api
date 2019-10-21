@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
+import DatetimePicker from './datetime-picker';
+import ImagePicker from './image-picker';
+import Input from './input';
+import MulImagePicker from './mul-image-picker';
+import MulSelectionBox from './multiple-select-box';
+import NumberValidation from './number-validation';
+import RowSelect from './row-select';
+import NormalSectionBox from './selection-box';
+import TextArea from './text-area';
+import ToggleSwitchWithLable from './toggle-switches-with-labels';
 
-export default class OpenModalDialog extends Component {
+export default class OpenModalConfirmation extends Component {
     public render() {
         return ([this._renderOpenModalConfirmation(), this._renderModalTitle1()]);
     }
@@ -11,6 +21,7 @@ export default class OpenModalDialog extends Component {
                 Confirmation</a>
         );
     }
+
     private _renderModalTitle1() {
         return (
             <div className='modal fade' id='modalConfirm' tabIndex={-1} role='dialog'
@@ -24,27 +35,29 @@ export default class OpenModalDialog extends Component {
                         </div>
                         <div className='modal-body'>
                             <form>
-
-                                <div className='form-group'>
-                                    <label htmlFor='exampleInput'>Normal input field</label>
-                                    <input type='text' className='form-control' id='exampleInput' />
-                                </div>
-
-                                <div className='form-group'>
-                                    <label htmlFor='passwordInput'>Password input field</label>
-                                    <input type='password' className='form-control' id='passwordInput' />
-                                </div>
-
-                                <div className='form-group'>
-                                    <label htmlFor='placeholderInput'>Input with placeholder</label>
-                                    <input type='text' className='form-control' id='placeholderInput'
-                                        placeholder='This is a placeholder...' />
-                                </div>
-
-                                <div className='form-group'>
-                                    <label>Normal textarea</label>
-                                    <textarea className='form-control' rows={3} />
-                                </div>
+                                <Input label='Username' />
+                                <Input type='password' label='Password' />
+                                <TextArea label='Textarea' />
+                                <NumberValidation label='Numbervalidation' />
+                                <NormalSectionBox
+                                    label='Selection box'
+                                    Options={['hien', 'nguyen', 'duy', 'trong']}
+                                    hint='res man'
+                                    onValueChange={(value) => console.log(value)}
+                                />
+                                <MulSelectionBox
+                                    label='Mul select box'
+                                    Options={['hien', 'nguyen', 'duy', 'trong']}
+                                    hint='res man'
+                                    onValueChange={(value) => console.log(value)}
+                                />
+                                {/* <MulSelectionBox item=[]/> */}
+                                <ToggleSwitchWithLable label='Toggle' />
+                                <ImagePicker label='Add image' />
+                                <MulImagePicker label='Select dish images' onValueChange={this._handle.bind(this)} />
+                                {/* <NormalSectionBox label='Selection box' /> */}
+                                {/* <MulSelectionBox /> */}
+                                {/* <RowSelect /> */}
 
                             </form>
                         </div>
@@ -56,5 +69,9 @@ export default class OpenModalDialog extends Component {
                 </div>
             </div>
         );
+    }
+
+    private _handle(images: string[]) {
+        console.log(images);
     }
 }
