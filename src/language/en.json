@@ -5,6 +5,8 @@
 		"username_or_email_incorrect": "Username or email incorrect.",
 		"password_incorrect": "Password incorrect.",
 		"username_has_already_used": "Username has already used.",
-		"email_has_already_used": "Email has already used."
+		"email_has_already_used": "Email has already used.",
+		"phone_number_has_already_used": "Phone number has already used.",
+		"{{role}}_not_found": "Role {{role}} not found."
 	}
 }

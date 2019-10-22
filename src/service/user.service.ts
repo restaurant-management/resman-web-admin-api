@@ -59,12 +59,14 @@ class UserService {
 
         const listRoles: Role[] = [];
 
-        for (const item of roles) {
-            const role = await Role.findOne({ where: { slug: item } });
+        if (roles) {
+            for (const item of roles) {
+                const role = await Role.findOne({ where: { slug: item } });
 
-            if (!role) { throw new Error(__('user_service.role_not_found.')); }
+                if (!role) { throw new Error(__('user_service.{{role}}_not_found', {role: item})); }
 
-            listRoles.push(role);
+                listRoles.push(role);
+            }
         }
 
         const newUser = new User();
@@ -82,6 +84,45 @@ class UserService {
         if (!user) { throw new Error(__('user_service.create_fail')); }
 
         return user;
+    }
+
+    public async edit(id: number, password?: string, phoneNumber?: string, address?: string,
+                      fullName?: string, avatar?: string, birthday?: Date, roles?: string[]) {
+        const user = await User.findOne(id);
+
+        if (address === '') {
+            throw new Error(__('user_service.address_must_be_not_empty'));
+        }
+
+        if (!user) {
+            throw new Error(__('user_service.user_not_found'));
+        }
+
+        if (await User.findOne({ where: { phoneNumber } })) {
+            throw new Error(__('user_service.phone_number_has_already_used'));
+        }
+
+        const listRoles: Role[] = user.roles;
+
+        if (roles) {
+            for (const item of roles) {
+                const role = await Role.findOne({ where: { slug: item } });
+
+                if (!role) { throw new Error(__('user_service.{{role}}_not_found', {role: item})); }
+
+                listRoles.push(role);
+            }
+        }
+
+        user.password = PasswordHandler.encode(password);
+        user.phoneNumber = phoneNumber;
+        if (address) { user.address = address; }
+        if (fullName) { user.fullName = fullName; }
+        if (avatar) { user.avatar = avatar; }
+        if (birthday) { user.birthday = birthday; }
+        user.roles = listRoles;
+
+        return await user.save();
     }
 }
 

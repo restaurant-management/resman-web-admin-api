@@ -4,6 +4,8 @@
 		"username_or_email_incorrect": "Tài khoản hoặc email không đúng.",
 		"password_incorrect": "mật khẩu không đúng.",
 		"username_has_already_used": "Tài khoản đã tồn tại.",
-		"email_has_already_used": "Email đã tồn tại."
+		"email_has_already_used": "Email đã tồn tại.",
+		"phone_number_has_already_used": "user_service.phone_number_has_already_used",
+		"{{role}}_not_found": "user_service.{{role}}_not_found"
 	}
 }

@@ -28,8 +28,11 @@ class UserController implements ICrudController {
         throw new Error('Method not implemented.');
     }
 
-    public update(_req: Request, _res: Response, _next: NextFunction): void {
-        throw new Error('Method not implemented.');
+    public update(req: Request, res: Response, next: NextFunction): void {
+        UserService.edit(parseInt(req.params.id, 10), req.body.password, req.body.phoneNumber, req.body.address,
+            req.body.fullName, req.body.avatar, req.body.birthday, req.body.roles).then(value =>
+                res.status(200).json(value)
+            ).catch(e => next(e));
     }
 
     public delete(_req: Request, _res: Response, _next: NextFunction): void {

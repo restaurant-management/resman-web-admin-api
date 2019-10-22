@@ -40,7 +40,7 @@ describe('The User Router', () => {
         });
     });
 
-    describe('when get all user', () => {
+    describe('when get all users', () => {
         describe('with normal mode', () => {
             it('should return OK status and json array', () => {
                 return app
@@ -193,6 +193,66 @@ describe('The User Router', () => {
                         ]);
                     });
             });
+        });
+    });
+
+    describe('when create user', () => {
+        it('should return OK status and json object', () => {
+            return app
+                .post('/api/users/create')
+                .send({
+                    username: 'test',
+                    email: 'test@gmail.com',
+                    password: 'test',
+                    phoneNumber: '099999',
+                    address: 'test'
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toMatchObject(
+                        {
+                            address: 'test',
+                            avatar: null,
+                            birthday: null,
+                            email: 'test@gmail.com',
+                            fullName: null,
+                            phoneNumber: '099999',
+                            username: 'test'
+                        }
+                    );
+                });
+        });
+    });
+
+    describe('when update user', () => {
+        it('should return OK status and json object with new info', () => {
+            return app
+                .put('/api/users/2/update')
+                .send({
+                    password: 'test',
+                    phoneNumber: '011111',
+                    address: 'test',
+                    fullName: 'hierenlee',
+                    avatar: 'avatar',
+                    birthday: new Date(1998, 1, 1),
+                    roles: ['administrator']
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toMatchObject(
+                        {
+                            id: 2,
+                            address: 'test',
+                            avatar: 'avatar',
+                            birthday: new Date(1998, 1, 1).toISOString(),
+                            fullName: 'hierenlee',
+                            phoneNumber: '011111',
+                            roles: [{
+                                slug: 'administrator'
+                            }]
+                        }
+                    );
+                });
         });
     });
 });
