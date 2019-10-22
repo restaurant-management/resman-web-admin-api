@@ -24,8 +24,10 @@ class UserController implements ICrudController {
             }).catch(e => next(e));
     }
 
-    public read(_req: Request, _res: Response, _next: NextFunction): void {
-        throw new Error('Method not implemented.');
+    public read(req: Request, res: Response, next: NextFunction): void {
+        UserService.getOne(parseInt(req.params.id, 10)).then((value) =>
+            res.status(200).json(value)
+        ).catch(e => next(e));
     }
 
     public update(req: Request, res: Response, next: NextFunction): void {
@@ -35,8 +37,10 @@ class UserController implements ICrudController {
             ).catch(e => next(e));
     }
 
-    public delete(_req: Request, _res: Response, _next: NextFunction): void {
-        throw new Error('Method not implemented.');
+    public delete(req: Request, res: Response, next: NextFunction): void {
+        UserService.delete(parseInt(req.params.id, 10)).then(() =>
+            res.sendStatus(200)
+        ).catch(e => next(e));
     }
 }
 

@@ -1,12 +1,17 @@
 {
 	"welcome_resman": "Welcome to Resman",
-	"common": {},
+	"common": {
+		"no_token_provided": "No token provided. Please check \"authorization\" header.",
+		"fail_authenticate_token": "Failed to authenticate token."
+	},
 	"user_service": {
 		"username_or_email_incorrect": "Username or email incorrect.",
 		"password_incorrect": "Password incorrect.",
 		"username_has_already_used": "Username has already used.",
 		"email_has_already_used": "Email has already used.",
 		"phone_number_has_already_used": "Phone number has already used.",
-		"{{role}}_not_found": "Role {{role}} not found."
+		"{{role}}_not_found": "Role {{role}} not found.",
+		"user_not_found": "user_service.user_not_found",
+		"can_not_delete_admin_user": "user_service.can_not_delete_admin_user"
 	}
 }

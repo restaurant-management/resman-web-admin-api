@@ -63,7 +63,7 @@ class UserService {
             for (const item of roles) {
                 const role = await Role.findOne({ where: { slug: item } });
 
-                if (!role) { throw new Error(__('user_service.{{role}}_not_found', {role: item})); }
+                if (!role) { throw new Error(__('user_service.{{role}}_not_found', { role: item })); }
 
                 listRoles.push(role);
             }
@@ -108,7 +108,7 @@ class UserService {
             for (const item of roles) {
                 const role = await Role.findOne({ where: { slug: item } });
 
-                if (!role) { throw new Error(__('user_service.{{role}}_not_found', {role: item})); }
+                if (!role) { throw new Error(__('user_service.{{role}}_not_found', { role: item })); }
 
                 listRoles.push(role);
             }
@@ -123,6 +123,30 @@ class UserService {
         user.roles = listRoles;
 
         return await user.save();
+    }
+
+    public async delete(id: number) {
+        if (id === 1) {
+            throw new Error(__('user_service.can_not_delete_admin_user'));
+        }
+
+        const user = await User.findOne(id);
+
+        if (!user) {
+            throw new Error(__('user_service.user_not_found'));
+        }
+
+        await user.remove();
+    }
+
+    public async getOne(id: number) {
+        const user = await User.findOne(id);
+
+        if (!user) {
+            throw new Error(__('user_service.user_not_found'));
+        }
+
+        return user;
     }
 }
 

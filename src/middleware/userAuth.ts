@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { __ } from 'i18n';
 import jwt from 'jsonwebtoken';
 import { User } from '../entity/user';
 
@@ -8,7 +9,7 @@ const userAuth = (req: Request, res: Response, next: NextFunction) => {
     if (!token) {
         throw {
             code: 401,
-            message: 'No token provided. Please check "authorization" header.'
+            message: __('common.no_token_provided')
         };
     }
 
@@ -27,7 +28,7 @@ const userAuth = (req: Request, res: Response, next: NextFunction) => {
 
             if (!user) {
                 return res.status(401).json({
-                    message: 'Failed to authenticate token.'
+                    message: __('common.fail_authenticate_token')
                 });
             }
 

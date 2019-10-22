@@ -13,7 +13,7 @@ const crudRouter = (router: Router, controller: ICrudController, options?: CrudR
 
     router.get(namespace + '/', ...middleware, controller.list);
     router.post(namespace + '/create', ...middleware, controller.create);
-    router.put(namespace + '/:id', ...middleware, controller.read);
+    router.get(namespace + '/:id', ...middleware, controller.read);
     router.put(namespace + '/:id/update', ...middleware, controller.update);
     router.delete(namespace + '/:id/delete', ...middleware, controller.delete);
 };

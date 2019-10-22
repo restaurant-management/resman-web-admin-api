@@ -255,4 +255,46 @@ describe('The User Router', () => {
                 });
         });
     });
+
+    describe('when delete user', () => {
+        describe('normal user', () => {
+            it('should return OK status', () => {
+                return app
+                    .delete('/api/users/4/delete')
+                    .expect(res => expect(res.status).toBe(200));
+            });
+        });
+
+        describe('not found user', () => {
+            it('should return 500 error code', () => {
+                return app
+                    .delete('/api/users/4/delete')
+                    .expect(res => expect(res.status).toBe(500));
+            });
+        });
+
+        describe('default admin user', () => {
+            it('should return 500 error code', () => {
+                return app
+                    .delete('/api/users/1/delete')
+                    .expect(res => expect(res.status).toBe(500));
+            });
+        });
+    });
+
+    describe('when get user', () => {
+        describe('get by id', () => {
+            it('should return OK status', () => {
+                return app
+                    .get('/api/users/1')
+                    .expect((res) => {
+                        expect(res.body).toMatchObject(
+                            {
+                                id: 1
+                            }
+                        );
+                    });
+            });
+        });
+    });
 });

@@ -61,6 +61,7 @@ export class Application {
             throw e;
         }
     }
+
     private static _app: express.Application;
 
     private static _setupMultiLanguage() {

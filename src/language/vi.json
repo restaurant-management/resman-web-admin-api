@@ -6,6 +6,8 @@
 		"username_has_already_used": "Tài khoản đã tồn tại.",
 		"email_has_already_used": "Email đã tồn tại.",
 		"phone_number_has_already_used": "user_service.phone_number_has_already_used",
-		"{{role}}_not_found": "user_service.{{role}}_not_found"
+		"{{role}}_not_found": "user_service.{{role}}_not_found",
+		"user_not_found": "user_service.user_not_found",
+		"can_not_delete_admin_user": "user_service.can_not_delete_admin_user"
 	}
 }
