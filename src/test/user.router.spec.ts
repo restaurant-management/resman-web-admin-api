@@ -1,11 +1,16 @@
+import jwt from 'jsonwebtoken';
 import { SuperTest, Test } from 'supertest';
+import { User } from '../entity/user';
 import { Application } from '../lib/application';
 
 describe('The User Router', () => {
     let app: SuperTest<Test>;
+    let adminToken: string;
 
     beforeAll(async (done) => {
         app = await Application.getTestApp();
+        adminToken = jwt.sign({ uuid: (await User.findOne(1)).uuid },
+            process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
         done();
     });
 
@@ -13,7 +18,7 @@ describe('The User Router', () => {
         describe('with username', () => {
             it('should return OK status and a token', () => {
                 return app
-                    .get('/api/users/login')
+                    .post('/api/users/login')
                     .send({
                         password: 'admin',
                         usernameOrEmail: 'admin',
@@ -27,7 +32,7 @@ describe('The User Router', () => {
         describe('with email', () => {
             it('should return OK status and a token', () => {
                 return app
-                    .get('/api/users/login')
+                    .post('/api/users/login')
                     .send({
                         password: 'admin',
                         usernameOrEmail: 'hienlh1298@gmail.com'
@@ -45,6 +50,9 @@ describe('The User Router', () => {
             it('should return OK status and json array', () => {
                 return app
                     .get('/api/users')
+                    .set({
+                        Authorization: adminToken
+                    })
                     .expect(200)
                     .expect((res) => {
                         expect(res.body).toMatchObject([
@@ -62,104 +70,6 @@ describe('The User Router', () => {
                                         id: 1,
                                         level: 5,
                                         name: 'Administrator',
-                                        permissions: [
-                                            'user.list',
-                                            'user.create',
-                                            'user.update',
-                                            'user.delete',
-                                            'user.import',
-                                            'user.export',
-                                            'role.list',
-                                            'role.create',
-                                            'role.update',
-                                            'role.delete',
-                                            'role.import',
-                                            'role.export',
-                                            'customer.list',
-                                            'customer.create',
-                                            'customer.update',
-                                            'customer.delete',
-                                            'customer.import',
-                                            'customer.export',
-                                            'store.list',
-                                            'store.create',
-                                            'store.update',
-                                            'store.delete',
-                                            'store.import',
-                                            'store.export',
-                                            'warehouse.list',
-                                            'warehouse.create',
-                                            'warehouse.update',
-                                            'warehouse.delete',
-                                            'warehouse.import',
-                                            'warehouse.export',
-                                            'discountCode.list',
-                                            'discountCode.create',
-                                            'discountCode.update',
-                                            'discountCode.delete',
-                                            'discountCode.import',
-                                            'discountCode.export',
-                                            'voucherCode.list',
-                                            'voucherCode.create',
-                                            'voucherCode.update',
-                                            'voucherCode.delete',
-                                            'voucherCode.import',
-                                            'voucherCode.export',
-                                            'discountCampaign.list',
-                                            'discountCampaign.create',
-                                            'discountCampaign.update',
-                                            'discountCampaign.delete',
-                                            'discountCampaign.import',
-                                            'discountCampaign.export',
-                                            'dish.list',
-                                            'dish.create',
-                                            'dish.update',
-                                            'dish.delete',
-                                            'dish.import',
-                                            'dish.export',
-                                            'dailyDish.list',
-                                            'dailyDish.create',
-                                            'dailyDish.update',
-                                            'dailyDish.delete',
-                                            'dailyDish.import',
-                                            'dailyDish.export',
-                                            'bill.list',
-                                            'bill.create',
-                                            'bill.update',
-                                            'bill.delete',
-                                            'bill.import',
-                                            'bill.export',
-                                            'deliveryBill.list',
-                                            'deliveryBill.create',
-                                            'deliveryBill.update',
-                                            'deliveryBill.delete',
-                                            'deliveryBill.import',
-                                            'deliveryBill.export',
-                                            'analysis.list',
-                                            'analysis.create',
-                                            'analysis.update',
-                                            'analysis.delete',
-                                            'analysis.import',
-                                            'analysis.export',
-                                            'stock.list',
-                                            'stock.create',
-                                            'stock.update',
-                                            'stock.delete',
-                                            'stock.import',
-                                            'stock.export',
-                                            'importBill.list',
-                                            'importBill.create',
-                                            'importBill.update',
-                                            'importBill.delete',
-                                            'importBill.import',
-                                            'importBill.export',
-                                            'dailyReport.list',
-                                            'dailyReport.create',
-                                            'dailyReport.update',
-                                            'dailyReport.delete',
-                                            'dailyReport.import',
-                                            'dailyReport.export'
-                                        ],
                                         slug: 'administrator'
                                     }
                                 ],
@@ -200,6 +110,9 @@ describe('The User Router', () => {
         it('should return OK status and json object', () => {
             return app
                 .post('/api/users/create')
+                .set({
+                    Authorization: adminToken
+                })
                 .send({
                     username: 'test',
                     email: 'test@gmail.com',
@@ -228,6 +141,9 @@ describe('The User Router', () => {
         it('should return OK status and json object with new info', () => {
             return app
                 .put('/api/users/2/update')
+                .set({
+                    Authorization: adminToken
+                })
                 .send({
                     password: 'test',
                     phoneNumber: '011111',
@@ -261,6 +177,9 @@ describe('The User Router', () => {
             it('should return OK status', () => {
                 return app
                     .delete('/api/users/4/delete')
+                    .set({
+                        Authorization: adminToken
+                    })
                     .expect(res => expect(res.status).toBe(200));
             });
         });
@@ -287,6 +206,9 @@ describe('The User Router', () => {
             it('should return OK status', () => {
                 return app
                     .get('/api/users/1')
+                    .set({
+                        Authorization: adminToken
+                    })
                     .expect((res) => {
                         expect(res.body).toMatchObject(
                             {

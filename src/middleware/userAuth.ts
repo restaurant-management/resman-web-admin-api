@@ -23,7 +23,7 @@ const userAuth = (req: Request, res: Response, next: NextFunction) => {
         try {
             const user = await User.findOne({
                 where: { uuid: decoded['uuid'] },
-                relations: ['userRole']
+                relations: ['roles']
             });
 
             if (!user) {

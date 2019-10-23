@@ -51,4 +51,16 @@ export class User extends BaseEntity {
 
     @OneToMany(_type => BillHistory, history => history.user)
     public billHistories: BillHistory[];
+
+    get permissions(): string[] {
+        let permissions = [];
+
+        this.roles.forEach(role => {
+            permissions = permissions.concat(role.permissions);
+        });
+
+        console.log(permissions);
+
+        return permissions;
+    }
 }
