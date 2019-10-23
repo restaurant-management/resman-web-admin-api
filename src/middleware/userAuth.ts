@@ -7,10 +7,9 @@ const userAuth = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
     if (!token) {
-        throw {
-            code: 401,
-            message: __('common.no_token_provided')
-        };
+        return res.status(401).json({
+            message: __('authentication.no_token_provided')
+        });
     }
 
     jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
@@ -28,7 +27,7 @@ const userAuth = (req: Request, res: Response, next: NextFunction) => {
 
             if (!user) {
                 return res.status(401).json({
-                    message: __('common.fail_authenticate_token')
+                    message: __('authentication.fail_authenticate_token')
                 });
             }
 

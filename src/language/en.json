@@ -1,7 +1,7 @@
 {
 	"welcome_resman": "Welcome to Resman",
-	"common": {
-		"no_token_provided": "No token provided. Please check \"authorization\" header.",
+	"authentication": {
+		"no_token_provided": "No token provided. Please check \"Authorization\" header.",
 		"fail_authenticate_token": "Failed to authenticate token.",
 		"unauthorized": "Unauthorized"
 	},

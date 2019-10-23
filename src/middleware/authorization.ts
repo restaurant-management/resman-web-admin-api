@@ -11,7 +11,7 @@ const authorization = (requiredPermissions: string[]) => {
             let permissions: string[] = [];
 
             if (!currentUser.roles) {
-                return res.status(401).json({ message: __('common.unauthorized') });
+                return res.status(401).json({ message: __('authentication.unauthorized') });
             }
 
             currentUser.roles.forEach(role => {
@@ -20,7 +20,7 @@ const authorization = (requiredPermissions: string[]) => {
 
             for (const permission of requiredPermissions) {
                 if (!permissions.find(p => permission === p)) {
-                    return res.status(401).json({ message: __('common.unauthorized') });
+                    return res.status(401).json({ message: __('authentication.unauthorized') });
                 }
             }
 
@@ -37,7 +37,7 @@ const authorizationOr = (requiredPermissions: string[]) => {
             let permissions: string[] = [];
 
             if (!currentUser.roles) {
-                return res.status(401).json({ message: __('common.unauthorized') });
+                return res.status(401).json({ message: __('authentication.unauthorized') });
             }
 
             currentUser.roles.forEach(role => {
@@ -50,7 +50,7 @@ const authorizationOr = (requiredPermissions: string[]) => {
                 }
             }
 
-            return res.status(401).json({ message: __('common.unauthorized') });
+            return res.status(401).json({ message: __('authentication.unauthorized') });
         }
     ];
 };
