@@ -33,5 +33,8 @@
 	"user": {
 		"user_not_found": "user.user_not_found",
 		"can_not_delete_admin_user": "user.can_not_delete_admin_user"
+	},
+	"stock": {
+		"stock_not_found": "stock.stock_not_found"
 	}
 }

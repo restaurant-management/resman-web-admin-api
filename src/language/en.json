@@ -25,6 +25,9 @@
 		"warehouse_not_found": "Warehouse not found."
 	},
 	"customer": {
-		"customer_not_found": "customer.customer_not_found"
+		"customer_not_found": "Customer not found"
+	},
+	"stock": {
+		"stock_not_found": "Stock not found"
 	}
 }

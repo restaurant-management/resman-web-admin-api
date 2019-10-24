@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitDatabase1571906261957 implements MigrationInterface {
+export class InitDatabase1571933128618 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(
             `CREATE TABLE "dish" ("id" SERIAL NOT NULL, "name" character varying(100) NOT NULL, "description" character varying, "images" text array NOT NULL, "defaultPrice" money NOT NULL DEFAULT 0, CONSTRAINT "PK_59ac7b35af39b231276bfc4c00c" PRIMARY KEY ("id"))`,
@@ -52,6 +52,10 @@ export class InitDatabase1571906261957 implements MigrationInterface {
         );
         await queryRunner.query(
             `CREATE TABLE "import_bill" ("id" SERIAL NOT NULL, "note" character varying, "createAt" TIMESTAMP NOT NULL DEFAULT now(), "updateAt" TIMESTAMP NOT NULL DEFAULT now(), "warehouseId" integer NOT NULL, "userId" integer NOT NULL, CONSTRAINT "PK_5805308b3811de7fa78c527506d" PRIMARY KEY ("id"))`,
+            undefined
+        );
+        await queryRunner.query(
+            `CREATE TABLE "warehouse_stock" ("warehouseId" integer NOT NULL, "stockId" integer NOT NULL, "price" integer, CONSTRAINT "PK_cc337fd27009da7b73c18ed9657" PRIMARY KEY ("warehouseId", "stockId"))`,
             undefined
         );
         await queryRunner.query(
@@ -132,18 +136,6 @@ export class InitDatabase1571906261957 implements MigrationInterface {
         );
         await queryRunner.query(
             `CREATE INDEX "IDX_66db0bb650dbafd9569861f48d" ON "voucher_code_stores_store" ("storeId") `,
-            undefined
-        );
-        await queryRunner.query(
-            `CREATE TABLE "warehouse_stocks_stock" ("warehouseId" integer NOT NULL, "stockId" integer NOT NULL, CONSTRAINT "PK_6a6f3301e8beb4042547a97692c" PRIMARY KEY ("warehouseId", "stockId"))`,
-            undefined
-        );
-        await queryRunner.query(
-            `CREATE INDEX "IDX_a9791f80f5e91f6285759f3a53" ON "warehouse_stocks_stock" ("warehouseId") `,
-            undefined
-        );
-        await queryRunner.query(
-            `CREATE INDEX "IDX_cfb81364281166b5e6ad8cffe0" ON "warehouse_stocks_stock" ("stockId") `,
             undefined
         );
         await queryRunner.query(
@@ -239,6 +231,14 @@ export class InitDatabase1571906261957 implements MigrationInterface {
             undefined
         );
         await queryRunner.query(
+            `ALTER TABLE "warehouse_stock" ADD CONSTRAINT "FK_3b428dd94da788ba06938ccd063" FOREIGN KEY ("warehouseId") REFERENCES "warehouse"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
+            undefined
+        );
+        await queryRunner.query(
+            `ALTER TABLE "warehouse_stock" ADD CONSTRAINT "FK_5f9244b1207d9b026b5dc7c66d8" FOREIGN KEY ("stockId") REFERENCES "stock"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
+            undefined
+        );
+        await queryRunner.query(
             `ALTER TABLE "warehouse" ADD CONSTRAINT "FK_f5aff4026a81fc0b35219edf512" FOREIGN KEY ("storeId") REFERENCES "store"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
             undefined
         );
@@ -327,14 +327,6 @@ export class InitDatabase1571906261957 implements MigrationInterface {
             undefined
         );
         await queryRunner.query(
-            `ALTER TABLE "warehouse_stocks_stock" ADD CONSTRAINT "FK_a9791f80f5e91f6285759f3a53f" FOREIGN KEY ("warehouseId") REFERENCES "warehouse"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
-            undefined
-        );
-        await queryRunner.query(
-            `ALTER TABLE "warehouse_stocks_stock" ADD CONSTRAINT "FK_cfb81364281166b5e6ad8cffe01" FOREIGN KEY ("stockId") REFERENCES "stock"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
-            undefined
-        );
-        await queryRunner.query(
             `ALTER TABLE "user_roles_role" ADD CONSTRAINT "FK_5f9286e6c25594c6b88c108db77" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
             undefined
         );
@@ -383,14 +375,6 @@ export class InitDatabase1571906261957 implements MigrationInterface {
         );
         await queryRunner.query(
             `ALTER TABLE "user_roles_role" DROP CONSTRAINT "FK_5f9286e6c25594c6b88c108db77"`,
-            undefined
-        );
-        await queryRunner.query(
-            `ALTER TABLE "warehouse_stocks_stock" DROP CONSTRAINT "FK_cfb81364281166b5e6ad8cffe01"`,
-            undefined
-        );
-        await queryRunner.query(
-            `ALTER TABLE "warehouse_stocks_stock" DROP CONSTRAINT "FK_a9791f80f5e91f6285759f3a53f"`,
             undefined
         );
         await queryRunner.query(
@@ -455,6 +439,14 @@ export class InitDatabase1571906261957 implements MigrationInterface {
         );
         await queryRunner.query(`ALTER TABLE "warehouse" DROP CONSTRAINT "FK_f5aff4026a81fc0b35219edf512"`, undefined);
         await queryRunner.query(
+            `ALTER TABLE "warehouse_stock" DROP CONSTRAINT "FK_5f9244b1207d9b026b5dc7c66d8"`,
+            undefined
+        );
+        await queryRunner.query(
+            `ALTER TABLE "warehouse_stock" DROP CONSTRAINT "FK_3b428dd94da788ba06938ccd063"`,
+            undefined
+        );
+        await queryRunner.query(
             `ALTER TABLE "import_bill" DROP CONSTRAINT "FK_66874c8c1223f779a0db28e16c3"`,
             undefined
         );
@@ -507,9 +499,6 @@ export class InitDatabase1571906261957 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "IDX_4be2f7adf862634f5f803d246b"`, undefined);
         await queryRunner.query(`DROP INDEX "IDX_5f9286e6c25594c6b88c108db7"`, undefined);
         await queryRunner.query(`DROP TABLE "user_roles_role"`, undefined);
-        await queryRunner.query(`DROP INDEX "IDX_cfb81364281166b5e6ad8cffe0"`, undefined);
-        await queryRunner.query(`DROP INDEX "IDX_a9791f80f5e91f6285759f3a53"`, undefined);
-        await queryRunner.query(`DROP TABLE "warehouse_stocks_stock"`, undefined);
         await queryRunner.query(`DROP INDEX "IDX_66db0bb650dbafd9569861f48d"`, undefined);
         await queryRunner.query(`DROP INDEX "IDX_a99fff5e661542482a4ac46e68"`, undefined);
         await queryRunner.query(`DROP TABLE "voucher_code_stores_store"`, undefined);
@@ -530,6 +519,7 @@ export class InitDatabase1571906261957 implements MigrationInterface {
         await queryRunner.query(`DROP TABLE "user"`, undefined);
         await queryRunner.query(`DROP TABLE "store"`, undefined);
         await queryRunner.query(`DROP TABLE "warehouse"`, undefined);
+        await queryRunner.query(`DROP TABLE "warehouse_stock"`, undefined);
         await queryRunner.query(`DROP TABLE "import_bill"`, undefined);
         await queryRunner.query(`DROP TABLE "import_bill_stock"`, undefined);
         await queryRunner.query(`DROP TABLE "daily_report"`, undefined);
