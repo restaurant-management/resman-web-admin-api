@@ -22,10 +22,10 @@ export class Warehouse extends BaseEntity {
     @Column({ length: 20 })
     public hotline: string;
 
-    @ManyToMany(() => User)
+    @ManyToMany(() => User, user => user.warehouses)
     public users: User[];
 
-    @ManyToMany(() => Stock)
+    @ManyToMany(() => Stock, stock => stock.warehouses)
     @JoinTable()
     public stocks: Stock[];
 

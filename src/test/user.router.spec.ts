@@ -188,6 +188,9 @@ describe('The User Router', () => {
             it('should return 500 error code', () => {
                 return app
                     .delete('/api/users/4/delete')
+                    .set({
+                        Authorization: adminToken
+                    })
                     .expect(res => expect(res.status).toBe(500));
             });
         });
@@ -196,6 +199,9 @@ describe('The User Router', () => {
             it('should return 500 error code', () => {
                 return app
                     .delete('/api/users/1/delete')
+                    .set({
+                        Authorization: adminToken
+                    })
                     .expect(res => expect(res.status).toBe(500));
             });
         });

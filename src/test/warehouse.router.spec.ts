@@ -3,7 +3,7 @@ import { SuperTest, Test } from 'supertest';
 import { User } from '../entity/user';
 import { Application } from '../lib/application';
 
-describe('The Store Router', () => {
+describe('The Warehouse Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
 
@@ -17,26 +17,24 @@ describe('The Store Router', () => {
         }
     });
 
-    describe('when create store', () => {
+    describe('when create warehouse', () => {
         it('should return OK status and json object', () => {
             return app
-                .post('/api/stores/create')
+                .post('/api/warehouses/create')
                 .set({
                     Authorization: adminToken
                 })
                 .send({
-                    name: 'Test Store',
-                    description: 'Test Store Description',
-                    logo: 'logo',
+                    name: 'Test Warehouse',
+                    description: 'Test Warehouse Description',
                     address: 'address',
                     hotline: '0123'
                 })
                 .expect(200)
                 .expect((res) => {
                     expect(res.body).toMatchObject({
-                        name: 'Test Store',
-                        description: 'Test Store Description',
-                        logo: 'logo',
+                        name: 'Test Warehouse',
+                        description: 'Test Warehouse Description',
                         address: 'address',
                         hotline: '0123'
                     });
@@ -44,10 +42,10 @@ describe('The Store Router', () => {
         });
     });
 
-    describe('when get store info', () => {
+    describe('when get warehouse info', () => {
         it('should return OK status', () => {
             return app
-                .get('/api/stores/1')
+                .get('/api/warehouses/1')
                 .set({
                     Authorization: adminToken
                 })
@@ -61,27 +59,27 @@ describe('The Store Router', () => {
         });
     });
 
-    describe('when get all stores', () => {
+    describe('when get all warehouses', () => {
         describe('with normal mode', () => {
             it('should return OK status and json array', () => {
                 return app
-                    .get('/api/stores')
+                    .get('/api/warehouses')
                     .set({
                         Authorization: adminToken
                     })
                     .expect(200)
                     .expect((res) => {
                         expect(res.body.length)
-                            .toBeGreaterThanOrEqual(0);
+                        .toBeGreaterThanOrEqual(0);
                     });
             });
         });
     });
 
-    describe('when update store', () => {
+    describe('when update warehouse', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/stores/1/update')
+                .put('/api/warehouses/1/update')
                 .set({
                     Authorization: adminToken
                 })
@@ -89,8 +87,7 @@ describe('The Store Router', () => {
                     name: 'update name',
                     address: 'update address',
                     hotline: '09876',
-                    description: 'update description',
-                    logo: 'update logo'
+                    description: 'update description'
                 })
                 .expect(200)
                 .expect((res) => {
@@ -100,19 +97,18 @@ describe('The Store Router', () => {
                             name: 'update name',
                             address: 'update address',
                             hotline: '09876',
-                            description: 'update description',
-                            logo: 'update logo'
+                            description: 'update description'
                         }
                     );
                 });
         });
     });
 
-    describe('when delete store', () => {
-        describe('exist store', () => {
+    describe('when delete warehouse', () => {
+        describe('exist warehouse', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/stores/1/delete')
+                    .delete('/api/warehouses/1/delete')
                     .set({
                         Authorization: adminToken
                     })
@@ -120,10 +116,10 @@ describe('The Store Router', () => {
             });
         });
 
-        describe('not found store', () => {
+        describe('not found warehouse', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/stores/3/delete')
+                    .delete('/api/warehouses/3/delete')
                     .set({
                         Authorization: adminToken
                     })

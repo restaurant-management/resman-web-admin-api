@@ -160,6 +160,9 @@ describe('The Customer Router', () => {
             it('should return 500 error code', () => {
                 return app
                     .delete('/api/customers/3/delete')
+                    .set({
+                        Authorization: adminToken
+                    })
                     .expect(res => expect(res.status).toBe(500));
             });
         });

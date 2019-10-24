@@ -20,5 +20,11 @@
 	},
 	"store": {
 		"store_not_found": "Store not found."
+	},
+	"warehouse": {
+		"warehouse_not_found": "Warehouse not found."
+	},
+	"customer": {
+		"customer_not_found": "customer.customer_not_found"
 	}
 }

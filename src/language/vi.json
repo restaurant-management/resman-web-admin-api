@@ -23,5 +23,15 @@
 	},
 	"store": {
 		"store_not_found": "store.store_not_found"
+	},
+	"warehouse": {
+		"warehouse_not_found": "warehouse.warehouse_not_found"
+	},
+	"customer": {
+		"customer_not_found": "customer.customer_not_found"
+	},
+	"user": {
+		"user_not_found": "user.user_not_found",
+		"can_not_delete_admin_user": "user.can_not_delete_admin_user"
 	}
 }

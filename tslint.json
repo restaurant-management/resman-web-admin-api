@@ -19,6 +19,7 @@
     "arrow-parens": false,
     "interface-name": false,
     "no-string-literal": false,
+    "align": false,
     "no-trailing-whitespace": [
       true,
       "ignore-comments"
