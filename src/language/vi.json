@@ -16,5 +16,12 @@
 	},
 	"error": {
 		"can_not_create_user_with_higher_level": "error.can_not_create_user_with_higher_level"
+	},
+	"authentication": {
+		"no_token_provided": "authentication.no_token_provided",
+		"fail_authenticate_token": "authentication.fail_authenticate_token"
+	},
+	"store": {
+		"store_not_found": "store.store_not_found"
 	}
 }

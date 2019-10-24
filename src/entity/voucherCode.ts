@@ -42,7 +42,7 @@ export class VoucherCode extends BaseEntity {
     @Column()
     public value: number;
 
-    @ManyToMany(() => Store)
+    @ManyToMany(_type => Store, store => store.voucherCodes, { onDelete: 'CASCADE' })
     @JoinTable()
     public stores: Store[];
 }

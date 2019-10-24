@@ -36,7 +36,7 @@ export class DiscountCode extends BaseEntity {
     @Column()
     public discount: number;
 
-    @ManyToMany(() => Store)
+    @ManyToMany(_type => Store, store => store.discountCodes, { onDelete: 'CASCADE' })
     @JoinTable()
     public stores: Store[];
 }

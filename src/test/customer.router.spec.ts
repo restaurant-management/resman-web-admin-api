@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { SuperTest, Test } from 'supertest';
-import { Application } from '../lib/application';
 import { User } from '../entity/user';
+import { Application } from '../lib/application';
 
 describe('The Customer Router', () => {
     let app: SuperTest<Test>;
@@ -60,9 +60,9 @@ describe('The Customer Router', () => {
                     .expect((res) => {
                         expect(res.body).toMatchObject([
                             {
-                                "id": 1,
-                                "username": "customer",
-                                "email": "16520361@gm.uit.edu.vn"
+                                id: 1,
+                                username: 'customer',
+                                email: '16520361@gm.uit.edu.vn'
                             }
                         ]);
                     });

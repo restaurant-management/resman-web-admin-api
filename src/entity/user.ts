@@ -37,30 +37,18 @@ export class User extends BaseEntity {
     @Column({ length: 200 })
     public address: string;
 
-    @ManyToMany(() => Role, { eager: true })
+    @ManyToMany(_type => Role, { eager: true })
     @JoinTable()
     public roles: Role[];
 
-    @ManyToMany(() => Store)
+    @ManyToMany(_type => Store, store => store.users, { onDelete: 'CASCADE' })
     @JoinTable()
     public stores: Store[];
 
-    @ManyToMany(() => Warehouse)
+    @ManyToMany(_type => Warehouse)
     @JoinTable()
     public warehouses: Warehouse[];
 
     @OneToMany(_type => BillHistory, history => history.user)
     public billHistories: BillHistory[];
-
-    get permissions(): string[] {
-        let permissions = [];
-
-        this.roles.forEach(role => {
-            permissions = permissions.concat(role.permissions);
-        });
-
-        console.log(permissions);
-
-        return permissions;
-    }
 }

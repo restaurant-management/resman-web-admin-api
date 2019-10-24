@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitDatabase1571377841377 implements MigrationInterface {
+export class InitDatabase1571906261957 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(
             `CREATE TABLE "dish" ("id" SERIAL NOT NULL, "name" character varying(100) NOT NULL, "description" character varying, "images" text array NOT NULL, "defaultPrice" money NOT NULL DEFAULT 0, CONSTRAINT "PK_59ac7b35af39b231276bfc4c00c" PRIMARY KEY ("id"))`,
@@ -27,7 +27,7 @@ export class InitDatabase1571377841377 implements MigrationInterface {
             undefined
         );
         await queryRunner.query(
-            `CREATE TABLE "store_dish" ("storeId" integer NOT NULL, "dishId" integer NOT NULL, "discount" integer, CONSTRAINT "PK_2672bf15a6f38568ba90a257e2b" PRIMARY KEY ("storeId", "dishId"))`,
+            `CREATE TABLE "store_dish" ("storeId" integer NOT NULL, "dishId" integer NOT NULL, "price" integer, CONSTRAINT "PK_2672bf15a6f38568ba90a257e2b" PRIMARY KEY ("storeId", "dishId"))`,
             undefined
         );
         await queryRunner.query(

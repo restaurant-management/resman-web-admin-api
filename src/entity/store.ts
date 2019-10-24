@@ -1,7 +1,6 @@
 import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DiscountCampaign } from './discountCampaign';
 import { DiscountCode } from './discountCode';
-import { Dish } from './dish';
 import { StoreDish } from './storeDish';
 import { User } from './user';
 import { VoucherCode } from './voucherCode';
@@ -27,21 +26,21 @@ export class Store extends BaseEntity {
     @Column({ length: 20 })
     public hotline: string;
 
-    @ManyToMany(() => User)
+    @ManyToMany(_type => User, user => user.stores)
     public users: User[];
 
-    @ManyToMany(() => DiscountCode)
+    @ManyToMany(_type => DiscountCode, discountCode => discountCode.stores)
     public discountCodes: DiscountCode[];
 
-    @ManyToMany(() => VoucherCode)
+    @ManyToMany(_type => VoucherCode, voucherCode => voucherCode.stores)
     public voucherCodes: VoucherCode[];
 
-    @ManyToMany(() => DiscountCampaign)
+    @ManyToMany(_type => DiscountCampaign, discountCampaign => discountCampaign.stores)
     public discountCampaigns: DiscountCampaign[];
 
-    @OneToMany(() => StoreDish, dish => dish.store)
-    public dishes: Dish[];
+    @OneToMany(_type => StoreDish, dish => dish.store)
+    public storeDishes: StoreDish[];
 
-    @OneToMany(() => Warehouse, warehouse => warehouse.store)
+    @OneToMany(_type => Warehouse, warehouse => warehouse.store)
     public warehouses: Warehouse[];
 }
