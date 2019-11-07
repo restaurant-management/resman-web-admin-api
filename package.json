@@ -37,6 +37,7 @@
   },
   "homepage": "https://github.com/hienlh/node-express-typescript#readme",
   "dependencies": {
+    "@types/express-serve-static-core": "^4.16.11",
     "@types/i18n": "^0.8.6",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.5",
