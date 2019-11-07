@@ -3,7 +3,7 @@ import { SuperTest, Test } from 'supertest';
 import { User } from '../entity/user';
 import { Application } from '../lib/application';
 
-describe('The Stock Router', () => {
+describe('The ImportBill Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
 
@@ -17,33 +17,49 @@ describe('The Stock Router', () => {
         }
     });
 
-    describe('when create stock', () => {
+    describe('when create import bill', () => {
         it('should return OK status and json object', () => {
             return app
-                .post('/api/stocks')
+                .post('/api/import_bills')
                 .set({
                     Authorization: adminToken
                 })
                 .send({
-                    name: 'Test Stock',
-                    price: 20000,
-                    unit: 'Box'
+                    stockIds: [1, 2],
+                    quantities: [5, 10],
+                    warehouseId: 1,
+                    username: 'admin',
+                    note: 'admin'
                 })
                 .expect(200)
                 .expect((res) => {
                     expect(res.body).toMatchObject({
-                        name: 'Test Stock',
-                        price: 20000,
-                        unit: 'Box'
+                        warehouse: {
+                            id: 1
+                        },
+                        stocks: [
+                            {
+                                stockId: 1,
+                                quantity: 5,
+                            },
+                            {
+                                stockId: 2,
+                                quantity: 10
+                            }
+                        ],
+                        user: {
+                            username: 'admin'
+                        },
+                        note: 'admin'
                     });
                 });
         });
     });
 
-    describe('when get stock info', () => {
+    describe('when get import bill info', () => {
         it('should return OK status', () => {
             return app
-                .get('/api/stocks/1')
+                .get('/api/import_bills/1')
                 .set({
                     Authorization: adminToken
                 })
@@ -57,65 +73,87 @@ describe('The Stock Router', () => {
         });
     });
 
-    describe('when get all stocks', () => {
+    describe('when get all import bills', () => {
         describe('with normal mode', () => {
             it('should return OK status and json array', () => {
                 return app
-                    .get('/api/stocks')
+                    .get('/api/import_bills')
                     .set({
                         Authorization: adminToken
                     })
                     .expect(200)
                     .expect((res) => {
                         expect(res.body.length)
-                        .toBeGreaterThanOrEqual(0);
+                            .toBeGreaterThanOrEqual(0);
                     });
             });
         });
     });
 
-    describe('when update stock', () => {
+    describe('when update import bill', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/stocks/1')
+                .put('/api/import_bills/1')
                 .set({
                     Authorization: adminToken
                 })
                 .send({
-                    name: 'Test Update Stock',
-                    price: 30000,
-                    unit: 'Can'
+                    username: 'staff',
+                    note: 'Test Update'
                 })
                 .expect(200)
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
                             id: 1,
-                            name: 'Test Update Stock',
-                            price: 30000,
-                            unit: 'Can'
+                            user: {
+                                username: 'staff'
+                            },
+                            note: 'Test Update'
                         }
                     );
                 });
         });
     });
 
-    describe('when delete stock', () => {
-        describe('exist stock', () => {
+    describe('when delete importBill', () => {
+        describe('exist importBill', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/stocks/4')
+                    .delete('/api/import_bills/1')
                     .set({
                         Authorization: adminToken
                     })
                     .expect(res => expect(res.status).toBe(200));
             });
+
+            it('should minus warehouse stock quantity', () => {
+                return app
+                    .get('/api/warehouses/1')
+                    .set({
+                        Authorization: adminToken
+                    })
+                    .expect((res) => {
+                        expect(res.body).toMatchObject(
+                            {
+                                warehouseStocks: [
+                                  {
+                                    quantity: 0
+                                  },
+                                  {
+                                    quantity: 0
+                                  }
+                                ]
+                            }
+                        );
+                    });
+            });
         });
 
-        describe('not found stock', () => {
+        describe('not found importBill', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/stocks/0')
+                    .delete('/api/import_bills/0')
                     .set({
                         Authorization: adminToken
                     })

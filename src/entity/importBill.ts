@@ -11,16 +11,17 @@ export class ImportBill extends BaseEntity {
     @Column({ nullable: true })
     public note: string;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamp with time zone' })
     public createAt: Date;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({ type: 'timestamp with time zone' })
     public updateAt: Date;
 
     @OneToMany(() => ImportBillStock, stock => stock.importBill, { nullable: false })
     public stocks: ImportBillStock[];
 
-    @ManyToOne(() => Warehouse, warehouse => warehouse.importBills, { nullable: false, onDelete: 'CASCADE' })
+    @ManyToOne(() => Warehouse, warehouse => warehouse.importBills,
+        { nullable: false, onDelete: 'CASCADE', eager: true })
     @JoinColumn({ name: 'warehouseId' })
     public warehouse: Warehouse;
 

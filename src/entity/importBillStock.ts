@@ -11,7 +11,7 @@ export class ImportBillStock extends BaseEntity {
     @PrimaryColumn()
     public importBillId: number;
 
-    @ManyToOne(() => Stock, { nullable: false, onDelete: 'NO ACTION' })
+    @ManyToOne(() => Stock, { nullable: true })
     @JoinColumn({ name: 'stockId' })
     public stock: Stock;
 

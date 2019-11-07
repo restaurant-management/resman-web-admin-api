@@ -5,7 +5,7 @@ module.exports = [
     "url": process.env.DATABASE_URL,
     "synchronize": false,
     "migrationsRun": false,
-    "ssl": true,
+    "ssl": false,
     "logging": false,
     "entities": [
       "src/entity/**/*.ts"
@@ -28,7 +28,7 @@ module.exports = [
     "url": process.env.DEV_DATABASE_URL,
     "synchronize": false,
     "migrationsRun": true,
-    "ssl": true,
+    "ssl": false,
     "logging": false,
     "entities": [
       "src/entity/**/*.ts"

@@ -64,15 +64,6 @@ describe('The User Router', () => {
                                 fullName: null,
                                 id: 1,
                                 phoneNumber: '0123456789',
-                                roles: [
-                                    {
-                                        description: null,
-                                        id: 1,
-                                        level: 5,
-                                        name: 'Administrator',
-                                        slug: 'administrator'
-                                    }
-                                ],
                                 username: 'admin',
                                 uuid: expect.stringMatching(/.*/)
                             },
@@ -84,7 +75,6 @@ describe('The User Router', () => {
                                 fullName: null,
                                 id: 2,
                                 phoneNumber: '01231234234',
-                                roles: [],
                                 username: 'staff',
                                 uuid: expect.stringMatching(/.*/)
                             },
@@ -96,7 +86,6 @@ describe('The User Router', () => {
                                 fullName: null,
                                 id: 3,
                                 phoneNumber: '12323123',
-                                roles: [],
                                 username: 'chef',
                                 uuid: expect.stringMatching(/.*/)
                             }
@@ -109,7 +98,7 @@ describe('The User Router', () => {
     describe('when create user', () => {
         it('should return OK status and json object', () => {
             return app
-                .post('/api/users/create')
+                .post('/api/users')
                 .set({
                     Authorization: adminToken
                 })
@@ -140,7 +129,7 @@ describe('The User Router', () => {
     describe('when update user', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/users/2/update')
+                .put('/api/users/2')
                 .set({
                     Authorization: adminToken
                 })
@@ -176,7 +165,7 @@ describe('The User Router', () => {
         describe('normal user', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/users/4/delete')
+                    .delete('/api/users/4')
                     .set({
                         Authorization: adminToken
                     })
@@ -187,7 +176,7 @@ describe('The User Router', () => {
         describe('not found user', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/users/4/delete')
+                    .delete('/api/users/5')
                     .set({
                         Authorization: adminToken
                     })
@@ -198,7 +187,7 @@ describe('The User Router', () => {
         describe('default admin user', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/users/1/delete')
+                    .delete('/api/users/1')
                     .set({
                         Authorization: adminToken
                     })

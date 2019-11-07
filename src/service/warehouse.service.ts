@@ -1,4 +1,5 @@
 import { __ } from 'i18n';
+import { DailyReport } from '../entity/dailyReport';
 import { Warehouse } from '../entity/warehouse';
 
 class WarehouseService {
@@ -28,6 +29,10 @@ class WarehouseService {
     public async edit(id: number, name?: string, address?: string, hotline?: string, description?: string) {
         const warehouse = await Warehouse.findOne(id);
 
+        if (!warehouse) {
+            throw new Error(__('warehouse.warehouse_not_found'));
+        }
+
         if (name) { warehouse.name = name; }
         if (address) { warehouse.address = address; }
         if (hotline) { warehouse.hotline = hotline; }
@@ -47,13 +52,51 @@ class WarehouseService {
     }
 
     public async getOne(id: number) {
-        const warehouse = await Warehouse.findOne(id);
+        const warehouse = await Warehouse.findOne(id, { relations: ['warehouseStocks'] });
 
         if (!warehouse) {
             throw new Error(__('warehouse.warehouse_not_found'));
         }
 
         return warehouse;
+    }
+
+    public async updateStockQuantityByReport(id: number, dailyReport: DailyReport) {
+        const warehouse = await Warehouse.findOne(id);
+
+        if (!warehouse) {
+            throw new Error(__('warehouse.warehouse_not_found'));
+        }
+
+        const warehouseStocks = warehouse.warehouseStocks;
+
+        for (const reportStock of dailyReport.stocks) {
+            const index = warehouseStocks.findIndex(i => i.stockId === reportStock.stockId);
+
+            if (index !== -1) {
+                if (warehouseStocks[index].quantity < reportStock.quantity) {
+                    throw new Error(
+                        __('warehouse.error_report_get_{{get_number}}_stocks_id_{{stock_id}}_but_warehouse_just_have_{{cur_number}}',
+                            {
+                                stock_id: reportStock.stockId.toString(),
+                                get_number: reportStock.quantity.toString(),
+                                cur_number: warehouseStocks[index].quantity.toString()
+                            }
+                        )
+                    );
+                }
+
+                warehouseStocks[index].quantity -= reportStock.quantity;
+                await warehouseStocks[index].save();
+            } else {
+                throw new Error(
+                    __('warehouse.warehouse_do_not_have_stock_id_{{id}}', { id: reportStock.stockId.toString() }));
+            }
+        }
+
+        warehouse.warehouseStocks = warehouseStocks;
+
+        return await warehouse.save();
     }
 }
 

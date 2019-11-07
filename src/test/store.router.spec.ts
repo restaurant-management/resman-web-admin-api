@@ -20,7 +20,7 @@ describe('The Store Router', () => {
     describe('when create store', () => {
         it('should return OK status and json object', () => {
             return app
-                .post('/api/stores/create')
+                .post('/api/stores')
                 .set({
                     Authorization: adminToken
                 })
@@ -81,7 +81,7 @@ describe('The Store Router', () => {
     describe('when update store', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/stores/1/update')
+                .put('/api/stores/1')
                 .set({
                     Authorization: adminToken
                 })
@@ -112,7 +112,7 @@ describe('The Store Router', () => {
         describe('exist store', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/stores/1/delete')
+                    .delete('/api/stores/1')
                     .set({
                         Authorization: adminToken
                     })
@@ -123,7 +123,7 @@ describe('The Store Router', () => {
         describe('not found store', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/stores/3/delete')
+                    .delete('/api/stores/3')
                     .set({
                         Authorization: adminToken
                     })

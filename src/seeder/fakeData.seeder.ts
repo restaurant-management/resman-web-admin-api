@@ -1,4 +1,5 @@
 import { Customer } from '../entity/customer';
+import { Stock } from '../entity/stock';
 import { Store } from '../entity/store';
 import { User } from '../entity/user';
 import { Warehouse } from '../entity/warehouse';
@@ -20,10 +21,11 @@ export const seedFakeData = async () => {
     await seedFakeUser();
     await seedStore();
     await seedWarehouse();
+    await seedStock();
 };
 
 const seedFakeUser = async () => {
-    let staff = await User.findOne({ where: {username: 'staff'}});
+    let staff = await User.findOne({ where: { username: 'staff' } });
     if (!staff) {
         staff = new User();
         staff.username = 'staff';
@@ -34,7 +36,7 @@ const seedFakeUser = async () => {
         await staff.save();
     }
 
-    let chef = await User.findOne({ where: {username: 'chef'}});
+    let chef = await User.findOne({ where: { username: 'chef' } });
     if (!chef) {
         chef = new User();
         chef.username = 'chef';
@@ -63,10 +65,49 @@ const seedWarehouse = async () => {
     let warehouse = await Warehouse.findOne(1);
     if (!warehouse) {
         warehouse = new Warehouse();
-        warehouse.name = 'Store';
-        warehouse.description = 'Store';
-        warehouse.address = 'Store';
+        warehouse.name = 'Warehouse1';
+        warehouse.description = 'Warehouse1';
+        warehouse.address = 'Warehouse1';
         warehouse.hotline = '123456';
         await warehouse.save();
+    }
+
+    warehouse = await Warehouse.findOne(2);
+    if (!warehouse) {
+        warehouse = new Warehouse();
+        warehouse.name = 'Warehouse2';
+        warehouse.description = 'Warehouse2';
+        warehouse.address = 'Warehouse2';
+        warehouse.hotline = '123456';
+        await warehouse.save();
+    }
+};
+
+const seedStock = async () => {
+    let stock = await Stock.findOne(1);
+    if (!stock) {
+        stock = new Stock();
+        stock.name = 'Fish';
+        stock.price = 20000;
+        stock.unit = 'KG';
+        await stock.save();
+    }
+
+    stock = await Stock.findOne(2);
+    if (!stock) {
+        stock = new Stock();
+        stock.name = 'Hotdog';
+        stock.price = 50000;
+        stock.unit = 'Bag';
+        await stock.save();
+    }
+
+    stock = await Stock.findOne(3);
+    if (!stock) {
+        stock = new Stock();
+        stock.name = 'Milk';
+        stock.price = 10000;
+        stock.unit = 'Box';
+        await stock.save();
     }
 };

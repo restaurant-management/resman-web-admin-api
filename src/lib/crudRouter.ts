@@ -23,10 +23,10 @@ const crudRouter = (router: Router, controller: ICrudController, options: CrudRo
     const deleteMiddleware = options.deleteMiddleware ? options.deleteMiddleware : [];
 
     router.get(namespace + '/', ...middleware, ...listMiddleware, controller.list);
-    router.post(namespace + '/create', ...middleware, ...createMiddleware, controller.create);
+    router.post(namespace + '/', ...middleware, ...createMiddleware, controller.create);
     router.get(namespace + '/:id', ...middleware, ...readMiddleware, controller.read);
-    router.put(namespace + '/:id/update', ...middleware, ...updateMiddleware, controller.update);
-    router.delete(namespace + '/:id/delete', ...middleware, ...deleteMiddleware, controller.delete);
+    router.put(namespace + '/:id', ...middleware, ...updateMiddleware, controller.update);
+    router.delete(namespace + '/:id', ...middleware, ...deleteMiddleware, controller.delete);
 };
 
 export { crudRouter as CrudRouter };

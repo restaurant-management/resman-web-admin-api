@@ -29,5 +29,17 @@
 	},
 	"stock": {
 		"stock_not_found": "Stock not found"
+	},
+	"import_bill": {
+		"stockIds_length_have_to_equal_quantities_length": "Number of stockIds have to equal with number of quantities.",
+		"warehouse_not_found": "import_bill.warehouse_not_found",
+		"user_{{username}}_not_found": "import_bill.user_{{username}}_not_found",
+		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found"
+	},
+	"error": {
+		"missing_required_information": "error.missing_required_information"
+	},
+	"importBill": {
+		"importBill_not_found": "importBill.importBill_not_found"
 	}
 }

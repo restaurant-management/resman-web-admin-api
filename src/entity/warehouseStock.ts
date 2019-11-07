@@ -4,7 +4,8 @@ import { Warehouse } from './warehouse';
 
 @Entity()
 export class WarehouseStock extends BaseEntity {
-    @ManyToOne(() => Warehouse, warehouse => warehouse.warehouseStocks, { nullable: false, onDelete: 'CASCADE' })
+    @ManyToOne(() => Warehouse, warehouse => warehouse.warehouseStocks,
+        { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'warehouseId' })
     public warehouse: Warehouse;
 
@@ -18,6 +19,6 @@ export class WarehouseStock extends BaseEntity {
     @PrimaryColumn()
     public stockId: number;
 
-    @Column({ nullable: true })
-    public price: number;
+    @Column({ default: 0 })
+    public quantity: number;
 }

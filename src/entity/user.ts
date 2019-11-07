@@ -37,7 +37,7 @@ export class User extends BaseEntity {
     @Column({ length: 200 })
     public address: string;
 
-    @ManyToMany(_type => Role, { eager: true })
+    @ManyToMany(_type => Role)
     @JoinTable()
     public roles: Role[];
 

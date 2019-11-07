@@ -15,7 +15,8 @@
 		"unauthorized": "common.unauthorized"
 	},
 	"error": {
-		"can_not_create_user_with_higher_level": "error.can_not_create_user_with_higher_level"
+		"can_not_create_user_with_higher_level": "error.can_not_create_user_with_higher_level",
+		"missing_required_information": "error.missing_required_information"
 	},
 	"authentication": {
 		"no_token_provided": "authentication.no_token_provided",
@@ -32,9 +33,20 @@
 	},
 	"user": {
 		"user_not_found": "user.user_not_found",
-		"can_not_delete_admin_user": "user.can_not_delete_admin_user"
+		"can_not_delete_admin_user": "user.can_not_delete_admin_user",
+		"username_or_email_incorrect": "user.username_or_email_incorrect",
+		"phone_number_has_already_used": "user.phone_number_has_already_used"
 	},
 	"stock": {
 		"stock_not_found": "stock.stock_not_found"
+	},
+	"import_bill": {
+		"stockIds_length_have_to_equal_quantities_length": "import_bill.stockIds_length_have_to_equal_quantities_length",
+		"warehouse_not_found": "import_bill.warehouse_not_found",
+		"user_{{username}}_not_found": "import_bill.user_{{username}}_not_found",
+		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found"
+	},
+	"importBill": {
+		"importBill_not_found": "importBill.importBill_not_found"
 	}
 }

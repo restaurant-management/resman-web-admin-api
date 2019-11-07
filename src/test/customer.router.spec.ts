@@ -73,7 +73,7 @@ describe('The Customer Router', () => {
     describe('when create customer', () => {
         it('should return OK status and json object', () => {
             return app
-                .post('/api/customers/create')
+                .post('/api/customers')
                 .set({
                     Authorization: adminToken
                 })
@@ -99,7 +99,7 @@ describe('The Customer Router', () => {
     describe('when update customer', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/customers/1/update')
+                .put('/api/customers/1')
                 .set({
                     Authorization: adminToken
                 })
@@ -148,7 +148,7 @@ describe('The Customer Router', () => {
         describe('normal user', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/customers/1/delete')
+                    .delete('/api/customers/1')
                     .set({
                         Authorization: adminToken
                     })
@@ -159,7 +159,7 @@ describe('The Customer Router', () => {
         describe('not found customer', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/customers/3/delete')
+                    .delete('/api/customers/3')
                     .set({
                         Authorization: adminToken
                     })

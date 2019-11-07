@@ -61,4 +61,3 @@ class UserController implements ICrudController {
 const userController = new UserController();
 
 export { userController as UserController };
-

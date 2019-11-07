@@ -11,7 +11,7 @@ export class Bill extends BaseEntity {
     @Column()
     public tableNumber: number;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamp with time zone' })
     public createAt: Date;
 
     @Column('timestamp with time zone', { nullable: true })

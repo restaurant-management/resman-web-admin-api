@@ -12,7 +12,7 @@ class UserService {
      * @param requireLevelRoles List role slugs to get require level.
      */
     public async checkRoleLevel(userId: number, requireLevelRoles: string[] = []): Promise<boolean> {
-        const user = await User.findOne(userId);
+        const user = await User.findOne(userId, { relations: ['roles'] });
         let highestUserRoleLevel = 0;
         let requireRoleLevel = 0;
 
@@ -98,7 +98,7 @@ class UserService {
     }
 
     public async create(username: string, email: string, password: string, phoneNumber: string, address: string,
-                        fullName?: string, avatar?: string, birthday?: Date, roles?: string[]) {
+        fullName?: string, avatar?: string, birthday?: Date, roles?: string[]) {
         if (await User.findOne({ where: { username } })) {
             throw new Error(__('user.username_has_already_used'));
         }
@@ -139,8 +139,8 @@ class UserService {
     }
 
     public async edit(id: number, password?: string, phoneNumber?: string, address?: string,
-                      fullName?: string, avatar?: string, birthday?: Date, roles?: string[]) {
-        const user = await User.findOne(id);
+        fullName?: string, avatar?: string, birthday?: Date, roles?: string[]) {
+        const user = await User.findOne(id, { relations: ['roles'] });
 
         if (address === '') {
             throw new Error(__('user.address_must_be_not_empty'));
@@ -192,7 +192,7 @@ class UserService {
     }
 
     public async getOne(id: number) {
-        const user = await User.findOne(id);
+        const user = await User.findOne(id, { relations: ['roles'] });
 
         if (!user) {
             throw new Error(__('user.user_not_found'));

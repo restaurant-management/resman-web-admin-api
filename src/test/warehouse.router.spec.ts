@@ -20,7 +20,7 @@ describe('The Warehouse Router', () => {
     describe('when create warehouse', () => {
         it('should return OK status and json object', () => {
             return app
-                .post('/api/warehouses/create')
+                .post('/api/warehouses')
                 .set({
                     Authorization: adminToken
                 })
@@ -79,7 +79,7 @@ describe('The Warehouse Router', () => {
     describe('when update warehouse', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/warehouses/1/update')
+                .put('/api/warehouses/1')
                 .set({
                     Authorization: adminToken
                 })
@@ -108,7 +108,7 @@ describe('The Warehouse Router', () => {
         describe('exist warehouse', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/warehouses/1/delete')
+                    .delete('/api/warehouses/1')
                     .set({
                         Authorization: adminToken
                     })
@@ -119,7 +119,7 @@ describe('The Warehouse Router', () => {
         describe('not found warehouse', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/warehouses/3/delete')
+                    .delete('/api/warehouses/0')
                     .set({
                         Authorization: adminToken
                     })
