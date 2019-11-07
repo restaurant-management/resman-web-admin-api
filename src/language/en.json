@@ -40,6 +40,10 @@
 		"missing_required_information": "error.missing_required_information"
 	},
 	"importBill": {
-		"importBill_not_found": "importBill.importBill_not_found"
+		"importBill_not_found": "Import bill not found."
+	},
+	"socket": {
+		"{{name}}_connected": "{{name}} connected.",
+		"{{name}}_disconnected": "{{name}} disconnected."
 	}
 }

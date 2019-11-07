@@ -48,5 +48,9 @@
 	},
 	"importBill": {
 		"importBill_not_found": "importBill.importBill_not_found"
+	},
+	"socket": {
+		"{{name}}_connected": "socket.{{name}}_connected",
+		"{{name}}_disconnected": "socket.{{name}}_disconnected"
 	}
 }
