@@ -24,7 +24,7 @@ class Repository {
     public getMessages(number: number) {
         const start = this._messages.length - number - 1;
 
-        return this._messages.slice(start < 0 ? 0 : start, this._messages.length - 1);
+        return this._messages.slice(start < 0 ? 0 : start, this._messages.length);
     }
 }
 
