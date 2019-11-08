@@ -20,7 +20,8 @@ export const createSocket = (app: Server) => {
         socket.broadcast.emit('new_user', __('socket.{{name}}_connected', { name: user.name }));
 
         socket.emit('first_connect', {
-            number_of_user: repository.getUsers().length,
+            user,
+            users: repository.getUsers(),
             messages: repository.getMessages(10)
         });
 
