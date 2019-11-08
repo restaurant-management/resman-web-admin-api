@@ -1,34 +1,41 @@
 import { Server } from 'http';
 import { __ } from 'i18n';
 import Socket from 'socket.io';
-import { User } from '../entity/user';
 import { SocketUserAuth } from '../middleware/socketAuth';
+import { ChatMessage } from './userChat/chatMessage';
+import { ChatUser } from './userChat/chatUser';
+import { UserChatRepository } from './userChat/repository';
 
 export const createSocket = (app: Server) => {
     const io = Socket(app);
+    const repository = UserChatRepository;
 
     io.of('/user-chat').use(SocketUserAuth).on('connection', (socket) => {
-        const user: User = socket['user'];
-        const { fullName, username } = user;
-        const name = fullName || username;
+        const user: ChatUser = ChatUser.fromUser(socket['user']);
+        repository.addUser(user);
 
         if (!user) { socket.disconnect(true); }
 
-        console.log(__('socket.{{name}}_connected', { name }));
-        socket.broadcast.emit('new_user', __('socket.{{name}}_connected', { name }));
+        console.log(__('socket.{{name}}_connected', { name: user.name }));
+        socket.broadcast.emit('new_user', __('socket.{{name}}_connected', { name: user.name }));
+
+        socket.emit('first_connect', {
+            number_of_user: repository.getUsers().length,
+            messages: repository.getMessages(10)
+        });
 
         socket.on('global_message', (msg) => {
-            socket.broadcast.emit('new_message', {
-                username,
-                fullName,
-                message: msg
-            });
+            const message = new ChatMessage(msg, user);
+            repository.addMessage(message);
+
+            socket.broadcast.emit('new_message', message);
         });
 
         socket.on('disconnect', () => {
-            console.log(__('socket.{{name}}_disconnected', { name }));
+            repository.removeUser(user);
+            console.log(__('socket.{{name}}_disconnected', { name: user.name }));
             socket.broadcast.emit('disconnect_user',
-                __('socket.{{name}}_disconnected', { name }));
+                __('socket.{{name}}_disconnected', { name: user.name }));
         });
     });
 };
