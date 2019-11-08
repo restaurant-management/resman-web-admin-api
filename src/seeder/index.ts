@@ -3,6 +3,8 @@ import { seedRole } from './role.seeder';
 import { seedUser } from './user.seeder';
 
 export default async function seedData() {
+    console.log('Seeding...');
+
     await seedRole();
     await seedUser();
 
