@@ -22,7 +22,9 @@ class Repository {
     }
 
     public getMessages(number: number) {
-        return this._messages.slice(this._messages.length - number - 1, this._messages.length - 1);
+        const start = this._messages.length - number - 1;
+
+        return this._messages.slice(start < 0 ? 0 : start, this._messages.length - 1);
     }
 }
 
