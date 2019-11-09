@@ -59,5 +59,9 @@
 	},
 	"dish": {
 		"delete_fail": "dish.delete_fail"
+	},
+	"dailyDish": {
+		"daily_dish_not_found": "dailyDish.daily_dish_not_found",
+		"delete_fail": "dailyDish.delete_fail"
 	}
 }

@@ -191,8 +191,24 @@ class UserService {
         await user.remove();
     }
 
-    public async getOne(id: number) {
-        const user = await User.findOne(id, { relations: ['roles'] });
+    public async getOne(key: { id?: number, uuid?: string, username?: string, email?: string },
+        withRoles: boolean = true) {
+
+        if (!key.id && !key.uuid && !key.username && !key.email) {
+            throw new Error(__('user.user_not_found'));
+        }
+
+        let user: User = null;
+
+        if (key.id) {
+            user = await User.findOne({ relations: withRoles ? ['roles'] : null, where: { id: key.id } });
+        } else if (key.uuid) {
+            user = await User.findOne({ relations: withRoles ? ['roles'] : null, where: { uuid: key.uuid } });
+        } else if (key.username) {
+            user = await User.findOne({ relations: withRoles ? ['roles'] : null, where: { username: key.username } });
+        } else {
+            user = await User.findOne({ relations: withRoles ? ['roles'] : null, where: { email: key.email } });
+        }
 
         if (!user) {
             throw new Error(__('user.user_not_found'));

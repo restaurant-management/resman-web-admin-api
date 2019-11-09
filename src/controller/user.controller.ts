@@ -31,7 +31,7 @@ class UserController implements ICrudController {
     }
 
     public read(req: Request, res: Response, next: NextFunction): void {
-        UserService.getOne(parseInt(req.params.id, 10)).then((value) =>
+        UserService.getOne({id: parseInt(req.params.id, 10)}).then((value) =>
             res.status(200).json(value)
         ).catch(e => next(e));
     }
