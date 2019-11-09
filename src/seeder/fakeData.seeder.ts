@@ -1,11 +1,16 @@
 import { Customer } from '../entity/customer';
+import { ImportBill } from '../entity/importBill';
 import { Stock } from '../entity/stock';
 import { Store } from '../entity/store';
 import { User } from '../entity/user';
 import { Warehouse } from '../entity/warehouse';
 import { PasswordHandler } from '../helper/passwordHandler';
+import { ImportBillService } from '../service/importBill.service';
+import { WarehouseService } from '../service/warehouse.service';
 
 export const seedFakeData = async () => {
+    console.info('Seeding fake data...');
+
     let customer = await Customer.findOne({ where: { username: 'customer' } });
 
     if (!customer) {
@@ -14,14 +19,13 @@ export const seedFakeData = async () => {
         customer.email = '16520361@gm.uit.edu.vn';
         customer.password = PasswordHandler.encode('customer');
         await customer.save();
-
-        console.log('Seeded fake data!');
     }
 
     await seedFakeUser();
     await seedStore();
     await seedWarehouse();
     await seedStock();
+    await seedImportBill();
 };
 
 const seedFakeUser = async () => {
@@ -58,29 +62,19 @@ const seedStore = async () => {
         store.address = 'Store';
         store.hotline = '123456';
         await store.save();
+        console.log('Seeded store!');
     }
 };
 
 const seedWarehouse = async () => {
-    let warehouse = await Warehouse.findOne(1);
-    if (!warehouse) {
-        warehouse = new Warehouse();
-        warehouse.name = 'Warehouse1';
-        warehouse.description = 'Warehouse1';
-        warehouse.address = 'Warehouse1';
-        warehouse.hotline = '123456';
-        await warehouse.save();
+    if (!await Warehouse.findOne(1)) {
+        await WarehouseService.create('Warehouse1', 'Warehouse1', '123456789', 'Warehouse1', 1);
     }
 
-    warehouse = await Warehouse.findOne(2);
-    if (!warehouse) {
-        warehouse = new Warehouse();
-        warehouse.name = 'Warehouse2';
-        warehouse.description = 'Warehouse2';
-        warehouse.address = 'Warehouse2';
-        warehouse.hotline = '123456';
-        await warehouse.save();
+    if (!await Warehouse.findOne(2)) {
+        await WarehouseService.create('Warehouse2', 'Warehouse2', '123456789', 'Warehouse2', 1);
     }
+    console.log('Seeded warehouse!');
 };
 
 const seedStock = async () => {
@@ -109,5 +103,21 @@ const seedStock = async () => {
         stock.price = 10000;
         stock.unit = 'Box';
         await stock.save();
+    }
+    console.log('Seeded stock!');
+};
+
+const seedImportBill = async () => {
+    if (!await ImportBill.findOne(1)) {
+        await ImportBillService.create(
+            [1, 2],
+            [5, 10],
+            1,
+            'admin',
+            'Test import bill',
+            [10, 20],
+            ['Gia re', 'ngon']
+        );
+        console.log('Seeded import bill!');
     }
 };

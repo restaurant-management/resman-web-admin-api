@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "npm run test-server && npm run test-client",
-    "test-server": "NODE_ENV=test ts-node clearTestDatabase.ts && jest --forceExit",
+    "test-server": "NODE_ENV=test ts-node clearTestDatabase.ts && jest --verbose=false --forceExit",
     "test-client": "npm run test --prefix client",
     "dev": "concurrently \"yarn server-dev\" \"yarn client\"",
     "lint": "tslint --project .",

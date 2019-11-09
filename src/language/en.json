@@ -41,5 +41,13 @@
 	},
 	"importBill": {
 		"importBill_not_found": "importBill.importBill_not_found"
+	},
+	"daily_report": {
+		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
+		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse"
+	},
+	"dailyReport": {
+		"dailyReport_not_found": "dailyReport.dailyReport_not_found",
+		"daily_report_not_found": "dailyReport.daily_report_not_found"
 	}
 }

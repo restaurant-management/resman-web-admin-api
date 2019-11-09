@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class InitDatabase1572522667360 implements MigrationInterface {
-
+export class InitDatabase1573269710456 implements MigrationInterface {
+    
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(`CREATE TABLE "dish" ("id" SERIAL NOT NULL, "name" character varying(100) NOT NULL, "description" character varying, "images" text array NOT NULL, "defaultPrice" money NOT NULL DEFAULT 0, CONSTRAINT "PK_59ac7b35af39b231276bfc4c00c" PRIMARY KEY ("id"))`, undefined);
         await queryRunner.query(`CREATE TABLE "bill_dish" ("billHistoryId" integer NOT NULL, "dishId" integer NOT NULL, "note" character varying, "preparedAt" TIMESTAMP WITH TIME ZONE, "deliveryAt" TIMESTAMP WITH TIME ZONE, "quantity" smallint NOT NULL DEFAULT 1, "price" money, CONSTRAINT "PK_9180acd08c6924e21d348fd4d17" PRIMARY KEY ("billHistoryId", "dishId"))`, undefined);
@@ -12,7 +12,7 @@ export class InitDatabase1572522667360 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "store_dish" ("storeId" integer NOT NULL, "dishId" integer NOT NULL, "price" integer, CONSTRAINT "PK_2672bf15a6f38568ba90a257e2b" PRIMARY KEY ("storeId", "dishId"))`, undefined);
         await queryRunner.query(`CREATE TABLE "voucher_code" ("code" character varying(10) NOT NULL, "isActive" boolean NOT NULL DEFAULT false, "isPercent" boolean NOT NULL DEFAULT true, "name" character varying(100) NOT NULL, "description" character varying, "image" character varying(100), "startAt" TIMESTAMP WITH TIME ZONE NOT NULL, "endAt" TIMESTAMP WITH TIME ZONE NOT NULL, "minBillPrice" money, "maxPriceDiscount" money, "value" integer NOT NULL, CONSTRAINT "PK_7c8b99834e64faa38f7927070cf" PRIMARY KEY ("code"))`, undefined);
         await queryRunner.query(`CREATE TABLE "stock" ("id" SERIAL NOT NULL, "name" character varying(100) NOT NULL, "price" money NOT NULL, "unit" character varying(20) NOT NULL, CONSTRAINT "PK_092bc1fc7d860426a1dec5aa8e9" PRIMARY KEY ("id"))`, undefined);
-        await queryRunner.query(`CREATE TABLE "daily_report_stock" ("dailyReportId" integer NOT NULL, "stockId" integer NOT NULL, "note" character varying, "quantity" smallint NOT NULL DEFAULT 1, "price" money, CONSTRAINT "PK_ea42bfbfe745f0a95eb6a087fe0" PRIMARY KEY ("dailyReportId", "stockId"))`, undefined);
+        await queryRunner.query(`CREATE TABLE "daily_report_stock" ("dailyReportId" integer NOT NULL, "stockId" integer NOT NULL, "note" character varying, "quantity" smallint NOT NULL DEFAULT 1, CONSTRAINT "PK_ea42bfbfe745f0a95eb6a087fe0" PRIMARY KEY ("dailyReportId", "stockId"))`, undefined);
         await queryRunner.query(`CREATE TABLE "daily_report" ("id" SERIAL NOT NULL, "note" character varying, "createAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updateAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "warehouseId" integer NOT NULL, "userId" integer NOT NULL, CONSTRAINT "PK_6f51b9eb292151755dc3ade12b1" PRIMARY KEY ("id"))`, undefined);
         await queryRunner.query(`CREATE TABLE "import_bill_stock" ("importBillId" integer NOT NULL, "stockId" integer NOT NULL, "note" character varying, "quantity" smallint NOT NULL DEFAULT 1, "price" money, CONSTRAINT "PK_8c7f29ff9c62d016272e6471bcd" PRIMARY KEY ("importBillId", "stockId"))`, undefined);
         await queryRunner.query(`CREATE TABLE "import_bill" ("id" SERIAL NOT NULL, "note" character varying, "createAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updateAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "warehouseId" integer NOT NULL, "userId" integer NOT NULL, CONSTRAINT "PK_5805308b3811de7fa78c527506d" PRIMARY KEY ("id"))`, undefined);
