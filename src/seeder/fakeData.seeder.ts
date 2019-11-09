@@ -72,12 +72,13 @@ const seedStore = async () => {
 const seedWarehouse = async () => {
     if (!await Warehouse.findOne(1)) {
         await WarehouseService.create('Warehouse1', 'Warehouse1', '123456789', 'Warehouse1', 1);
+        console.log('Seeded warehouse 1!');
     }
 
     if (!await Warehouse.findOne(2)) {
         await WarehouseService.create('Warehouse2', 'Warehouse2', '123456789', 'Warehouse2', 1);
+        console.log('Seeded warehouse! 2');
     }
-    console.log('Seeded warehouse!');
 };
 
 const seedStock = async () => {
@@ -88,6 +89,7 @@ const seedStock = async () => {
         stock.price = 20000;
         stock.unit = 'KG';
         await stock.save();
+        console.log('Seeded stock1!');
     }
 
     stock = await Stock.findOne(2);
@@ -97,6 +99,7 @@ const seedStock = async () => {
         stock.price = 50000;
         stock.unit = 'Bag';
         await stock.save();
+        console.log('Seeded stock 2!');
     }
 
     stock = await Stock.findOne(3);
@@ -106,8 +109,8 @@ const seedStock = async () => {
         stock.price = 10000;
         stock.unit = 'Box';
         await stock.save();
+        console.log('Seeded stock 3!');
     }
-    console.log('Seeded stock!');
 };
 
 const seedImportBill = async () => {
@@ -136,6 +139,7 @@ const seedDish = async () => {
             ],
             25000
         );
+        console.log('Seeded dish 1!');
     }
 
     if (!await Dish.findOne(2)) {
@@ -149,6 +153,6 @@ const seedDish = async () => {
             ],
             25000
         );
+        console.log('Seeded dish 2!');
     }
-    console.log('Seeded import bill!');
 };

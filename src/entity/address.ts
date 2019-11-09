@@ -9,6 +9,12 @@ export class Address extends BaseEntity {
     @Column()
     public address: string;
 
+    @Column('float', { nullable: true })
+    public longitude: number;
+
+    @Column('float', { nullable: true })
+    public latitude: number;
+
     @ManyToOne(_type => Customer, customer => customer.addresses, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'customerId' })
     public customer: Customer;
