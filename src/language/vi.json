@@ -56,5 +56,8 @@
 	"dailyReport": {
 		"dailyReport_not_found": "dailyReport.dailyReport_not_found",
 		"daily_report_not_found": "dailyReport.daily_report_not_found"
+	},
+	"dish": {
+		"delete_fail": "dish.delete_fail"
 	}
 }

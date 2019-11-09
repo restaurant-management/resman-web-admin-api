@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import { __ } from 'i18n';
 import { CustomerRouter } from './customer.router';
 import { DailyReportRouter } from './dailyReport.router';
+import { DishRouter } from './dish.router';
 import { ImportBillRouter } from './importBill.router';
 import { StockRouter } from './stock.router';
 import { StoreRouter } from './store.router';
@@ -17,6 +18,7 @@ router.use('/warehouses', WarehouseRouter);
 router.use('/stocks', StockRouter);
 router.use('/import_bills', ImportBillRouter);
 router.use('/daily_reports', DailyReportRouter);
+router.use('/dishes', DishRouter);
 
 router.get('/test', (_req: Request, res: Response) =>
     res.status(200).send({
