@@ -3,6 +3,7 @@ import { __ } from 'i18n';
 import { CustomerRouter } from './customer.router';
 import { DailyDishRouter } from './dailyDish.router';
 import { DailyReportRouter } from './dailyReport.router';
+import { DiscountCodeRouter } from './discountCode.router';
 import { DishRouter } from './dish.router';
 import { ImportBillRouter } from './importBill.router';
 import { StockRouter } from './stock.router';
@@ -23,6 +24,7 @@ router.use('/daily_reports', DailyReportRouter);
 router.use('/dishes', DishRouter);
 router.use('/daily_dishes', DailyDishRouter);
 router.use('/voucher_codes', VoucherCodeRouter);
+router.use('/discount_codes', DiscountCodeRouter);
 
 router.get('/test', (_req: Request, res: Response) =>
     res.status(200).send({

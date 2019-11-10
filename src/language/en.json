@@ -59,5 +59,12 @@
 	},
 	"voucherCode": {
 		"voucher_code_not_found": "voucherCode.voucher_code_not_found"
+	},
+	"voucher_code": {
+		"voucher_code_not_found": "voucher_code.voucher_code_not_found"
+	},
+	"discount_code": {
+		"voucher_code_not_found": "discount_code.voucher_code_not_found",
+		"discount_code_not_found": "discount_code.discount_code_not_found"
 	}
 }

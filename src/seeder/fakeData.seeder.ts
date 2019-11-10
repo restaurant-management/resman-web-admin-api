@@ -6,6 +6,7 @@ import { Store } from '../entity/store';
 import { User } from '../entity/user';
 import { Warehouse } from '../entity/warehouse';
 import { PasswordHandler } from '../helper/passwordHandler';
+import { DiscountCodeService } from '../service/discountCode.service';
 import { DishService } from '../service/dish.service';
 import { ImportBillService } from '../service/importBill.service';
 import { WarehouseService } from '../service/warehouse.service';
@@ -29,6 +30,9 @@ export const seedFakeData = async () => {
     await seedStock();
     await seedImportBill();
     await seedDish();
+    await seedDiscountCode();
+
+    console.log('Seeded fake data!');
 };
 
 const seedFakeUser = async () => {
@@ -65,19 +69,16 @@ const seedStore = async () => {
         store.address = 'Store';
         store.hotline = '123456';
         await store.save();
-        console.log('Seeded store!');
     }
 };
 
 const seedWarehouse = async () => {
     if (!await Warehouse.findOne(1)) {
         await WarehouseService.create('Warehouse1', 'Warehouse1', '123456789', 'Warehouse1', 1);
-        console.log('Seeded warehouse 1!');
     }
 
     if (!await Warehouse.findOne(2)) {
         await WarehouseService.create('Warehouse2', 'Warehouse2', '123456789', 'Warehouse2', 1);
-        console.log('Seeded warehouse! 2');
     }
 };
 
@@ -89,7 +90,6 @@ const seedStock = async () => {
         stock.price = 20000;
         stock.unit = 'KG';
         await stock.save();
-        console.log('Seeded stock1!');
     }
 
     stock = await Stock.findOne(2);
@@ -99,7 +99,6 @@ const seedStock = async () => {
         stock.price = 50000;
         stock.unit = 'Bag';
         await stock.save();
-        console.log('Seeded stock 2!');
     }
 
     stock = await Stock.findOne(3);
@@ -109,7 +108,6 @@ const seedStock = async () => {
         stock.price = 10000;
         stock.unit = 'Box';
         await stock.save();
-        console.log('Seeded stock 3!');
     }
 };
 
@@ -124,7 +122,6 @@ const seedImportBill = async () => {
             [10, 20],
             ['Gia re', 'ngon']
         );
-        console.log('Seeded import bill!');
     }
 };
 
@@ -139,7 +136,6 @@ const seedDish = async () => {
             ],
             25000
         );
-        console.log('Seeded dish 1!');
     }
 
     if (!await Dish.findOne(2)) {
@@ -153,6 +149,25 @@ const seedDish = async () => {
             ],
             25000
         );
-        console.log('Seeded dish 2!');
+    }
+};
+
+const seedDiscountCode = async () => {
+    try {
+        await DiscountCodeService.getOne('RESMAN2019');
+    } catch (e) {
+        await DiscountCodeService.create({
+            code: 'RESMAN2019',
+            name: 'Welcome to Resman!',
+            startAt: new Date(1998, 1, 1),
+            endAt: new Date(2098, 1, 1),
+            discount: 100,
+            storeIds: [1],
+            description: 'Discount for opening Resman',
+            minBillPrice: 0,
+            maxPriceDiscount: 9999999,
+            maxNumber: 99999999,
+            isActive: true
+        });
     }
 };

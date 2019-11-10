@@ -16,7 +16,7 @@ class VoucherCodeService {
 
     public async create(data: {
         name: string, startAt: Date, endAt: Date, value: number, storeIds: number[]
-        description?: string, image?: string, minBillPrice?: number, maxPriceDiscount: number,
+        description?: string, image?: string, minBillPrice?: number, maxPriceDiscount?: number,
         isActive?: boolean, isPercent?: boolean
     }) {
         // Generate unique code
@@ -45,14 +45,14 @@ class VoucherCodeService {
         newVoucherCode.stores = stores;
 
         const voucherCode = await newVoucherCode.save();
-        if (!voucherCode) { throw new Error(__('voucherCode.create_fail')); }
+        if (!voucherCode) { throw new Error(__('voucher_code.create_fail')); }
 
         return await this.getOne(voucherCode.code);
     }
 
     public async edit(code: string, data: {
         name?: string, startAt?: Date, endAt?: Date, value?: number, storeIds?: number[]
-        description?: string, image?: string, minBillPrice?: number, maxPriceDiscount: number,
+        description?: string, image?: string, minBillPrice?: number, maxPriceDiscount?: number,
         isActive?: boolean, isPercent?: boolean
     }) {
         const voucherCode = await this.getOne(code);
@@ -82,7 +82,7 @@ class VoucherCodeService {
         const voucherCode = await this.getOne(code);
 
         if (!voucherCode) {
-            throw new Error(__('voucherCode.voucher_code_not_found'));
+            throw new Error(__('voucher_code.voucher_code_not_found'));
         }
 
         await voucherCode.remove();
@@ -94,7 +94,7 @@ class VoucherCodeService {
         const voucherCode = await VoucherCode.findOne(code, options.withStores ? { relations: ['stores'] } : {});
 
         if (!voucherCode) {
-            throw new Error(__('voucherCode.voucher_code_not_found'));
+            throw new Error(__('voucher_code.voucher_code_not_found'));
         }
 
         return voucherCode;
