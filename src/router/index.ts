@@ -8,6 +8,7 @@ import { ImportBillRouter } from './importBill.router';
 import { StockRouter } from './stock.router';
 import { StoreRouter } from './store.router';
 import { UserRouter } from './user.router';
+import { VoucherCodeRouter } from './voucherCode.router';
 import { WarehouseRouter } from './warehouse.router';
 
 const router = Router();
@@ -21,6 +22,7 @@ router.use('/import_bills', ImportBillRouter);
 router.use('/daily_reports', DailyReportRouter);
 router.use('/dishes', DishRouter);
 router.use('/daily_dishes', DailyDishRouter);
+router.use('/voucher_codes', VoucherCodeRouter);
 
 router.get('/test', (_req: Request, res: Response) =>
     res.status(200).send({

@@ -63,5 +63,8 @@
 	"dailyDish": {
 		"daily_dish_not_found": "dailyDish.daily_dish_not_found",
 		"delete_fail": "dailyDish.delete_fail"
+	},
+	"voucherCode": {
+		"voucher_code_not_found": "voucherCode.voucher_code_not_found"
 	}
 }
