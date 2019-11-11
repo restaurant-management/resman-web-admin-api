@@ -18,14 +18,14 @@ class DailyDishService {
 
     public async create(day: Date, dishId: number, storeId: number, session?: string) {
         if (session && Object.keys(DaySession).map(i => DaySession[i]).indexOf(session) < 0) {
-            throw new Error(__('dailyDish.session_not_found'));
+            throw new Error(__('daily_dish.session_not_found'));
         }
 
         const dish = await DishService.getOne(dishId);
-        if (!dish) { throw new Error(__('dailyDish.dish_not_found')); }
+        if (!dish) { throw new Error(__('daily_dish.dish_not_found')); }
 
         const store = await StoreService.getOne(storeId);
-        if (!store) { throw new Error(__('dailyDish.store_not_found')); }
+        if (!store) { throw new Error(__('daily_dish.store_not_found')); }
 
         const newDailyDish = new DailyDish();
         newDailyDish.day = day;
@@ -34,7 +34,7 @@ class DailyDishService {
         newDailyDish.store = store;
 
         const dailyDish = await newDailyDish.save({ reload: true });
-        if (!dailyDish) { throw new Error(__('dailyDish.create_fail')); }
+        if (!dailyDish) { throw new Error(__('daily_dish.create_fail')); }
 
         return await this.getOne(dailyDish.day, dailyDish.dish.id, dailyDish.session);
     }
@@ -42,12 +42,12 @@ class DailyDishService {
     public async edit(day: Date, dishId: number, session: string, storeId?: number, confirmByUsername?: string,
         confirmAt?: Date) {
         const dailyDish = await this.getOne(day, dishId, session);
-        if (!dailyDish) { throw new Error(__('dailyDish.daily_dish_not_found')); }
+        if (!dailyDish) { throw new Error(__('daily_dish.daily_dish_not_found')); }
 
         // Update store whether storeID exist
         if (storeId) {
             const store = await StoreService.getOne(storeId);
-            if (!store) { throw new Error(__('dailyDish.store_not_found')); }
+            if (!store) { throw new Error(__('daily_dish.store_not_found')); }
 
             dailyDish.store = store;
         }
@@ -69,14 +69,14 @@ class DailyDishService {
             .where('dishId=:dishId', { dishId })
             .where('session=:session', { session })
             .execute();
-        if (result.affected < 1) { throw new Error(__('dailyDish.delete_fail')); }
+        if (result.affected < 1) { throw new Error(__('daily_dish.delete_fail')); }
     }
 
     public async getOne(day: Date, dishId: number, session: string) {
         const dailyDish = await DailyDish.findOne({ relations: ['confirmBy'], where: { day, dishId, session } });
 
         if (dailyDish) { return dailyDish; }
-        throw new Error(__('dailyDish.daily_dish_not_found'));
+        throw new Error(__('daily_dish.daily_dish_not_found'));
     }
 }
 

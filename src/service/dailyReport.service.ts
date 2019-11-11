@@ -120,7 +120,7 @@ class DailyReportService {
         const dailyReport = await DailyReport.findOne(id, { relations: ['stocks', 'warehouse'] });
 
         if (!dailyReport) {
-            throw new Error(__('dailyReport.daily_report_not_found'));
+            throw new Error(__('daily_report.daily_report_not_found'));
         }
         const warehouse = await Warehouse.findOne(dailyReport.warehouse.id, { relations: ['warehouseStocks'] });
 
@@ -146,7 +146,7 @@ class DailyReportService {
         const dailyReport = await DailyReport.findOne(id);
 
         if (!dailyReport) {
-            throw new Error(__('dailyReport.dailyReport_not_found'));
+            throw new Error(__('daily_report.dailyReport_not_found'));
         }
 
         return dailyReport;

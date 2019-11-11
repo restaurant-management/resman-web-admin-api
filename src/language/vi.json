@@ -46,26 +46,12 @@
 		"user_{{username}}_not_found": "import_bill.user_{{username}}_not_found",
 		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found"
 	},
-	"importBill": {
-		"importBill_not_found": "importBill.importBill_not_found"
-	},
 	"daily_report": {
 		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
 		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse"
 	},
-	"dailyReport": {
-		"dailyReport_not_found": "dailyReport.dailyReport_not_found",
-		"daily_report_not_found": "dailyReport.daily_report_not_found"
-	},
 	"dish": {
 		"delete_fail": "dish.delete_fail"
-	},
-	"dailyDish": {
-		"daily_dish_not_found": "dailyDish.daily_dish_not_found",
-		"delete_fail": "dailyDish.delete_fail"
-	},
-	"voucherCode": {
-		"voucher_code_not_found": "voucherCode.voucher_code_not_found"
 	},
 	"voucher_code": {
 		"voucher_code_not_found": "voucher_code.voucher_code_not_found"
@@ -73,5 +59,8 @@
 	"discount_code": {
 		"voucher_code_not_found": "discount_code.voucher_code_not_found",
 		"discount_code_not_found": "discount_code.discount_code_not_found"
+	},
+	"discount_campaign": {
+		"discount_campaign_not_found": "discount_campaign.discount_campaign_not_found"
 	}
 }
