@@ -68,6 +68,9 @@ const seedStore = async () => {
         store.logo = 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4';
         store.address = 'Store';
         store.hotline = '123456';
+        store.openTime = new Date(1998, 1, 1, 6, 0);
+        store.closeTime = new Date(1998, 1, 1, 6, 0);
+        store.rating = 4.5;
         await store.save();
     }
 };

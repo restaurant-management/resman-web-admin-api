@@ -26,6 +26,15 @@ export class Store extends BaseEntity {
     @Column({ length: 20 })
     public hotline: string;
 
+    @Column('float', {default: 0})
+    public rating: number;
+
+    @Column('time', { nullable: true })
+    public openTime: Date;
+
+    @Column('time', { nullable: true })
+    public closeTime: Date;
+
     @ManyToMany(_type => User, user => user.stores)
     public users: User[];
 

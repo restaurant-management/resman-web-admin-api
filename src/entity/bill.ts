@@ -36,7 +36,7 @@ export class Bill extends BaseEntity {
     public discountValue: number;
 
     @Column('float', { nullable: true })
-    public rate: number;
+    public rating: number;
 
     @Column({ nullable: true })
     public note: string;
