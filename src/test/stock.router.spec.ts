@@ -6,6 +6,7 @@ import { Application } from '../lib/application';
 describe('The Stock Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
+    let newId: number;
 
     beforeAll(async () => {
         try {
@@ -31,6 +32,7 @@ describe('The Stock Router', () => {
                 })
                 .expect(200)
                 .expect((res) => {
+                    newId = res.body.id;
                     expect(res.body).toMatchObject({
                         name: 'Test Stock',
                         price: 20000,
@@ -43,14 +45,14 @@ describe('The Stock Router', () => {
     describe('when get stock info', () => {
         it('should return OK status', () => {
             return app
-                .get('/api/stocks/1')
+                .get('/api/stocks/' + newId)
                 .set({
                     Authorization: adminToken
                 })
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1
+                            id: newId
                         }
                     );
                 });
@@ -77,7 +79,7 @@ describe('The Stock Router', () => {
     describe('when update stock', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/stocks/1')
+                .put('/api/stocks/' + newId)
                 .set({
                     Authorization: adminToken
                 })
@@ -90,7 +92,7 @@ describe('The Stock Router', () => {
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1,
+                            id: newId,
                             name: 'Test Update Stock',
                             price: 30000,
                             unit: 'Can'
@@ -104,7 +106,7 @@ describe('The Stock Router', () => {
         describe('exist stock', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/stocks/4')
+                    .delete('/api/stocks/' + newId)
                     .set({
                         Authorization: adminToken
                     })

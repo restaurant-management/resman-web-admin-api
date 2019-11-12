@@ -45,7 +45,8 @@
 		"stockIds_length_have_to_equal_quantities_length": "import_bill.stockIds_length_have_to_equal_quantities_length",
 		"warehouse_not_found": "import_bill.warehouse_not_found",
 		"user_{{username}}_not_found": "import_bill.user_{{username}}_not_found",
-		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found"
+		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found",
+		"import_bill_not_found": "import_bill.import_bill_not_found"
 	},
 	"daily_report": {
 		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",

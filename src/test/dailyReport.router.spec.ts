@@ -6,6 +6,8 @@ import { Application } from '../lib/application';
 describe('The DailyReport Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
+    let newWarehouseId: number = 0;
+    let newDRId: number = 0;
 
     beforeAll(async () => {
         try {
@@ -17,7 +19,45 @@ describe('The DailyReport Router', () => {
         }
     });
 
+    describe('before create daily report', () => {
+
+        it('create new warehouse to test', () => {
+            return app
+                .post('/api/warehouses')
+                .set({
+                    Authorization: adminToken
+                })
+                .send({
+                    name: 'Test Warehouse for daily report',
+                    description: 'Test Warehouse Description 12',
+                    address: 'address 12',
+                    hotline: '01234'
+                })
+                .expect(200)
+                .expect((res) => {
+                    newWarehouseId = res.body.id;
+                });
+        });
+
+        it('create import bill before', () => {
+            return app
+                .post('/api/import_bills')
+                .set({
+                    Authorization: adminToken
+                })
+                .send({
+                    stockIds: [1, 2],
+                    quantities: [5, 10],
+                    warehouseId: newWarehouseId,
+                    username: 'admin',
+                    note: 'admin'
+                })
+                .expect(200);
+        });
+    });
+
     describe('when create daily report', () => {
+
         it('should return OK status and json object', (done) => {
             return app
                 .post('/api/daily_reports')
@@ -27,13 +67,14 @@ describe('The DailyReport Router', () => {
                 .send({
                     stockIds: [1, 2],
                     quantities: [5, 10],
-                    warehouseId: 1,
+                    warehouseId: newWarehouseId,
                     username: 'admin',
                     note: 'admin',
                     stockNotes: ['note1', 'note2'],
                 })
                 .expect(200)
                 .expect((res) => {
+                    newDRId = res.body.id;
                     expect(res.body).toMatchObject({
                         stocks: [
                             {
@@ -52,10 +93,31 @@ describe('The DailyReport Router', () => {
                     });
                 })
                 .end((err, res) => {
-                    if (err) {
-                        console.log(res.body);
-                    }
+                    console.log(res.body);
+                    console.log(newDRId);
                     done(err);
+                });
+        });
+
+        it('should minus warehouse stock quantity', () => {
+            return app
+                .get('/api/warehouses/' + newWarehouseId)
+                .set({
+                    Authorization: adminToken
+                })
+                .expect((res) => {
+                    expect(res.body).toMatchObject(
+                        {
+                            warehouseStocks: [
+                                {
+                                    quantity: 0
+                                },
+                                {
+                                    quantity: 0
+                                }
+                            ]
+                        }
+                    );
                 });
         });
     });
@@ -63,14 +125,14 @@ describe('The DailyReport Router', () => {
     describe('when get daily report info', () => {
         it('should return OK status', () => {
             return app
-                .get('/api/daily_reports/1')
+                .get('/api/daily_reports/' + newDRId)
                 .set({
                     Authorization: adminToken
                 })
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1
+                            id: newDRId
                         }
                     );
                 });
@@ -97,7 +159,7 @@ describe('The DailyReport Router', () => {
     describe('when update daily report', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/daily_reports/1')
+                .put('/api/daily_reports/' + newDRId)
                 .set({
                     Authorization: adminToken
                 })
@@ -109,7 +171,7 @@ describe('The DailyReport Router', () => {
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1,
+                            id: newDRId,
                             user: {
                                 username: 'staff'
                             },
@@ -122,24 +184,18 @@ describe('The DailyReport Router', () => {
 
     describe('when delete dailyReport', () => {
         describe('exist dailyReport', () => {
-            it('should return OK status', (done) => {
+            it('should return OK status', () => {
                 return app
-                    .delete('/api/daily_reports/1')
+                    .delete('/api/daily_reports/' + newDRId)
                     .set({
                         Authorization: adminToken
                     })
-                    .expect(res => expect(res.status).toBe(200))
-                    .end((err, res) => {
-                        if (err) {
-                            console.log(res.body);
-                        }
-                        done(err);
-                    });
+                    .expect(res => expect(res.status).toBe(200));
             });
 
-            it('should minus warehouse stock quantity', (done) => {
+            it('should minus warehouse stock quantity', () => {
                 return app
-                    .get('/api/warehouses/1')
+                    .get('/api/warehouses/' + newDRId)
                     .set({
                         Authorization: adminToken
                     })
@@ -156,30 +212,18 @@ describe('The DailyReport Router', () => {
                                 ]
                             }
                         );
-                    })
-                    .end((err, res) => {
-                        if (err) {
-                            console.log(res.body);
-                        }
-                        done(err);
                     });
             });
         });
 
         describe('not found dailyReport', () => {
-            it('should return 500 error code', (done) => {
+            it('should return 500 error code', () => {
                 return app
                     .delete('/api/daily_reports/0')
                     .set({
                         Authorization: adminToken
                     })
-                    .expect(res => expect(res.status).toBe(500))
-                    .end((err, res) => {
-                        if (err) {
-                            console.log(res.body);
-                        }
-                        done(err);
-                    });
+                    .expect(res => expect(res.status).toBe(500));
             });
         });
     });
