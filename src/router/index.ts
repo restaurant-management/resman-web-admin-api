@@ -12,6 +12,7 @@ import { StoreRouter } from './store.router';
 import { UserRouter } from './user.router';
 import { VoucherCodeRouter } from './voucherCode.router';
 import { WarehouseRouter } from './warehouse.router';
+import { AddressRouter } from './address.router';
 
 const router = Router();
 
@@ -27,6 +28,7 @@ router.use('/daily_dishes', DailyDishRouter);
 router.use('/voucher_codes', VoucherCodeRouter);
 router.use('/discount_codes', DiscountCodeRouter);
 router.use('/discount_campaigns', DiscountCampaignRouter);
+router.use('/addresses', AddressRouter);
 
 router.get('/test', (_req: Request, res: Response) =>
     res.status(200).send({

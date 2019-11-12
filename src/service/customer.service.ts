@@ -103,8 +103,23 @@ class CustomerService {
         await customer.remove();
     }
 
-    public async getOne(id: number) {
-        const customer = await Customer.findOne(id);
+    public async getOne(key: { id?: number, uuid?: string, username?: string, email?: string }) {
+
+        if (!key.id && !key.uuid && !key.username && !key.email) {
+            throw new Error(__('customer.customer_not_found'));
+        }
+
+        let customer: Customer = null;
+
+        if (key.id) {
+            customer = await Customer.findOne({ where: { id: key.id } });
+        } else if (key.uuid) {
+            customer = await Customer.findOne({ where: { uuid: key.uuid } });
+        } else if (key.username) {
+            customer = await Customer.findOne({ where: { username: key.username } });
+        } else {
+            customer = await Customer.findOne({ where: { email: key.email } });
+        }
 
         if (!customer) {
             throw new Error(__('customer.customer_not_found'));

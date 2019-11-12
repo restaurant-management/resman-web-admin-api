@@ -62,5 +62,8 @@
 	},
 	"discount_campaign": {
 		"discount_campaign_not_found": "discount_campaign.discount_campaign_not_found"
+	},
+	"address": {
+		"address_not_found": "address.address_not_found"
 	}
 }

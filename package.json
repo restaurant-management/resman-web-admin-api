@@ -54,9 +54,9 @@
     "reflect-metadata": "^0.1.13",
     "supertest": "^4.0.2",
     "ts-node": "^8.4.1",
-    "tslint": "^5.20.0",
+    "tslint": "^5.20.1",
     "typeorm": "^0.2.19",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
