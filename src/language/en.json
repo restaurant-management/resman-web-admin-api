@@ -22,7 +22,8 @@
 		"store_not_found": "Store not found."
 	},
 	"warehouse": {
-		"warehouse_not_found": "Warehouse not found."
+		"warehouse_not_found": "Warehouse not found.",
+		"store_not_found": "warehouse.store_not_found"
 	},
 	"customer": {
 		"customer_not_found": "Customer not found"
@@ -39,12 +40,10 @@
 	"error": {
 		"missing_required_information": "error.missing_required_information"
 	},
-	"importBill": {
-		"importBill_not_found": "importBill.importBill_not_found"
-	},
 	"daily_report": {
 		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
-		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse"
+		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse",
+		"daily_report_not_found": "daily_report.daily_report_not_found"
 	},
 	"dish": {
 		"delete_fail": "dish.delete_fail"
@@ -61,5 +60,8 @@
 	},
 	"address": {
 		"address_not_found": "address.address_not_found"
+	},
+	"daily_dish": {
+		"delete_fail": "daily_dish.delete_fail"
 	}
 }

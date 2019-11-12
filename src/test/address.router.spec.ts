@@ -6,7 +6,7 @@ import { CustomerService } from '../service/customer.service';
 
 describe('The Address Router', () => {
     let app: SuperTest<Test>;
-    let customerUuid: string;
+    let customerUsername: string;
     let adminToken: string;
 
     beforeAll(async () => {
@@ -14,24 +14,23 @@ describe('The Address Router', () => {
             app = await Application.getTestApp();
             adminToken = jwt.sign({ uuid: (await User.findOne(1)).uuid },
                 process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
-            customerUuid = (await CustomerService.getOne({ id: 1 })).uuid;
+            customerUsername = (await CustomerService.getOne({ id: 1 })).username;
         } catch (error) {
             console.error(error);
         }
     });
 
     describe('when create address', () => {
-        it('should return OK status and json object', () => {
+        it('should return OK status and json object', (done) => {
             return app
-                .post('/api/addresses')
+                .post(`/api/customers/${customerUsername}/addresses`)
                 .set({
                     Authorization: adminToken
                 })
                 .send({
                     address: 'address',
                     longitude: 10.342,
-                    latitude: 10.222,
-                    customerUuid
+                    latitude: 10.222
                 })
                 .expect(200)
                 .expect((res) => {
@@ -41,9 +40,15 @@ describe('The Address Router', () => {
                         latitude: 10.222,
                         customer: {
                             id: 1,
-                            uuid: customerUuid
+                            username: customerUsername
                         }
                     });
+                })
+                .end((err, res) => {
+                    if (err) {
+                        console.log(res.body);
+                    }
+                    done(err);
                 });
         });
     });
@@ -51,7 +56,7 @@ describe('The Address Router', () => {
     describe('when get address info', () => {
         it('should return OK status', () => {
             return app
-                .get('/api/addresses/1')
+                .get(`/api/customers/${customerUsername}/addresses/1`)
                 .set({
                     Authorization: adminToken
                 })
@@ -69,7 +74,7 @@ describe('The Address Router', () => {
         describe('with normal mode', () => {
             it('should return OK status and json array', () => {
                 return app
-                    .get('/api/addresses')
+                    .get(`/api/customers/${customerUsername}/addresses`)
                     .set({
                         Authorization: adminToken
                     })
@@ -85,7 +90,7 @@ describe('The Address Router', () => {
     describe('when update address', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/addresses/1')
+                .put(`/api/customers/${customerUsername}/addresses/1`)
                 .set({
                     Authorization: adminToken
                 })
@@ -93,7 +98,7 @@ describe('The Address Router', () => {
                     address: 'updated address',
                     longitude: 1.342,
                     latitude: 1.222,
-                    customerUuid
+                    customerUuid: customerUsername
                 })
                 .expect(200)
                 .expect((res) => {
@@ -104,7 +109,7 @@ describe('The Address Router', () => {
                             latitude: 1.222,
                             customer: {
                                 id: 1,
-                                uuid: customerUuid
+                                username: customerUsername
                             }
                         }
                     );
@@ -113,21 +118,21 @@ describe('The Address Router', () => {
     });
 
     describe('when delete address', () => {
-        // describe('exist address', () => {
-        //     it('should return OK status', () => {
-        //         return app
-        //             .delete('/api/addresses/1')
-        //             .set({
-        //                 Authorization: adminToken
-        //             })
-        //             .expect(res => expect(res.status).toBe(200));
-        //     });
-        // });
+        describe('exist address', () => {
+            it('should return OK status', () => {
+                return app
+                    .delete(`/api/customers/${customerUsername}/addresses/1`)
+                    .set({
+                        Authorization: adminToken
+                    })
+                    .expect(res => expect(res.status).toBe(200));
+            });
+        });
 
         describe('not found address', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/addresses/3')
+                    .delete(`/api/customers/${customerUsername}/addresses/0`)
                     .set({
                         Authorization: adminToken
                     })

@@ -26,7 +26,8 @@
 		"store_not_found": "store.store_not_found"
 	},
 	"warehouse": {
-		"warehouse_not_found": "warehouse.warehouse_not_found"
+		"warehouse_not_found": "warehouse.warehouse_not_found",
+		"store_not_found": "warehouse.store_not_found"
 	},
 	"customer": {
 		"customer_not_found": "customer.customer_not_found"
@@ -48,7 +49,8 @@
 	},
 	"daily_report": {
 		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
-		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse"
+		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse",
+		"daily_report_not_found": "daily_report.daily_report_not_found"
 	},
 	"dish": {
 		"delete_fail": "dish.delete_fail"
@@ -65,5 +67,8 @@
 	},
 	"address": {
 		"address_not_found": "address.address_not_found"
+	},
+	"daily_dish": {
+		"delete_fail": "daily_dish.delete_fail"
 	}
 }
