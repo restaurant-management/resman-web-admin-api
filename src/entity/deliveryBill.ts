@@ -32,6 +32,9 @@ export class DeliveryBill extends BaseEntity {
     @Column({ nullable: true })
     public voucherValue: number;
 
+    @Column({ nullable: true })
+    public voucherIsPercent: boolean;
+
     @Column({ length: 20, nullable: true })
     public discountCode: string;
 

@@ -63,6 +63,11 @@
 		"address_not_found": "address.address_not_found"
 	},
 	"daily_dish": {
-		"delete_fail": "daily_dish.delete_fail"
+		"delete_fail": "daily_dish.delete_fail",
+		"daily_dish_not_found": "daily_dish.daily_dish_not_found"
+	},
+	"bill": {
+		"create_bill_fail": "bill.create_bill_fail",
+		"bill_not_found": "bill.bill_not_found"
 	}
 }

@@ -153,6 +153,19 @@ const seedDish = async () => {
             25000
         );
     }
+
+    if (!await Dish.findOne(3)) {
+        await DishService.create(
+            'Canh khổ qua nhồi thịt Ver 2.0',
+            'Canh khổ qua nhồi thịt ver 2.0 y chan ver 1.0.',
+            [
+                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt0-2019-06-07%2001:05:43?generation=1559887548010845&alt=media',
+                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt1-2019-06-07%2001:05:45?generation=1559887549908602&alt=media',
+                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt2-2019-06-07%2001:05:47?generation=1559887551753810&alt=media'
+            ],
+            30000
+        );
+    }
 };
 
 const seedDiscountCode = async () => {

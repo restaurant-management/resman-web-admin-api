@@ -99,6 +99,34 @@ class VoucherCodeService {
 
         return voucherCode;
     }
+
+    /**
+     * @param storeId If you have check code enable for this store. 
+     * @throws Error If it has
+     */
+    public async isValid(code: string, other?: { storeId?: number, billPrice?: number, time?: Date }) {
+        const voucherCode = await this.getOne(code);
+
+        if (!voucherCode.isActive) {
+            throw new Error(__('discount_code.no_longer_valid'));
+        }
+
+        const time = other?.time || new Date();
+        if (time > voucherCode.endAt) {
+            throw new Error(__('discount_code.expire'));
+        }
+        if (time < voucherCode.startAt) {
+            throw new Error(__('discount_code.not_started_yet'));
+        }
+
+        if (other?.storeId && voucherCode.stores.findIndex(item => item.id === other.storeId) < 0) {
+            throw new Error(__('discount_code.not_apply_for_this_store'));
+        }
+
+        if (other?.billPrice && other.billPrice < voucherCode.minBillPrice) {
+            throw new Error(__('discount_code.not_apply_for_this_price'));
+        }
+    }
 }
 
 const voucherCodeService = new VoucherCodeService();

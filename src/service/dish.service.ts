@@ -51,6 +51,16 @@ class DishService {
         if (dish) { return dish; }
         throw new Error(__('dish.dish_not_found'));
     }
+
+    public async getRealPrice(key: { dish?: Dish, id?: number }) {
+        let dish = key.dish;
+        if (!dish) {
+            dish = await this.getOne(key.id);
+        }
+
+        // TODO handle price with discount campaign
+        return dish.defaultPrice;
+    }
 }
 
 const dishService = new DishService();

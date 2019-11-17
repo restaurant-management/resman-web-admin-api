@@ -1,4 +1,6 @@
 import { __ } from 'i18n';
+import { Bill } from '../entity/bill';
+import { DeliveryBill } from '../entity/deliveryBill';
 import { DiscountCode } from '../entity/discountCode';
 import { StoreService } from './store.service';
 
@@ -93,8 +95,36 @@ class DiscountCodeService {
 
         return discountCode;
     }
+
+    /**
+     * @param storeId If you have check code enable for this store. 
+     */
+    public async isValid(code: string, other?: { storeId?: number, billPrice?: number }) {
+        const discountCode = await this.getOne(code);
+
+        if (!discountCode.isActive) {
+            throw new Error(__('discount_code.no_longer_valid'));
+        }
+
+        let amountNumber = 0;
+        amountNumber += await Bill.findAndCount({ where: { discountCode: code } })[1];
+        amountNumber += await DeliveryBill.findAndCount({ where: { discountCode: code } })[1];
+
+        if (amountNumber > discountCode.maxNumber) {
+            throw new Error(__('discount_code.out_of_stock'));
+        }
+
+        if (other?.storeId && discountCode.stores.findIndex(item => item.id === other.storeId) < 0) {
+            throw new Error(__('discount_code.not_apply_for_this_store'));
+        }
+
+        if (other?.billPrice && other.billPrice < discountCode.minBillPrice) {
+            throw new Error(__('discount_code.not_apply_for_this_price'));
+        }
+    }
 }
 
 const discountCodeService = new DiscountCodeService();
 
 export { discountCodeService as DiscountCodeService };
+
