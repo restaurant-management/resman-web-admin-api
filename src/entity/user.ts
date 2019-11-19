@@ -37,15 +37,18 @@ export class User extends BaseEntity {
     @Column({ length: 200 })
     public address: string;
 
-    @ManyToMany(() => Role, { eager: true })
+    @Column('json', {default: {}})
+    public settings: object;
+
+    @ManyToMany(_type => Role)
     @JoinTable()
     public roles: Role[];
 
-    @ManyToMany(() => Store)
+    @ManyToMany(_type => Store, store => store.users, { onDelete: 'CASCADE' })
     @JoinTable()
     public stores: Store[];
 
-    @ManyToMany(() => Warehouse)
+    @ManyToMany(_type => Warehouse)
     @JoinTable()
     public warehouses: Warehouse[];
 

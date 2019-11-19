@@ -36,6 +36,9 @@ export class Customer extends BaseEntity {
     @OneToMany(_type => Address, address => address.customer)
     public addresses: Address[];
 
+    @Column('json', {default: {}})
+    public settings: object;
+
     @OneToMany(_type => Bill, bill => bill.customer)
     public bills: Bill[];
 

@@ -4,7 +4,7 @@ import i18n from 'i18n';
 import logger from 'morgan';
 import path from 'path';
 import supertest, { SuperTest, Test } from 'supertest';
-import { createConnections } from 'typeorm';
+import { createConnection, getConnectionOptions } from 'typeorm';
 import errorHandler from '../middleware/errorHandler';
 import router from '../router';
 import seedData from '../seeder';
@@ -12,6 +12,8 @@ import seedData from '../seeder';
 export class Application {
 
     public static async getApp() {
+        console.info(`Running Mode: ${process.env.NODE_ENV}`);
+
         if (this._app) { return this._app; }
 
         this._app = express();
@@ -23,8 +25,10 @@ export class Application {
         this._setupMultiLanguage();
 
         try {
-            await createConnections();
+            await this.createTypeOrmConnection();
+
             await seedData();
+
             this._app.use('/api', router);
             this._app.use(errorHandler);
 
@@ -42,6 +46,12 @@ export class Application {
         }
     }
 
+    public static async createTypeOrmConnection() {
+        const options = await getConnectionOptions(process.env.NODE_ENV);
+
+        return createConnection({ ...options, name: 'default' });
+    }
+
     public static async getTestApp(): Promise<SuperTest<Test>> {
         try {
             const app = await this.getApp();
@@ -51,16 +61,25 @@ export class Application {
             throw e;
         }
     }
+
     private static _app: express.Application;
 
     private static _setupMultiLanguage() {
         i18n.configure({
             directory: process.env.PWD + '/src/language',
             defaultLocale: 'en',
+            locales: ['en', 'vi'],
             fallbacks: {
-                ['vi']: 'en'
+                vi: 'en'
             },
             cookie: 'resman_language',
+            queryParameter: 'lang',
+            syncFiles: true,
+            objectNotation: true,
+            autoReload: true,
+            api: {
+                __: 't'
+            }
         });
 
         this._app.use(i18n.init);

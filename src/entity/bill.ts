@@ -1,17 +1,18 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { SoftDeleteEntity } from '../lib/softDeleteEntity';
 import { BillHistory } from './billHistory';
 import { Customer } from './customer';
 import { User } from './user';
 
 @Entity()
-export class Bill extends BaseEntity {
+export class Bill extends SoftDeleteEntity {
     @PrimaryGeneratedColumn()
     public id: number;
 
     @Column()
     public tableNumber: number;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamp with time zone' })
     public createAt: Date;
 
     @Column('timestamp with time zone', { nullable: true })
@@ -29,6 +30,9 @@ export class Bill extends BaseEntity {
     @Column({ nullable: true })
     public voucherValue: number;
 
+    @Column({ nullable: true })
+    public voucherIsPercent: boolean;
+
     @Column({ length: 20, nullable: true })
     public discountCode: string;
 
@@ -36,7 +40,7 @@ export class Bill extends BaseEntity {
     public discountValue: number;
 
     @Column('float', { nullable: true })
-    public rate: number;
+    public rating: number;
 
     @Column({ nullable: true })
     public note: string;
@@ -53,9 +57,6 @@ export class Bill extends BaseEntity {
     @ManyToOne(_type => Customer, customer => customer.bills, { nullable: true, onDelete: 'SET NULL' })
     @JoinColumn({ name: 'customerId' })
     public customer: Customer;
-
-    @Column({ nullable: true })
-    public customerId: number;
 
     @OneToMany(_type => BillHistory, history => history.bill)
     public histories: BillHistory[];

@@ -11,10 +11,10 @@ export class DailyReport extends BaseEntity {
     @Column({ nullable: true })
     public note: string;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamp with time zone' })
     public createAt: Date;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({ type: 'timestamp with time zone' })
     public updateAt: Date;
 
     @OneToMany(() => DailyReportStock, stock => stock.dailyReport, { nullable: false, onDelete: 'NO ACTION' })

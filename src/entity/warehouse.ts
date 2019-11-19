@@ -1,9 +1,9 @@
-import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DailyReport } from './dailyReport';
 import { ImportBill } from './importBill';
-import { Stock } from './stock';
 import { Store } from './store';
 import { User } from './user';
+import { WarehouseStock } from './warehouseStock';
 
 @Entity()
 export class Warehouse extends BaseEntity {
@@ -22,12 +22,11 @@ export class Warehouse extends BaseEntity {
     @Column({ length: 20 })
     public hotline: string;
 
-    @ManyToMany(() => User)
+    @ManyToMany(() => User, user => user.warehouses)
     public users: User[];
 
-    @ManyToMany(() => Stock)
-    @JoinTable()
-    public stocks: Stock[];
+    @OneToMany(_type => WarehouseStock, warehouseStock => warehouseStock.warehouse)
+    public warehouseStocks: WarehouseStock[];
 
     @OneToMany(() => ImportBill, importBill => importBill.warehouse)
     public importBills: ImportBill[];
