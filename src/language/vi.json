@@ -49,6 +49,13 @@
 		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found",
 		"import_bill_not_found": "import_bill.import_bill_not_found"
 	},
+	"importBill": {
+		"importBill_not_found": "importBill.importBill_not_found"
+	},
+	"socket": {
+		"{{name}}_connected": "socket.{{name}}_connected",
+		"{{name}}_disconnected": "socket.{{name}}_disconnected"
+  },
 	"daily_report": {
 		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
 		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse",

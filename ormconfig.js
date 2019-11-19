@@ -4,7 +4,7 @@ module.exports = [
     "type": "postgres",
     "url": process.env.DATABASE_URL,
     "synchronize": false,
-    "migrationsRun": false,
+    "migrationsRun": true,
     "ssl": false,
     "logging": false,
     "entities": [
