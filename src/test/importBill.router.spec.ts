@@ -6,6 +6,8 @@ import { Application } from '../lib/application';
 describe('The ImportBill Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
+    let newWarehouseId: number;
+    let newImportBillId: number;
 
     beforeAll(async () => {
         try {
@@ -18,6 +20,25 @@ describe('The ImportBill Router', () => {
     });
 
     describe('when create import bill', () => {
+
+        it('create new warehouse to test', () => {
+            return app
+                .post('/api/warehouses')
+                .set({
+                    Authorization: adminToken
+                })
+                .send({
+                    name: 'Test Warehouse for import bill',
+                    description: 'Test Warehouse Description',
+                    address: 'address',
+                    hotline: '0123'
+                })
+                .expect(200)
+                .expect((res) => {
+                    newWarehouseId = res.body.id;
+                });
+        });
+
         it('should return OK status and json object', () => {
             return app
                 .post('/api/import_bills')
@@ -27,15 +48,16 @@ describe('The ImportBill Router', () => {
                 .send({
                     stockIds: [1, 2],
                     quantities: [5, 10],
-                    warehouseId: 1,
+                    warehouseId: newWarehouseId,
                     username: 'admin',
                     note: 'admin'
                 })
                 .expect(200)
                 .expect((res) => {
+                    newImportBillId = res.body.id;
                     expect(res.body).toMatchObject({
                         warehouse: {
-                            id: 1
+                            id: newWarehouseId
                         },
                         stocks: [
                             {
@@ -59,14 +81,14 @@ describe('The ImportBill Router', () => {
     describe('when get import bill info', () => {
         it('should return OK status', () => {
             return app
-                .get('/api/import_bills/1')
+                .get('/api/import_bills/' + newImportBillId)
                 .set({
                     Authorization: adminToken
                 })
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1
+                            id: newImportBillId
                         }
                     );
                 });
@@ -93,7 +115,7 @@ describe('The ImportBill Router', () => {
     describe('when update import bill', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/import_bills/1')
+                .put('/api/import_bills/' + newImportBillId)
                 .set({
                     Authorization: adminToken
                 })
@@ -105,7 +127,7 @@ describe('The ImportBill Router', () => {
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1,
+                            id: newImportBillId,
                             user: {
                                 username: 'staff'
                             },
@@ -120,7 +142,7 @@ describe('The ImportBill Router', () => {
         describe('exist importBill', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/import_bills/1')
+                    .delete('/api/import_bills/' + newImportBillId)
                     .set({
                         Authorization: adminToken
                     })
@@ -129,7 +151,7 @@ describe('The ImportBill Router', () => {
 
             it('should minus warehouse stock quantity', () => {
                 return app
-                    .get('/api/warehouses/1')
+                    .get('/api/warehouses/' + newWarehouseId)
                     .set({
                         Authorization: adminToken
                     })
@@ -137,12 +159,12 @@ describe('The ImportBill Router', () => {
                         expect(res.body).toMatchObject(
                             {
                                 warehouseStocks: [
-                                  {
-                                    quantity: 0
-                                  },
-                                  {
-                                    quantity: 0
-                                  }
+                                    {
+                                        quantity: 0
+                                    },
+                                    {
+                                        quantity: 0
+                                    }
                                 ]
                             }
                         );

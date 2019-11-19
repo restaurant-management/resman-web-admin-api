@@ -23,7 +23,4 @@ export class DailyReportStock extends BaseEntity {
 
     @Column('smallint', { default: 1 })
     public quantity: number;
-
-    @Column('money', { nullable: true })
-    public price: number;
 }

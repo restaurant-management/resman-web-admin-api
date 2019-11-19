@@ -37,6 +37,9 @@ export class User extends BaseEntity {
     @Column({ length: 200 })
     public address: string;
 
+    @Column('json', {default: {}})
+    public settings: object;
+
     @ManyToMany(_type => Role)
     @JoinTable()
     public roles: Role[];

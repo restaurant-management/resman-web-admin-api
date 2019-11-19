@@ -1,13 +1,4 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    OneToMany,
-    PrimaryColumn,
-    PrimaryGeneratedColumn
-} from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Bill } from './bill';
 import { BillDish } from './billDish';
 import { User } from './user';
@@ -21,21 +12,18 @@ export class BillHistory extends BaseEntity {
     @JoinColumn({ name: 'billId' })
     public bill: Bill;
 
-    @PrimaryColumn()
+    @Column()
     public billId: number;
 
     @ManyToOne(_type => User, user => user.billHistories, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'userId' })
     public user: User;
 
-    @PrimaryColumn()
-    public userId: number;
-
     @Column({ nullable: true })
     public description: string;
 
-    @Column('time with time zone')
-    public time: Date;
+    @CreateDateColumn({ type: 'timestamp with time zone' })
+    public createAt: Date;
 
     @OneToMany(_type => BillDish, billDish => billDish.billHistory, { nullable: false })
     public dishes: BillDish[];

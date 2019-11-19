@@ -25,7 +25,7 @@ class CustomerController implements ICrudController {
     }
 
     public read(req: Request, res: Response, next: NextFunction): void {
-        CustomerService.getOne(parseInt(req.params.id, 10)).then((value) =>
+        CustomerService.getOne(req.params).then((value) =>
             res.status(200).json(value)
         ).catch(e => next(e));
     }

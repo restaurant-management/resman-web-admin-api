@@ -6,6 +6,7 @@ import { Application } from '../lib/application';
 describe('The Warehouse Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
+    let newId: number;
 
     beforeAll(async () => {
         try {
@@ -38,6 +39,7 @@ describe('The Warehouse Router', () => {
                         address: 'address',
                         hotline: '0123'
                     });
+                    newId = res.body.id;
                 });
         });
     });
@@ -45,14 +47,14 @@ describe('The Warehouse Router', () => {
     describe('when get warehouse info', () => {
         it('should return OK status', () => {
             return app
-                .get('/api/warehouses/1')
+                .get('/api/warehouses/' + newId)
                 .set({
                     Authorization: adminToken
                 })
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1
+                            id: newId
                         }
                     );
                 });
@@ -79,7 +81,7 @@ describe('The Warehouse Router', () => {
     describe('when update warehouse', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/warehouses/1')
+                .put('/api/warehouses/' + newId)
                 .set({
                     Authorization: adminToken
                 })
@@ -93,7 +95,7 @@ describe('The Warehouse Router', () => {
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1,
+                            id: newId,
                             name: 'update name',
                             address: 'update address',
                             hotline: '09876',
@@ -108,7 +110,7 @@ describe('The Warehouse Router', () => {
         describe('exist warehouse', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/warehouses/1')
+                    .delete('/api/warehouses/' + newId)
                     .set({
                         Authorization: adminToken
                     })

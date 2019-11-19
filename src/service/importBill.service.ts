@@ -120,7 +120,7 @@ class ImportBillService {
         const importBill = await ImportBill.findOne(id, { relations: ['stocks'] });
 
         if (!importBill) {
-            throw new Error(__('importBill.importBill_not_found'));
+            throw new Error(__('import_bill.import_bill_not_found'));
         }
         const warehouse = await Warehouse.findOne(importBill.warehouse.id, { relations: ['warehouseStocks'] });
 
@@ -146,7 +146,7 @@ class ImportBillService {
         const importBill = await ImportBill.findOne(id);
 
         if (!importBill) {
-            throw new Error(__('importBill.importBill_not_found'));
+            throw new Error(__('import_bill.import_bill_not_found'));
         }
 
         return importBill;

@@ -6,6 +6,7 @@ import { Application } from '../lib/application';
 describe('The Customer Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
+    let newCustomerId: number;
 
     beforeAll(async () => {
         try {
@@ -58,13 +59,8 @@ describe('The Customer Router', () => {
                     })
                     .expect(200)
                     .expect((res) => {
-                        expect(res.body).toMatchObject([
-                            {
-                                id: 1,
-                                username: 'customer',
-                                email: '16520361@gm.uit.edu.vn'
-                            }
-                        ]);
+                        expect(res.body.length)
+                            .toBeGreaterThanOrEqual(0);
                     });
             });
         });
@@ -92,6 +88,7 @@ describe('The Customer Router', () => {
                             username: 'test'
                         }
                     );
+                    newCustomerId = res.body.id;
                 });
         });
     });
@@ -99,7 +96,7 @@ describe('The Customer Router', () => {
     describe('when update customer', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/customers/1')
+                .put('/api/customers/' + newCustomerId)
                 .set({
                     Authorization: adminToken
                 })
@@ -114,7 +111,7 @@ describe('The Customer Router', () => {
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1,
+                            id: newCustomerId,
                             avatar: 'avatar',
                             birthday: new Date(1998, 1, 1).toISOString(),
                             fullName: 'hierenlee',
@@ -129,14 +126,14 @@ describe('The Customer Router', () => {
         describe('get by id', () => {
             it('should return OK status', () => {
                 return app
-                    .get('/api/customers/1')
+                    .get('/api/customers/' + newCustomerId)
                     .set({
                         Authorization: adminToken
                     })
                     .expect((res) => {
                         expect(res.body).toMatchObject(
                             {
-                                id: 1
+                                id: newCustomerId
                             }
                         );
                     });
@@ -148,7 +145,7 @@ describe('The Customer Router', () => {
         describe('normal user', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/customers/1')
+                    .delete('/api/customers/' + newCustomerId)
                     .set({
                         Authorization: adminToken
                     })
@@ -159,7 +156,7 @@ describe('The Customer Router', () => {
         describe('not found customer', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/customers/3')
+                    .delete('/api/customers/0')
                     .set({
                         Authorization: adminToken
                     })

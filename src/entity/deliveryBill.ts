@@ -32,6 +32,9 @@ export class DeliveryBill extends BaseEntity {
     @Column({ nullable: true })
     public voucherValue: number;
 
+    @Column({ nullable: true })
+    public voucherIsPercent: boolean;
+
     @Column({ length: 20, nullable: true })
     public discountCode: string;
 
@@ -39,7 +42,7 @@ export class DeliveryBill extends BaseEntity {
     public discountValue: number;
 
     @Column('float', { nullable: true })
-    public rate: number;
+    public rating: number;
 
     @Column({ nullable: true })
     public note: string;

@@ -1,5 +1,6 @@
 import { __ } from 'i18n';
 import { DailyReport } from '../entity/dailyReport';
+import { Store } from '../entity/store';
 import { Warehouse } from '../entity/warehouse';
 
 class WarehouseService {
@@ -13,12 +14,21 @@ class WarehouseService {
         return warehouse;
     }
 
-    public async create(name: string, address: string, hotline: string, description?: string) {
+    public async create(name: string, address: string, hotline: string, description?: string, storeId?: number) {
         const newWarehouse = new Warehouse();
         newWarehouse.name = name;
         newWarehouse.address = address;
         newWarehouse.hotline = hotline;
         if (description) { newWarehouse.description = description; }
+
+        if (storeId) {
+            const store = await Store.findOne(storeId);
+
+            if (!store) {
+                throw new Error(__('warehouse.store_not_found'));
+            }
+            newWarehouse.store = store;
+        }
 
         const warehouse = await newWarehouse.save({ reload: true });
         if (!warehouse) { throw new Error(__('warehouse.create_fail')); }
@@ -103,3 +113,4 @@ class WarehouseService {
 const warehouseService = new WarehouseService();
 
 export { warehouseService as WarehouseService };
+

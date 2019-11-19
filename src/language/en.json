@@ -22,7 +22,8 @@
 		"store_not_found": "Store not found."
 	},
 	"warehouse": {
-		"warehouse_not_found": "Warehouse not found."
+		"warehouse_not_found": "Warehouse not found.",
+		"store_not_found": "warehouse.store_not_found"
 	},
 	"customer": {
 		"customer_not_found": "Customer not found"
@@ -34,16 +35,45 @@
 		"stockIds_length_have_to_equal_quantities_length": "Number of stockIds have to equal with number of quantities.",
 		"warehouse_not_found": "import_bill.warehouse_not_found",
 		"user_{{username}}_not_found": "import_bill.user_{{username}}_not_found",
-		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found"
+		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found",
+		"import_bill_not_found": "import_bill.import_bill_not_found"
 	},
 	"error": {
 		"missing_required_information": "error.missing_required_information"
 	},
-	"importBill": {
-		"importBill_not_found": "Import bill not found."
-	},
 	"socket": {
 		"{{name}}_connected": "{{name}} connected.",
 		"{{name}}_disconnected": "{{name}} disconnected."
+  },
+	"daily_report": {
+		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
+		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse",
+		"daily_report_not_found": "daily_report.daily_report_not_found"
+	},
+	"dish": {
+		"delete_fail": "dish.delete_fail"
+	},
+	"voucher_code": {
+		"voucher_code_not_found": "voucher_code.voucher_code_not_found"
+	},
+	"discount_code": {
+		"voucher_code_not_found": "discount_code.voucher_code_not_found",
+		"discount_code_not_found": "discount_code.discount_code_not_found"
+	},
+	"discount_campaign": {
+		"discount_campaign_not_found": "discount_campaign.discount_campaign_not_found"
+	},
+	"address": {
+		"address_not_found": "address.address_not_found"
+	},
+	"daily_dish": {
+		"delete_fail": "daily_dish.delete_fail",
+		"daily_dish_not_found": "daily_dish.daily_dish_not_found"
+	},
+	"bill": {
+		"create_bill_fail": "bill.create_bill_fail",
+		"bill_not_found": "bill.bill_not_found",
+		"collect_value_must_be_not_null": "bill.collect_value_must_be_not_null",
+		"bill_is_collected": "bill.bill_is_collected"
 	}
 }

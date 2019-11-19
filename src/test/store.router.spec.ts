@@ -6,6 +6,7 @@ import { Application } from '../lib/application';
 describe('The Store Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
+    let newStoreId: 2;
 
     beforeAll(async () => {
         try {
@@ -40,6 +41,7 @@ describe('The Store Router', () => {
                         address: 'address',
                         hotline: '0123'
                     });
+                    newStoreId = res.body.id;
                 });
         });
     });
@@ -47,14 +49,14 @@ describe('The Store Router', () => {
     describe('when get store info', () => {
         it('should return OK status', () => {
             return app
-                .get('/api/stores/1')
+                .get('/api/stores/' + newStoreId)
                 .set({
                     Authorization: adminToken
                 })
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1
+                            id: newStoreId
                         }
                     );
                 });
@@ -81,7 +83,7 @@ describe('The Store Router', () => {
     describe('when update store', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/stores/1')
+                .put('/api/stores/' + newStoreId)
                 .set({
                     Authorization: adminToken
                 })
@@ -96,7 +98,7 @@ describe('The Store Router', () => {
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1,
+                            id: newStoreId,
                             name: 'update name',
                             address: 'update address',
                             hotline: '09876',
@@ -112,7 +114,7 @@ describe('The Store Router', () => {
         describe('exist store', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/stores/1')
+                    .delete('/api/stores/' + newStoreId)
                     .set({
                         Authorization: adminToken
                     })
@@ -123,7 +125,7 @@ describe('The Store Router', () => {
         describe('not found store', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/stores/3')
+                    .delete('/api/stores/0')
                     .set({
                         Authorization: adminToken
                     })

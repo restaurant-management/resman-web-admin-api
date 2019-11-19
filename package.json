@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "npm run test-server && npm run test-client",
-    "test-server": "NODE_ENV=test ts-node clearTestDatabase.ts && jest --forceExit",
+    "test-server": "NODE_ENV=test ts-node clearTestDatabase.ts && jest --verbose=false --forceExit",
     "test-client": "npm run test --prefix client",
     "dev": "concurrently \"yarn server-dev\" \"yarn client\"",
     "lint": "tslint --project .",
@@ -13,7 +13,7 @@
     "server": "ts-node index.ts",
     "server-dev": "ts-node-dev --respawn --transpileOnly index.ts",
     "server-production": "NODE_ENV=production ts-node index.ts",
-    "server-test": "NODE_ENV=test ts-node index.ts",
+    "server-test": "NODE_ENV=test ts-node-dev --respawn --transpileOnly index.ts",
     "client": "npm start --prefix=client",
     "client-install": "npm install --prefix client",
     "client-install-dev": "npm install --prefix client --only=dev --no-shrinkwrap",
@@ -51,15 +51,16 @@
     "express": "^4.17.1",
     "i18n": "^0.8.3",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "pg": "^7.12.1",
     "reflect-metadata": "^0.1.13",
     "socket.io": "^2.3.0",
     "supertest": "^4.0.2",
     "ts-node": "^8.4.1",
-    "tslint": "^5.20.0",
+    "tslint": "^5.20.1",
     "typeorm": "^0.2.19",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
