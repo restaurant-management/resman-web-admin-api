@@ -14,7 +14,6 @@ export interface CrudRouterOption {
 }
 
 const crudRouter = (router: Router, controller: ICrudController, options: CrudRouterOption = {}) => {
-
     const namespace = options.namespace ? options.namespace : '';
     const middleware = options.middleware ? options.middleware : [];
     const listMiddleware = options.listMiddleware ? options.listMiddleware : [];

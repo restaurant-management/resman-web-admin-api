@@ -3,7 +3,6 @@ import { Dish } from '../entity/dish';
 import { ImportBill } from '../entity/importBill';
 import { Stock } from '../entity/stock';
 import { Store } from '../entity/store';
-import { User } from '../entity/user';
 import { Warehouse } from '../entity/warehouse';
 import { PasswordHandler } from '../helper/passwordHandler';
 import { DiscountCodeService } from '../service/discountCode.service';
@@ -25,7 +24,7 @@ export const seedFakeData = async () => {
         await customer.save();
     }
 
-    await seedFakeUser();
+    // await seedFakeUser();
     await seedStore();
     await seedWarehouse();
     await seedStock();

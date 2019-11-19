@@ -41,6 +41,10 @@
 	"error": {
 		"missing_required_information": "error.missing_required_information"
 	},
+	"socket": {
+		"{{name}}_connected": "{{name}} connected.",
+		"{{name}}_disconnected": "{{name}} disconnected."
+  },
 	"daily_report": {
 		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
 		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse",
