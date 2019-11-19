@@ -20,7 +20,8 @@
 	},
 	"authentication": {
 		"no_token_provided": "authentication.no_token_provided",
-		"fail_authenticate_token": "authentication.fail_authenticate_token"
+		"fail_authenticate_token": "authentication.fail_authenticate_token",
+		"unauthorized": "authentication.unauthorized"
 	},
 	"store": {
 		"store_not_found": "store.store_not_found"
@@ -75,6 +76,8 @@
 	},
 	"bill": {
 		"create_bill_fail": "bill.create_bill_fail",
-		"bill_not_found": "bill.bill_not_found"
+		"bill_not_found": "bill.bill_not_found",
+		"collect_value_must_be_not_null": "bill.collect_value_must_be_not_null",
+		"bill_is_collected": "bill.bill_is_collected"
 	}
 }

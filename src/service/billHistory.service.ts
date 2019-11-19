@@ -30,6 +30,7 @@ class BillHistoryService {
         dishNotes?: string[], dishQuantities?: number[], description?: string, createAt?: Date
     }) {
         const time = data.createAt || new Date();
+        const bill = await BillService.getOne(billId, { showDishesType: 'dishes' });
 
         // Check whether dish is daily dish.
         for (const dishId of data.dishIds) {
@@ -37,7 +38,7 @@ class BillHistoryService {
         }
 
         const newBillHistory = new BillHistory();
-        newBillHistory.bill = await BillService.getOne(billId);
+        newBillHistory.bill = bill;
         newBillHistory.description = data.description;
         newBillHistory.createAt = time;
         newBillHistory.user = await UserService.getOne({ uuid: data.userUuid });
@@ -48,11 +49,18 @@ class BillHistoryService {
         for (const [index, dishId] of data.dishIds.entries()) {
             // Check whether dish is daily dish.
             await DailyDishService.getOne(time, dishId, DaySession.None);
-
+            const oldBillDish = bill['dishes'].find((item) => item.dishId === dishId);
             const dishNotes = data.dishNotes || [];
             const dishQuantities = data.dishQuantities || [];
+
             await BillDishService.create(billHistory.id, billId,
-                { dishId, note: dishNotes[index], quantity: dishQuantities[index] });
+                {
+                    dishId,
+                    note: dishNotes[index] || oldBillDish?.note,
+                    quantity: dishQuantities[index] || oldBillDish?.quantity,
+                    preparedAt: oldBillDish?.preparedAt,
+                    deliveredAt: oldBillDish?.deliveredAt
+                });
         }
 
         return billHistory;

@@ -10,6 +10,7 @@ import { DiscountCodeService } from '../service/discountCode.service';
 import { DishService } from '../service/dish.service';
 import { ImportBillService } from '../service/importBill.service';
 import { WarehouseService } from '../service/warehouse.service';
+import { UserService } from '../service/user.service';
 
 export const seedFakeData = async () => {
     console.info('Seeding fake data...');
@@ -36,26 +37,14 @@ export const seedFakeData = async () => {
 };
 
 const seedFakeUser = async () => {
-    let staff = await User.findOne({ where: { username: 'staff' } });
-    if (!staff) {
-        staff = new User();
-        staff.username = 'staff';
-        staff.password = PasswordHandler.encode('staff');
-        staff.email = 'staff@gmail.com';
-        staff.phoneNumber = '01231234234';
-        staff.address = 'Viet Nam';
-        await staff.save();
+    if (!await User.findOne({ where: { username: 'staff' } })) {
+        await UserService.create('staff', 'staff@gmail.com', PasswordHandler.encode('staff'), '01231234234', 'Viet Nam',
+            null, null, null, ['staff']);
     }
 
-    let chef = await User.findOne({ where: { username: 'chef' } });
-    if (!chef) {
-        chef = new User();
-        chef.username = 'chef';
-        chef.password = PasswordHandler.encode('chef');
-        chef.email = 'chef@gmail.com';
-        chef.phoneNumber = '12323123';
-        chef.address = 'Viet Nam';
-        await chef.save();
+    if (!await User.findOne({ where: { username: 'chef' } })) {
+        await UserService.create('chef', 'chef@gmail.com', PasswordHandler.encode('chef'), '12323123', 'Viet Nam',
+            null, null, null, ['chef']);
     }
 };
 

@@ -228,20 +228,14 @@ class BillService {
             throw new Error(__('bill.bill_is_collected'));
         }
 
-        try {
-            await BillHistoryService.create(bill.id, {
-                dishIds: data.dishIds,
-                dishNotes: data.dishNotes,
-                dishQuantities: data.dishQuantities,
-                userUuid: data.updateByUuid,
-                description: data.note,
-                createAt: new Date()
-            });
-        } catch (e) {
-            await bill.remove();
-            console.error(e);
-            throw new Error(__('bill.create_bill_fail'));
-        }
+        await BillHistoryService.create(bill.id, {
+            dishIds: data.dishIds,
+            dishNotes: data.dishNotes,
+            dishQuantities: data.dishQuantities,
+            userUuid: data.updateByUuid,
+            description: data.note,
+            createAt: new Date()
+        });
 
         return await this.edit(id, data);
     }
@@ -269,10 +263,16 @@ class BillService {
     public async preparedBillDish(id: number, dishId?: number) {
         const bill = await this.getOne(id, { showDishesType: 'histories' });
         const histories = bill.histories;
+        if (bill.histories.length === 0) {
+            throw new Error(__('bill.bill_does_not_have_history'));
+        }
+
         if (dishId) {
             await BillDishService.prepared(dishId, histories[histories.length - 1].id);
         } else {
-            for (const dish of histories[histories.length - 1].dishes) {
+            const dishes = (await BillHistoryService.getOne(
+                id, histories[histories.length - 1].id, { withDishes: true })).dishes;
+            for (const dish of dishes) {
                 await BillDishService.prepared(dish.dishId, dish.billHistoryId);
             }
         }
@@ -281,10 +281,16 @@ class BillService {
     public async deliveredBillDish(id: number, dishId?: number) {
         const bill = await this.getOne(id, { showDishesType: 'histories' });
         const histories = bill.histories;
+        if (bill.histories.length === 0) {
+            throw new Error(__('bill.bill_does_not_have_history'));
+        }
+
         if (dishId) {
             await BillDishService.delivered(dishId, histories[histories.length - 1].id);
         } else {
-            for (const dish of histories[histories.length - 1].dishes) {
+            const dishes = (await BillHistoryService.getOne(
+                id, histories[histories.length - 1].id, { withDishes: true })).dishes;
+            for (const dish of dishes) {
                 await BillDishService.delivered(dish.dishId, dish.billHistoryId);
             }
         }
@@ -293,17 +299,18 @@ class BillService {
     /**
      * Collect money of bill for staff
      */
-    public async collectBill(id: number, data: { collectByUuid: string, collectValue: number }) {
+    public async collectBill(id: number, data: { collectByUuid: string, collectValue: number, note: string }) {
         const bill = await this.getOne(id, { withCollectBy: true });
 
         if (data.collectByUuid) {
-            if (data.collectValue) {
+            if (!data.collectValue) {
                 throw new Error(__('bill.collect_value_must_be_not_null'));
             }
             try {
                 bill.collectBy = await UserService.getOne({ uuid: data.collectByUuid });
                 bill.collectAt = new Date();
                 bill.collectValue = data.collectValue;
+                bill.note = data.note;
             } catch (_e) { throw new Error(__('bill.collected_user_not_found')); }
         }
 
@@ -312,8 +319,25 @@ class BillService {
         return await this.getOne(id, { withCollectBy: true });
     }
 
+    public async assignCustomer(id: number, data: { customerUuid: string }) {
+        const bill = await this.getOne(id);
+
+        if (bill.customer) {
+            throw new Error(__('bill.bill_have_been_already_assigned'));
+        }
+
+        bill.customer = await CustomerService.getOne({ uuid: data.customerUuid });
+
+        await bill.save();
+    }
+
     public async rateBill(id: number, data: { rating: number }) {
         const bill = await this.getOne(id);
+
+        if (!bill.customer) {
+            throw new Error(__('bill.need_assign_customer_before_rating'));
+        }
+
         bill.rating = data.rating;
 
         return await bill.save();
@@ -344,20 +368,27 @@ class BillService {
         }
 
         if (options?.showDishesType === 'dishes') {
-            let newestTime = bill.histories[0].createAt;
-            let historyId = bill.histories[0].id;
-            for (let i = 1; i < bill.histories.length; i++) {
-                if (newestTime < bill.histories[i].createAt) {
-                    newestTime = bill.histories[i].createAt;
-                    historyId = bill.histories[i].id;
+            if (bill.histories.length > 0) {
+                let newestTime = bill.histories[0].createAt;
+                let historyId = bill.histories[0].id;
+                for (let i = 1; i < bill.histories.length; i++) {
+                    if (newestTime < bill.histories[i].createAt) {
+                        newestTime = bill.histories[i].createAt;
+                        historyId = bill.histories[i].id;
+                    }
                 }
-            }
 
-            const history = await BillHistoryService.getOne(id, historyId, { withDishes: true, withUser: true });
-            bill['updateAt'] = newestTime;
-            bill['updateBy'] = history.user;
-            bill['dishes'] = history.dishes;
-            delete bill.histories;
+                const history = await BillHistoryService.getOne(id, historyId, { withDishes: true, withUser: true });
+                bill['updateAt'] = newestTime;
+                bill['updateBy'] = history.user;
+                bill['dishes'] = history.dishes;
+                delete bill.histories;
+            } else {
+                bill['updateAt'] = null;
+                bill['updateBy'] = null;
+                bill['dishes'] = [];
+                delete bill.histories;
+            }
         }
 
         return bill;

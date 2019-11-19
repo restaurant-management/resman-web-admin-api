@@ -5,6 +5,7 @@ import { DaySession } from '../entity/dailyDish';
 import { User } from '../entity/user';
 import { Application } from '../lib/application';
 import { CustomerService } from '../service/customer.service';
+import { __ } from 'i18n';
 
 describe('The Bill Router', () => {
     let app: SuperTest<Test>;
@@ -108,7 +109,7 @@ describe('The Bill Router', () => {
                 .expect(200);
         });
 
-        it('should return OK status and json object', (done) => {
+        it('should return OK status and json object', () => {
             return app
                 .post('/api/bills')
                 .set({
@@ -153,11 +154,54 @@ describe('The Bill Router', () => {
                         rating: 4.5,
                     });
                     newBillId = res.body.id;
+                });
+        });
+    });
+
+    describe('when create bill like a staff', () => {
+        it('should return OK status and json object', () => {
+            return app
+                .post('/api/bills/restrict')
+                .set({
+                    Authorization: staffToken
                 })
-                .end((err, res) => {
-                    console.log(res.body);
-                    console.log(chefToken, staffToken, newBillId);
-                    done(err);
+                .send({
+                    tableNumber: 1,
+                    dishIds: [1, 2],
+                    dishNotes: ['Khong hanh', 'Khong kho hoa'],
+                    dishQuantities: [3, 1],
+                    voucherCode,
+                    discountCode,
+                    note: 'Hoa don cho dai gia, lam cho dang hoang',
+                    customerUuid: null,
+                    rating: 4.5,
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toMatchObject({
+                        tableNumber: 1,
+                        createBy: {
+                            username: 'staff'
+                        },
+                        voucherCode,
+                        voucherValue: 10,
+                        discountCode,
+                        discountValue: 10,
+                        dishes: [
+                            {
+                                dishId: 1,
+                                note: 'Khong hanh',
+                                quantity: 3
+                            },
+                            {
+                                dishId: 2,
+                                note: 'Khong kho hoa',
+                                quantity: 1
+                            }
+                        ],
+                        note: 'Hoa don cho dai gia, lam cho dang hoang',
+                        rating: 4.5,
+                    });
                 });
         });
     });
@@ -216,6 +260,168 @@ describe('The Bill Router', () => {
         });
     });
 
+    describe('when prepare bill as chef', () => {
+        it('should return OK status and json object with new info', () => {
+            return app
+                .put(`/api/bills/${newBillId}/prepare`)
+                .set({
+                    Authorization: chefToken
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toMatchObject(
+                        {
+                            prepareBy: {
+                                username: 'chef'
+                            }
+                        }
+                    );
+                });
+        });
+    });
+
+    describe('when prepared one bill dish as chef', () => {
+        describe('try as staff', () => {
+            it('401 error', () => {
+                return app
+                    .put(`/api/bills/${newBillId}/prepared/1`)
+                    .set({
+                        Authorization: staffToken
+                    })
+                    .expect(401);
+            });
+        });
+
+        describe('one bill dish', () => {
+            it('should return OK status and json object with new info', () => {
+                return app
+                    .put(`/api/bills/${newBillId}/prepared/1`)
+                    .set({
+                        Authorization: chefToken
+                    })
+                    .expect(200);
+            });
+        });
+
+        describe('all bill dish', () => {
+            it('should return OK status and json object with new info', () => {
+                return app
+                    .put(`/api/bills/${newBillId}/prepared`)
+                    .set({
+                        Authorization: chefToken
+                    })
+                    .expect(200);
+            });
+        });
+    });
+
+    describe('when delivered one bill dish as staff', () => {
+        describe('one bill dish', () => {
+            it('should return OK status and json object with new info', () => {
+                return app
+                    .put(`/api/bills/${newBillId}/delivered/1`)
+                    .set({
+                        Authorization: staffToken
+                    })
+                    .expect(200);
+            });
+        });
+
+        describe('all bill dish', () => {
+            it('should return OK status and json object with new info', () => {
+                return app
+                    .put(`/api/bills/${newBillId}/delivered`)
+                    .set({
+                        Authorization: staffToken
+                    })
+                    .expect(200);
+            });
+        });
+    });
+
+    describe('when staff change dish', () => {
+
+        it('create daily dish for testing', () => {
+            return app
+                .post('/api/daily_dishes')
+                .set({
+                    Authorization: adminToken
+                })
+                .send({
+                    dishId: 3,
+                    storeId: 1,
+                    session: DaySession.None,
+                })
+                .expect(200);
+        });
+
+        it('should return success status', () => {
+            return app
+                .put(`/api/bills/${newBillId}/change-dish`)
+                .set({
+                    Authorization: staffToken
+                })
+                .send({
+                    dishIds: [1, 2, 3],
+                    dishNotes: [null, null, 'It'],
+                    dishQuantities: [null, null, 3],
+                    note: 'Bo m thich'
+                })
+                .expect(200);
+        });
+    });
+
+    describe('when collect bill as staff', () => {
+        it('should return OK status and json object with new info', () => {
+            return app
+                .put(`/api/bills/${newBillId}/collect`)
+                .set({
+                    Authorization: staffToken
+                })
+                .send({
+                    collectValue: 20000,
+                    note: 'Khach hang ko chiu tra du tien'
+                })
+                .expect(200);
+        });
+    });
+
+    describe('when staff change dish', () => {
+        it('can not change dish of colleted bill', () => {
+            return app
+                .put(`/api/bills/${newBillId}/change-dish`)
+                .set({
+                    Authorization: staffToken
+                })
+                .send({
+                    dishIds: [1, 2, 3],
+                    dishNotes: [null, null, 'It'],
+                    dishQuantities: [null, null, 3],
+                    note: 'Bo m thich'
+                })
+                .expect(500)
+                .expect((res) => {
+                    expect(res.body).toMatchObject(
+                        { message: __('bill.bill_is_collected') }
+                    );
+                });
+        });
+    });
+
+    describe('when staff assign customer', () => {
+        it('should return 200 status', () => {
+            return app
+                .put(`/api/bills/${newBillId}/customer`)
+                .set({
+                    Authorization: staffToken
+                })
+                .send({
+                    customerUuid: customer.uuid
+                })
+                .expect(200);
+        });
+    });
+
     describe('when update bill as admin', () => {
         it('should return OK status and json object with new info', () => {
             return app
@@ -264,26 +470,6 @@ describe('The Bill Router', () => {
                             ],
                             note: 'No note',
                             rating: 4,
-                        }
-                    );
-                });
-        });
-    });
-
-    describe('when prepare bill as chef', () => {
-        it('should return OK status and json object with new info', () => {
-            return app
-                .post(`/api/bills/${newBillId}/prepare`)
-                .set({
-                    Authorization: chefToken
-                })
-                .expect(200)
-                .expect((res) => {
-                    expect(res.body).toMatchObject(
-                        {
-                            prepareBy: {
-                                username: 'chef'
-                            }
                         }
                     );
                 });

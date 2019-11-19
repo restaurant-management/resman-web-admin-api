@@ -68,6 +68,8 @@
 	},
 	"bill": {
 		"create_bill_fail": "bill.create_bill_fail",
-		"bill_not_found": "bill.bill_not_found"
+		"bill_not_found": "bill.bill_not_found",
+		"collect_value_must_be_not_null": "bill.collect_value_must_be_not_null",
+		"bill_is_collected": "bill.bill_is_collected"
 	}
 }

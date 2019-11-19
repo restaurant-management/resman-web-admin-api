@@ -55,6 +55,19 @@ class BillController implements ICrudController {
             }).catch(e => next(e));
     }
 
+    public rating(req: Request, res: Response, next: NextFunction): void {
+        const user: User = req['user'];
+
+        if (!req.body.updateByUuid) {
+            req.body.updateByUuid = user.uuid;
+        }
+
+        BillService.edit(parseInt(req.params.id, 10), req.body)
+            .then(value => {
+                return res.status(200).json(value);
+            }).catch(e => next(e));
+    }
+
     public delete(req: Request, res: Response, next: NextFunction): void {
         BillService.delete(parseInt(req.params.id, 10), req['user']).then(() =>
             res.sendStatus(200)
@@ -93,6 +106,12 @@ class BillController implements ICrudController {
         const user: User = req['user'];
         req.body.updateByUuid = user.uuid;
         BillService.changeDishes(parseInt(req.params.id, 10), req.body).then(() =>
+            res.sendStatus(200)
+        ).catch(e => next(e));
+    }
+
+    public assignedCustomer(req: Request, res: Response, next: NextFunction): void {
+        BillService.assignCustomer(parseInt(req.params.id, 10), req.body).then(() =>
             res.sendStatus(200)
         ).catch(e => next(e));
     }

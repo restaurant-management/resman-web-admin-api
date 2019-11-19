@@ -19,6 +19,32 @@ export const seedRole = async () => {
                 }
             ])
             .execute();
+        await getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(Role)
+            .values([
+                {
+                    level: 1,
+                    name: 'Chef',
+                    permissions: [],
+                    slug: 'chef'
+                }
+            ])
+            .execute();
+        await getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(Role)
+            .values([
+                {
+                    level: 1,
+                    name: 'Staff',
+                    permissions: [],
+                    slug: 'staff'
+                }
+            ])
+            .execute();
 
         console.log('Seeded role!');
     }

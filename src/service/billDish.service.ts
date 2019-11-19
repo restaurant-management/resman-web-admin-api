@@ -21,7 +21,7 @@ class BillDishService {
     }
 
     public async create(billHistoryId: number, billId: number,
-        data: { dishId: number, note?: string, quantity?: number }) {
+        data: { dishId: number, note?: string, quantity?: number, preparedAt?: Date, deliveredAt?: Date }) {
         const dish = await DishService.getOne(data.dishId);
 
         // Create new bill dish
@@ -30,11 +30,34 @@ class BillDishService {
         billDish.billHistory = await BillHistoryService.getOne(billId, billHistoryId);
         billDish.note = data.note || '';
         billDish.quantity = data.quantity || 1;
+        billDish.preparedAt = data.preparedAt;
+        billDish.deliveryAt = data.deliveredAt;
         billDish.price = await DishService.getRealPrice({ dish });
 
         await billDish.save();
 
         return await this.getOne(dish.id, billHistoryId);
+    }
+
+    public async createFrom(billHistoryId: number, billId: number,
+        otherBillDish: { billHistoryId: number, dishId: number }) {
+        const billDish = await this.getOne(otherBillDish.dishId, otherBillDish.billHistoryId);
+        const dish = await DishService.getOne(otherBillDish.dishId);
+
+        // Create new bill dish
+        const newBillDish = new BillDish();
+        newBillDish.dish = dish;
+        newBillDish.billHistory = await BillHistoryService.getOne(billId, billHistoryId);
+        newBillDish.note = billDish.note;
+        newBillDish.quantity = billDish.quantity || 1;
+        newBillDish.preparedAt = billDish.preparedAt;
+        newBillDish.deliveryAt = billDish.deliveryAt;
+        newBillDish.price = await DishService.getRealPrice({ dish });
+
+        await newBillDish.save();
+
+        return await this.getOne(dish.id, billHistoryId);
+
     }
 
     public async edit(dishId: number, billHistoryId: number, data: { note?: string, quantity?: number }) {
