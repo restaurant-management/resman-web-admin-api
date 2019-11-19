@@ -19,7 +19,7 @@ describe('The DailyReport Router', () => {
         }
     });
 
-    describe('before create daily report', () => {
+    describe('when create daily report', () => {
 
         it('create new warehouse to test', () => {
             return app
@@ -54,9 +54,6 @@ describe('The DailyReport Router', () => {
                 })
                 .expect(200);
         });
-    });
-
-    describe('when create daily report', () => {
 
         it('should return OK status and json object', (done) => {
             return app

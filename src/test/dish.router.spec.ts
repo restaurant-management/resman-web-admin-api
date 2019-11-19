@@ -6,6 +6,7 @@ import { Application } from '../lib/application';
 describe('The Dish Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
+    let newDishId: number;
 
     beforeAll(async () => {
         try {
@@ -32,6 +33,7 @@ describe('The Dish Router', () => {
                 })
                 .expect(200)
                 .expect((res) => {
+                    newDishId = res.body.id;
                     expect(res.body).toMatchObject({
                         name: 'Test Dish',
                         description: 'Test Dish Description',
@@ -50,14 +52,14 @@ describe('The Dish Router', () => {
     describe('when get dish info', () => {
         it('should return OK status', (done) => {
             return app
-                .get('/api/dishes/1')
+                .get('/api/dishes/' + newDishId)
                 .set({
                     Authorization: adminToken
                 })
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: 1
+                            id: newDishId
                         }
                     );
                 })
@@ -90,7 +92,7 @@ describe('The Dish Router', () => {
     describe('when update dish', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/dishes/1')
+                .put('/api/dishes/' + newDishId)
                 .set({
                     Authorization: adminToken
                 })
@@ -118,7 +120,7 @@ describe('The Dish Router', () => {
         describe('exist dish', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/dishes/3')
+                    .delete('/api/dishes/' + newDishId)
                     .set({
                         Authorization: adminToken
                     })

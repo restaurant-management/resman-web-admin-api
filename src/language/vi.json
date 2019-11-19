@@ -55,7 +55,8 @@
 		"daily_report_not_found": "daily_report.daily_report_not_found"
 	},
 	"dish": {
-		"delete_fail": "dish.delete_fail"
+		"delete_fail": "dish.delete_fail",
+		"dish_not_found": "dish.dish_not_found"
 	},
 	"voucher_code": {
 		"voucher_code_not_found": "voucher_code.voucher_code_not_found"
