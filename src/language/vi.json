@@ -55,7 +55,7 @@
 	"socket": {
 		"{{name}}_connected": "socket.{{name}}_connected",
 		"{{name}}_disconnected": "socket.{{name}}_disconnected"
-  },
+	},
 	"daily_report": {
 		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
 		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse",
@@ -87,5 +87,8 @@
 		"bill_not_found": "bill.bill_not_found",
 		"collect_value_must_be_not_null": "bill.collect_value_must_be_not_null",
 		"bill_is_collected": "bill.bill_is_collected"
+	},
+	"role": {
+		"role_not_found": "role.role_not_found"
 	}
 }
