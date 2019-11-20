@@ -3,13 +3,14 @@ import { Dish } from '../entity/dish';
 import { ImportBill } from '../entity/importBill';
 import { Stock } from '../entity/stock';
 import { Store } from '../entity/store';
+import { User } from '../entity/user';
 import { Warehouse } from '../entity/warehouse';
 import { PasswordHandler } from '../helper/passwordHandler';
 import { DiscountCodeService } from '../service/discountCode.service';
 import { DishService } from '../service/dish.service';
 import { ImportBillService } from '../service/importBill.service';
-import { WarehouseService } from '../service/warehouse.service';
 import { UserService } from '../service/user.service';
+import { WarehouseService } from '../service/warehouse.service';
 
 export const seedFakeData = async () => {
     console.info('Seeding fake data...');
@@ -24,7 +25,7 @@ export const seedFakeData = async () => {
         await customer.save();
     }
 
-    // await seedFakeUser();
+    await seedFakeUser();
     await seedStore();
     await seedWarehouse();
     await seedStock();
