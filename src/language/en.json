@@ -1,0 +1,83 @@
+{
+	"welcome_resman": "Welcome to Resman",
+	"authentication": {
+		"no_token_provided": "No token provided. Please check \"Authorization\" header.",
+		"fail_authenticate_token": "Failed to authenticate token.",
+		"unauthorized": "Unauthorized"
+	},
+	"user": {
+		"username_or_email_incorrect": "Username or email incorrect.",
+		"password_incorrect": "Password incorrect.",
+		"username_has_already_used": "Username has already used.",
+		"email_has_already_used": "Email has already used.",
+		"phone_number_has_already_used": "Phone number has already used.",
+		"{{role}}_not_found": "Role {{role}} not found.",
+		"user_not_found": "user_service.user_not_found",
+		"can_not_delete_admin_user": "user_service.can_not_delete_admin_user",
+		"can_not_create_user_with_higher_level": "Can not create user with higher level.",
+		"can_not_update_user_with_higher_level": "Can not update user with higher level.",
+		"can_not_delete_user_with_higher_level": "Can not delete user with higher level."
+	},
+	"store": {
+		"store_not_found": "Store not found."
+	},
+	"warehouse": {
+		"warehouse_not_found": "Warehouse not found.",
+		"store_not_found": "warehouse.store_not_found"
+	},
+	"customer": {
+		"customer_not_found": "Customer not found"
+	},
+	"stock": {
+		"stock_not_found": "Stock not found"
+	},
+	"import_bill": {
+		"stockIds_length_have_to_equal_quantities_length": "Number of stockIds have to equal with number of quantities.",
+		"warehouse_not_found": "import_bill.warehouse_not_found",
+		"user_{{username}}_not_found": "import_bill.user_{{username}}_not_found",
+		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found",
+		"import_bill_not_found": "import_bill.import_bill_not_found"
+	},
+	"error": {
+		"missing_required_information": "error.missing_required_information"
+	},
+	"socket": {
+		"{{name}}_connected": "{{name}} connected.",
+		"{{name}}_disconnected": "{{name}} disconnected."
+	},
+	"daily_report": {
+		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
+		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse",
+		"daily_report_not_found": "daily_report.daily_report_not_found"
+	},
+	"dish": {
+		"delete_fail": "dish.delete_fail",
+		"dish_not_found": "dish.dish_not_found"
+	},
+	"voucher_code": {
+		"voucher_code_not_found": "voucher_code.voucher_code_not_found"
+	},
+	"discount_code": {
+		"voucher_code_not_found": "discount_code.voucher_code_not_found",
+		"discount_code_not_found": "discount_code.discount_code_not_found"
+	},
+	"discount_campaign": {
+		"discount_campaign_not_found": "discount_campaign.discount_campaign_not_found"
+	},
+	"address": {
+		"address_not_found": "address.address_not_found"
+	},
+	"daily_dish": {
+		"delete_fail": "daily_dish.delete_fail",
+		"daily_dish_not_found": "daily_dish.daily_dish_not_found"
+	},
+	"bill": {
+		"create_bill_fail": "bill.create_bill_fail",
+		"bill_not_found": "bill.bill_not_found",
+		"collect_value_must_be_not_null": "bill.collect_value_must_be_not_null",
+		"bill_is_collected": "bill.bill_is_collected"
+	},
+	"role": {
+		"role_not_found": "role.role_not_found"
+	}
+}

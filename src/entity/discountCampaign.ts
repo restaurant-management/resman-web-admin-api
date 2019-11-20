@@ -25,7 +25,7 @@ export class DiscountCampaign extends BaseEntity {
     @Column()
     public defaultDiscount: number;
 
-    @ManyToMany(() => Store)
+    @ManyToMany(_type => Store, store => store.discountCampaigns)
     @JoinTable()
     public stores: Store[];
 

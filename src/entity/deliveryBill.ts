@@ -8,10 +8,7 @@ export class DeliveryBill extends BaseEntity {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Column()
-    public tableNumber: number;
-
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamp with time zone' })
     public createAt: Date;
 
     @Column('timestamp with time zone', { nullable: true })
@@ -32,23 +29,23 @@ export class DeliveryBill extends BaseEntity {
     @Column({ length: 20, nullable: true })
     public voucherCode: string;
 
-    @Column()
+    @Column({ nullable: true })
     public voucherValue: number;
+
+    @Column({ nullable: true })
+    public voucherIsPercent: boolean;
 
     @Column({ length: 20, nullable: true })
     public discountCode: string;
 
-    @Column()
+    @Column({ nullable: true })
     public discountValue: number;
 
     @Column('float', { nullable: true })
-    public rate: number;
+    public rating: number;
 
     @Column({ nullable: true })
     public note: string;
-
-    @ManyToOne(_type => User, { nullable: false, onDelete: 'NO ACTION' })
-    public createBy: User;
 
     @ManyToOne(_type => User, { onDelete: 'NO ACTION' })
     public prepareBy: User;

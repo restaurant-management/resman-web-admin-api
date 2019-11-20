@@ -4,7 +4,7 @@ import { Store } from './store';
 
 @Entity()
 export class StoreDish extends BaseEntity {
-    @ManyToOne(() => Store, store => store.dishes, { nullable: false, onDelete: 'CASCADE' })
+    @ManyToOne(() => Store, store => store.storeDishes, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'storeId' })
     public store: Store;
 
@@ -19,5 +19,5 @@ export class StoreDish extends BaseEntity {
     public dishId: number;
 
     @Column({ nullable: true })
-    public discount: number;
+    public price: number;
 }

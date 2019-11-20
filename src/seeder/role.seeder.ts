@@ -1,4 +1,5 @@
 import { getConnection } from 'typeorm';
+import { Permission } from '../entity/permission';
 import { Role } from '../entity/role';
 
 export const seedRole = async () => {
@@ -13,8 +14,34 @@ export const seedRole = async () => {
                 {
                     level: 5,
                     name: 'Administrator',
-                    permissions: [],
+                    permissions: Permission.toArray(),
                     slug: 'administrator'
+                }
+            ])
+            .execute();
+        await getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(Role)
+            .values([
+                {
+                    level: 1,
+                    name: 'Chef',
+                    permissions: [],
+                    slug: 'chef'
+                }
+            ])
+            .execute();
+        await getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(Role)
+            .values([
+                {
+                    level: 1,
+                    name: 'Staff',
+                    permissions: [],
+                    slug: 'staff'
                 }
             ])
             .execute();

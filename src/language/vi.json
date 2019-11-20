@@ -1,0 +1,94 @@
+{
+	"welcome_resman": "Chào mừng bạn đến với Resman",
+	"user_service": {
+		"username_or_email_incorrect": "Tài khoản hoặc email không đúng.",
+		"password_incorrect": "mật khẩu không đúng.",
+		"username_has_already_used": "Tài khoản đã tồn tại.",
+		"email_has_already_used": "Email đã tồn tại.",
+		"phone_number_has_already_used": "user_service.phone_number_has_already_used",
+		"{{role}}_not_found": "user_service.{{role}}_not_found",
+		"user_not_found": "user_service.user_not_found",
+		"can_not_delete_admin_user": "user_service.can_not_delete_admin_user"
+	},
+	"common": {
+		"no_token_provided": "common.no_token_provided",
+		"unauthorized": "common.unauthorized"
+	},
+	"error": {
+		"can_not_create_user_with_higher_level": "error.can_not_create_user_with_higher_level",
+		"missing_required_information": "error.missing_required_information"
+	},
+	"authentication": {
+		"no_token_provided": "authentication.no_token_provided",
+		"fail_authenticate_token": "authentication.fail_authenticate_token",
+		"unauthorized": "authentication.unauthorized"
+	},
+	"store": {
+		"store_not_found": "store.store_not_found"
+	},
+	"warehouse": {
+		"warehouse_not_found": "warehouse.warehouse_not_found",
+		"store_not_found": "warehouse.store_not_found"
+	},
+	"customer": {
+		"customer_not_found": "customer.customer_not_found"
+	},
+	"user": {
+		"user_not_found": "user.user_not_found",
+		"can_not_delete_admin_user": "user.can_not_delete_admin_user",
+		"username_or_email_incorrect": "user.username_or_email_incorrect",
+		"phone_number_has_already_used": "user.phone_number_has_already_used"
+	},
+	"stock": {
+		"stock_not_found": "stock.stock_not_found"
+	},
+	"import_bill": {
+		"stockIds_length_have_to_equal_quantities_length": "import_bill.stockIds_length_have_to_equal_quantities_length",
+		"warehouse_not_found": "import_bill.warehouse_not_found",
+		"user_{{username}}_not_found": "import_bill.user_{{username}}_not_found",
+		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found",
+		"import_bill_not_found": "import_bill.import_bill_not_found"
+	},
+	"importBill": {
+		"importBill_not_found": "importBill.importBill_not_found"
+	},
+	"socket": {
+		"{{name}}_connected": "socket.{{name}}_connected",
+		"{{name}}_disconnected": "socket.{{name}}_disconnected"
+	},
+	"daily_report": {
+		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
+		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse",
+		"daily_report_not_found": "daily_report.daily_report_not_found"
+	},
+	"dish": {
+		"delete_fail": "dish.delete_fail",
+		"dish_not_found": "dish.dish_not_found"
+	},
+	"voucher_code": {
+		"voucher_code_not_found": "voucher_code.voucher_code_not_found"
+	},
+	"discount_code": {
+		"voucher_code_not_found": "discount_code.voucher_code_not_found",
+		"discount_code_not_found": "discount_code.discount_code_not_found"
+	},
+	"discount_campaign": {
+		"discount_campaign_not_found": "discount_campaign.discount_campaign_not_found"
+	},
+	"address": {
+		"address_not_found": "address.address_not_found"
+	},
+	"daily_dish": {
+		"delete_fail": "daily_dish.delete_fail",
+		"daily_dish_not_found": "daily_dish.daily_dish_not_found"
+	},
+	"bill": {
+		"create_bill_fail": "bill.create_bill_fail",
+		"bill_not_found": "bill.bill_not_found",
+		"collect_value_must_be_not_null": "bill.collect_value_must_be_not_null",
+		"bill_is_collected": "bill.bill_is_collected"
+	},
+	"role": {
+		"role_not_found": "role.role_not_found"
+	}
+}

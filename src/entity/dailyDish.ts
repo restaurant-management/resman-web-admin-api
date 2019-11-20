@@ -32,7 +32,7 @@ export class DailyDish extends BaseEntity {
 
     @ManyToOne(() => Dish, { nullable: false, onDelete: 'NO ACTION' })
     @JoinColumn({ name: 'dishId' })
-    public dish: Store;
+    public dish: Dish;
 
     @PrimaryColumn()
     public dishId: number;

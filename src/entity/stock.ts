@@ -1,12 +1,11 @@
-import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Warehouse } from './warehouse';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Stock extends BaseEntity {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Column({ nullable: true, length: 100 })
+    @Column({ length: 100 })
     public name: string;
 
     @Column('money')
@@ -14,7 +13,4 @@ export class Stock extends BaseEntity {
 
     @Column({ length: 20 })
     public unit: string;
-
-    @ManyToMany(() => Warehouse)
-    public warehouses: Warehouse[];
 }
