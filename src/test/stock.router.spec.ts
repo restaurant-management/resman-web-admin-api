@@ -28,7 +28,8 @@ describe('The Stock Router', () => {
                 .send({
                     name: 'Test Stock',
                     price: 20000,
-                    unit: 'Box'
+                    unit: 'Box',
+                    image: 'Image'
                 })
                 .expect(200)
                 .expect((res) => {
@@ -36,7 +37,8 @@ describe('The Stock Router', () => {
                     expect(res.body).toMatchObject({
                         name: 'Test Stock',
                         price: 20000,
-                        unit: 'Box'
+                        unit: 'Box',
+                        image: 'Image'
                     });
                 });
         });
@@ -86,7 +88,8 @@ describe('The Stock Router', () => {
                 .send({
                     name: 'Test Update Stock',
                     price: 30000,
-                    unit: 'Can'
+                    unit: 'Can',
+                    image: 'Updated image'
                 })
                 .expect(200)
                 .expect((res) => {
@@ -95,7 +98,8 @@ describe('The Stock Router', () => {
                             id: newId,
                             name: 'Test Update Stock',
                             price: 30000,
-                            unit: 'Can'
+                            unit: 'Can',
+                            image: 'Updated image'
                         }
                     );
                 });

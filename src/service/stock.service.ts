@@ -12,11 +12,14 @@ class StockService {
         return stock;
     }
 
-    public async create(name: string, price: number, unit: string) {
+    public async create(data: {
+        name: string, price: number, unit: string, image: string
+    }) {
         const newStock = new Stock();
-        newStock.name = name;
-        newStock.price = price;
-        newStock.unit = unit;
+        newStock.name = data.name;
+        newStock.price = data.price;
+        newStock.unit = data.unit;
+        newStock.image = data.image;
 
         const stock = await newStock.save({ reload: true });
         if (!stock) { throw new Error(__('stock.create_fail')); }
@@ -24,12 +27,13 @@ class StockService {
         return stock;
     }
 
-    public async edit(id: number, name?: string, price?: number, unit?: string) {
+    public async edit(id: number, data: { name?: string, price?: number, unit?: string, image?: string }) {
         const stock = await Stock.findOne(id);
 
-        if (name) { stock.name = name; }
-        if (price) { stock.price = price; }
-        if (unit) { stock.unit = unit; }
+        if (data.name) { stock.name = data.name; }
+        if (data.price) { stock.price = data.price; }
+        if (data.unit) { stock.unit = data.unit; }
+        if (data.image) { stock.image = data.image; }
 
         return await stock.save();
     }

@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitDatabase1573916402613 implements MigrationInterface {
-    public name = 'InitDatabase1573916402613';
+export class InitDatabase1574350250782 implements MigrationInterface {
+    public name = 'InitDatabase1574350250782';
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(
@@ -41,7 +41,7 @@ export class InitDatabase1573916402613 implements MigrationInterface {
             undefined
         );
         await queryRunner.query(
-            `CREATE TABLE "stock" ("id" SERIAL NOT NULL, "name" character varying(100) NOT NULL, "price" money NOT NULL, "unit" character varying(20) NOT NULL, CONSTRAINT "PK_092bc1fc7d860426a1dec5aa8e9" PRIMARY KEY ("id"))`,
+            `CREATE TABLE "stock" ("id" SERIAL NOT NULL, "name" character varying(100) NOT NULL, "price" money NOT NULL, "unit" character varying(20) NOT NULL, "image" text, CONSTRAINT "PK_092bc1fc7d860426a1dec5aa8e9" PRIMARY KEY ("id"))`,
             undefined
         );
         await queryRunner.query(

@@ -10,7 +10,7 @@ class StockController implements ICrudController {
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {
-        StockService.create(req.body.name, req.body.price, req.body.unit)
+        StockService.create(req.body)
             .then(value => {
                 return res.status(200).json(value);
             }).catch(e => next(e));
@@ -23,7 +23,7 @@ class StockController implements ICrudController {
     }
 
     public update(req: Request, res: Response, next: NextFunction): void {
-        StockService.edit(parseInt(req.params.id, 10), req.body.name, req.body.price, req.body.unit).then(value =>
+        StockService.edit(parseInt(req.params.id, 10), req.body).then(value =>
                 res.status(200).json(value)
             ).catch(e => next(e));
     }

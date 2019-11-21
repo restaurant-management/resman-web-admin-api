@@ -3,13 +3,11 @@ import { Dish } from '../entity/dish';
 import { ImportBill } from '../entity/importBill';
 import { Stock } from '../entity/stock';
 import { Store } from '../entity/store';
-import { User } from '../entity/user';
 import { Warehouse } from '../entity/warehouse';
 import { PasswordHandler } from '../helper/passwordHandler';
 import { DiscountCodeService } from '../service/discountCode.service';
 import { DishService } from '../service/dish.service';
 import { ImportBillService } from '../service/importBill.service';
-import { UserService } from '../service/user.service';
 import { WarehouseService } from '../service/warehouse.service';
 
 export const seedFakeData = async () => {
@@ -25,7 +23,6 @@ export const seedFakeData = async () => {
         await customer.save();
     }
 
-    await seedFakeUser();
     await seedStore();
     await seedWarehouse();
     await seedStock();
@@ -34,18 +31,6 @@ export const seedFakeData = async () => {
     await seedDiscountCode();
 
     console.log('Seeded fake data!');
-};
-
-const seedFakeUser = async () => {
-    if (!await User.findOne({ where: { username: 'staff' } })) {
-        await UserService.create('staff', 'staff@gmail.com', PasswordHandler.encode('staff'), '01231234234', 'Viet Nam',
-            null, null, null, ['staff']);
-    }
-
-    if (!await User.findOne({ where: { username: 'chef' } })) {
-        await UserService.create('chef', 'chef@gmail.com', PasswordHandler.encode('chef'), '12323123', 'Viet Nam',
-            null, null, null, ['chef']);
-    }
 };
 
 const seedStore = async () => {
