@@ -68,9 +68,6 @@ describe('The Store Router', () => {
             it('should return OK status and json array', () => {
                 return app
                     .get('/api/stores')
-                    .set({
-                        Authorization: adminToken
-                    })
                     .expect(200)
                     .expect((res) => {
                         expect(res.body.length)

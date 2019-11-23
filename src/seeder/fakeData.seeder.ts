@@ -1,15 +1,15 @@
 import { Customer } from '../entity/customer';
+import { DaySession } from '../entity/dailyDish';
 import { Dish } from '../entity/dish';
 import { ImportBill } from '../entity/importBill';
 import { Stock } from '../entity/stock';
 import { Store } from '../entity/store';
-import { User } from '../entity/user';
 import { Warehouse } from '../entity/warehouse';
 import { PasswordHandler } from '../helper/passwordHandler';
+import { DailyDishService } from '../service/dailyDish.service';
 import { DiscountCodeService } from '../service/discountCode.service';
 import { DishService } from '../service/dish.service';
 import { ImportBillService } from '../service/importBill.service';
-import { UserService } from '../service/user.service';
 import { WarehouseService } from '../service/warehouse.service';
 
 export const seedFakeData = async () => {
@@ -25,27 +25,15 @@ export const seedFakeData = async () => {
         await customer.save();
     }
 
-    await seedFakeUser();
     await seedStore();
     await seedWarehouse();
     await seedStock();
     await seedImportBill();
     await seedDish();
     await seedDiscountCode();
+    await seedDailyDish();
 
     console.log('Seeded fake data!');
-};
-
-const seedFakeUser = async () => {
-    if (!await User.findOne({ where: { username: 'staff' } })) {
-        await UserService.create('staff', 'staff@gmail.com', PasswordHandler.encode('staff'), '01231234234', 'Viet Nam',
-            null, null, null, ['staff']);
-    }
-
-    if (!await User.findOne({ where: { username: 'chef' } })) {
-        await UserService.create('chef', 'chef@gmail.com', PasswordHandler.encode('chef'), '12323123', 'Viet Nam',
-            null, null, null, ['chef']);
-    }
 };
 
 const seedStore = async () => {
@@ -154,6 +142,26 @@ const seedDish = async () => {
             ],
             30000
         );
+    }
+};
+
+const seedDailyDish = async () => {
+    try {
+        await DailyDishService.getOne(new Date(), 1, DaySession.None);
+    } catch (e) {
+        await DailyDishService.create(new Date(), 1, 1, DaySession.None);
+    }
+
+    try {
+        await DailyDishService.getOne(new Date(), 2, DaySession.None);
+    } catch (e) {
+        await DailyDishService.create(new Date(), 2, 1, DaySession.None);
+    }
+
+    try {
+        await DailyDishService.getOne(new Date(), 3, DaySession.None);
+    } catch (e) {
+        await DailyDishService.create(new Date(), 3, 1, DaySession.None);
     }
 };
 

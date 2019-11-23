@@ -101,7 +101,7 @@ class BillService {
 
     public async createWithRestrict(data: {
         tableNumber: number, dishIds: number[], createByUuid: string,
-        note?: string, voucherCode?: string, discountCode?: string, customerUuid?: string
+        dishQuantities?: number[], note?: string, voucherCode?: string, discountCode?: string, customerUuid?: string
     }) {
         if (data.voucherCode) {
             await VoucherCodeService.isValid(data.voucherCode);

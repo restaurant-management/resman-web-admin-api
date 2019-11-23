@@ -13,4 +13,7 @@ export class Stock extends BaseEntity {
 
     @Column({ length: 20 })
     public unit: string;
+
+    @Column('text', { nullable: true })
+    public image: string;
 }

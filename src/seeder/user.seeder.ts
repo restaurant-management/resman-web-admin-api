@@ -1,6 +1,7 @@
 import { Role } from '../entity/role';
 import { User } from '../entity/user';
 import { PasswordHandler } from '../helper/passwordHandler';
+import { UserService } from '../service/user.service';
 
 /**
  * Please seed role before!
@@ -21,26 +22,32 @@ export const seedUser = async () => {
         console.log('Seeded admin user!');
     }
 
-    let staff = await User.findOne({ where: { username: 'staff' } });
-    if (!staff) {
-        staff = new User();
-        staff.username = 'staff';
-        staff.password = PasswordHandler.encode('staff');
-        staff.email = 'staff@gmail.com';
-        staff.phoneNumber = '01231234234';
-        staff.address = 'Viet Nam';
-        await staff.save();
+    try {
+        await UserService.getOne({ username: 'staff' });
+    } catch (e) {
+        await UserService.create('staff', 'staff@gmail.com', PasswordHandler.encode('staff'), '01231234234', 'Viet Nam',
+            null, null, null, ['staff']);
     }
 
-    let chef = await User.findOne({ where: { username: 'chef' } });
-    if (!chef) {
-        chef = new User();
-        chef.username = 'chef';
-        chef.password = PasswordHandler.encode('chef');
-        chef.email = 'chef@gmail.com';
-        chef.phoneNumber = '12323123';
-        chef.address = 'Viet Nam';
-        await chef.save();
+    try {
+        await UserService.getOne({ username: 'chef' });
+    } catch (e) {
+        await UserService.create('chef', 'chef@gmail.com', PasswordHandler.encode('chef'), '12323123', 'Viet Nam',
+            null, null, null, ['chef']);
+    }
+
+    // try {
+    //     await UserService.getOne({ username: 'WareManager' });
+    // } catch (e) {
+    //     await UserService.create('WareManager', 'WareManager@gmail.com', PasswordHandler.encode('ware_manager'), '03445243234', 'Viet Nam',
+    //         null, null, null, ['ware-manager']);
+    // }
+
+    try {
+        await UserService.getOne({ username: 'shipper' });
+    } catch (e) {
+        await UserService.create('shipper', 'shipper@gmail.com', PasswordHandler.encode('shipper'), '0971963964', 'Viet Nam',
+            null, null, null, ['shipper']);
     }
 
     if (process.env.NODE_ENV === 'development') {

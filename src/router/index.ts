@@ -4,6 +4,7 @@ import { BillRouter } from './bill.router';
 import { CustomerRouter } from './customer.router';
 import { DailyDishRouter } from './dailyDish.router';
 import { DailyReportRouter } from './dailyReport.router';
+import { DeliveryBillRouter } from './deliveryBill.router';
 import { DiscountCampaignRouter } from './discountCampaign.router';
 import { DiscountCodeRouter } from './discountCode.router';
 import { DishRouter } from './dish.router';
@@ -31,6 +32,7 @@ router.use('/voucher_codes', VoucherCodeRouter);
 router.use('/discount_codes', DiscountCodeRouter);
 router.use('/discount_campaigns', DiscountCampaignRouter);
 router.use('/bills', BillRouter);
+router.use('/delivery-bills', DeliveryBillRouter);
 
 router.get('/test', (_req: Request, res: Response) =>
     res.status(200).send({

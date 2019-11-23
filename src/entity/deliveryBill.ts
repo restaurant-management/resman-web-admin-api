@@ -1,14 +1,18 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { SoftDeleteEntity } from '../lib/softDeleteEntity';
 import { Customer } from './customer';
 import { DeliveryBillDish } from './deliveryBillDish';
 import { User } from './user';
 
 @Entity()
-export class DeliveryBill extends BaseEntity {
+export class DeliveryBill extends SoftDeleteEntity {
     @PrimaryGeneratedColumn()
     public id: number;
 
     @CreateDateColumn({ type: 'timestamp with time zone' })
+    public insertAt: Date;
+
+    @Column({ type: 'timestamp with time zone' })
     public createAt: Date;
 
     @Column('timestamp with time zone', { nullable: true })
@@ -25,6 +29,15 @@ export class DeliveryBill extends BaseEntity {
 
     @Column('money', { nullable: true })
     public collectValue: number;
+
+    @Column('text')
+    public address: string;
+
+    @Column('float', { nullable: true })
+    public longitude: number;
+
+    @Column('float', { nullable: true })
+    public latitude: number;
 
     @Column({ length: 20, nullable: true })
     public voucherCode: string;
