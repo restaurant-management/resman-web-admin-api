@@ -37,7 +37,8 @@
 		"user_not_found": "user.user_not_found",
 		"can_not_delete_admin_user": "user.can_not_delete_admin_user",
 		"username_or_email_incorrect": "user.username_or_email_incorrect",
-		"phone_number_has_already_used": "user.phone_number_has_already_used"
+		"phone_number_has_already_used": "user.phone_number_has_already_used",
+		"username_has_already_used": "user.username_has_already_used"
 	},
 	"stock": {
 		"stock_not_found": "stock.stock_not_found"
@@ -90,5 +91,12 @@
 	},
 	"role": {
 		"role_not_found": "role.role_not_found"
+	},
+	"delivery_bill": {
+		"delivery_bill_not_found": "delivery_bill.delivery_bill_not_found",
+		"customer_not_found": "delivery_bill.customer_not_found",
+		"user_not_found": "delivery_bill.user_not_found",
+		"collect_value_must_be_not_null": "delivery_bill.collect_value_must_be_not_null",
+		"bill_have_been_already_rated": "delivery_bill.bill_have_been_already_rated"
 	}
 }

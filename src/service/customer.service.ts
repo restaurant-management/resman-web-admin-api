@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { getConnection } from 'typeorm';
 import { Customer } from '../entity/customer';
 import { PasswordHandler } from '../helper/passwordHandler';
+import { AddressService } from './address.service';
 
 class CustomerService {
     public async authenticate(usernameOrEmail: string, password: string) {
@@ -103,22 +104,28 @@ class CustomerService {
         await customer.remove();
     }
 
-    public async getOne(key: { id?: number, uuid?: string, username?: string, email?: string }) {
+    public async getOne(key: { id?: number, uuid?: string, username?: string, email?: string },
+        options?: { withAddresses?: boolean }) {
 
         if (!key.id && !key.uuid && !key.username && !key.email) {
             throw new Error(__('customer.customer_not_found'));
         }
 
         let customer: Customer = null;
+        const relations = [];
+
+        if (options?.withAddresses) {
+            relations.push('addresses');
+        }
 
         if (key.id) {
-            customer = await Customer.findOne({ where: { id: key.id } });
+            customer = await Customer.findOne({ where: { id: key.id }, relations });
         } else if (key.uuid) {
-            customer = await Customer.findOne({ where: { uuid: key.uuid } });
+            customer = await Customer.findOne({ where: { uuid: key.uuid }, relations });
         } else if (key.username) {
-            customer = await Customer.findOne({ where: { username: key.username } });
+            customer = await Customer.findOne({ where: { username: key.username }, relations });
         } else {
-            customer = await Customer.findOne({ where: { email: key.email } });
+            customer = await Customer.findOne({ where: { email: key.email }, relations });
         }
 
         if (!customer) {
@@ -126,6 +133,13 @@ class CustomerService {
         }
 
         return customer;
+    }
+
+    public async addAddress(customerUsername: string, data: {
+        address: string, longitude?: number, latitude?: number
+    }) {
+        const customer = await this.getOne({ username: customerUsername }, { withAddresses: true });
+        await AddressService.create(customer.username, data);
     }
 }
 
