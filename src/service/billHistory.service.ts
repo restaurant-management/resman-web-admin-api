@@ -47,8 +47,6 @@ class BillHistoryService {
         if (!billHistory) { throw new Error(__('bill_history.create_fail')); }
 
         for (const [index, dishId] of data.dishIds.entries()) {
-            // Check whether dish is daily dish.
-            await DailyDishService.getOne(time, dishId, DaySession.None);
             const oldBillDish = bill['dishes'].find((item) => item.dishId === dishId);
             const dishNotes = data.dishNotes || [];
             const dishQuantities = data.dishQuantities || [];

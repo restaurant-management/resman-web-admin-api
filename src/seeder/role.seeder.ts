@@ -1,6 +1,7 @@
 import { getConnection } from 'typeorm';
 import { Permission } from '../entity/permission';
 import { Role } from '../entity/role';
+import { RoleService } from '../service/role.service';
 
 export const seedRole = async () => {
     const [, roleCount] = await Role.findAndCount();
@@ -45,6 +46,9 @@ export const seedRole = async () => {
                 }
             ])
             .execute();
+
+        await RoleService.create({ name: 'Ware Manager', slug: 'ware-manager', level: 1, permissions: [] });
+        await RoleService.create({ name: 'Shipper', slug: 'shipper', level: 1, permissions: [] });
 
         console.log('Seeded role!');
     }

@@ -12,8 +12,8 @@
 		"email_has_already_used": "Email has already used.",
 		"phone_number_has_already_used": "Phone number has already used.",
 		"{{role}}_not_found": "Role {{role}} not found.",
-		"user_not_found": "user_service.user_not_found",
-		"can_not_delete_admin_user": "user_service.can_not_delete_admin_user",
+		"user_not_found": "user.user_not_found",
+		"can_not_delete_admin_user": "user.can_not_delete_admin_user",
 		"can_not_create_user_with_higher_level": "Can not create user with higher level.",
 		"can_not_update_user_with_higher_level": "Can not update user with higher level.",
 		"can_not_delete_user_with_higher_level": "Can not delete user with higher level."
@@ -79,5 +79,12 @@
 	},
 	"role": {
 		"role_not_found": "role.role_not_found"
+	},
+	"delivery_bill": {
+		"delivery_bill_not_found": "delivery_bill.delivery_bill_not_found",
+		"customer_not_found": "delivery_bill.customer_not_found",
+		"user_not_found": "delivery_bill.user_not_found",
+		"collect_value_must_be_not_null": "delivery_bill.collect_value_must_be_not_null",
+		"bill_have_been_already_rated": "delivery_bill.bill_have_been_already_rated"
 	}
 }
