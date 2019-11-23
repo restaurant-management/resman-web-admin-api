@@ -4,7 +4,7 @@ import { DishService } from '../service/dish.service';
 
 class DishController implements ICrudController {
     public async list(req: Request, res: Response, next: NextFunction) {
-        DishService.getAll(req.query.length, req.query.page, req.query.orderId, req.query.order).then(value => {
+        DishService.getAll(req.query).then(value => {
             return res.status(200).json(value);
         }).catch(e => next(e));
     }
