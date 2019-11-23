@@ -7,9 +7,14 @@ class StoreService {
         const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
         const take = length;
 
-        const store = await Store.find({ take, skip, order });
+        const stores = await Store.find({ take, skip, order, relations: ['storeDishes'] });
 
-        return store;
+        for (const store of stores) {
+            store['amountDishes'] = store.storeDishes.length;
+            delete store.storeDishes;
+        }
+
+        return stores;
     }
 
     public async create(name: string, address: string, hotline: string, description?: string, logo?: string) {
@@ -27,7 +32,7 @@ class StoreService {
     }
 
     public async edit(id: number, name?: string, address?: string, hotline?: string, description?: string,
-                      logo?: string) {
+        logo?: string) {
         const store = await Store.findOne(id);
 
         if (name) { store.name = name; }

@@ -1,14 +1,18 @@
 import { __ } from 'i18n';
-import { getConnection } from 'typeorm';
+import { FindConditions, getConnection, ObjectLiteral } from 'typeorm';
 import { Dish } from '../entity/dish';
 
 class DishService {
-    public async getAll(length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
-        const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
-        const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
+    public async getAll(options: {
+        length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1' // Paging
+        where?: Array<FindConditions<Dish>> | FindConditions<Dish> | ObjectLiteral | string;
+    }) {
+        const order = options.orderId ?
+            { [options.orderId]: options.orderType === 'DESC' || options.orderType === '-1' ? -1 : 1 } : {};
+        const skip = (options.page - 1) * length >= 0 ? (options.page - 1) * length : 0;
         const take = length;
 
-        const dish = await Dish.find({ take, skip, order });
+        const dish = await Dish.find({ take, skip, order, where: {} });
 
         return dish;
     }
