@@ -7,7 +7,6 @@ import { Authorization } from '../middleware/authorization';
 const router = Router();
 
 CrudRouter(router, StoreController, {
-    listMiddleware: Authorization([Permission.store.list]),
     readMiddleware: Authorization([Permission.store.list]),
     createMiddleware: Authorization([Permission.store.create]),
     updateMiddleware: Authorization([Permission.store.update]),
