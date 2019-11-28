@@ -5,16 +5,17 @@ export interface BasicDatatableProps {
     readonly title?: string;
     readonly subtitle?: string;
     readonly data?: any[];
-    readonly columns?: DataTableColumn;
+    readonly columns?: DataTableColumn[];
+    readonly onMinimize?: () => void;
 }
 
-export type DataTableColumn = Array<{
-    id?: string,
-    label: string,
-    sortType?: SortType,
-    textCenter?: boolean,
-    type?: 'string' | 'image'
-}>;
+export interface DataTableColumn {
+    id?: string;
+    label: string;
+    sortType?: SortType;
+    textCenter?: boolean;
+    type?: 'string' | 'image';
+}
 
 export type SortType = 'sort-alpha' | 'sort-amount' | 'sort-numeric';
 
@@ -32,7 +33,9 @@ export default class BasicDatatable extends Component<BasicDatatableProps> {
                 <h1>{this.props.title}</h1>
                 {this.props.subtitle && (<span className='note'>{this.props.subtitle}</span>)}
                 <div className='controls'>
-                    <a href='#/' className='minimize'><i className='fa fa-chevron-down' /></a>
+                    <a href='#/' onClick={this._onMinimize.bind(this)} className='minimize'>
+                        <i className='fa fa-chevron-down' />
+                    </a>
                     <a href='#/' className='refresh'><i className='fa fa-refresh' /></a>
                     <a href='#/' className='remove'><i className='fa fa-times' /></a>
                 </div>
@@ -85,5 +88,9 @@ export default class BasicDatatable extends Component<BasicDatatableProps> {
                 </div>
             </section>
         );
+    }
+
+    private _onMinimize() {
+        console.log('Minimize');
     }
 }

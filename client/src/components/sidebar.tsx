@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Li } from './li';
 
 export default class SideBar extends Component {
     public render() {
@@ -7,324 +8,325 @@ export default class SideBar extends Component {
 
                 <li className='collapsed-content'>
                     <ul>
-                        <li className='search' />
+                        <Li key='search' className='search'></Li>
                     </ul>
                 </li>
 
                 <li className='navigation' id='navigation'>
-                    <a href='/#' className='sidebar-toggle' data-toggle='#navigation'>Navigation <i
+                    <a href='#/' className='sidebar-toggle' data-toggle='#navigation'>Navigation <i
                         className='fa fa-angle-up' /></a>
 
                     <ul className='menu'>
-
-                        <li>
-                            <a href='/#'>
-                                <i className='fa fa-tachometer' /> Dashboard
+                        <Li>
+                            <a href='#/'>
+                                <i className='fa fa-tachometer' />
+                                {` Dashboard`}
                                 <span className='badge badge-red'>1</span>
                             </a>
-                        </li>
-
-                        <li>
+                        </Li>
+                        <Li>
                             <a href='/users'>
-                                <i className='fa fa-user' /> Users
+                                <i className='fa fa-user' />
+                                {` Users`}
                             </a>
-                        </li>
+                        </Li>
 
-                        <li className='dropdown'>
-                            <a href='/#' className='dropdown-toggle' data-toggle='dropdown'>
+                        <Li>
+                            <a href='#/' className='dropdown-toggle' data-toggle='dropdown'>
                                 <i className='fa fa-list' /> Forms <b className='fa fa-plus dropdown-plus' />
                             </a>
                             <ul className='dropdown-menu'>
-                                <li>
-                                    <a href='/#'>
-                                        <i className='fa fa-caret-right' /> Common Elements
+                                <Li>
+                                    <a href='#/'>
+                                        <i className='fa fa-caret-right' />
+                                        {` Common Elements`}
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
-                                        <i className='fa fa-caret-right' /> Validation
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
+                                        <i className='fa fa-caret-right' />
+                                        {` Validation`}
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
-                                        <i className='fa fa-caret-right' /> Form Wizard
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
+                                        <i className='fa fa-caret-right' />
+                                        {` Form Wizard`}
                                     </a>
-                                </li>
+                                </Li>
                             </ul>
-                        </li>
+                        </Li>
 
-                        <li className='dropdown'>
-                            <a href='/#' className='dropdown-toggle' data-toggle='dropdown'>
+                        <Li className='dropdown'>
+                            <a href='#/' className='dropdown-toggle' data-toggle='dropdown'>
                                 <i className='fa fa-pencil' /> Interface <b className='fa fa-plus dropdown-plus' />
                             </a>
                             <ul className='dropdown-menu'>
-                                <li>
-                                    <a href='/#'>
+                                <Li key='UI Elements'>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> UI Elements
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li key='Typography'>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Typography
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li key='Tiles'>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Tiles
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li key='Portlets'>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Portlets
                                         <span className='label label-greensea'>new</span>
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li key='Nestable Lists'>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Nestable Lists
                                         <span className='label label-greensea'>new</span>
                                     </a>
-                                </li>
+                                </Li>
                             </ul>
-                        </li>
+                        </Li>
 
-                        <li>
-                            <a href='/#'>
+                        <Li>
+                            <a href='#/'>
                                 <i className='fa fa-tint' /> Buttons & Icons
                             </a>
-                        </li>
-                        <li>
-                            <a href='/#'>
+                        </Li>
+                        <Li>
+                            <a href='#/'>
                                 <i className='fa fa-th' /> Grid Layout
                             </a>
-                        </li>
+                        </Li>
 
-                        <li className='dropdown'>
-                            <a href='/#' className='dropdown-toggle' data-toggle='dropdown'>
+                        <Li className='dropdown'>
+                            <a href='#/' className='dropdown-toggle' data-toggle='dropdown'>
                                 <i className='fa fa-th-large' /> Tables <b className='fa fa-plus dropdown-plus' />
                             </a>
                             <ul className='dropdown-menu'>
-                                <li>
-                                    <a href='/#'>
+                                <Li>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Bootstrap Tables
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> DataTables
                                     </a>
-                                </li>
+                                </Li>
                             </ul>
-                        </li>
+                        </Li>
 
-                        <li className='dropdown active open'>
-                            <a href='/#' className='dropdown-toggle' data-toggle='dropdown'>
+                        <Li className='dropdown active open'>
+                            <a href='#/' className='dropdown-toggle' data-toggle='dropdown'>
                                 <i className='fa fa-desktop' /> Example Pages <b className='fa fa-plus dropdown-plus' />
                                 <span className='label label-greensea'>mails</span>
                             </a>
                             <ul className='dropdown-menu'>
-                                <li>
+                                <Li>
                                     <a href='/login'>
                                         <i className='fa fa-caret-right' /> Login Page
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Calendar
                                     </a>
-                                </li>
-                                <li>
+                                </Li>
+                                <Li>
                                     <a href='/page404'>
                                         <i className='fa fa-caret-right' /> Page 404
                                     </a>
-                                </li>
-                                <li>
+                                </Li>
+                                <Li>
                                     <a href='/page500'>
                                         <i className='fa fa-caret-right' /> Page 500
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Page Offline
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Invoice
                                         <span className='label label-greensea'>new</span>
                                     </a>
-                                </li>
-                                <li className='active'>
+                                </Li>
+                                <Li className='active'>
                                     <a href='/blank-page'>
                                         <i className='fa fa-caret-right' /> Blank Page
                                         <span className='label label-greensea'>new</span>
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Locked Screen
                                         <span className='label label-greensea'>new</span>
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Gallery
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Timeline
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Chat
                                         <span className='label label-greensea'>new</span>
                                     </a>
-                                </li>
-                                <li>
-                                    <a href='/#'>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
                                         <i className='fa fa-caret-right' /> Search Results
                                         <span className='label label-greensea'>new</span>
                                     </a>
-                                </li>
-                                <li>
-                                    <li>
-                                        <a href='/#'>
-                                            <i className='fa fa-caret-right' /> Profile Page
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
+                                        <i className='fa fa-caret-right' /> Profile Page
                                             <span className='label label-greensea'>new</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='/#'>
-                                            <i className='fa fa-caret-right' /> Weather Page
+                                    </a>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
+                                        <i className='fa fa-caret-right' /> Weather Page
                                             <span className='label label-greensea'>new</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='/#'>
-                                            <i className='fa fa-caret-right' /> Front Page
+                                    </a>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
+                                        <i className='fa fa-caret-right' /> Front Page
                                             <span className='label label-greensea'>new</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='/#'>
-                                            <i className='fa fa-caret-right' /> Vertical Mail
+                                    </a>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
+                                        <i className='fa fa-caret-right' /> Vertical Mail
                                             <span className='badge badge-red'>5</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href='/#'>
-                                            <i className='fa fa-caret-right' /> Horizontal Mail
+                                    </a>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
+                                        <i className='fa fa-caret-right' /> Horizontal Mail
                                             <span className='label label-greensea'>mails</span>
+                                    </a>
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
+                                        <i className='fa fa-caret-right' /> Vector Maps
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a href='/#'>
-                                            <i className='fa fa-caret-right' /> Vector Maps
+                                </Li>
+                                <Li>
+                                    <a href='#/'>
+                                        <i className='fa fa-caret-right' /> Google Maps
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a href='/#'>
-                                            <i className='fa fa-caret-right' /> Google Maps
-                                        </a>
-                                    </li>
-                                </li>
+                                </Li>
                             </ul>
-                        </li>
+                        </Li>
 
-                        <li>
-                            <a href='/#'>
+                        <Li>
+                            <a href='#/'>
                                 <i className='fa fa-play-circle' /> Widgets
                             </a>
-                        </li>
+                        </Li>
 
-                        <li>
-                            <a href='/#'>
+                        <Li>
+                            <a href='#/'>
                                 <i className='fa fa-bar-chart-o' /> Charts & Graphs
                             </a>
-                        </li>
+                        </Li>
 
                         <li className='dropdown'>
-                            <a href='/#' className='dropdown-toggle' data-toggle='dropdown'>
+                            <a href='#/' className='dropdown-toggle' data-toggle='dropdown'>
                                 <i className='fa fa-folder' /> Menu Levels <b className='fa fa-plus dropdown-plus' />
                                 <span className='label label-cyan'>new</span>
                             </a>
                             <ul className='dropdown-menu'>
-                                <li><a href='/#'><i className='fa fa-caret-right' /> Menu Level 1.1</a></li>
+                                <Li><a href='#/'><i className='fa fa-caret-right' /> Menu Level 1.1</a></Li>
 
-                                <li className='dropdown'>
-                                    <a href='/#' className='dropdown-toggle' data-toggle='dropdown'><i
+                                <Li className='dropdown'>
+                                    <a href='#/' className='dropdown-toggle' data-toggle='dropdown'><i
                                         className='fa fa-folder' /> Menu Level 1.2 <b
                                             className='fa fa-plus dropdown-plus' /></a>
                                     <ul className='dropdown-menu'>
-                                        <li><a href='/#'><i className='fa fa-caret-right' /> Menu Level 2.1</a></li>
-                                        <li><a href='/#'><i className='fa fa-caret-right' /> Menu Level 2.2</a></li>
-                                        <li className='dropdown'>
-                                            <a href='/#' className='dropdown-toggle' data-toggle='dropdown'><i
+                                        <Li><a href='#/'><i className='fa fa-caret-right' /> Menu Level 2.1</a></Li>
+                                        <Li><a href='#/'><i className='fa fa-caret-right' /> Menu Level 2.2</a></Li>
+                                        <Li className='dropdown'>
+                                            <a href='#/' className='dropdown-toggle' data-toggle='dropdown'><i
                                                 className='fa fa-folder' /> Menu Level 2.3 <b
                                                     className='fa fa-plus dropdown-plus' /></a>
                                             <ul className='dropdown-menu'>
-                                                <li><a href='/#'><i className='fa fa-caret-right' /> Menu Level 3.1</a>
-                                                </li>
-                                                <li><a href='/#'><i className='fa fa-caret-right' /> Menu Level 3.2</a>
-                                                </li>
-                                                <li className='dropdown'>
-                                                    <a href='/#' className='dropdown-toggle' data-toggle='dropdown'><i
+                                                <Li><a href='#/'><i className='fa fa-caret-right' /> Menu Level 3.1</a>
+                                                </Li>
+                                                <Li><a href='#/'><i className='fa fa-caret-right' /> Menu Level 3.2</a>
+                                                </Li>
+                                                <Li className='dropdown'>
+                                                    <a href='#/' className='dropdown-toggle' data-toggle='dropdown'><i
                                                         className='fa fa-folder' /> Menu Level 3.3 <b
                                                             className='fa fa-plus dropdown-plus' /></a>
                                                     <ul className='dropdown-menu'>
-                                                        <li><a href='/#'><i className='fa fa-caret-right' /> Menu Level
-                                                            4.1</a></li>
-                                                        <li className='dropdown'>
-                                                            <a href='/#' className='dropdown-toggle'
+                                                        <Li><a href='#/'><i className='fa fa-caret-right' /> Menu Level
+                                                            4.1</a></Li>
+                                                        <Li className='dropdown'>
+                                                            <a href='#/' className='dropdown-toggle'
                                                                 data-toggle='dropdown'><i
                                                                     className='fa fa-folder' /> Menu Level 4.2 <b
                                                                     className='fa fa-plus dropdown-plus' /></a>
                                                             <ul className='dropdown-menu'>
-                                                                <li>
-                                                                    <a href='/#'>
+                                                                <Li>
+                                                                    <a href='#/'>
                                                                         <i className='fa fa-caret-right' />
                                                                         <span> Menu Level 5.1</span>
                                                                     </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href='/#'>
+                                                                </Li>
+                                                                <Li>
+                                                                    <a href='#/'>
                                                                         <i className='fa fa-caret-right' />
                                                                         <span> Menu Level 5.2</span>
                                                                     </a>
-                                                                </li>
+                                                                </Li>
                                                             </ul>
-                                                        </li>
+                                                        </Li>
                                                     </ul>
-                                                </li>
+                                                </Li>
                                             </ul>
-                                        </li>
+                                        </Li>
                                     </ul>
-                                </li>
+                                </Li>
 
-                                <li className='dropdown'>
-                                    <a href='/#' className='dropdown-toggle' data-toggle='dropdown'><i
+                                <Li className='dropdown'>
+                                    <a href='#/' className='dropdown-toggle' data-toggle='dropdown'><i
                                         className='fa fa-folder' /> Menu Level 1.3 <b
                                             className='fa fa-plus dropdown-plus' /></a>
                                     <ul className='dropdown-menu'>
-                                        <li><a href='/#'><i className='fa fa-caret-right' /> Menu Level 2.1</a></li>
-                                        <li><a href='/#'><i className='fa fa-caret-right' /> Menu Level 2.2</a></li>
-                                        <li className='dropdown'>
-                                            <a href='/#' className='dropdown-toggle' data-toggle='dropdown'><i
+                                        <Li><a href='#/'><i className='fa fa-caret-right' /> Menu Level 2.1</a></Li>
+                                        <Li><a href='#/'><i className='fa fa-caret-right' /> Menu Level 2.2</a></Li>
+                                        <Li className='dropdown'>
+                                            <a href='#/' className='dropdown-toggle' data-toggle='dropdown'><i
                                                 className='fa fa-folder' /> Menu Level 2.3 <b
                                                     className='fa fa-plus dropdown-plus' /></a>
                                             <ul className='dropdown-menu'>
-                                                <li><a href='/#'><i className='fa fa-caret-right' /> Menu Level 3.1</a>
-                                                </li>
-                                                <li><a href='/#'><i className='fa fa-caret-right' /> Menu Level 3.2</a>
-                                                </li>
-                                                <li><a href='/#'><i className='fa fa-caret-right' /> Menu Level 3.3</a>
-                                                </li>
+                                                <Li><a href='#/'><i className='fa fa-caret-right' /> Menu Level 3.1</a>
+                                                </Li>
+                                                <Li><a href='#/'><i className='fa fa-caret-right' /> Menu Level 3.2</a>
+                                                </Li>
+                                                <Li><a href='#/'><i className='fa fa-caret-right' /> Menu Level 3.3</a>
+                                                </Li>
                                             </ul>
-                                        </li>
+                                        </Li>
                                     </ul>
-                                </li>
+                                </Li>
 
                             </ul>
                         </li>
@@ -369,7 +371,7 @@ export default class SideBar extends Component {
                         <div className='col-xs-4 control-label'>
                             <div className='onoffswitch greensea'>
                                 <input type='checkbox' name='onoffswitch' className='onoffswitch-checkbox'
-                                    id='switch-on' checked />
+                                    id='switch-on' checked onChange={() => { console.log(''); }} />
                                 <label className='onoffswitch-label' htmlFor='switch-on'>
                                     <span className='onoffswitch-inner' />
                                     <span className='onoffswitch-switch' />
@@ -383,7 +385,7 @@ export default class SideBar extends Component {
                         <div className='col-xs-4 control-label'>
                             <div className='onoffswitch greensea'>
                                 <input type='checkbox' name='onoffswitch' className='onoffswitch-checkbox'
-                                    id='switch-off' />
+                                    id='switch-off' onChange={() => { console.log(''); }} />
                                 <label className='onoffswitch-label' htmlFor='switch-off'>
                                     <span className='onoffswitch-inner' />
                                     <span className='onoffswitch-switch' />

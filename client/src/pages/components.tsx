@@ -17,62 +17,29 @@ import george_avatar from '../assets/images/george-avatar.jpg';
 import ici_avatar from '../assets/images/ici-avatar.jpg';
 import peter_avatar from '../assets/images/peter-avatar.jpg';
 import profile_photo from '../assets/images/profile-photo.jpg';
-import BasicDatatable, { DataTableColumn } from '../components/basicDatatable';
+import AdvancedTable from '../components/advancedtable';
 import Mmenu from '../components/mmenu';
+import Flip3DHorizontal from '../components/Modals/3d-flip-horizontal';
+import Flip3DVertical from '../components/Modals/3d-flip-vertical';
+import RotateBottom3D from '../components/Modals/3d-rotate-bottom';
+import RotateInLeft3D from '../components/Modals/3d-rotate-in-left';
+import Sign3D from '../components/Modals/3d-sign';
+import Slit3D from '../components/Modals/3d-slit';
+import Blur from '../components/Modals/blur';
+import FadeInScale from '../components/Modals/fade-in-scale';
+import Fall from '../components/Modals/fall';
+import JustMe from '../components/Modals/just-me';
+import Newspaper from '../components/Modals/newspaper';
+import OpenModalConfirmation from '../components/Modals/open-modal-comfirmation';
+import OpenModalDialog from '../components/Modals/open-modal-dialog';
+import SideFall from '../components/Modals/side-fall';
+import SlideInBottom from '../components/Modals/slide-in-bottom';
+import SlideInRight from '../components/Modals/slide-in-right';
+import StickyUp from '../components/Modals/sticky-up';
+import SuperScaled from '../components/Modals/super-scaled';
 import SideBar from '../components/sidebar';
 
-export default class UserManagement extends Component<any, any> {
-
-    public fakeData = [
-        {
-            username: 'admin',
-            email: 'hienlh1298@gmail.com',
-            phoneNumber: '00000',
-            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
-            roles: [
-                'Administrator'
-            ],
-            birthday: new Date(1998, 1, 1),
-            address: 'HCM City'
-        }, {
-            username: 'staff',
-            email: 'staff@gmail.com',
-            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
-            roles: [
-                'Staff'
-            ],
-            birthday: new Date(1998, 1, 1),
-            address: 'Ha Noi'
-        }, {
-            username: 'chef',
-            email: 'chef@gmail.com',
-            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
-            roles: [
-                'Chef'
-            ],
-            birthday: new Date(1998, 1, 1),
-            address: 'HCM City'
-        }, {
-            username: 'ware_manager',
-            email: 'ware_manager@gmail.com',
-            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
-            roles: [
-                'Ware Manager'
-            ],
-            birthday: new Date(1998, 1, 1),
-            address: 'HCM City'
-        },
-    ];
-
-    public fakeColumn: DataTableColumn[] = [
-        { id: 'username', label: 'Username', sortType: 'sort-alpha', textCenter: true },
-        { id: 'email', label: 'Email', sortType: 'sort-alpha' },
-        { id: 'avatar', label: 'Avatar', type: 'image', textCenter: true },
-        { id: 'roles', label: 'Role', sortType: 'sort-alpha' },
-        { id: 'birthday', label: 'Birthday', sortType: 'sort-alpha' },
-        { id: 'address', label: 'Address', sortType: 'sort-alpha' },
-    ];
-
+export default class Components extends Component<any, any> {
     constructor(props: Readonly<{}>) {
         super(props);
         this.state = {
@@ -83,6 +50,14 @@ export default class UserManagement extends Component<any, any> {
     public componentDidMount = () => {
         document.body.classList.add('bg-1');
         this.setState({ showModal: true });
+
+        fetch('/api/test').then((res: Response) => {
+            return res.json();
+        }).then((json) => {
+            this.setState({
+                text: json.message
+            });
+        });
 
         this.loadScript('/assets/js/jquery.js');
         this.loadScript('/assets/js/bootstrap.min.js');
@@ -108,15 +83,20 @@ export default class UserManagement extends Component<any, any> {
         this.loadScript('/assets/js/dataTables.bootstrap.js');
         this.loadScript('/assets/js/dataTable.js');
 
-        this.loadScript('/assets/js/minimal.min.js');
+        // Modals Dialog.
+        this.loadScript('/assets/js/modal-dialog.js');
+        this.loadScript('/assets/js/jquery.jgrowl.min.js');
+        this.loadScript('/assets/js/typeahead.min.js');
+        this.loadScript('/assets/js/moment-with-langs.min.js');
+        this.loadScript('/assets/js/bootstrap-datetimepicker.min.js');
+        this.loadScript('/assets/js/jquery.nouislider.min.js');
+        this.loadScript('/assets/js/bootstrap-tabdrop.min.js');
+        this.loadScript('/assets/js/classie.js');
+        this.loadScript('/assets/js/modalEffects.js');
+        this.loadScript('/assets/js/cssParser.js');
+        this.loadScript('/assets/js/css-filters-polyfill.js');
 
-        fetch('/api/test').then((res: Response) => {
-            return res.json();
-        }).then((json) => {
-            this.setState({
-                text: json.message
-            });
-        });
+        this.loadScript('/assets/js/minimal.min.js');
     }
 
     public componentWillUnmount = () => {
@@ -517,7 +497,7 @@ export default class UserManagement extends Component<any, any> {
                     <div id='content' className='col-md-12' style={{ overflowY: 'scroll' }}>
                         <div className='pageheader'>
                             <h2><i className='fa fa-file-o' style={{ lineHeight: '48px', paddingLeft: 2 }} />
-                                {' Users Management '}<span> {'Create, delete or update user.'}</span>
+                                {' Blank Page '}<span> {this.state.text}.</span>
                             </h2>
                             <div className='breadcrumbs'>
                                 <ol className='breadcrumb'>
@@ -531,17 +511,41 @@ export default class UserManagement extends Component<any, any> {
                         <div className='main'>
                             <div className='row'>
                                 <div className='col-md-12'>
-                                    <BasicDatatable
-                                        data={this.fakeData.map(item => ({
-                                            username: item.username,
-                                            email: item.email,
-                                            avatar: item.avatar,
-                                            roles: item.roles.join(', '),
-                                            birthday: item.birthday.toUTCString(),
-                                            address: item.address
-                                        }))}
-                                        columns={this.fakeColumn}
-                                    />
+                                    <AdvancedTable />
+                                    {/* <BasicDatatable /> */}
+                                    <OpenModalDialog />
+                                    <OpenModalConfirmation />
+                                </div>
+                            </div>
+                            <br />
+                            <div className='row'>
+                                <div className='col-md-12'>
+                                    <FadeInScale />
+                                    <SlideInRight />
+                                    <SlideInBottom />
+                                </div>
+                            </div>
+                            <br />
+                            <div className='row'>
+                                <div className='col-md-12'>
+                                    <RotateBottom3D />
+                                    <RotateInLeft3D />
+                                    <Flip3DHorizontal />
+                                    <Flip3DVertical />
+                                    <Sign3D />
+                                    <Slit3D />
+                                </div>
+                            </div>
+                            <br />
+                            <div className='row'>
+                                <div className='col-md-12'>
+                                    <Newspaper />
+                                    <Fall />
+                                    <SideFall />
+                                    <StickyUp />
+                                    <SuperScaled />
+                                    <JustMe />
+                                    <Blur />
                                 </div>
                             </div>
                         </div>

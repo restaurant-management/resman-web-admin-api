@@ -47,13 +47,14 @@ $(function(){
             "sSearch": ""
         },
         "aaSorting": [ [0,'asc'], [1,'asc'] ],
-        "aoColumns": [
-            null,
-            null,
-            { "sType": 'string-case' },
-            null,
-            null
-        ],
+        // Error when basic table have more than 5 columns
+        // "aoColumns": [
+        //     null,
+        //     null,
+        //     { "sType": 'string-case' },
+        //     null,
+        //     null
+        // ],
         "fnInitComplete": function(oSettings, json) {
             $('.dataTables_filter input').attr("placeholder", "Search");
         }
@@ -312,7 +313,7 @@ $(function(){
         $('.DTTT_dropdown').css('top', newtop + 'px');
     });
 
-    //initialize chosen
+    //initialize chosen: disable search input
     $('.dataTables_length select').chosen({disable_search_threshold: 10});
 
     // Add custom class
