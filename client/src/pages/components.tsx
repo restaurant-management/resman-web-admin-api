@@ -38,6 +38,7 @@ import SlideInRight from '../components/Modals/slide-in-right';
 import StickyUp from '../components/Modals/sticky-up';
 import SuperScaled from '../components/Modals/super-scaled';
 import SideBar from '../components/sidebar';
+import { LoadScriptFile } from '../utils/loadScript';
 
 export default class Components extends Component<any, any> {
     constructor(props: Readonly<{}>) {
@@ -59,57 +60,49 @@ export default class Components extends Component<any, any> {
             });
         });
 
-        this.loadScript('/assets/js/jquery.js');
-        this.loadScript('/assets/js/bootstrap.min.js');
-        this.loadScript('/assets/js/bootstrap-dropdown-multilevel.js');
-        this.loadScript('/assets/js/run_prettifyf793.js');
-        this.loadScript('/assets/js/jquery.mmenu.min.js');
-        this.loadScript('/assets/js/jquery.sparkline.min.js');
-        this.loadScript('/assets/js/jquery.nicescroll.min.js');
-        this.loadScript('/assets/js/jquery.animateNumbers.js');
-        this.loadScript('/assets/js/jquery.videobackground.js');
-        this.loadScript('/assets/js/jquery.blockUI.js');
+        LoadScriptFile('/assets/js/jquery.js');
+        LoadScriptFile('/assets/js/bootstrap.min.js');
+        LoadScriptFile('/assets/js/bootstrap-dropdown-multilevel.js');
+        LoadScriptFile('/assets/js/run_prettifyf793.js');
+        LoadScriptFile('/assets/js/jquery.mmenu.min.js');
+        LoadScriptFile('/assets/js/jquery.sparkline.min.js');
+        LoadScriptFile('/assets/js/jquery.nicescroll.min.js');
+        LoadScriptFile('/assets/js/jquery.animateNumbers.js');
+        LoadScriptFile('/assets/js/jquery.videobackground.js');
+        LoadScriptFile('/assets/js/jquery.blockUI.js');
 
         // Advanced Table.
-        this.loadScript('/assets/js/chosen.jquery.min.js');
-        this.loadScript('/assets/js/advancedTable.js');
+        LoadScriptFile('/assets/js/chosen.jquery.min.js');
+        LoadScriptFile('/assets/js/advancedTable.js');
 
         // Basic Datatable.
-        this.loadScript('/assets/js/jquery.dataTables.min.js');
-        this.loadScript('/assets/js/ColReorderWithResize.js');
-        this.loadScript('/assets/js/dataTables.colVis.min.js');
-        this.loadScript('/assets/js/ZeroClipboard.js');
-        this.loadScript('/assets/js/dataTables.tableTools.min.js');
-        this.loadScript('/assets/js/dataTables.bootstrap.js');
-        this.loadScript('/assets/js/dataTable.js');
+        LoadScriptFile('/assets/js/jquery.dataTables.min.js');
+        LoadScriptFile('/assets/js/ColReorderWithResize.js');
+        LoadScriptFile('/assets/js/dataTables.colVis.min.js');
+        LoadScriptFile('/assets/js/ZeroClipboard.js');
+        LoadScriptFile('/assets/js/dataTables.tableTools.min.js');
+        LoadScriptFile('/assets/js/dataTables.bootstrap.js');
+        LoadScriptFile('/assets/js/dataTable.js');
 
         // Modals Dialog.
-        this.loadScript('/assets/js/modal-dialog.js');
-        this.loadScript('/assets/js/jquery.jgrowl.min.js');
-        this.loadScript('/assets/js/typeahead.min.js');
-        this.loadScript('/assets/js/moment-with-langs.min.js');
-        this.loadScript('/assets/js/bootstrap-datetimepicker.min.js');
-        this.loadScript('/assets/js/jquery.nouislider.min.js');
-        this.loadScript('/assets/js/bootstrap-tabdrop.min.js');
-        this.loadScript('/assets/js/classie.js');
-        this.loadScript('/assets/js/modalEffects.js');
-        this.loadScript('/assets/js/cssParser.js');
-        this.loadScript('/assets/js/css-filters-polyfill.js');
+        LoadScriptFile('/assets/js/modal-dialog.js');
+        LoadScriptFile('/assets/js/jquery.jgrowl.min.js');
+        LoadScriptFile('/assets/js/typeahead.min.js');
+        LoadScriptFile('/assets/js/moment-with-langs.min.js');
+        LoadScriptFile('/assets/js/bootstrap-datetimepicker.min.js');
+        LoadScriptFile('/assets/js/jquery.nouislider.min.js');
+        LoadScriptFile('/assets/js/bootstrap-tabdrop.min.js');
+        LoadScriptFile('/assets/js/classie.js');
+        LoadScriptFile('/assets/js/modalEffects.js');
+        LoadScriptFile('/assets/js/cssParser.js');
+        LoadScriptFile('/assets/js/css-filters-polyfill.js');
 
-        this.loadScript('/assets/js/minimal.min.js');
+        LoadScriptFile('/assets/js/minimal.min.js');
     }
 
     public componentWillUnmount = () => {
         document.body.classList.remove('bg-1');
         this.setState({ showModal: false });
-    }
-
-    public loadScript = (src: string, withType: boolean = false) => {
-        const tag = document.createElement('script');
-        tag.async = false;
-        tag.src = src;
-        if (withType) { tag.type = 'text/javascript'; }
-        document.getElementsByTagName('body')[0].appendChild(tag);
     }
 
     public _renderLoad() {

@@ -1,26 +1,27 @@
 export class User {
 
     public static fromJson(jsonObject: any) {
-        const user = new User();
-        user._name = jsonObject.name;
-        user._avatar = jsonObject.avatar;
-
-        return user;
+        // TODO implement this function
+        return jsonObject;
     }
 
-    public get name(): string {
-        return this._name;
-    }
-
-    public get avatar(): string {
-        return this._avatar;
-    }
-
-    private _name: string;
-    private _avatar: string;
+    public readonly name?: string;
+    public readonly avatar?: string;
+    public readonly username: string;
+    public readonly email: string;
+    public readonly phoneNumber: string;
+    public readonly roles: string[];
+    public readonly birthday?: Date;
+    public readonly address: string;
 
     private constructor() {
-        this._name = '';
-        this._avatar = '';
+        this.name = '';
+        this.avatar = '';
+        this.username = '';
+        this.email = '';
+        this.phoneNumber = '';
+        this.roles = [];
+        this.birthday = new Date();
+        this.address = '';
     }
 }
