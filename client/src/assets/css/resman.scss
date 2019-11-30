@@ -1,0 +1,66 @@
+.resman-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border-width: 0px;
+    transition: all 0.25s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.resman-btn:focus {
+    outline: 0;
+}
+.resman-danger {
+    color: #d9534f;
+}
+.resman-danger:hover {
+    color: #f2f2f2;
+    background-color: #d9534f;
+}
+.resman-cyan {
+    color: #0fa1cf;
+}
+.resman-cyan:hover {
+    color: #f2f2f2;
+    background-color: #0fa1cf;
+}
+.resman-warning {
+    color: #f0ad4e;
+}
+.resman-warning:hover {
+    color: #f2f2f2;
+    background-color: #f0ad4e;
+}
+.resman-slategray {
+    color: #536781;
+}
+.resman-slategray:hover {
+    color: #f2f2f2;
+    background-color: #536781;
+}
+.resman-left-border-radius {
+    border-radius: 0px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+.resman-no-border-radius {
+    border-radius: 0px;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+.resman-right-border-radius {
+    border-radius: 0px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}

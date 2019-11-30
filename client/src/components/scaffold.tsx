@@ -12,6 +12,7 @@ import '../assets/css/font-awesome.min.css';
 import '../assets/css/jquery.mmenu.all.css';
 import '../assets/css/jquery.videoBackground.css';
 import '../assets/css/minimal.css';
+import '../assets/css/resman.scss';
 import { Breadcrumb } from '../components/breadcrumb';
 import { LoadingIndicator } from '../components/loadingIndicator';
 import { Navbar } from '../components/navbar/navbar';
@@ -29,6 +30,10 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
     constructor(props: ScaffoldProp) {
         super(props);
 
+        document.body.classList.add('bg-1');
+        document.body.appendChild(VideoContent);
+        document.body.appendChild(LoadingIndicator);
+
         LoadScriptFile('/assets/js/jquery.js');
         LoadScriptFile('/assets/js/bootstrap.min.js');
         LoadScriptFile('/assets/js/bootstrap-dropdown-multilevel.js');
@@ -41,10 +46,6 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
         LoadScriptFile('/assets/js/jquery.blockUI.js');
 
         LoadScriptFile('/assets/js/minimal.min.js');
-
-        document.body.classList.add('bg-1');
-        document.body.appendChild(VideoContent);
-        document.body.appendChild(LoadingIndicator);
     }
 
     public componentWillUnmount = () => {
@@ -66,11 +67,7 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
                         <Breadcrumb />
                     </div>
                     <div className='main'>
-                        <div className='row'>
-                            <div className='col-md-12'>
-                                {this.props.children}
-                            </div>
-                        </div>
+                        {this.props.children}
                     </div>
                 </div>
             </div>

@@ -1,11 +1,5 @@
 $(function(){
 
-    // Add custom class to pagination div
-    $.fn.dataTableExt.oStdClasses.sPaging = 'dataTables_paginate paging_bootstrap paging_custom';
-
-    $('div.dataTables_filter input').addClass('form-control');
-    $('div.dataTables_length select').addClass('form-control');
-
     /*************************************************/
     /**************** BASIC DATATABLE ****************/
     /*************************************************/
@@ -19,33 +13,11 @@ $(function(){
         return ((x < y) ?  1 : ((x > y) ? -1 : 0));
     };
 
-    /* Add a click handler to the rows - this could be used as a callback */
-    $("#basicDataTable tbody tr").click( function( e ) {
-        if ( $(this).hasClass('row_selected') ) {
-            $(this).removeClass('row_selected');
-        }
-        else {
-            oTable01.$('tr.row_selected').removeClass('row_selected');
-            $(this).addClass('row_selected');
-        }
-
-        // FadeIn/Out delete rows button
-        if ($('#basicDataTable tr.row_selected').length > 0) {
-            $('#deleteRow').stop().fadeIn(300);
-        } else {
-            $('#deleteRow').stop().fadeOut(300);
-        }
-    });
-
     /* Build the DataTable with third column using our custom sort functions */
     var oTable01 = $('#basicDataTable').dataTable({
-        "sDom":
-            "R<'row'<'col-md-6'l><'col-md-6'f>r>"+
-            "t"+
-            "<'row'<'col-md-4 sm-center'i><'col-md-4'><'col-md-4 text-right sm-center'p>>",
-        "oLanguage": {
-            "sSearch": ""
-        },
+        "aoColumnDefs": [
+            { 'bSortable': false, 'aTargets': [ "no-sort" ] }
+        ],
         "aaSorting": [ [0,'asc'], [1,'asc'] ],
         // Error when basic table have more than 5 columns
         // "aoColumns": [
@@ -55,28 +27,7 @@ $(function(){
         //     null,
         //     null
         // ],
-        "fnInitComplete": function(oSettings, json) {
-            $('.dataTables_filter input').attr("placeholder", "Search");
-        }
     });
-
-    // Append delete button to table
-    var deleteRowLink = '<a href="#" id="deleteRow" class="btn btn-red btn-xs delete-row">Delete selected row</a>'
-    $('#basicDataTable_wrapper').append(deleteRowLink);
-
-    /* Add a click handler for the delete row */
-    $('#deleteRow').click( function() {
-        var anSelected = fnGetSelected(oTable01);
-        if (anSelected.length !== 0 ) {
-            oTable01.fnDeleteRow(anSelected[0]);
-            $('#deleteRow').stop().fadeOut(300);
-        }
-    });
-
-    /* Get the rows which are currently selected */
-    function fnGetSelected(oTable01Local){
-        return oTable01Local.$('tr.row_selected');
-    };
 
     /*******************************************************/
     /**************** INLINE EDIT DATATABLE ****************/
@@ -118,19 +69,12 @@ $(function(){
 
 
     var oTable02 = $('#inlineEditDataTable').dataTable({
-        "sDom":
-            "R<'row'<'col-md-6'l><'col-md-6'f>r>"+
-            "t"+
-            "<'row'<'col-md-4 sm-center'i><'col-md-4'><'col-md-4 text-right sm-center'p>>",
         "oLanguage": {
             "sSearch": ""
         },
         "aoColumnDefs": [
             { 'bSortable': false, 'aTargets': [ "no-sort" ] }
         ],
-        "fnInitComplete": function(oSettings, json) {
-            $('.dataTables_filter input').attr("placeholder", "Search");
-        }
     });
 
     // Append add row button to table
@@ -196,10 +140,6 @@ $(function(){
     var anOpen = [];
 
     var oTable03 = $('#drillDownDataTable').dataTable({
-        "sDom":
-            "R<'row'<'col-md-6'l><'col-md-6'f>r>"+
-            "t"+
-            "<'row'<'col-md-4 sm-center'i><'col-md-4'><'col-md-4 text-right sm-center'p>>",
         "oLanguage": {
             "sSearch": ""
         },
@@ -218,10 +158,7 @@ $(function(){
             { "mDataProp": "engine" },
             { "mDataProp": "browser" },
             { "mDataProp": "grade" }
-        ],
-        "fnInitComplete": function(oSettings, json) {
-            $('.dataTables_filter input').attr("placeholder", "Search");
-        }
+        ]
     });
 
     $(document).on( 'click', '#drillDownDataTable td.control', function () {
@@ -273,10 +210,6 @@ $(function(){
     /****************************************************/
 
     var oTable04 = $('#advancedDataTable').dataTable({
-        "sDom":
-            "<'row'<'col-md-4'l><'col-md-4 text-center sm-left'T C><'col-md-4'f>r>"+
-            "t"+
-            "<'row'<'col-md-4 sm-center'i><'col-md-4'><'col-md-4 text-right sm-center'p>>",
         "oLanguage": {
             "sSearch": ""
         },
@@ -291,9 +224,6 @@ $(function(){
                     "aButtons":    [ "csv", "xls", "pdf" ]
                 }
             ]
-        },
-        "fnInitComplete": function(oSettings, json) {
-            $('.dataTables_filter input').attr("placeholder", "Search");
         },
         "oColVis": {
             "buttonText": '<i class="fa fa-eye"></i>'
@@ -312,12 +242,5 @@ $(function(){
         var newtop = $('.DTTT_dropdown').position().top - 45;
         $('.DTTT_dropdown').css('top', newtop + 'px');
     });
-
-    //initialize chosen: disable search input
-    $('.dataTables_length select').chosen({disable_search_threshold: 10});
-
-    // Add custom class
-    $('div.dataTables_filter input').addClass('form-control');
-    $('div.dataTables_length select').addClass('form-control');
 
 })

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import BasicDatatable, { DataTableColumn } from '../components/basicDatatable';
 import Scaffold from '../components/scaffold';
 import { User } from '../models/user';
-import AdvancedTable from '../components/advancedtable';
 
 export default class UserManagement extends Component<any, any> {
 
@@ -48,7 +47,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -59,7 +58,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -70,7 +69,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -81,7 +80,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -92,7 +91,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -103,7 +102,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -114,7 +113,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -125,7 +124,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -136,7 +135,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -147,7 +146,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -158,7 +157,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -169,7 +168,7 @@ export default class UserManagement extends Component<any, any> {
             ],
             birthday: new Date(1998, 1, 1),
             address: 'HCM City'
-        },{
+        }, {
             username: 'ware_manager',
             email: 'ware_manager@gmail.com',
             avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
@@ -186,7 +185,7 @@ export default class UserManagement extends Component<any, any> {
     public fakeColumn: DataTableColumn[] = [
         { id: 'username', label: 'Username', sortType: 'sort-alpha', textCenter: true },
         { id: 'email', label: 'Email', sortType: 'sort-alpha' },
-        { id: 'avatar', label: 'Avatar', type: 'image', textCenter: true },
+        { id: 'avatar', label: 'Avatar', type: 'image', textCenter: true, sortType: 'no-sort', titleCenter: true },
         { id: 'roles', label: 'Role', sortType: 'sort-alpha' },
         { id: 'birthday', label: 'Birthday', sortType: 'sort-alpha', type: 'date' },
         { id: 'address', label: 'Address', sortType: 'sort-alpha' },
@@ -194,14 +193,18 @@ export default class UserManagement extends Component<any, any> {
 
     public render() {
         return <Scaffold title={'User manager'} subTitle={'Add, edit or delete user'}>
-            <BasicDatatable<User>
-                data={this.fakeData.map(item => ({
-                    ...item,
-                    roles: [item.roles.join(', ')]
-                }))}
-                columns={this.fakeColumn}
-            />
-            <AdvancedTable />
+            <div className='row'>
+                <div className='col-md-12'>
+                    <BasicDatatable<User>
+                        data={this.fakeData.map(item => ({
+                            ...item,
+                            roles: [item.roles.join(', ')]
+                        }))}
+                        columns={this.fakeColumn}
+                        hideTitle
+                    />
+                </div>
+            </div>
         </Scaffold>;
     }
 }

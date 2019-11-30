@@ -1,0 +1,135 @@
+// Customize the look and feel of the grid with Sass variables
+// Up-to-date list of variables is available here: http://www.ag-grid.com/javascript-grid-styling/#customizing-sass-variables
+// @import '../../../node_modules/@ag-grid-community/all-modules/dist/styles/ag-grid.scss';
+// @import '../../../node_modules/@ag-grid-community/all-modules/dist/styles/ag-theme-balham-dark.css';
+
+// changes the default icon color
+$icon-color: #03a9f4;
+
+// changes the selected checkbox check mark color
+$accent-color: #03a9f4;
+
+$header-height: 50px;
+$row-height: 40px;
+$row-border-width: 1px;
+$hover-color: cornsilk;
+
+$ag-range-selected-color-1: rgb(250, 235, 215);
+$ag-range-selected-color-2: darken($ag-range-selected-color-1, 10%);
+$ag-range-selected-color-3: darken($ag-range-selected-color-1, 20%);
+$ag-range-selected-color-4: darken($ag-range-selected-color-1, 30%);
+$ag-icon-asc: '\f15d';
+$ag-icon-desc: '\f15e';
+
+.ag-theme-balham-dark {
+    color: #fff !important;
+    background-color: transparent !important;
+    .ag-icon {
+        // font-awesome Free has font-weight bold
+        font-weight: bold;
+        &.ag-icon-checkbox-checked,
+        &.ag-icon-checkbox-indeterminate,
+        &.ag-icon-checkbox-unchecked {
+            background-color: transparent;
+            border-radius: 0;
+            color: $icon-color;
+        }
+        font-family: 'FontAwesome' !important;
+    }
+    .ag-icon-asc::before {
+        content: $ag-icon-asc !important;
+    }
+    .ag-icon-desc::before {
+        content: $ag-icon-desc !important;
+    }
+    .ag-icon-filter::before {
+        content: '\f0b0' !important;
+    }
+    .ag-icon-none::before {
+        content: '\f0dc' !important;
+    }
+    .ag-icon-menu::before {
+        content: '\f141' !important;
+    }
+    .ag-icon-first::before {
+        content: '\f049' !important;
+    }
+    .ag-icon-previous::before {
+        content: '\f04a' !important;
+    }
+    .ag-icon-next::before {
+        content: '\f04e' !important;
+    }
+    .ag-icon-last::before {
+        content: '\f050' !important;
+    }
+    .ag-icon-checkbox-checked::before {
+        content: '\f046' !important;
+    }
+    .ag-icon-checkbox-unchecked::before {
+        content: '\f096' !important;
+    }
+    .ag-header {
+        background-color: transparent !important;
+        border-bottom: 1px solid #fff !important;
+        color: #fff !important;
+    }
+    .ag-header-cell:after {
+        border-right: 1px solid #fff !important;
+    }
+    .ag-header-cell-label {
+        justify-content: center;
+    }
+    .ag-root {
+        border: 0px !important;
+        .ag-body-horizontal-scroll-viewport {
+            opacity: 0;
+            transition: opacity 0.5s linear;
+        }
+    }
+    .ag-row {
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    .ag-floating-filter-input {
+        background-color: rgba(0, 0, 0, 0.3) !important;
+    }
+    .ag-row:not(.ag-row-first) {
+        border-top-width: 1px !important;
+    }
+    .ag-row-even {
+        background-color: transparent !important;
+    }
+    .ag-row-odd {
+        background-color: transparent !important;
+    }
+    .ag-row-selected {
+        background-color: rgba(0, 0, 0, 0.3) !important;
+    }
+    .ag-cell-focus {
+        border-width: 0px !important;
+    }
+    .ag-paging-panel {
+        border-top: 1px solid #ddd !important;
+    }
+    .ag-root ::-webkit-scrollbar {
+        width: 12px !important;
+        height: 6px !important;
+        background-color: transparent !important;
+    }
+    .ag-root ::-webkit-scrollbar-thumb {
+        height: 6px !important;
+        border-radius: 10px !important;
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+        background-color: rgba(0, 0, 0, 0.3) !important;
+    }
+    .ag-root:hover {
+        .ag-body-horizontal-scroll-viewport {
+            overflow-x: scroll;
+            opacity: 1;
+            transition: opacity 0.5s linear;
+        }
+    }
+    .grid-cell-center {
+        text-align: center;
+    }
+}

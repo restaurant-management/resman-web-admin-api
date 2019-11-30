@@ -2682,7 +2682,7 @@ select.form-control.input-lg + .chosen-container .chosen-choices .search-field i
 
 .tile .tile-header .search input:-ms-input-placeholder { color: rgba(0, 0, 0, 0.4) !important; }
 
-.tile .tile-header button, .tile .tile-header .btn { padding: 2px 5px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; }
+.tile .tile .tile-header .btn { padding: 2px 5px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; }
 
 .tile .tile-header .btn-group button.btn-default, .tile .tile-header .btn-group .btn.btn-default { border: 1px solid #ccc !important; }
 
@@ -4844,3 +4844,7 @@ a.submit:hover { text-decoration: none; }
 .mobile-device .navbar-nav.side-nav.collapsed { width: 40px; }
 
 .mobile-device .navbar-nav.side-nav.collapsed.open { width: 100%; }
+
+.Body {
+  overflow-y: auto;
+}
