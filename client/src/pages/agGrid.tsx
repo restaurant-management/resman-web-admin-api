@@ -3,8 +3,11 @@ import { AgGridReact } from '@ag-grid-community/react';
 import moment from 'moment';
 import React, { Component } from 'react';
 import Select from 'react-select';
+import ReactTooltip from 'react-tooltip';
 import '../assets/css/agGridStyles.scss';
 import { AgActions } from '../components/AgRenderer/agActions';
+import { AgImage } from '../components/AgRenderer/agImage';
+import { AgImageTooltip } from '../components/AgRenderer/agImageTooltip';
 import Scaffold from '../components/scaffold';
 import { User } from '../models/user';
 import { LoadScriptFile } from '../utils/loadScript';
@@ -209,6 +212,8 @@ export class AgGrid extends Component<any, any> {
             sideBar: true,
             floatingFilter: true,
             rowMultiSelectWithClick: true,
+            components: { AgImageTooltip },
+            // enableBrowserTooltips: true,
             onFirstDataRendered: (params) => {
                 params.columnApi.autoSizeColumns(['username', 'birthday', 'email', 'roles', 'avatar']);
             }
@@ -221,6 +226,7 @@ export class AgGrid extends Component<any, any> {
 
         return (
             <Scaffold title={'User manager'} subTitle={'Add, edit or delete user'}>
+                <ReactTooltip place='top' type='dark' effect='solid' />
                 <div className='row'>
                     <div className='col-md-12'>
                         <section className='tile color transparent-black'>
@@ -232,6 +238,7 @@ export class AgGrid extends Component<any, any> {
                                     <div className='col-md-4'>
                                         <div style={{ float: 'right' }} >
                                             <button
+                                                data-tip='Export to CSV'
                                                 onClick={this._export.bind(this)}
                                                 className='resman-btn resman-cyan resman-left-border-radius'
                                             >
@@ -239,6 +246,7 @@ export class AgGrid extends Component<any, any> {
                                                 <span> Export</span>
                                             </button>
                                             <button
+                                                data-tip='Delete all selected rows'
                                                 className='resman-btn resman-danger resman-right-border-radius'
                                             >
                                                 <i className='fa fa-trash-o'></i>{` Delete`}
@@ -300,11 +308,9 @@ export class AgGrid extends Component<any, any> {
                                             }, {
                                                 headerName: 'Avatar', field: 'avatar', sortable: false, filter: false,
                                                 cellClass: 'grid-cell-center', suppressAutoSize: true,
-                                                cellRenderer: (params) => (
-                                                    `<img
-                                                        src='${params.value}'
-                                                        width='20' height='20'
-                                                    />`)
+                                                cellRenderer: 'AgImage', tooltipComponent: 'AgImageTooltip',
+                                                tooltip: (params) => params.value,
+                                                tooltipValueGetter: (params) => params.value,
                                             }, {
                                                 headerName: 'Roles', field: 'roles'
                                             }, {
@@ -312,7 +318,8 @@ export class AgGrid extends Component<any, any> {
                                                 cellClass: 'grid-cell-center',
                                                 cellRenderer: (params) => moment(params.value).format('DD/MM/YYYY')
                                             }, {
-                                                headerName: 'Address', field: 'address', minWidth: 100
+                                                headerName: 'Address', field: 'address', minWidth: 100,
+                                                tooltipField: 'address'
                                             }, {
                                                 headerName: 'Actions',
                                                 cellClass: 'grid-cell-center',
@@ -327,7 +334,7 @@ export class AgGrid extends Component<any, any> {
                                         ]}
                                         rowData={this.fakeData}
                                         modules={AllCommunityModules}
-                                        frameworkComponents={{ AgActions }}
+                                        frameworkComponents={{ AgActions, AgImage }}
                                     ></AgGridReact>
                                 </div>
                             </div>

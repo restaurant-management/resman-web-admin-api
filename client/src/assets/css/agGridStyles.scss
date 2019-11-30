@@ -132,4 +132,27 @@ $ag-icon-desc: '\f15e';
     .grid-cell-center {
         text-align: center;
     }
+    .image-tooltip {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        border: 1px solid cornflowerblue;
+        overflow: hidden;
+        pointer-events: none;
+        transition: opacity 1s;
+        background-color: white;
+    }
+    
+    .image-tooltip.ag-tooltip-hiding {
+        opacity: 0;
+    }
+    
+    .image-tooltip p {
+        margin: 5px;
+        white-space: nowrap;
+    }
+    
+    .image-tooltip p:first-of-type {
+        font-weight: bold;
+    }
 }
