@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { __ } from 'i18n';
+import { Permission } from '../entity/permission';
 import { User } from '../entity/user';
 import { ICrudController } from '../lib/ICrudController';
+import { Authorization } from '../middleware/authorization';
 import { UserService } from '../service/user.service';
 
 class UserController implements ICrudController {
@@ -39,6 +41,14 @@ class UserController implements ICrudController {
     }
 
     public getByUsername(req: Request, res: Response, next: NextFunction) {
+        if ((req['user'] as User).username !== req.params.username) {
+            try {
+                Authorization(req['user'], [Permission.user.list]);
+            } catch (e) {
+                return next(e);
+            }
+        }
+
         UserService.getOne({ username: req.params.username }).then(value => {
             const { password, id, ...exportedData } = value;
 
@@ -47,6 +57,14 @@ class UserController implements ICrudController {
     }
 
     public getByEmail(req: Request, res: Response, next: NextFunction) {
+        if ((req['user'] as User).email !== req.params.email) {
+            try {
+                Authorization(req['user'], [Permission.user.list]);
+            } catch (e) {
+                return next(e);
+            }
+        }
+
         UserService.getOne({ email: req.params.email }).then(value => {
             const { password, id, ...exportedData } = value;
 
@@ -79,3 +97,4 @@ class UserController implements ICrudController {
 const userController = new UserController();
 
 export { userController as UserController };
+

@@ -38,7 +38,8 @@
 		"can_not_delete_admin_user": "user.can_not_delete_admin_user",
 		"username_or_email_incorrect": "user.username_or_email_incorrect",
 		"phone_number_has_already_used": "user.phone_number_has_already_used",
-		"username_has_already_used": "user.username_has_already_used"
+		"username_has_already_used": "user.username_has_already_used",
+		"password_incorrect": "user.password_incorrect"
 	},
 	"stock": {
 		"stock_not_found": "stock.stock_not_found"

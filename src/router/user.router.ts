@@ -2,21 +2,23 @@ import { Router } from 'express';
 import { UserController } from '../controller/user.controller';
 import { Permission } from '../entity/permission';
 import { CrudRouter } from '../lib/crudRouter';
-import { Authorization } from '../middleware/authorization';
+import { AuthorMiddleware } from '../middleware/authorization';
+import { UserAuth } from '../middleware/userAuth';
 
 const router = Router();
 
 router.post('/login', UserController.login);
 
 CrudRouter(router, UserController, {
-    listMiddleware: Authorization([Permission.user.list]),
-    createMiddleware: Authorization([Permission.user.create]),
-    updateMiddleware: Authorization([Permission.user.update]),
-    deleteMiddleware: Authorization([Permission.user.delete]),
+    listMiddleware: AuthorMiddleware([Permission.user.list]),
+    createMiddleware: AuthorMiddleware([Permission.user.create]),
+    updateMiddleware: AuthorMiddleware([Permission.user.update]),
+    deleteMiddleware: AuthorMiddleware([Permission.user.delete]),
     ignore: ['read']
 });
 
-router.get('/:username', Authorization([Permission.user.list]), UserController.getByUsername);
-router.get('/email/:email', Authorization([Permission.user.list]), UserController.getByEmail);
+// Authorization in controller to check if user is owner
+router.get('/:username', UserAuth, UserController.getByUsername);
+router.get('/email/:email', UserAuth, UserController.getByEmail);
 
 export { router as UserRouter };

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { BillController } from '../controller/bill.controller';
 import { Permission } from '../entity/permission';
 import { CrudRouter } from '../lib/crudRouter';
-import { Authorization } from '../middleware/authorization';
+import { AuthorMiddleware } from '../middleware/authorization';
 import { AuthorizationByRole } from '../middleware/authorizationByRole';
 
 const router = Router();
@@ -35,11 +35,11 @@ router.put('/:id/customer', AuthorizationByRole(['staff']), BillController.assig
 router.put('/:id/rating', AuthorizationByRole(['staff']), BillController.rating);
 
 CrudRouter(router, BillController, {
-    listMiddleware: Authorization([Permission.bill.list]),
-    readMiddleware: Authorization([Permission.bill.list]),
-    createMiddleware: Authorization([Permission.bill.create]),
-    updateMiddleware: Authorization([Permission.bill.update]),
-    deleteMiddleware: Authorization([Permission.bill.delete])
+    listMiddleware: AuthorMiddleware([Permission.bill.list]),
+    readMiddleware: AuthorMiddleware([Permission.bill.list]),
+    createMiddleware: AuthorMiddleware([Permission.bill.create]),
+    updateMiddleware: AuthorMiddleware([Permission.bill.update]),
+    deleteMiddleware: AuthorMiddleware([Permission.bill.delete])
 });
 
 export { router as BillRouter };
