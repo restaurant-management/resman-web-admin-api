@@ -25,28 +25,28 @@ export const seedUser = async () => {
     try {
         await UserService.getOne({ username: 'staff' });
     } catch (e) {
-        await UserService.create('staff', 'staff@gmail.com', PasswordHandler.encode('staff'), '01231234234', 'Viet Nam',
+        await UserService.create('staff', 'staff@gmail.com', 'staff', '01231234234', 'Viet Nam',
             null, null, null, ['staff']);
     }
 
     try {
         await UserService.getOne({ username: 'chef' });
     } catch (e) {
-        await UserService.create('chef', 'chef@gmail.com', PasswordHandler.encode('chef'), '12323123', 'Viet Nam',
+        await UserService.create('chef', 'chef@gmail.com', 'chef', '12323123', 'Viet Nam',
             null, null, null, ['chef']);
     }
 
-    // try {
-    //     await UserService.getOne({ username: 'WareManager' });
-    // } catch (e) {
-    //     await UserService.create('WareManager', 'WareManager@gmail.com', PasswordHandler.encode('ware_manager'), '03445243234', 'Viet Nam',
-    //         null, null, null, ['ware-manager']);
-    // }
+    try {
+        await UserService.getOne({ username: 'WareManager' });
+    } catch (e) {
+        await UserService.create('WareManager', 'WareManager@gmail.com', 'ware_manager', '03445243234', 'Viet Nam',
+            null, null, null, ['ware-manager']);
+    }
 
     try {
         await UserService.getOne({ username: 'shipper' });
     } catch (e) {
-        await UserService.create('shipper', 'shipper@gmail.com', PasswordHandler.encode('shipper'), '0971963964', 'Viet Nam',
+        await UserService.create('shipper', 'shipper@gmail.com', 'shipper', '0971963964', 'Viet Nam',
             null, null, null, ['shipper']);
     }
 
