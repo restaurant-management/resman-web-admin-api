@@ -2,16 +2,16 @@ import { Router } from 'express';
 import { RoleController } from '../controller/role.controller';
 import { Permission } from '../entity/permission';
 import { CrudRouter } from '../lib/crudRouter';
-import { Authorization } from '../middleware/authorization';
+import { AuthorMiddleware } from '../middleware/authorization';
 
 const router = Router();
 
 CrudRouter(router, RoleController, {
-    listMiddleware: Authorization([Permission.role.list]),
-    readMiddleware: Authorization([Permission.role.list]),
-    createMiddleware: Authorization([Permission.role.create]),
-    updateMiddleware: Authorization([Permission.role.update]),
-    deleteMiddleware: Authorization([Permission.role.delete]),
+    listMiddleware: AuthorMiddleware([Permission.role.list]),
+    readMiddleware: AuthorMiddleware([Permission.role.list]),
+    createMiddleware: AuthorMiddleware([Permission.role.create]),
+    updateMiddleware: AuthorMiddleware([Permission.role.update]),
+    deleteMiddleware: AuthorMiddleware([Permission.role.delete]),
 });
 
 export { router as RoleRouter };

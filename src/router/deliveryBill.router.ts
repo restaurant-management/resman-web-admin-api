@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { DeliveryBillController } from '../controller/deliveryBill.controller';
 import { Permission } from '../entity/permission';
 import { CrudRouter } from '../lib/crudRouter';
-import { Authorization } from '../middleware/authorization';
+import { AuthorMiddleware } from '../middleware/authorization';
 import { AuthorizationByRole } from '../middleware/authorizationByRole';
 import { CustomerAuth } from '../middleware/customerAuth';
 
@@ -27,11 +27,11 @@ router.put('/:id/collect', AuthorizationByRole(['shipper']), DeliveryBillControl
 router.put('/:id/rating', CustomerAuth, DeliveryBillController.rating);
 
 CrudRouter(router, DeliveryBillController, {
-    listMiddleware: Authorization([Permission.bill.list]),
-    readMiddleware: Authorization([Permission.bill.list]),
-    createMiddleware: Authorization([Permission.bill.create]),
-    updateMiddleware: Authorization([Permission.bill.update]),
-    deleteMiddleware: Authorization([Permission.bill.delete])
+    listMiddleware: AuthorMiddleware([Permission.bill.list]),
+    readMiddleware: AuthorMiddleware([Permission.bill.list]),
+    createMiddleware: AuthorMiddleware([Permission.bill.create]),
+    updateMiddleware: AuthorMiddleware([Permission.bill.update]),
+    deleteMiddleware: AuthorMiddleware([Permission.bill.delete])
 });
 
 export { router as DeliveryBillRouter };

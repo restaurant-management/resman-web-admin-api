@@ -4,30 +4,35 @@ import { User } from '../entity/user';
 import { HttpError } from '../lib/httpError';
 import { UserAuth } from './userAuth';
 
-const authorization = (requiredPermissions: string[]) => {
+const authorMiddleware = (requiredPermissions: string[]) => {
     return [
         UserAuth,
         (req: Request, _res: Response, next: NextFunction) => {
             const currentUser: User = req['user'];
-            let permissions: string[] = [];
 
-            if (!currentUser.roles) {
-                throw new HttpError(401, __('authentication.unauthorized'));
-            }
-
-            currentUser.roles.forEach(role => {
-                permissions = permissions.concat(role.permissions);
-            });
-
-            for (const permission of requiredPermissions) {
-                if (!permissions.find(p => permission === p)) {
-                    throw new HttpError(401, __('authentication.unauthorized'));
-                }
-            }
+            authorization(currentUser, requiredPermissions);
 
             return next();
         }
     ];
+};
+
+const authorization = (currentUser: User, requiredPermissions: string[]) => {
+    let permissions: string[] = [];
+
+    if (!currentUser || !currentUser.roles || currentUser.roles.length === 0) {
+        throw new HttpError(401, __('authentication.unauthorized'));
+    }
+
+    currentUser.roles.forEach(role => {
+        permissions = permissions.concat(role.permissions);
+    });
+
+    for (const permission of requiredPermissions) {
+        if (!permissions.find(p => permission === p)) {
+            throw new HttpError(401, __('authentication.unauthorized'));
+        }
+    }
 };
 
 const authorizationOr = (requiredPermissions: string[]) => {
@@ -56,5 +61,4 @@ const authorizationOr = (requiredPermissions: string[]) => {
     ];
 };
 
-export { authorization as Authorization, authorizationOr as AuthorizationOr };
-
+export { authorMiddleware as AuthorMiddleware, authorizationOr as AuthorizationOr, authorization as Authorization };
