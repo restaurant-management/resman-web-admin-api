@@ -69,6 +69,9 @@ $ag-icon-desc: '\f15e';
     .ag-icon-checkbox-unchecked::before {
         content: '\f096' !important;
     }
+    .ag-icon-checkbox-indeterminate::before {
+        content: '\f00c' !important;
+    }
     .ag-header {
         background-color: transparent !important;
         border-bottom: 1px solid #fff !important;

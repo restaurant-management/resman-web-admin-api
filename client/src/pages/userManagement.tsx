@@ -1,5 +1,8 @@
+import moment from 'moment';
 import React, { Component } from 'react';
-import BasicDatatable, { DataTableColumn } from '../components/basicDatatable';
+import { DataTableColumn } from '../components/basicDatatable';
+import { DataTable } from '../components/dataTable';
+import { FormModal } from '../components/formModal';
 import Scaffold from '../components/scaffold';
 import { User } from '../models/user';
 
@@ -191,17 +194,60 @@ export default class UserManagement extends Component<any, any> {
         { id: 'address', label: 'Address', sortType: 'sort-alpha' },
     ];
 
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            showModal: false
+        };
+    }
+
     public render() {
         return <Scaffold title={'User manager'} subTitle={'Add, edit or delete user'}>
             <div className='row'>
                 <div className='col-md-12'>
-                    <BasicDatatable<User>
-                        data={this.fakeData.map(item => ({
-                            ...item,
-                            roles: [item.roles.join(', ')]
-                        }))}
-                        columns={this.fakeColumn}
-                        hideTitle
+                    <button
+                        data-tip='Export to CSV'
+                        onClick={() => {
+                            console.log('aaaaaaaaaaaaaaaa');
+                            this.setState({ showModal: true });
+                        }}
+                        className='resman-btn resman-cyan resman-left-border-radius'
+                    >
+                        <i className='fa fa-download'></i>
+                        <span> Export</span>
+                    </button>
+                    <FormModal id={'edit-user'} isShowing={true} />
+                    <DataTable<User>
+                        onView={(item) => console.log(item)}
+                        onMultiDelete={(items => console.log(items))}
+                        data={this.fakeData}
+                        autoSizeColumns={['username', 'birthday', 'email', 'roles', 'avatar']}
+                        header={(<h1><strong>User</strong> Table</h1>)}
+                        columnDefs={[
+                            {
+                                headerName: 'Username', field: 'username',
+                                cellClass: 'grid-cell-center', checkboxSelection: true,
+                                headerCheckboxSelection: true,
+                                headerCheckboxSelectionFilteredOnly: true
+                            }, {
+                                headerName: 'Email', field: 'email'
+                            }, {
+                                headerName: 'Avatar', field: 'avatar', sortable: false, filter: false,
+                                cellClass: 'grid-cell-center', suppressAutoSize: true,
+                                cellRenderer: 'AgImage', tooltipComponent: 'AgImageTooltip',
+                                tooltip: (params) => params.value,
+                                tooltipValueGetter: (params) => params.value,
+                            }, {
+                                headerName: 'Roles', field: 'roles'
+                            }, {
+                                headerName: 'Birthday', field: 'birthday',
+                                cellClass: 'grid-cell-center',
+                                cellRenderer: (params) => moment(params.value).format('DD/MM/YYYY')
+                            }, {
+                                headerName: 'Address', field: 'address', minWidth: 100,
+                                tooltipField: 'address',
+                            }
+                        ]}
                     />
                 </div>
             </div>

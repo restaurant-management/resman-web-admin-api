@@ -7,7 +7,7 @@ export default class OpenModalDialog extends Component {
 
     private _renderOpenModalConfirmation() {
         return (
-            <a href={'#modalConfirm'} role='button' className='btn btn-red' data-toggle='modal'>Open Modal
+            <a href={'#edit-user'} role='button' className='btn btn-red' data-toggle='modal'>Open Modal
                 Confirmation</a>
         );
     }

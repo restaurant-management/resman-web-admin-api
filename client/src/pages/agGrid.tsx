@@ -5,9 +5,9 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
 import '../assets/css/agGridStyles.scss';
-import { AgActions } from '../components/AgRenderer/agActions';
-import { AgImage } from '../components/AgRenderer/agImage';
-import { AgImageTooltip } from '../components/AgRenderer/agImageTooltip';
+import { AgActions } from '../components/AgExtensions/agActions';
+import { AgImage } from '../components/AgExtensions/agImage';
+import { AgImageTooltip } from '../components/AgExtensions/agImageTooltip';
 import Scaffold from '../components/scaffold';
 import { User } from '../models/user';
 import { LoadScriptFile } from '../utils/loadScript';
@@ -211,9 +211,8 @@ export class AgGrid extends Component<any, any> {
             rowHeight: 32,
             sideBar: true,
             floatingFilter: true,
-            rowMultiSelectWithClick: true,
             components: { AgImageTooltip },
-            // enableBrowserTooltips: true,
+            suppressRowClickSelection: true,
             onFirstDataRendered: (params) => {
                 params.columnApi.autoSizeColumns(['username', 'birthday', 'email', 'roles', 'avatar']);
             }
@@ -303,6 +302,7 @@ export class AgGrid extends Component<any, any> {
                                                 headerName: 'Username', field: 'username',
                                                 cellClass: 'grid-cell-center', checkboxSelection: true,
                                                 headerCheckboxSelection: true,
+                                                headerCheckboxSelectionFilteredOnly: true
                                             }, {
                                                 headerName: 'Email', field: 'email'
                                             }, {
@@ -319,7 +319,7 @@ export class AgGrid extends Component<any, any> {
                                                 cellRenderer: (params) => moment(params.value).format('DD/MM/YYYY')
                                             }, {
                                                 headerName: 'Address', field: 'address', minWidth: 100,
-                                                tooltipField: 'address'
+                                                tooltipField: 'address',
                                             }, {
                                                 headerName: 'Actions',
                                                 cellClass: 'grid-cell-center',
@@ -329,7 +329,7 @@ export class AgGrid extends Component<any, any> {
                                                 filter: false,
                                                 minWidth: 150,
                                                 maxWidth: 200,
-                                                sortable: false
+                                                sortable: false,
                                             },
                                         ]}
                                         rowData={this.fakeData}
