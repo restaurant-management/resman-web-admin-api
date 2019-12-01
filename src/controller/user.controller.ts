@@ -15,7 +15,11 @@ class UserController implements ICrudController {
 
     public async list(req: Request, res: Response, next: NextFunction) {
         UserService.getAll(req.query.length, req.query.page, req.query.orderId, req.query.order).then(value => {
-            return res.status(200).json(value);
+            return res.status(200).json(value.map((item => {
+                const { password, id, ...exportedData } = item;
+
+                return exportedData;
+            })));
         }).catch(e => next(e));
     }
 
@@ -30,10 +34,24 @@ class UserController implements ICrudController {
             }).catch(e => next(e));
     }
 
-    public read(req: Request, res: Response, next: NextFunction): void {
-        UserService.getOne({id: parseInt(req.params.id, 10)}).then((value) =>
-            res.status(200).json(value)
-        ).catch(e => next(e));
+    public read(_req: Request, _res: Response, next: NextFunction): void {
+        next();
+    }
+
+    public getByUsername(req: Request, res: Response, next: NextFunction) {
+        UserService.getOne({ username: req.params.username }).then(value => {
+            const { password, id, ...exportedData } = value;
+
+            return res.status(200).json(exportedData);
+        }).catch(err => next(err));
+    }
+
+    public getByEmail(req: Request, res: Response, next: NextFunction) {
+        UserService.getOne({ email: req.params.email }).then(value => {
+            const { password, id, ...exportedData } = value;
+
+            return res.status(200).json(exportedData);
+        }).catch(err => next(err));
     }
 
     public update(req: Request, res: Response, next: NextFunction): void {
