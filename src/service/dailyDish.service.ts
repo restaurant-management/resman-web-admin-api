@@ -36,12 +36,12 @@ class DailyDishService {
         const dailyDish = await newDailyDish.save({ reload: true });
         if (!dailyDish) { throw new Error(__('daily_dish.create_fail')); }
 
-        return await this.getOne(dailyDish.day, dailyDish.dish.id, dailyDish.session);
+        return await this.getOne({ day: dailyDish.day, dishId: dailyDish.dish.id, session: dailyDish.session });
     }
 
     public async edit(day: Date, dishId: number, session: string, storeId?: number, confirmByUsername?: string,
         confirmAt?: Date) {
-        const dailyDish = await this.getOne(day, dishId, session);
+        const dailyDish = await this.getOne({ day, dishId, session });
         if (!dailyDish) { throw new Error(__('daily_dish.daily_dish_not_found')); }
 
         // Update store whether storeID exist
@@ -59,7 +59,7 @@ class DailyDishService {
 
         await dailyDish.save();
 
-        return await this.getOne(day, dishId, session);
+        return await this.getOne({ day, dishId, session });
     }
 
     public async delete(day: Date, dishId: number, session: string) {
@@ -72,11 +72,21 @@ class DailyDishService {
         if (result.affected < 1) { throw new Error(__('daily_dish.delete_fail')); }
     }
 
-    public async getOne(day: Date, dishId: number, session: string) {
-        const dailyDish = await DailyDish.findOne({ relations: ['confirmBy'], where: { day, dishId, session } });
+    public async getOne(key: { day?: Date, dishId?: number, session?: string }) {
+        const dailyDish = await DailyDish.findOne({
+            relations: ['confirmBy', 'dish'],
+            where: { ...key }
+        });
 
         if (dailyDish) { return dailyDish; }
         throw new Error(__('daily_dish.daily_dish_not_found'));
+    }
+
+    public async getBy(key: { day?: Date, dishId?: number, session?: string, storeId?: number }) {
+        return await DailyDish.find({
+            relations: ['confirmBy', 'dish'],
+            where: { ...key }
+        });
     }
 }
 

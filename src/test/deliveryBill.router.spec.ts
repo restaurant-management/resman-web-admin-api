@@ -122,7 +122,7 @@ describe('The Delivery Bill Router', () => {
             const today = new Date();
 
             return app
-                .post('/api/delivery-bills')
+                .post('/api/delivery_bills')
                 .set({
                     Authorization: adminToken
                 })
@@ -189,7 +189,7 @@ describe('The Delivery Bill Router', () => {
     describe('when create delivery bill as a customer', () => {
         it('should return OK status and json object', () => {
             return app
-                .post('/api/delivery-bills/restrict')
+                .post('/api/delivery_bills/restrict')
                 .set({
                     Authorization: customerToken
                 })
@@ -235,7 +235,7 @@ describe('The Delivery Bill Router', () => {
     describe('when get delivery bill info', () => {
         it('should return OK status', () => {
             return app
-                .get('/api/delivery-bills/' + newDeliveryBillId + '?withCustomer=true&withPrepareBy=true&withShipBy=true&withDishes=true')
+                .get('/api/delivery_bills/' + newDeliveryBillId + '?withCustomer=true&withPrepareBy=true&withShipBy=true&withDishes=true')
                 .set({
                     Authorization: adminToken
                 })
@@ -268,7 +268,7 @@ describe('The Delivery Bill Router', () => {
         describe('with normal mode', () => {
             it('should return OK status and json array', () => {
                 return app
-                    .get('/api/delivery-bills')
+                    .get('/api/delivery_bills')
                     .set({
                         Authorization: adminToken
                     })
@@ -284,7 +284,7 @@ describe('The Delivery Bill Router', () => {
     describe('when prepare delivery bill as chef', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put(`/api/delivery-bills/${newDeliveryBillId}/prepare`)
+                .put(`/api/delivery_bills/${newDeliveryBillId}/prepare`)
                 .set({
                     Authorization: chefToken
                 })
@@ -305,7 +305,7 @@ describe('The Delivery Bill Router', () => {
         describe('try as shipper', () => {
             it('401 error', () => {
                 return app
-                    .put(`/api/delivery-bills/${newDeliveryBillId}/prepared`)
+                    .put(`/api/delivery_bills/${newDeliveryBillId}/prepared`)
                     .set({
                         Authorization: shipperToken
                     })
@@ -316,7 +316,7 @@ describe('The Delivery Bill Router', () => {
         describe('try as chef', () => {
             it('should return OK status and json object with new info', () => {
                 return app
-                    .put(`/api/delivery-bills/${newDeliveryBillId}/prepared`)
+                    .put(`/api/delivery_bills/${newDeliveryBillId}/prepared`)
                     .set({
                         Authorization: chefToken
                     })
@@ -328,7 +328,7 @@ describe('The Delivery Bill Router', () => {
     describe('when ship delivery bill as shipper', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put(`/api/delivery-bills/${newDeliveryBillId}/ship`)
+                .put(`/api/delivery_bills/${newDeliveryBillId}/ship`)
                 .set({
                     Authorization: shipperToken
                 })
@@ -339,7 +339,7 @@ describe('The Delivery Bill Router', () => {
     describe('when collect delivery bill as shipper', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put(`/api/delivery-bills/${newDeliveryBillId}/collect`)
+                .put(`/api/delivery_bills/${newDeliveryBillId}/collect`)
                 .set({
                     Authorization: shipperToken
                 })
@@ -354,7 +354,7 @@ describe('The Delivery Bill Router', () => {
     describe('when rate delivery bill as customer', () => {
         it('should return OK status', () => {
             return app
-                .put(`/api/delivery-bills/${newDeliveryBillId}/rating`)
+                .put(`/api/delivery_bills/${newDeliveryBillId}/rating`)
                 .set({
                     Authorization: customerToken
                 })
@@ -370,7 +370,7 @@ describe('The Delivery Bill Router', () => {
             const someDay = new Date(2019, 1, 2, 12, 12);
 
             return app
-                .put('/api/delivery-bills/' + newDeliveryBillId)
+                .put('/api/delivery_bills/' + newDeliveryBillId)
                 .set({
                     Authorization: adminToken
                 })
@@ -429,7 +429,7 @@ describe('The Delivery Bill Router', () => {
         describe('exist delivery bill', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/delivery-bills/' + newDeliveryBillId)
+                    .delete('/api/delivery_bills/' + newDeliveryBillId)
                     .set({
                         Authorization: adminToken
                     })
@@ -440,7 +440,7 @@ describe('The Delivery Bill Router', () => {
         describe('not found delivery bill', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/delivery-bills/0')
+                    .delete('/api/delivery_bills/0')
                     .set({
                         Authorization: adminToken
                     })

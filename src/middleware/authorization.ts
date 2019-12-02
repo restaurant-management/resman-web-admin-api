@@ -35,6 +35,18 @@ const authorization = (currentUser: User, requiredPermissions: string[]) => {
     }
 };
 
+const authorizationStore = (currentUser: User, storeId: number) => {
+    if (!storeId) {
+        throw new Error(__('error.no_storeId_is_provided'));
+    }
+
+    const stores = currentUser.stores || [];
+
+    if (stores.findIndex(item => item.id === storeId) === -1) {
+        throw new HttpError(401, 'authentication.unauthorized');
+    }
+};
+
 const authorizationOr = (requiredPermissions: string[]) => {
     return [
         UserAuth,
@@ -61,4 +73,9 @@ const authorizationOr = (requiredPermissions: string[]) => {
     ];
 };
 
-export { authorMiddleware as AuthorMiddleware, authorizationOr as AuthorizationOr, authorization as Authorization };
+export {
+    authorMiddleware as AuthorMiddleware,
+    authorizationOr as AuthorizationOr,
+    authorization as Authorization,
+    authorizationStore as AuthorizationStore
+};

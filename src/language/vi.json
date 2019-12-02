@@ -82,7 +82,8 @@
 	},
 	"daily_dish": {
 		"delete_fail": "daily_dish.delete_fail",
-		"daily_dish_not_found": "daily_dish.daily_dish_not_found"
+		"daily_dish_not_found": "daily_dish.daily_dish_not_found",
+		"no_storeId_is_provided": "daily_dish.no_storeId_is_provided"
 	},
 	"bill": {
 		"create_bill_fail": "bill.create_bill_fail",

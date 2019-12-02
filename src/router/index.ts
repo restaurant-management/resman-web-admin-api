@@ -32,7 +32,7 @@ router.use('/voucher_codes', VoucherCodeRouter);
 router.use('/discount_codes', DiscountCodeRouter);
 router.use('/discount_campaigns', DiscountCampaignRouter);
 router.use('/bills', BillRouter);
-router.use('/delivery-bills', DeliveryBillRouter);
+router.use('/delivery_bills', DeliveryBillRouter);
 
 router.get('/test', (_req: Request, res: Response) =>
     res.status(200).send({

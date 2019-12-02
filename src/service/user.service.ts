@@ -59,6 +59,7 @@ class UserService {
     }
 
     public async authenticate(usernameOrEmail: string, password: string) {
+        console.log(usernameOrEmail, password);
         let user = await getConnection()
             .createQueryBuilder()
             .select('user')
