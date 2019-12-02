@@ -139,9 +139,9 @@ class UserService {
         return user;
     }
 
-    public async edit(id: number, password?: string, phoneNumber?: string, address?: string,
+    public async edit(username: string, password?: string, phoneNumber?: string, address?: string,
         fullName?: string, avatar?: string, birthday?: Date, roles?: string[]) {
-        const user = await User.findOne(id, { relations: ['roles'] });
+        const user = await User.findOne({ where: { username }, relations: ['roles'] });
 
         if (address === '') {
             throw new Error(__('user.address_must_be_not_empty'));
@@ -178,12 +178,12 @@ class UserService {
         return await user.save();
     }
 
-    public async delete(id: number) {
-        if (id === 1) {
+    public async delete(username: string) {
+        if (username === 'admin') {
             throw new Error(__('user.can_not_delete_admin_user'));
         }
 
-        const user = await User.findOne(id);
+        const user = await this.getOne({ username });
 
         if (!user) {
             throw new Error(__('user.user_not_found'));

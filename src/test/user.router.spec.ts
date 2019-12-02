@@ -6,7 +6,7 @@ import { Application } from '../lib/application';
 describe('The User Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
-    let newUserId: string;
+    let newUsername: string;
 
     beforeAll(async (done) => {
         app = await Application.getTestApp();
@@ -79,7 +79,7 @@ describe('The User Router', () => {
                 })
                 .expect(200)
                 .expect((res) => {
-                    newUserId = 'test';
+                    newUsername = 'test';
                     expect(res.body).toMatchObject(
                         {
                             address: 'test',
@@ -98,7 +98,7 @@ describe('The User Router', () => {
     describe('when update user', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/users/' + newUserId + '?withRoles=true&withStores=true&withWarehouses=true')
+                .put('/api/users/' + newUsername)
                 .set({
                     Authorization: adminToken
                 })
@@ -115,8 +115,7 @@ describe('The User Router', () => {
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: newUserId,
-                            address: 'test',
+                            address: newUsername,
                             avatar: 'avatar',
                             birthday: new Date(1998, 1, 1).toISOString(),
                             fullName: 'hierenlee',
@@ -130,11 +129,30 @@ describe('The User Router', () => {
         });
     });
 
+    describe('when get user', () => {
+        describe('get by id', () => {
+            it('should return OK status', () => {
+                return app
+                    .get('/api/users/' + newUsername + '?withRoles=true&withStores=true&withWarehouses=true')
+                    .set({
+                        Authorization: adminToken
+                    })
+                    .expect((res) => {
+                        expect(res.body).toMatchObject(
+                            {
+                                username: newUsername
+                            }
+                        );
+                    });
+            });
+        });
+    });
+
     describe('when delete user', () => {
         describe('normal user', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/users/4')
+                    .delete('/api/users/' + newUsername)
                     .set({
                         Authorization: adminToken
                     })
@@ -145,7 +163,7 @@ describe('The User Router', () => {
         describe('not found user', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/users/5')
+                    .delete('/api/users/notfound')
                     .set({
                         Authorization: adminToken
                     })
@@ -156,30 +174,11 @@ describe('The User Router', () => {
         describe('default admin user', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/users/1')
+                    .delete('/api/users/admin')
                     .set({
                         Authorization: adminToken
                     })
                     .expect(res => expect(res.status).toBe(500));
-            });
-        });
-    });
-
-    describe('when get user', () => {
-        describe('get by id', () => {
-            it('should return OK status', () => {
-                return app
-                    .get('/api/users/1')
-                    .set({
-                        Authorization: adminToken
-                    })
-                    .expect((res) => {
-                        expect(res.body).toMatchObject(
-                            {
-                                id: 1
-                            }
-                        );
-                    });
             });
         });
     });

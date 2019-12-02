@@ -1,6 +1,8 @@
 {
 	"user": {
-		"username_or_email_incorrect": "user.username_or_email_incorrect"
+		"username_or_email_incorrect": "user.username_or_email_incorrect",
+		"can_not_delete_admin_user": "user.can_not_delete_admin_user",
+		"user_not_found": "user.user_not_found"
 	},
 	"daily_dish": {
 		"no_storeId_is_provided": "daily_dish.no_storeId_is_provided"

@@ -77,7 +77,7 @@ class UserController implements ICrudController {
             return next(new Error(__('user.can_not_update_user_with_higher_level')));
         }
 
-        UserService.edit(parseInt(req.params.id, 10), req.body.password, req.body.phoneNumber, req.body.address,
+        UserService.edit(req.params.id, req.body.password, req.body.phoneNumber, req.body.address,
             req.body.fullName, req.body.avatar, req.body.birthday, req.body.roles).then(value =>
                 res.status(200).json(value)
             ).catch(e => next(e));
@@ -88,7 +88,7 @@ class UserController implements ICrudController {
             return next(new Error(__('user.can_not_delete_user_with_higher_level')));
         }
 
-        UserService.delete(parseInt(req.params.id, 10)).then(() =>
+        UserService.delete(req.params.id).then(() =>
             res.sendStatus(200)
         ).catch(e => next(e));
     }
