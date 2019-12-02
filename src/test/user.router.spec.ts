@@ -6,7 +6,7 @@ import { Application } from '../lib/application';
 describe('The User Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
-    let newUserId: number;
+    let newUserId: string;
 
     beforeAll(async (done) => {
         app = await Application.getTestApp();
@@ -79,7 +79,7 @@ describe('The User Router', () => {
                 })
                 .expect(200)
                 .expect((res) => {
-                    newUserId = res.body.id;
+                    newUserId = 'test';
                     expect(res.body).toMatchObject(
                         {
                             address: 'test',
@@ -98,7 +98,7 @@ describe('The User Router', () => {
     describe('when update user', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/users/' + newUserId)
+                .put('/api/users/' + newUserId + '?withRoles=true&withStores=true&withWarehouses=true')
                 .set({
                     Authorization: adminToken
                 })

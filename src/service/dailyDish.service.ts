@@ -53,7 +53,7 @@ class DailyDishService {
         }
 
         if (confirmByUsername) {
-            dailyDish.confirmBy = await UserService.getOne({ username: confirmByUsername }, false);
+            dailyDish.confirmBy = await UserService.getOne({ username: confirmByUsername });
             dailyDish.confirmAt = confirmAt || new Date();
         }
 

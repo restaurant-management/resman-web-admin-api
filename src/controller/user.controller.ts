@@ -49,7 +49,7 @@ class UserController implements ICrudController {
             }
         }
 
-        UserService.getOne({ username: req.params.username }).then(value => {
+        UserService.getOne({ username: req.params.username }, req.query).then(value => {
             const { password, id, ...exportedData } = value;
 
             return res.status(200).json(exportedData);
@@ -65,7 +65,7 @@ class UserController implements ICrudController {
             }
         }
 
-        UserService.getOne({ email: req.params.email }).then(value => {
+        UserService.getOne({ email: req.params.email }, req.query).then(value => {
             const { password, id, ...exportedData } = value;
 
             return res.status(200).json(exportedData);

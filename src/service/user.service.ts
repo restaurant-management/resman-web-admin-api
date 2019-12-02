@@ -193,22 +193,26 @@ class UserService {
     }
 
     public async getOne(key: { id?: number, uuid?: string, username?: string, email?: string },
-        withRoles: boolean = true) {
+        options?: { withRoles?: boolean, withStores?: boolean, withWarehouses?: boolean }) {
 
         if (!key.id && !key.uuid && !key.username && !key.email) {
             throw new Error(__('user.user_not_found'));
         }
 
         let user: User = null;
+        const relations = [];
+        if (options?.withRoles) { relations.push('roles'); }
+        if (options?.withStores) { relations.push('stores'); }
+        if (options?.withWarehouses) { relations.push('warehouses'); }
 
         if (key.id) {
-            user = await User.findOne({ relations: withRoles ? ['roles'] : null, where: { id: key.id } });
+            user = await User.findOne({ relations, where: { id: key.id } });
         } else if (key.uuid) {
-            user = await User.findOne({ relations: withRoles ? ['roles'] : null, where: { uuid: key.uuid } });
+            user = await User.findOne({ relations, where: { uuid: key.uuid } });
         } else if (key.username) {
-            user = await User.findOne({ relations: withRoles ? ['roles'] : null, where: { username: key.username } });
+            user = await User.findOne({ relations, where: { username: key.username } });
         } else {
-            user = await User.findOne({ relations: withRoles ? ['roles'] : null, where: { email: key.email } });
+            user = await User.findOne({ relations, where: { email: key.email } });
         }
 
         if (!user) {
