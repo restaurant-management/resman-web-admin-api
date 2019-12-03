@@ -8,7 +8,8 @@ export default async function seedData() {
     await seedRole();
     await seedUser();
 
-    if (process.env.NODE_ENV !== 'production') {
-        await seedFakeData();
-    }
+    await seedFakeData();
+    // if (process.env.NODE_ENV !== 'production') {
+    //     await seedFakeData();
+    // }
 }

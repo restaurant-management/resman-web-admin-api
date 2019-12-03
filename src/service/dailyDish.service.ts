@@ -1,5 +1,4 @@
 import { __ } from 'i18n';
-import { getConnection } from 'typeorm';
 import { DailyDish, DaySession } from '../entity/dailyDish';
 import { DishService } from './dish.service';
 import { StoreService } from './store.service';
@@ -63,15 +62,15 @@ class DailyDishService {
     }
 
     public async delete(day: Date, dishId: number, session: string) {
-        const result = await getConnection().createQueryBuilder()
-            .delete().from(DailyDish)
-            .where('day=:day', { day })
-            .where('dishId=:dishId', { dishId })
-            .where('session=:session', { session })
-            .execute();
-        if (result.affected < 1) { throw new Error(__('daily_dish.delete_fail')); }
+        if (!day || !dishId! || !session) {
+            throw new Error(__('daily_dish.missing_required_arguments'));
+        }
+
+        const dailyDish = await this.getOne({ day, dishId, session });
+        await dailyDish.remove();
     }
 
+    // TODO fix get one with storeId
     public async getOne(key: { day?: Date, dishId?: number, session?: string }) {
         const dailyDish = await DailyDish.findOne({
             relations: ['confirmBy', 'dish'],
@@ -93,3 +92,4 @@ class DailyDishService {
 const dailyDishService = new DailyDishService();
 
 export { dailyDishService as DailyDishService };
+

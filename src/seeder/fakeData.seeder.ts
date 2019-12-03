@@ -147,21 +147,14 @@ const seedDish = async () => {
 
 const seedDailyDish = async () => {
     try {
-        await DailyDishService.getOne({day: new Date(), dishId: 1, session: DaySession.None});
+        if ((await DailyDishService.getBy({ day: new Date() })).length === 0) {
+            throw new Error();
+        }
     } catch (e) {
-        await DailyDishService.create(new Date(), 1, 1, DaySession.None);
-    }
-
-    try {
-        await DailyDishService.getOne({day: new Date(), dishId: 2, session: DaySession.None});
-    } catch (e) {
-        await DailyDishService.create(new Date(), 2, 1, DaySession.None);
-    }
-
-    try {
-        await DailyDishService.getOne({day: new Date(), dishId: 3, session: DaySession.None});
-    } catch (e) {
-        await DailyDishService.create(new Date(), 3, 1, DaySession.None);
+        const listDish = await DishService.getAll({});
+        for (const dish of listDish) {
+            await DailyDishService.create(new Date(), dish.id, 1, DaySession.None);
+        }
     }
 };
 

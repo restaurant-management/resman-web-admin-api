@@ -9,8 +9,8 @@ class DishService {
     }) {
         const order = options.orderId ?
             { [options.orderId]: options.orderType === 'DESC' || options.orderType === '-1' ? -1 : 1 } : {};
-        const skip = (options.page - 1) * length >= 0 ? (options.page - 1) * length : 0;
-        const take = length;
+        const skip = (options.page - 1) * options.length >= 0 ? (options.page - 1) * options.length : 0;
+        const take = options.length;
 
         const dish = await Dish.find({ take, skip, order, where: {} });
 
