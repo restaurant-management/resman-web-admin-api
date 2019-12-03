@@ -4486,7 +4486,7 @@ CSSParser.prototype = {
                     bgImage = token.value;
                     if (token.isFunction("url(")) {
                         token = this.getToken(true, true);
-                        var url = this.parseURL(token); // TODO
+                        var url = this.parseURL(token);
                         if (url)
                             bgImage += url;
                         else

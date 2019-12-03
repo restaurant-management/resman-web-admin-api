@@ -5,6 +5,54 @@
 		"user_not_found": "user.user_not_found"
 	},
 	"daily_dish": {
-		"no_storeId_is_provided": "daily_dish.no_storeId_is_provided"
+		"no_storeId_is_provided": "daily_dish.no_storeId_is_provided",
+		"daily_dish_not_found": "daily_dish.daily_dish_not_found",
+		"delete_fail": "daily_dish.delete_fail"
+	},
+	"authentication": {
+		"unauthorized": "authentication.unauthorized"
+	},
+	"daily_report": {
+		"daily_report_not_found": "daily_report.daily_report_not_found"
+	},
+	"delivery_bill": {
+		"delivery_bill_not_found": "delivery_bill.delivery_bill_not_found"
+	},
+	"bill": {
+		"bill_is_collected": "bill.bill_is_collected",
+		"bill_not_found": "bill.bill_not_found"
+	},
+	"voucher_code": {
+		"voucher_code_not_found": "voucher_code.voucher_code_not_found"
+	},
+	"discount_campaign": {
+		"discount_campaign_not_found": "discount_campaign.discount_campaign_not_found"
+	},
+	"discount_code": {
+		"discount_code_not_found": "discount_code.discount_code_not_found"
+	},
+	"import_bill": {
+		"import_bill_not_found": "import_bill.import_bill_not_found"
+	},
+	"customer": {
+		"customer_not_found": "customer.customer_not_found"
+	},
+	"role": {
+		"role_not_found": "role.role_not_found"
+	},
+	"address": {
+		"address_not_found": "address.address_not_found"
+	},
+	"dish": {
+		"delete_fail": "dish.delete_fail"
+	},
+	"store": {
+		"store_not_found": "store.store_not_found"
+	},
+	"warehouse": {
+		"warehouse_not_found": "warehouse.warehouse_not_found"
+	},
+	"stock": {
+		"stock_not_found": "stock.stock_not_found"
 	}
 }

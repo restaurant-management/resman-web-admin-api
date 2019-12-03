@@ -10,8 +10,11 @@ const router = Router();
 CrudRouter(router, DailyDishController, {
     listMiddleware: AuthorMiddleware([Permission.dailyDish.list]),
     createMiddleware: AuthorMiddleware([Permission.dailyDish.create]),
-    ignore: ['read']
+    ignore: ['read', 'delete', 'update']
 });
+
+router.put('/', AuthorMiddleware([Permission.dailyDish.update]), DailyDishController.update);
+router.delete('/', AuthorMiddleware([Permission.dailyDish.delete]), DailyDishController.delete);
 
 router.get('/get_by', UserAuth, DailyDishController.read);
 
