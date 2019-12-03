@@ -1,5 +1,6 @@
 import { __ } from 'i18n';
 import { Store } from '../entity/store';
+import { DishService } from './dish.service';
 
 class StoreService {
     public async getAll(length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
@@ -54,12 +55,51 @@ class StoreService {
         await store.remove();
     }
 
-    public async getOne(id: number) {
-        const store = await Store.findOne(id);
+    public async getOne(id: number, options?: {
+        withUsers?: boolean;
+        withDiscountCodes?: boolean;
+        withVoucherCodes?: boolean;
+        withDiscountCampaigns?: boolean;
+        withDishes?: boolean;
+        withWarehouses?: boolean;
+    }) {
+        const relations = [];
+        if (options.withUsers) { relations.push('users'); }
+        if (options.withDiscountCodes) { relations.push('discountCodes'); }
+        if (options.withVoucherCodes) { relations.push('voucherCodes'); }
+        if (options.withDiscountCampaigns) { relations.push('discountCampaigns'); }
+        if (options.withWarehouses) { relations.push('warehouses'); }
+        if (options.withDishes) { relations.push('storeDishes'); }
+
+        const store = await Store.findOne(id, { relations });
 
         if (!store) {
             throw new Error(__('store.store_not_found'));
         }
+
+        if (options.withDishes) {
+            const dishes = [];
+            for (const storeDish of store.storeDishes) {
+                const dish = await DishService.getOne(storeDish.dishId);
+
+                // Calculate price
+                const price = storeDish.price || dish.defaultPrice;
+
+                delete dish.defaultPrice;
+                dish['price'] = price;
+
+                dishes.push(dish);
+            }
+
+            delete store.storeDishes;
+            store['dishes'] = dishes;
+        }
+
+        return store;
+    }
+
+    public async getDishes(id: number) {
+        const store = await this.getOne(id);
 
         return store;
     }

@@ -17,7 +17,7 @@ class StoreController implements ICrudController {
     }
 
     public read(req: Request, res: Response, next: NextFunction): void {
-        StoreService.getOne(parseInt(req.params.id, 10)).then((value) =>
+        StoreService.getOne(parseInt(req.params.id, 10), req.query).then((value) =>
             res.status(200).json(value)
         ).catch(e => next(e));
     }

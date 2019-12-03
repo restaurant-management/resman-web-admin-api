@@ -18,6 +18,6 @@ export class StoreDish extends BaseEntity {
     @PrimaryColumn()
     public dishId: number;
 
-    @Column({ nullable: true })
+    @Column({ type: 'money', nullable: true })
     public price: number;
 }
