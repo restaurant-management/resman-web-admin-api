@@ -5,6 +5,7 @@ import { BillDishService } from './billDish.service';
 import { BillHistoryService } from './billHistory.service';
 import { CustomerService } from './customer.service';
 import { DiscountCodeService } from './discountCode.service';
+import { StoreService } from './store.service';
 import { UserService } from './user.service';
 import { VoucherCodeService } from './voucherCode.service';
 
@@ -20,17 +21,23 @@ class BillService {
     }
 
     public async create(data: {
-        tableNumber: number, dishIds: number[], createByUuid: string,
+        tableNumber: number, dishIds: number[], createByUuid: string, storeId: number,
         dishNotes?: string[], dishQuantities?: number[],
         createAt?: Date, prepareAt?: Date, prepareByUuid?: string, collectAt?: Date,
         collectByUuid?: string, collectValue?: number, rating?: number, note?: string
         voucherCode?: string, discountCode?: string, customerUuid?: string
     }) {
+        if (!data.tableNumber || !data.dishIds || !data.createByUuid || data.storeId) {
+            throw new Error(__('error.missing_required_information'));
+        }
+
         const newBill = new Bill();
         newBill.tableNumber = data.tableNumber;
         newBill.createAt = data.createAt || new Date();
         newBill.rating = data.rating;
         newBill.note = data.note;
+
+        newBill.store = await StoreService.getOne(data.storeId);
 
         // Created user must be not null by controller.
         try {
@@ -95,12 +102,13 @@ class BillService {
             withCreateBy: true,
             withCustomer: !!data.customerUuid,
             withPrepareBy: !!data.prepareByUuid,
+            withStore: true,
             showDishesType: 'dishes'
         });
     }
 
     public async createWithRestrict(data: {
-        tableNumber: number, dishIds: number[], createByUuid: string,
+        tableNumber: number, dishIds: number[], createByUuid: string, storeId: number,
         dishQuantities?: number[], note?: string, voucherCode?: string, discountCode?: string, customerUuid?: string
     }) {
         if (data.voucherCode) {
@@ -351,7 +359,7 @@ class BillService {
     public async getOne(id: number,
         options?: {
             withCreateBy?: boolean, withPrepareBy?: boolean, withCollectBy?: boolean,
-            withCustomer?: boolean, showDishesType?: 'dishes' | 'histories'
+            withStore?: boolean, withCustomer?: boolean, showDishesType?: 'dishes' | 'histories'
         }) {
 
         const relations = [];
@@ -360,6 +368,7 @@ class BillService {
         if (options?.withCreateBy) { relations.push('createBy'); }
         if (options?.withCustomer) { relations.push('customer'); }
         if (options?.withPrepareBy) { relations.push('prepareBy'); }
+        if (options?.withStore) { relations.push('store'); }
 
         const bill = await Bill.findOne(id, { relations, where: { deleteAt: null } });
 
@@ -398,3 +407,4 @@ class BillService {
 const billService = new BillService();
 
 export { billService as BillService };
+

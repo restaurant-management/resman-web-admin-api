@@ -62,7 +62,7 @@ class DailyDishService {
     }
 
     public async delete(day: Date, dishId: number, session: string) {
-        if (!day || !dishId! || !session) {
+        if (!day || !dishId || !session) {
             throw new Error(__('daily_dish.missing_required_arguments'));
         }
 

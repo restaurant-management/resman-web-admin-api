@@ -30,8 +30,7 @@ class UserController implements ICrudController {
             return next(new Error(__('user.can_not_create_user_with_higher_level')));
         }
 
-        UserService.create(req.body.username, req.body.email, req.body.password, req.body.phoneNumber, req.body.address,
-            req.body.fullName, req.body.avatar, req.body.birthday, req.body.roles).then(value => {
+        UserService.create(req.body).then(value => {
                 return res.status(200).json(value);
             }).catch(e => next(e));
     }
@@ -77,8 +76,7 @@ class UserController implements ICrudController {
             return next(new Error(__('user.can_not_update_user_with_higher_level')));
         }
 
-        UserService.edit(req.params.id, req.body.password, req.body.phoneNumber, req.body.address,
-            req.body.fullName, req.body.avatar, req.body.birthday, req.body.roles).then(value =>
+        UserService.edit(req.params.id, req.body).then(value =>
                 res.status(200).json(value)
             ).catch(e => next(e));
     }
@@ -97,4 +95,3 @@ class UserController implements ICrudController {
 const userController = new UserController();
 
 export { userController as UserController };
-

@@ -1,10 +1,11 @@
 import { getLocale } from 'i18n';
-import jwt from 'jsonwebtoken';
 import { SuperTest, Test } from 'supertest';
 import { Customer } from '../entity/customer';
 import { User } from '../entity/user';
 import { Application } from '../lib/application';
+import { AuthService } from '../service/authService';
 import { CustomerService } from '../service/customer.service';
+import { UserService } from '../service/user.service';
 
 describe('The Delivery Bill Router', () => {
     let app: SuperTest<Test>;
@@ -23,20 +24,14 @@ describe('The Delivery Bill Router', () => {
     beforeAll(async () => {
         try {
             app = await Application.getTestApp();
-            adminToken = jwt.sign({ uuid: (await User.findOne(1)).uuid },
-                process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
-
-            chefUser = await User.findOne({ where: { username: 'chef' } });
-            chefToken = jwt.sign({ uuid: chefUser.uuid },
-                process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
-
-            shipperUser = await User.findOne({ where: { username: 'shipper' } });
-            shipperToken = jwt.sign({ uuid: shipperUser.uuid },
-                process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
+            adminToken = AuthService.sign(await UserService.getOne({ username: 'admin' }));
+            chefUser = await UserService.getOne({ username: 'chef' });
+            chefToken = AuthService.sign(chefUser);
+            shipperUser = await UserService.getOne({ username: 'shipper' });
+            shipperToken = AuthService.sign(shipperUser);
 
             customer = await CustomerService.getOne({ username: 'customer' });
-            customerToken = jwt.sign({ uuid: customer.uuid },
-                process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
+            customerToken = AuthService.sign(customer);
         } catch (error) {
             console.error(error);
             console.log(chefToken, shipperToken, customerToken);
@@ -128,6 +123,7 @@ describe('The Delivery Bill Router', () => {
                 })
                 .send({
                     dishIds: [1, 2],
+                    storeId: 1,
                     customerUuid: customer.uuid,
                     addressId,
                     createAt: today,
@@ -195,6 +191,7 @@ describe('The Delivery Bill Router', () => {
                 })
                 .send({
                     dishIds: [1, 2],
+                    storeId: 1,
                     addressId,
                     dishNotes: ['Khong hanh', 'Khong kho hoa'],
                     dishQuantities: [3, 1],
@@ -235,7 +232,7 @@ describe('The Delivery Bill Router', () => {
     describe('when get delivery bill info', () => {
         it('should return OK status', () => {
             return app
-                .get('/api/delivery_bills/' + newDeliveryBillId + '?withCustomer=true&withPrepareBy=true&withShipBy=true&withDishes=true')
+                .get('/api/delivery_bills/' + newDeliveryBillId + '?withCustomer=true&withPrepareBy=true&withShipBy=true&withDishes=true&withStore=true')
                 .set({
                     Authorization: adminToken
                 })
@@ -258,6 +255,7 @@ describe('The Delivery Bill Router', () => {
                                 quantity: 1
                             }
                         ],
+                        store: { id: 1 },
                         note: 'Hoa don cho dai gia, lam cho dang hoang',
                     });
                 });
@@ -292,6 +290,7 @@ describe('The Delivery Bill Router', () => {
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
+                            prepareAt: expect.stringMatching(/.*/),
                             prepareBy: {
                                 username: 'chef'
                             }
@@ -320,7 +319,18 @@ describe('The Delivery Bill Router', () => {
                     .set({
                         Authorization: chefToken
                     })
-                    .expect(200);
+                    .expect(200)
+                    .expect((res) => {
+                        expect(res.body).toMatchObject(
+                            {
+                                prepareBy: {
+                                    username: 'chef'
+                                },
+                                prepareAt: expect.stringMatching(/.*/),
+                                preparedAt: expect.stringMatching(/.*/)
+                            }
+                        );
+                    });
             });
         });
     });
@@ -332,7 +342,22 @@ describe('The Delivery Bill Router', () => {
                 .set({
                     Authorization: shipperToken
                 })
-                .expect(200);
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toMatchObject(
+                        {
+                            prepareBy: {
+                                username: 'chef'
+                            },
+                            prepareAt: expect.stringMatching(/.*/),
+                            preparedAt: expect.stringMatching(/.*/),
+                            shipBy: {
+                                username: 'shipper',
+                            },
+                            shipAt: expect.stringMatching(/.*/)
+                        }
+                    );
+                });
         });
     });
 
@@ -347,7 +372,26 @@ describe('The Delivery Bill Router', () => {
                     collectValue: 0,
                     note: 'Khach hang BOM'
                 })
-                .expect(200);
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toMatchObject(
+                        {
+                            prepareBy: {
+                                username: 'chef'
+                            },
+                            prepareAt: expect.stringMatching(/.*/),
+                            preparedAt: expect.stringMatching(/.*/),
+                            shipBy: {
+                                username: 'shipper',
+                            },
+                            shipAt: expect.stringMatching(/.*/),
+                            collectAt: expect.stringMatching(/.*/),
+                            collectValue: Intl.NumberFormat(getLocale(), { style: 'currency', currency: 'USD' })
+                                .format(0),
+                            note: 'Khach hang BOM'
+                        }
+                    );
+                });
         });
     });
 

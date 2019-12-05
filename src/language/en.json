@@ -10,13 +10,18 @@
 		"delete_fail": "daily_dish.delete_fail"
 	},
 	"authentication": {
-		"unauthorized": "authentication.unauthorized"
+		"unauthorized": "authentication.unauthorized",
+		"no_token_provided": "authentication.no_token_provided",
+		"fail_authenticate_token": "authentication.fail_authenticate_token"
 	},
 	"daily_report": {
 		"daily_report_not_found": "daily_report.daily_report_not_found"
 	},
 	"delivery_bill": {
-		"delivery_bill_not_found": "delivery_bill.delivery_bill_not_found"
+		"delivery_bill_not_found": "delivery_bill.delivery_bill_not_found",
+		"can_not_rate_if_bill_not_done": "delivery_bill.can_not_rate_if_bill_not_done",
+		"could_not_mark_prepared_for_bill_with_no_chef_select": "delivery_bill.could_not_mark_prepared_for_bill_with_no_chef_select",
+		"could_not_ship_bill_did_not_prepare_yet": "delivery_bill.could_not_ship_bill_did_not_prepare_yet"
 	},
 	"bill": {
 		"bill_is_collected": "bill.bill_is_collected",
@@ -54,5 +59,9 @@
 	},
 	"stock": {
 		"stock_not_found": "stock.stock_not_found"
+	},
+	"error": {
+		"no_storeId_is_provided": "error.no_storeId_is_provided",
+		"missing_required_information": "error.missing_required_information"
 	}
 }

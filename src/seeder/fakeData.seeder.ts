@@ -3,13 +3,13 @@ import { DaySession } from '../entity/dailyDish';
 import { Dish } from '../entity/dish';
 import { ImportBill } from '../entity/importBill';
 import { Stock } from '../entity/stock';
-import { Store } from '../entity/store';
 import { Warehouse } from '../entity/warehouse';
 import { PasswordHandler } from '../helper/passwordHandler';
 import { DailyDishService } from '../service/dailyDish.service';
 import { DiscountCodeService } from '../service/discountCode.service';
 import { DishService } from '../service/dish.service';
 import { ImportBillService } from '../service/importBill.service';
+import { StoreService } from '../service/store.service';
 import { WarehouseService } from '../service/warehouse.service';
 
 export const seedFakeData = async () => {
@@ -37,18 +37,18 @@ export const seedFakeData = async () => {
 };
 
 const seedStore = async () => {
-    let store = await Store.findOne(1);
-    if (!store) {
-        store = new Store();
-        store.name = 'Store';
-        store.description = 'Store';
-        store.logo = 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4';
-        store.address = 'Store';
-        store.hotline = '123456';
-        store.openTime = new Date(1998, 1, 1, 6, 0);
-        store.closeTime = new Date(1998, 1, 1, 6, 0);
-        store.rating = 4.5;
-        await store.save();
+    try {
+        await StoreService.getOne(2);
+    } catch (_) {
+        await StoreService.create({
+            name: 'Store 2',
+            address: 'Address 2',
+            hotline: '113',
+            description: 'Store 2',
+            logo: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            openTime: new Date(1998, 1, 1, 6, 0),
+            closeTime: new Date(1998, 1, 1, 18, 0)
+        });
     }
 };
 

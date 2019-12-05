@@ -1,9 +1,11 @@
 import { __ } from 'i18n';
-import jwt from 'jsonwebtoken';
 import { getConnection } from 'typeorm';
 import { Role } from '../entity/role';
+import { Store } from '../entity/store';
 import { User } from '../entity/user';
 import { PasswordHandler } from '../helper/passwordHandler';
+import { AuthService } from './authService';
+import { StoreService } from './store.service';
 
 class UserService {
     /**
@@ -59,7 +61,6 @@ class UserService {
     }
 
     public async authenticate(usernameOrEmail: string, password: string) {
-        console.log(usernameOrEmail, password);
         let user = await getConnection()
             .createQueryBuilder()
             .select('user')
@@ -83,7 +84,7 @@ class UserService {
                 throw new Error(__('user.password_incorrect'));
             }
 
-            return jwt.sign({ uuid: user.uuid }, process.env.JWT_SECRET_KEY, { expiresIn: `${process.env.USER_TOKEN_EXPIRE_DAY || '1'} days` });
+            return AuthService.sign(user);
         }
         throw new Error(__('user.username_or_email_incorrect'));
     }
@@ -98,22 +99,27 @@ class UserService {
         return users;
     }
 
-    public async create(username: string, email: string, password: string, phoneNumber: string, address: string,
-        fullName?: string, avatar?: string, birthday?: Date, roles?: string[]) {
-        if (await User.findOne({ where: { username } })) {
+    public async create(data: {
+        username: string, email: string, password: string, phoneNumber: string, address: string,
+        fullName?: string, avatar?: string, birthday?: Date, roles?: string[], storeIds?: number[]
+    }) {
+        if (!data.username || !data.email || !data.password || !data.phoneNumber) {
+            throw new Error(__('error.missing_required_information'));
+        }
+        if (await User.findOne({ where: { username: data.username } })) {
             throw new Error(__('user.username_has_already_used'));
         }
-        if (await User.findOne({ where: { email } })) {
+        if (await User.findOne({ where: { email: data.email } })) {
             throw new Error(__('user.email_has_already_used'));
         }
-        if (await User.findOne({ where: { phoneNumber } })) {
+        if (await User.findOne({ where: { phoneNumber: data.phoneNumber } })) {
             throw new Error(__('user.phone_number_has_already_used'));
         }
 
         const listRoles: Role[] = [];
 
-        if (roles) {
-            for (const item of roles) {
+        if (data.roles) {
+            for (const item of data.roles) {
                 const role = await Role.findOne({ where: { slug: item } });
 
                 if (!role) { throw new Error(__('user.{{role}}_not_found', { role: item })); }
@@ -122,16 +128,25 @@ class UserService {
             }
         }
 
+        const listStores: Store[] = [];
+        if (data.storeIds) {
+            for (const item of data.storeIds) {
+                const store = await StoreService.getOne(item);
+                listStores.push(store);
+            }
+        }
+
         const newUser = new User();
-        newUser.username = username;
-        newUser.fullName = fullName;
-        newUser.email = email;
-        newUser.password = PasswordHandler.encode(password);
-        newUser.avatar = avatar;
-        newUser.birthday = birthday;
-        newUser.phoneNumber = phoneNumber;
-        newUser.address = address;
+        newUser.username = data.username;
+        newUser.fullName = data.fullName;
+        newUser.email = data.email;
+        newUser.password = PasswordHandler.encode(data.password);
+        newUser.avatar = data.avatar;
+        newUser.birthday = data.birthday;
+        newUser.phoneNumber = data.phoneNumber;
+        newUser.address = data.address;
         newUser.roles = listRoles;
+        newUser.stores = listStores;
 
         const user = await newUser.save();
         if (!user) { throw new Error(__('user.create_fail')); }
@@ -139,11 +154,14 @@ class UserService {
         return user;
     }
 
-    public async edit(username: string, password?: string, phoneNumber?: string, address?: string,
-        fullName?: string, avatar?: string, birthday?: Date, roles?: string[]) {
-        const user = await User.findOne({ where: { username }, relations: ['roles'] });
+    public async edit(username: string, data: {
+        password?: string, phoneNumber?: string, address?: string,
+        fullName?: string, avatar?: string, birthday?: Date, roles?: string[], storeIds?: number[]
+    }) {
+        const user = await this.getOne({ username },
+            { withRoles: true, withStores: true, withWarehouses: true });
 
-        if (address === '') {
+        if (data.address === '') {
             throw new Error(__('user.address_must_be_not_empty'));
         }
 
@@ -151,14 +169,15 @@ class UserService {
             throw new Error(__('user.user_not_found'));
         }
 
-        if (await User.findOne({ where: { phoneNumber } })) {
+        if (await User.findOne({ where: { phoneNumber: data.phoneNumber } })) {
             throw new Error(__('user.phone_number_has_already_used'));
         }
 
-        const listRoles: Role[] = user.roles;
+        let listRoles: Role[] = user.roles;
 
-        if (roles) {
-            for (const item of roles) {
+        if (data.roles) {
+            listRoles = [];
+            for (const item of data.roles) {
                 const role = await Role.findOne({ where: { slug: item } });
 
                 if (!role) { throw new Error(__('user.{{role}}_not_found', { role: item })); }
@@ -167,13 +186,23 @@ class UserService {
             }
         }
 
-        user.password = PasswordHandler.encode(password);
-        user.phoneNumber = phoneNumber;
-        if (address) { user.address = address; }
-        if (fullName) { user.fullName = fullName; }
-        if (avatar) { user.avatar = avatar; }
-        if (birthday) { user.birthday = birthday; }
+        let listStores: Store[] = user.stores;
+        if (data.storeIds) {
+            listStores = [];
+            for (const item of data.storeIds) {
+                const store = await StoreService.getOne(item);
+                listStores.push(store);
+            }
+        }
+
+        user.password = PasswordHandler.encode(data.password);
+        user.phoneNumber = data.phoneNumber;
+        if (data.address) { user.address = data.address; }
+        if (data.fullName) { user.fullName = data.fullName; }
+        if (data.avatar) { user.avatar = data.avatar; }
+        if (data.birthday) { user.birthday = data.birthday; }
         user.roles = listRoles;
+        user.stores = listStores;
 
         return await user.save();
     }

@@ -4,50 +4,57 @@ import { PasswordHandler } from '../helper/passwordHandler';
 import { UserService } from '../service/user.service';
 
 /**
- * Please seed role before!
+ * Please seed role and store before!
  */
 export const seedUser = async () => {
-    const adminUser = await User.findOne({ where: { username: 'admin' } });
-
-    if (!adminUser) {
-        const newUser = new User();
-        newUser.username = process.env.ADMIN_USERNAME || 'admin';
-        newUser.password = PasswordHandler.encode(process.env.ADMIN_PASSWORD || 'admin');
-        newUser.email = 'hienlh1298@gmail.com';
-        newUser.roles = [await Role.findOne({ where: { slug: 'administrator' } })];
-        newUser.phoneNumber = '0123456789';
-        newUser.address = 'Viet Nam';
-        await newUser.save();
-
+    try {
+        await UserService.getOne({ username: process.env.ADMIN_USERNAME || 'admin' });
+    } catch (e) {
+        await UserService.create({
+            username: process.env.ADMIN_USERNAME || 'admin',
+            email: process.env.ADMIN_USERNAME || 'hienlh1298@gmail.com',
+            password: process.env.ADMIN_PASSWORD || 'admin',
+            phoneNumber: '0123456789', address: 'Viet Nam',
+            roles: [(await Role.findOne({ where: { slug: 'administrator' } })).slug],
+            storeIds: [1]
+        });
         console.log('Seeded admin user!');
     }
 
     try {
         await UserService.getOne({ username: 'staff' });
     } catch (e) {
-        await UserService.create('staff', 'staff@gmail.com', 'staff', '01231234234', 'Viet Nam',
-            null, null, null, ['staff']);
+        await UserService.create({
+            username: 'staff', email: 'staff@gmail.com', password: 'staff', phoneNumber: '01231234234', address: 'Viet Nam',
+            roles: ['staff'], storeIds: [1]
+        });
     }
 
     try {
         await UserService.getOne({ username: 'chef' });
     } catch (e) {
-        await UserService.create('chef', 'chef@gmail.com', 'chef', '12323123', 'Viet Nam',
-            null, null, null, ['chef']);
+        await UserService.create({
+            username: 'chef', email: 'chef@gmail.com', password: 'chef', phoneNumber: '12323123', address: 'Viet Nam',
+            roles: ['chef'], storeIds: [1]
+        });
     }
 
     try {
         await UserService.getOne({ username: 'WareManager' });
     } catch (e) {
-        await UserService.create('WareManager', 'WareManager@gmail.com', 'ware_manager', '03445243234', 'Viet Nam',
-            null, null, null, ['ware-manager']);
+        await UserService.create({
+            username: 'WareManager', email: 'WareManager@gmail.com', password: 'ware_manager', phoneNumber: '03445243234',
+            address: 'Viet Nam', roles: ['ware-manager'], storeIds: [1]
+        });
     }
 
     try {
         await UserService.getOne({ username: 'shipper' });
     } catch (e) {
-        await UserService.create('shipper', 'shipper@gmail.com', 'shipper', '0971963964', 'Viet Nam',
-            null, null, null, ['shipper']);
+        await UserService.create({
+            username: 'shipper', email: 'shipper@gmail.com', password: 'shipper', phoneNumber: '0971963964',
+            address: 'Viet Nam', roles: ['shipper'], storeIds: [1]
+        });
     }
 
     if (process.env.NODE_ENV === 'development') {

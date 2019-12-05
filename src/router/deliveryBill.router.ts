@@ -27,11 +27,11 @@ router.put('/:id/collect', AuthorizationByRole(['shipper']), DeliveryBillControl
 router.put('/:id/rating', CustomerAuth, DeliveryBillController.rating);
 
 CrudRouter(router, DeliveryBillController, {
-    listMiddleware: AuthorMiddleware([Permission.bill.list]),
-    readMiddleware: AuthorMiddleware([Permission.bill.list]),
-    createMiddleware: AuthorMiddleware([Permission.bill.create]),
-    updateMiddleware: AuthorMiddleware([Permission.bill.update]),
-    deleteMiddleware: AuthorMiddleware([Permission.bill.delete])
+    listMiddleware: AuthorMiddleware([Permission.deliveryBill.list]),
+    readMiddleware: AuthorMiddleware([Permission.deliveryBill.list]),
+    createMiddleware: AuthorMiddleware([Permission.deliveryBill.create]),
+    updateMiddleware: AuthorMiddleware([Permission.deliveryBill.update]),
+    deleteMiddleware: AuthorMiddleware([Permission.deliveryBill.delete])
 });
 
 export { router as DeliveryBillRouter };

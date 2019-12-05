@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
 import { SuperTest, Test } from 'supertest';
-import { User } from '../entity/user';
 import { Application } from '../lib/application';
+import { AuthService } from '../service/authService';
+import { UserService } from '../service/user.service';
 
 describe('The User Router', () => {
     let app: SuperTest<Test>;
@@ -10,8 +10,7 @@ describe('The User Router', () => {
 
     beforeAll(async (done) => {
         app = await Application.getTestApp();
-        adminToken = jwt.sign({ uuid: (await User.findOne(1)).uuid },
-            process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
+        adminToken = AuthService.sign(await UserService.getOne({username: 'admin'}));
         done();
     });
 
