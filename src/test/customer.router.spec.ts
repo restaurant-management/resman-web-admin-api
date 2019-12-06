@@ -1,18 +1,19 @@
-import jwt from 'jsonwebtoken';
 import { SuperTest, Test } from 'supertest';
-import { User } from '../entity/user';
 import { Application } from '../lib/application';
+import { AuthService } from '../service/authService';
+import { UserService } from '../service/user.service';
 
 describe('The Customer Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
-    let newCustomerId: number;
+    const newCustomerByAdmin: string = 'test';
+    const newCustomerByRegister: string = 'hieren_lee';
+    let newCustomerByRegisterToken: string;
 
     beforeAll(async () => {
         try {
             app = await Application.getTestApp();
-            adminToken = jwt.sign({ uuid: (await User.findOne(1)).uuid },
-                process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
+            adminToken = AuthService.sign(await UserService.getOne({ username: 'admin' }));
         } catch (error) {
             console.error(error);
         }
@@ -49,6 +50,77 @@ describe('The Customer Router', () => {
         });
     });
 
+    describe('when customer register', () => {
+        it('should return OK status and a token', () => {
+            return app
+                .post('/api/customers/register')
+                .send({
+                    username: newCustomerByRegister,
+                    email: 'gaphagun12@gmail.com',
+                    password: newCustomerByRegister,
+                    phoneNumber: '16520361',
+                    fullName: 'Hieren Lee',
+                    avatar: 'Avatar',
+                    birthday: new Date(2019, 1, 1)
+                })
+                .expect(200)
+                .expect(res => {
+                    expect(res.body).toMatchObject(
+                        {
+                            username: newCustomerByRegister,
+                            email: 'gaphagun12@gmail.com',
+                            phoneNumber: '16520361',
+                            fullName: 'Hieren Lee',
+                            avatar: 'Avatar',
+                            birthday: new Date(2019, 1, 1).toJSON()
+                        }
+                    );
+                });
+        });
+
+        it('login to get token to change password', () => {
+            return app
+                .post('/api/customers/login')
+                .send({
+                    usernameOrEmail: newCustomerByRegister,
+                    password: newCustomerByRegister
+                })
+                .expect(200)
+                .expect(res => {
+                    expect(res.body).toEqual(expect.stringMatching(/.*\..*\..*/));
+                    newCustomerByRegisterToken = res.body;
+                });
+        });
+    });
+
+    describe('when customer change password', () => {
+        it('should return OK status and a token', () => {
+            return app
+                .patch('/api/customers/password')
+                .set({
+                    Authorization: newCustomerByRegisterToken
+                })
+                .send({
+                    oldPassword: newCustomerByRegister,
+                    newPassword: 'customer',
+                })
+                .expect(200);
+        });
+
+        it('login with new password', () => {
+            return app
+                .post('/api/customers/login')
+                .send({
+                    usernameOrEmail: newCustomerByRegister,
+                    password: 'customer'
+                })
+                .expect(200)
+                .expect(res => {
+                    expect(res.body).toEqual(expect.stringMatching(/.*\..*\..*/));
+                });
+        });
+    });
+
     describe('when get all customers', () => {
         describe('with normal mode', () => {
             it('should return OK status and json array', () => {
@@ -74,10 +146,13 @@ describe('The Customer Router', () => {
                     Authorization: adminToken
                 })
                 .send({
-                    username: 'test',
+                    username: newCustomerByAdmin,
                     email: 'test@gmail.com',
                     password: 'test',
-                    phoneNumber: '099999'
+                    phoneNumber: '099999',
+                    fullName: 'Hieren Lee',
+                    avatar: 'Avatar',
+                    birthday: new Date(2019, 1, 1)
                 })
                 .expect(200)
                 .expect((res) => {
@@ -85,10 +160,12 @@ describe('The Customer Router', () => {
                         {
                             email: 'test@gmail.com',
                             phoneNumber: '099999',
-                            username: 'test'
+                            username: 'test',
+                            fullName: 'Hieren Lee',
+                            avatar: 'Avatar',
+                            birthday: new Date(2019, 1, 1).toJSON()
                         }
                     );
-                    newCustomerId = res.body.id;
                 });
         });
     });
@@ -96,7 +173,7 @@ describe('The Customer Router', () => {
     describe('when update customer', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/customers/' + newCustomerId)
+                .put('/api/customers/' + newCustomerByAdmin)
                 .set({
                     Authorization: adminToken
                 })
@@ -111,7 +188,7 @@ describe('The Customer Router', () => {
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: newCustomerId,
+                            username: newCustomerByAdmin,
                             avatar: 'avatar',
                             birthday: new Date(1998, 1, 1).toISOString(),
                             fullName: 'hierenlee',
@@ -123,17 +200,17 @@ describe('The Customer Router', () => {
     });
 
     describe('when get customer info', () => {
-        describe('get by id', () => {
+        describe('get by username', () => {
             it('should return OK status', () => {
                 return app
-                    .get('/api/customers/' + newCustomerId)
+                    .get('/api/customers/' + newCustomerByAdmin)
                     .set({
                         Authorization: adminToken
                     })
                     .expect((res) => {
                         expect(res.body).toMatchObject(
                             {
-                                id: newCustomerId
+                                username: newCustomerByAdmin
                             }
                         );
                     });
@@ -145,7 +222,7 @@ describe('The Customer Router', () => {
         describe('normal user', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/customers/' + newCustomerId)
+                    .delete('/api/customers/' + newCustomerByAdmin)
                     .set({
                         Authorization: adminToken
                     })
@@ -156,7 +233,7 @@ describe('The Customer Router', () => {
         describe('not found customer', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/customers/0')
+                    .delete('/api/customers/xyz')
                     .set({
                         Authorization: adminToken
                     })

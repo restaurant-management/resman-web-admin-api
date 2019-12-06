@@ -5,10 +5,13 @@ import { Permission } from '../entity/permission';
 import { CrudRouter } from '../lib/crudRouter';
 import { SubCrudRouter } from '../lib/subCrudRouter';
 import { AuthorMiddleware } from '../middleware/authorization';
+import { CustomerAuth } from '../middleware/customerAuth';
 
 const router = Router();
 
 router.post('/login', CustomerController.login);
+router.post('/register', CustomerController.create);
+router.patch('/password', CustomerAuth, CustomerController.changePassword);
 
 SubCrudRouter(router, AddressController, {
     parentIdString: 'customerUsername',

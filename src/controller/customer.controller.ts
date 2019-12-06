@@ -18,29 +18,41 @@ class CustomerController implements ICrudController {
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {
-        CustomerService.create(req.body.username, req.body.email, req.body.password, req.body.phoneNumber,
-            req.body.fullName, req.body.avatar, req.body.birthday).then(value => {
-                return res.status(200).json(value);
-            }).catch(e => next(e));
+        CustomerService.create(req.body).then(value => {
+            return res.status(200).json(value);
+        }).catch(e => next(e));
     }
 
     public read(req: Request, res: Response, next: NextFunction): void {
-        CustomerService.getOne(req.params).then((value) =>
+        CustomerService.getOne({ username: req.params.id }).then((value) =>
             res.status(200).json(value)
         ).catch(e => next(e));
     }
 
     public update(req: Request, res: Response, next: NextFunction): void {
-        CustomerService.edit(parseInt(req.params.id, 10), req.body.password, req.body.phoneNumber, req.body.fullName,
-            req.body.avatar, req.body.birthday).then(value =>
-                res.status(200).json(value)
-            ).catch(e => next(e));
+        CustomerService.edit(req.params.id, req.body).then(value =>
+            res.status(200).json(value)
+        ).catch(e => next(e));
     }
 
     public delete(req: Request, res: Response, next: NextFunction): void {
-        CustomerService.delete(parseInt(req.params.id, 10)).then(() =>
+        CustomerService.delete(req.params.id).then(() =>
             res.sendStatus(200)
         ).catch(e => next(e));
+    }
+
+    public editProfile(req: Request, res: Response, next: NextFunction): void {
+        CustomerService.editProfile(req.params.id, req['customer'], req.body).then(value =>
+            res.status(200).json(value)
+        ).catch(e => next(e));
+    }
+
+    // For user change password.
+    public changePassword(req: Request, res: Response, next: NextFunction) {
+        CustomerService.changePassword(req['customer'], req.body)
+            .then(value => {
+                return res.status(200).json(value);
+            }).catch(e => next(e));
     }
 }
 

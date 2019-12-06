@@ -63,7 +63,7 @@ class DailyDishService {
 
     public async delete(day: Date, dishId: number, session: string) {
         if (!day || !dishId || !session) {
-            throw new Error(__('daily_dish.missing_required_arguments'));
+            throw new Error(__('error.missing_required_information'));
         }
 
         const dailyDish = await this.getOne({ day, dishId, session });
@@ -92,4 +92,3 @@ class DailyDishService {
 const dailyDishService = new DailyDishService();
 
 export { dailyDishService as DailyDishService };
-
