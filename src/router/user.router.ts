@@ -20,6 +20,6 @@ CrudRouter(router, UserController, {
 // Authorization in controller to check if user is owner
 router.get('/:username', UserAuth, UserController.getByUsername);
 router.get('/email/:email', UserAuth, UserController.getByEmail);
-router.put('/:username/password', UserAuth, UserController.changePassword);
+router.patch('/password', UserAuth, UserController.changePassword);
 
 export { router as UserRouter };

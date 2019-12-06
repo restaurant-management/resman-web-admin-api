@@ -177,16 +177,19 @@ class CustomerService {
         return await customer.save();
     }
 
-    // For user
+    // For customer
     public async changePassword(editBy: Customer, data: { oldPassword: string, newPassword: string }) {
         if (!PasswordHandler.validate(data.newPassword)) {
             throw new Error(__('error.password_invalidate'));
+        }
+        if (data.newPassword === data.oldPassword) {
+            throw new Error(__('error.new_password_must_be_difference_old_password'));
         }
 
         const customer = await Customer.findOne({ where: { username: editBy.username }, select: ['password'] });
 
         if (!PasswordHandler.compare(data.oldPassword, customer.password)) {
-            throw new Error(__('customer.incorrect_old_password'));
+            throw new Error(__('error.incorrect_old_password'));
         }
 
         return this.edit(editBy.username, { password: data.newPassword });

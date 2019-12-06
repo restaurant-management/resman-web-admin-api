@@ -11,8 +11,8 @@ describe('The User Router', () => {
 
     beforeAll(async (done) => {
         app = await Application.getTestApp();
-        adminToken = AuthService.sign(await UserService.getOne({username: 'admin'}));
-        staffToken = AuthService.sign(await UserService.getOne({username: 'staff'}));
+        adminToken = AuthService.sign(await UserService.getOne({ username: 'admin' }));
+        staffToken = AuthService.sign(await UserService.getOne({ username: 'staff' }));
         done();
     });
 
@@ -115,12 +115,13 @@ describe('The User Router', () => {
 
         it('should return OK status', () => {
             return app.
-                put('/api/users/test/password')
+                patch('/api/users/password')
                 .set({
                     Authorization: userToken
                 })
                 .send({
-                    password: 'new_test',
+                    oldPassword: 'test',
+                    newPassword: 'new_test'
                 })
                 .expect(200);
         });
