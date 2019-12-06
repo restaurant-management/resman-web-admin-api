@@ -6,11 +6,13 @@ import { UserService } from '../service/user.service';
 describe('The User Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
+    let staffToken: string;
     let newUsername: string;
 
     beforeAll(async (done) => {
         app = await Application.getTestApp();
         adminToken = AuthService.sign(await UserService.getOne({username: 'admin'}));
+        staffToken = AuthService.sign(await UserService.getOne({username: 'staff'}));
         done();
     });
 
@@ -94,6 +96,80 @@ describe('The User Router', () => {
         });
     });
 
+    describe('when user change password', () => {
+        let userToken = '';
+
+        it('login with old password', () => {
+            return app
+                .post('/api/users/login')
+                .send({
+                    password: 'test',
+                    usernameOrEmail: 'test',
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toEqual(expect.stringMatching(/.*\..*\..*/));
+                    userToken = res.body;
+                });
+        });
+
+        it('should return OK status', () => {
+            return app.
+                put('/api/users/test/password')
+                .set({
+                    Authorization: userToken
+                })
+                .send({
+                    password: 'new_test',
+                })
+                .expect(200);
+        });
+
+        it('login again with new password', () => {
+            return app
+                .post('/api/users/login')
+                .send({
+                    password: 'new_test',
+                    usernameOrEmail: 'test',
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toEqual(expect.stringMatching(/.*\..*\..*/));
+                });
+        });
+    });
+
+    describe('when edit profile by owner', () => {
+        it('should return OK status and json object with new info', () => {
+            return app
+                .put('/api/users/staff')
+                .set({
+                    Authorization: staffToken
+                })
+                .send({
+                    password: 'test',
+                    phoneNumber: '011111',
+                    address: 'test',
+                    fullName: 'hierenlee',
+                    avatar: 'avatar',
+                    birthday: new Date(1998, 1, 1)
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toMatchObject(
+                        {
+                            address: 'test',
+                            avatar: 'avatar',
+                            birthday: new Date(1998, 1, 1).toISOString(),
+                            fullName: 'hierenlee',
+                            phoneNumber: '011111',
+                            username: 'staff'
+                        }
+                    );
+                });
+        });
+    })
+
     describe('when update user', () => {
         it('should return OK status and json object with new info', () => {
             return app
@@ -103,7 +179,7 @@ describe('The User Router', () => {
                 })
                 .send({
                     password: 'test',
-                    phoneNumber: '011111',
+                    phoneNumber: '011112',
                     address: 'test',
                     fullName: 'hierenlee',
                     avatar: 'avatar',
@@ -118,7 +194,7 @@ describe('The User Router', () => {
                             avatar: 'avatar',
                             birthday: new Date(1998, 1, 1).toISOString(),
                             fullName: 'hierenlee',
-                            phoneNumber: '011111',
+                            phoneNumber: '011112',
                             roles: [{
                                 slug: 'administrator'
                             }]

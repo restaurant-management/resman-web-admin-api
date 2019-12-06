@@ -12,7 +12,7 @@ export const seedUser = async () => {
     } catch (e) {
         await UserService.create({
             username: process.env.ADMIN_USERNAME || 'admin',
-            email: process.env.ADMIN_USERNAME || 'hienlh1298@gmail.com',
+            email: process.env.ADMIN_EMAIL || 'hienlh1298@gmail.com',
             password: process.env.ADMIN_PASSWORD || 'admin',
             phoneNumber: '0123456789', address: 'Viet Nam',
             roles: [(await Role.findOne({ where: { slug: 'administrator' } })).slug],

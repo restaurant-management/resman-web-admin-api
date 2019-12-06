@@ -154,12 +154,16 @@ class UserService {
         return user;
     }
 
-    public async edit(username: string, data: {
+    public async edit(username: string, editBy: User, data: {
         password?: string, phoneNumber?: string, address?: string,
         fullName?: string, avatar?: string, birthday?: Date, roles?: string[], storeIds?: number[]
     }) {
         const user = await this.getOne({ username },
             { withRoles: true, withStores: true, withWarehouses: true });
+
+        if (!this.checkRoleLevel(editBy.id, user.roles.map(item => item.slug))) {
+            throw new Error(__('user.can_not_update_user_with_higher_level'));
+        }
 
         if (data.address === '') {
             throw new Error(__('user.address_must_be_not_empty'));
@@ -169,8 +173,11 @@ class UserService {
             throw new Error(__('user.user_not_found'));
         }
 
-        if (await User.findOne({ where: { phoneNumber: data.phoneNumber } })) {
-            throw new Error(__('user.phone_number_has_already_used'));
+        if (data.phoneNumber) {
+            const samePhone = await User.findOne({ where: { phoneNumber: data.phoneNumber } });
+            if (samePhone && samePhone.username !== username) {
+                throw new Error(__('user.phone_number_has_already_used'));
+            }
         }
 
         let listRoles: Role[] = user.roles;
@@ -205,6 +212,15 @@ class UserService {
         user.stores = listStores;
 
         return await user.save();
+    }
+
+    // For user
+    public async changePassword(username: string, editBy: User, password: string) {
+        if (!PasswordHandler.validate(password)) {
+            throw new Error(__('error.password_invalidate'));
+        }
+
+        return this.edit(username, editBy, { password });
     }
 
     public async delete(username: string) {

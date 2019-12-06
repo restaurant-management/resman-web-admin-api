@@ -44,7 +44,9 @@ const authorization = (currentUser: User, requiredPermissions: string[], throwEr
     if (!currentUser || !currentUser.roles || currentUser.roles.length === 0) {
         if (throwError) {
             throw new HttpError(401, __('authentication.unauthorized'));
-        } else { return false; }
+        }
+
+        return false;
     }
 
     currentUser.roles.forEach(role => {
@@ -55,13 +57,13 @@ const authorization = (currentUser: User, requiredPermissions: string[], throwEr
         if (!permissions.find(p => permission === p)) {
             if (throwError) {
                 throw new HttpError(401, __('authentication.unauthorized'));
-            } else { return false; }
+            }
+
+            return false;
         }
     }
 
-    if (!throwError) {
-        return true;
-    } else { return; }
+    return true;
 };
 
 const authorizationStore = (currentUser: User, storeId: number) => {
