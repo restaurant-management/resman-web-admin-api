@@ -1,17 +1,18 @@
-import jwt from 'jsonwebtoken';
 import { SuperTest, Test } from 'supertest';
-import { User } from '../entity/user';
 import { Application } from '../lib/application';
+import { AuthService } from '../service/authService';
+import { UserService } from '../service/user.service';
 
 describe('The User Router', () => {
     let app: SuperTest<Test>;
     let adminToken: string;
-    let newUserId: number;
+    let staffToken: string;
+    let newUsername: string;
 
     beforeAll(async (done) => {
         app = await Application.getTestApp();
-        adminToken = jwt.sign({ uuid: (await User.findOne(1)).uuid },
-            process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
+        adminToken = AuthService.sign(await UserService.getOne({username: 'admin'}));
+        staffToken = AuthService.sign(await UserService.getOne({username: 'staff'}));
         done();
     });
 
@@ -79,7 +80,7 @@ describe('The User Router', () => {
                 })
                 .expect(200)
                 .expect((res) => {
-                    newUserId = res.body.id;
+                    newUsername = 'test';
                     expect(res.body).toMatchObject(
                         {
                             address: 'test',
@@ -95,16 +96,90 @@ describe('The User Router', () => {
         });
     });
 
+    describe('when user change password', () => {
+        let userToken = '';
+
+        it('login with old password', () => {
+            return app
+                .post('/api/users/login')
+                .send({
+                    password: 'test',
+                    usernameOrEmail: 'test',
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toEqual(expect.stringMatching(/.*\..*\..*/));
+                    userToken = res.body;
+                });
+        });
+
+        it('should return OK status', () => {
+            return app.
+                put('/api/users/test/password')
+                .set({
+                    Authorization: userToken
+                })
+                .send({
+                    password: 'new_test',
+                })
+                .expect(200);
+        });
+
+        it('login again with new password', () => {
+            return app
+                .post('/api/users/login')
+                .send({
+                    password: 'new_test',
+                    usernameOrEmail: 'test',
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toEqual(expect.stringMatching(/.*\..*\..*/));
+                });
+        });
+    });
+
+    describe('when edit profile by owner', () => {
+        it('should return OK status and json object with new info', () => {
+            return app
+                .put('/api/users/staff')
+                .set({
+                    Authorization: staffToken
+                })
+                .send({
+                    password: 'test',
+                    phoneNumber: '011111',
+                    address: 'test',
+                    fullName: 'hierenlee',
+                    avatar: 'avatar',
+                    birthday: new Date(1998, 1, 1)
+                })
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body).toMatchObject(
+                        {
+                            address: 'test',
+                            avatar: 'avatar',
+                            birthday: new Date(1998, 1, 1).toISOString(),
+                            fullName: 'hierenlee',
+                            phoneNumber: '011111',
+                            username: 'staff'
+                        }
+                    );
+                });
+        });
+    })
+
     describe('when update user', () => {
         it('should return OK status and json object with new info', () => {
             return app
-                .put('/api/users/' + newUserId)
+                .put('/api/users/' + newUsername)
                 .set({
                     Authorization: adminToken
                 })
                 .send({
                     password: 'test',
-                    phoneNumber: '011111',
+                    phoneNumber: '011112',
                     address: 'test',
                     fullName: 'hierenlee',
                     avatar: 'avatar',
@@ -115,12 +190,11 @@ describe('The User Router', () => {
                 .expect((res) => {
                     expect(res.body).toMatchObject(
                         {
-                            id: newUserId,
-                            address: 'test',
+                            address: newUsername,
                             avatar: 'avatar',
                             birthday: new Date(1998, 1, 1).toISOString(),
                             fullName: 'hierenlee',
-                            phoneNumber: '011111',
+                            phoneNumber: '011112',
                             roles: [{
                                 slug: 'administrator'
                             }]
@@ -130,11 +204,30 @@ describe('The User Router', () => {
         });
     });
 
+    describe('when get user', () => {
+        describe('get by id', () => {
+            it('should return OK status', () => {
+                return app
+                    .get('/api/users/' + newUsername + '?withRoles=true&withStores=true&withWarehouses=true')
+                    .set({
+                        Authorization: adminToken
+                    })
+                    .expect((res) => {
+                        expect(res.body).toMatchObject(
+                            {
+                                username: newUsername
+                            }
+                        );
+                    });
+            });
+        });
+    });
+
     describe('when delete user', () => {
         describe('normal user', () => {
             it('should return OK status', () => {
                 return app
-                    .delete('/api/users/4')
+                    .delete('/api/users/' + newUsername)
                     .set({
                         Authorization: adminToken
                     })
@@ -145,7 +238,7 @@ describe('The User Router', () => {
         describe('not found user', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/users/5')
+                    .delete('/api/users/notfound')
                     .set({
                         Authorization: adminToken
                     })
@@ -156,30 +249,11 @@ describe('The User Router', () => {
         describe('default admin user', () => {
             it('should return 500 error code', () => {
                 return app
-                    .delete('/api/users/1')
+                    .delete('/api/users/admin')
                     .set({
                         Authorization: adminToken
                     })
                     .expect(res => expect(res.status).toBe(500));
-            });
-        });
-    });
-
-    describe('when get user', () => {
-        describe('get by id', () => {
-            it('should return OK status', () => {
-                return app
-                    .get('/api/users/1')
-                    .set({
-                        Authorization: adminToken
-                    })
-                    .expect((res) => {
-                        expect(res.body).toMatchObject(
-                            {
-                                id: 1
-                            }
-                        );
-                    });
             });
         });
     });

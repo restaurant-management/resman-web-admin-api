@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 import { SoftDeleteEntity } from '../lib/softDeleteEntity';
 import { Customer } from './customer';
 import { DeliveryBillDish } from './deliveryBillDish';
+import { Store } from './store';
 import { User } from './user';
 
 @Entity()
@@ -59,6 +60,10 @@ export class DeliveryBill extends SoftDeleteEntity {
 
     @Column({ nullable: true })
     public note: string;
+
+    @ManyToOne(_type => Store, { nullable: false, onDelete: 'CASCADE' })
+    @JoinColumn({name: 'storeId'})
+    public store: Store;
 
     @ManyToOne(_type => User, { onDelete: 'NO ACTION' })
     public prepareBy: User;

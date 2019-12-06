@@ -1,9 +1,9 @@
 import { __ } from 'i18n';
-import jwt from 'jsonwebtoken';
 import { getConnection } from 'typeorm';
 import { Customer } from '../entity/customer';
 import { PasswordHandler } from '../helper/passwordHandler';
 import { AddressService } from './address.service';
+import { AuthService } from './authService';
 
 class CustomerService {
     public async authenticate(usernameOrEmail: string, password: string) {
@@ -30,7 +30,7 @@ class CustomerService {
                 throw new Error('Password incorrect.');
             }
 
-            return jwt.sign({ uuid: customer.uuid }, process.env.JWT_SECRET_KEY, { expiresIn: `${process.env.CUSTOMER_TOKEN_EXPIRE_DAY || '10'} days` });
+            return AuthService.sign(customer);
         }
         throw new Error('Username or email incorrect.');
 
@@ -146,3 +146,4 @@ class CustomerService {
 const customerService = new CustomerService();
 
 export { customerService as CustomerService };
+

@@ -1,10 +1,10 @@
 import { __ } from 'i18n';
-import jwt from 'jsonwebtoken';
 import { SuperTest, Test } from 'supertest';
 import { Customer } from '../entity/customer';
-import { User } from '../entity/user';
 import { Application } from '../lib/application';
+import { AuthService } from '../service/authService';
 import { CustomerService } from '../service/customer.service';
+import { UserService } from '../service/user.service';
 
 describe('The Bill Router', () => {
     let app: SuperTest<Test>;
@@ -19,12 +19,9 @@ describe('The Bill Router', () => {
     beforeAll(async () => {
         try {
             app = await Application.getTestApp();
-            adminToken = jwt.sign({ uuid: (await User.findOne(1)).uuid },
-                process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
-            chefToken = jwt.sign({ uuid: (await User.findOne({ where: { username: 'chef' } })).uuid },
-                process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
-            staffToken = jwt.sign({ uuid: (await User.findOne({ where: { username: 'staff' } })).uuid },
-                process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
+            adminToken = AuthService.sign(await UserService.getOne({username: 'admin'}));
+            chefToken = AuthService.sign(await UserService.getOne({username: 'chef'}));
+            staffToken = AuthService.sign(await UserService.getOne({username: 'staff'}));
             customer = await CustomerService.getOne({ username: 'customer' });
         } catch (error) {
             console.error(error);
@@ -90,6 +87,7 @@ describe('The Bill Router', () => {
                 .send({
                     tableNumber: 1,
                     dishIds: [1, 2],
+                    storeId: 1,
                     dishNotes: ['Khong hanh', 'Khong kho hoa'],
                     dishQuantities: [3, 1],
                     voucherCode,
@@ -105,6 +103,7 @@ describe('The Bill Router', () => {
                         createBy: {
                             username: 'admin'
                         },
+                        store: { id: 1 },
                         customer: { uuid: customer.uuid },
                         voucherCode,
                         voucherValue: 10,
@@ -140,6 +139,7 @@ describe('The Bill Router', () => {
                 .send({
                     tableNumber: 1,
                     dishIds: [1, 2],
+                    storeId: 1,
                     dishNotes: ['Khong hanh', 'Khong kho hoa'],
                     dishQuantities: [3, 1],
                     voucherCode,

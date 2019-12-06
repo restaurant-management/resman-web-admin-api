@@ -34,7 +34,7 @@ class BillHistoryService {
 
         // Check whether dish is daily dish.
         for (const dishId of data.dishIds) {
-            await DailyDishService.getOne(time, dishId, DaySession.None);
+            await DailyDishService.getOne({day: time, dishId, session: DaySession.None});
         }
 
         const newBillHistory = new BillHistory();
@@ -72,7 +72,7 @@ class BillHistoryService {
         const dishes = [];
         for (const dishId of data.dishIds) {
             // Check whether dish is daily dish.
-            await DailyDishService.getOne(time, dishId, DaySession.None);
+            await DailyDishService.getOne({day: time, dishId, session: DaySession.None});
             // Add to list dishes
             dishes.push(await DishService.getOne(dishId));
         }

@@ -2,20 +2,26 @@ import { NextFunction, Request, Response } from 'express';
 import { Customer } from '../entity/customer';
 import { User } from '../entity/user';
 import { ICrudController } from '../lib/ICrudController';
+import { AuthorizationStore } from '../middleware/authorization';
 import { DeliveryBillService } from '../service/deliveryBill.service';
 
 class DeliveryBillController implements ICrudController {
     public async list(req: Request, res: Response, next: NextFunction) {
-        DeliveryBillService.getAll(req.query.length, req.query.page, req.query.orderId, req.query.order).then(value => {
+        DeliveryBillService.getAll(req.query).then(value => {
             return res.status(200).json(value);
         }).catch(e => next(e));
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {
-        DeliveryBillService.create(req.body)
-            .then(value => {
-                return res.status(200).json(value);
-            }).catch(e => next(e));
+        try {
+            AuthorizationStore(req['user'], req.body.storeId);
+            DeliveryBillService.create(req.body)
+                .then(value => {
+                    return res.status(200).json(value);
+                }).catch(e => next(e));
+        } catch (e) {
+            next(e);
+        }
     }
 
     public createWithRestrict(req: Request, res: Response, next: NextFunction): void {
@@ -35,7 +41,7 @@ class DeliveryBillController implements ICrudController {
     }
 
     public update(req: Request, res: Response, next: NextFunction): void {
-        DeliveryBillService.edit(parseInt(req.params.id, 10), req.body)
+        DeliveryBillService.edit(parseInt(req.params.id, 10), req['user'], req.body)
             .then(value => {
                 return res.status(200).json(value);
             }).catch(e => next(e));
@@ -57,30 +63,28 @@ class DeliveryBillController implements ICrudController {
     }
 
     public prepare(req: Request, res: Response, next: NextFunction): void {
-        const user: User = req['user'];
-        req.body.prepareByUuid = user.uuid;
-        DeliveryBillService.prepareDeliveryBill(parseInt(req.params.id, 10), req.body).then((value) =>
+        DeliveryBillService.prepareDeliveryBill(parseInt(req.params.id, 10), req['user']).then((value) =>
             res.status(200).json(value)
         ).catch(e => next(e));
     }
 
     public prepared(req: Request, res: Response, next: NextFunction): void {
-        DeliveryBillService.preparedDeliveryBill(parseInt(req.params.id, 10), req['user'].uuid).then(() =>
-            res.sendStatus(200)
+        DeliveryBillService.preparedDeliveryBill(parseInt(req.params.id, 10), req['user']).then((value) =>
+            res.status(200).json(value)
         ).catch(e => next(e));
     }
 
     public ship(req: Request, res: Response, next: NextFunction): void {
-        DeliveryBillService.shipDeliveryBill(parseInt(req.params.id, 10), req['user'].uuid).then(() =>
-            res.sendStatus(200)
+        DeliveryBillService.shipDeliveryBill(parseInt(req.params.id, 10), req['user']).then((value) =>
+            res.status(200).json(value)
         ).catch(e => next(e));
     }
 
     public collect(req: Request, res: Response, next: NextFunction): void {
         const user: User = req['user'];
         req.body.collectByUuid = user.uuid;
-        DeliveryBillService.collectDeliveryBill(parseInt(req.params.id, 10), req.body).then(() =>
-            res.sendStatus(200)
+        DeliveryBillService.collectDeliveryBill(parseInt(req.params.id, 10), req['user'], req.body).then((value) =>
+            res.status(200).json(value)
         ).catch(e => next(e));
     }
 }

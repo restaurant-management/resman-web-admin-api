@@ -1,37 +1,53 @@
 import { __ } from 'i18n';
+import { FindConditions } from 'typeorm';
 import { DaySession } from '../entity/dailyDish';
 import { DeliveryBill } from '../entity/deliveryBill';
 import { User } from '../entity/user';
 import { HttpError, HttpErrorCode } from '../lib/httpError';
+import { AuthorizationStore } from '../middleware/authorization';
 import { AddressService } from './address.service';
 import { CustomerService } from './customer.service';
 import { DailyDishService } from './dailyDish.service';
 import { DeliveryBillDishService } from './deliveryBillDish.service';
 import { DiscountCodeService } from './discountCode.service';
+import { StoreService } from './store.service';
 import { UserService } from './user.service';
 import { VoucherCodeService } from './voucherCode.service';
 
 class DeliveryBillService {
-    public async getAll(length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
-        const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
-        const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
+    public async getAll(options: {
+        length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1' // Paging
+        where?: FindConditions<DeliveryBill>;
+    }) {
+        const order = options.orderId ?
+            { [options.orderId]: options.orderType === 'DESC' || options.orderType === '-1' ? -1 : 1 } : {};
+        const skip = (options.page - 1) * length >= 0 ? (options.page - 1) * length : 0;
         const take = length;
 
-        const deliveryBill = await DeliveryBill.find({ take, skip, order, where: { deleteAt: null } });
+        const deliveryBill = await DeliveryBill.find({
+            take, skip, order,
+            where: { ...options.where, deleteAt: null }
+        });
 
         return deliveryBill;
     }
 
     public async create(data: {
-        dishIds: number[], customerUuid: string, addressId: number,
+        storeId: number, dishIds: number[], customerUuid: string, addressId: number,
         dishNotes?: string[], dishQuantities?: number[], shipAt?: Date, shipByUuid?: string,
         createAt?: Date, prepareAt?: Date, prepareByUuid?: string, preparedAt?: Date, collectAt?: Date,
         collectValue?: number, rating?: number, note?: string, voucherCode?: string, discountCode?: string
     }) {
+        if (!data.storeId || !data.dishIds || !data.customerUuid || !data.addressId) {
+            throw new Error(__('error.missing_required_information'));
+        }
+
         const newDeliveryBill = new DeliveryBill();
         newDeliveryBill.createAt = data.createAt || new Date();
         newDeliveryBill.rating = data.rating;
         newDeliveryBill.note = data.note;
+
+        newDeliveryBill.store = await StoreService.getOne(data.storeId);
 
         // Created user must be not null by controller.
         try {
@@ -86,7 +102,7 @@ class DeliveryBillService {
 
         // Check whether dish is daily dish.
         for (const dishId of data.dishIds) {
-            await DailyDishService.getOne(time, dishId, DaySession.None);
+            await DailyDishService.getOne({ day: time, dishId, session: DaySession.None });
         }
 
         for (const [index, dishId] of data.dishIds.entries()) {
@@ -105,12 +121,13 @@ class DeliveryBillService {
             withCustomer: !!data.customerUuid,
             withPrepareBy: !!data.prepareByUuid,
             withShipBy: !!data.shipByUuid,
-            withDishes: !!data.dishIds
+            withDishes: !!data.dishIds,
+            withStore: true
         });
     }
 
     public async createWithRestrict(data: {
-        dishIds: number[], customerUuid: string, addressId: number,
+        storeId: number, dishIds: number[], customerUuid: string, addressId: number,
         dishNotes?: string[], dishQuantities?: number[], note?: string, voucherCode?: string, discountCode?: string
     }) {
         if (data.voucherCode) {
@@ -123,17 +140,22 @@ class DeliveryBillService {
         return await this.create(data);
     }
 
-    public async edit(id: number, data: {
-        prepareAt?: Date, prepareByUuid?: string, shipAt?: Date, shipByUuid?: string, collectAt?: Date,
-        collectValue?: number, addressId?: number, dishIds?: number[], dishNotes?: string[], dishQuantities?: number[],
-        rating?: number, note?: string, voucherCode?: string, discountCode?: string,
+    public async edit(id: number, editBy: User, data: {
+        prepareAt?: Date, preparedAt?: Date, prepareByUuid?: string, shipAt?: Date, shipByUuid?: string,
+        collectAt?: Date, collectValue?: number, addressId?: number, dishIds?: number[], dishNotes?: string[],
+        dishQuantities?: number[], rating?: number, note?: string, voucherCode?: string, discountCode?: string,
     }) {
         const deliveryBill = await this.getOne(id,
             {
                 withCustomer: true,
                 withPrepareBy: true,
-                withShipBy: true
-            });
+                withShipBy: true,
+                withStore: true
+            }
+        );
+
+        // Check if user have right to edit bill of other store
+        AuthorizationStore(editBy, deliveryBill.store.id);
 
         if (data.prepareAt) {
             deliveryBill.prepareAt = data.prepareAt;
@@ -148,16 +170,26 @@ class DeliveryBillService {
             deliveryBill.prepareAt = null;
         }
 
+        if (data.preparedAt) {
+            if (!deliveryBill.prepareBy) {
+                throw new Error(__('delivery_bill.could_not_mark_prepared_for_bill_with_no_chef_select'));
+            }
+            deliveryBill.preparedAt = data.preparedAt;
+        }
+
         if (data.collectAt) {
             deliveryBill.collectAt = data.collectAt;
         }
-        if (data.collectValue) {
+        if (data.collectValue !== null && data.collectValue !== undefined) {
             deliveryBill.collectValue = data.collectValue;
         }
         if (data.shipAt) {
             deliveryBill.shipAt = data.shipAt;
         }
         if (data.shipByUuid) {
+            if (!deliveryBill.preparedAt) {
+                throw new Error(__('delivery_bill.could_not_ship_bill_did_not_prepare_yet'));
+            }
             try {
                 deliveryBill.shipBy = await UserService.getOne({ uuid: data.shipByUuid });
             } catch (_e) { throw new Error(__('delivery_bill.ship_user_not_found')); }
@@ -200,28 +232,29 @@ class DeliveryBillService {
         }
 
         // Check whether dish is daily dish.
-        for (const dishId of data.dishIds) {
-            await DailyDishService.getOne(deliveryBill.createAt, dishId, DaySession.None);
-        }
+        if (data.dishIds) {
+            for (const dishId of data.dishIds) {
+                await DailyDishService.getOne({ day: deliveryBill.createAt, dishId, session: DaySession.None });
+            }
+            for (const [index, dishId] of data.dishIds.entries()) {
+                const dishNotes = data.dishNotes || [];
+                const dishQuantities = data.dishQuantities || [];
 
-        for (const [index, dishId] of data.dishIds.entries()) {
-            const dishNotes = data.dishNotes || [];
-            const dishQuantities = data.dishQuantities || [];
-
-            try {
-                await DeliveryBillDishService.getOne(dishId, deliveryBill.id);
-                await DeliveryBillDishService.edit(dishId, deliveryBill.id,
-                    {
-                        note: dishNotes[index],
-                        quantity: dishQuantities[index]
-                    });
-            } catch (e) {
-                await DeliveryBillDishService.create(deliveryBill.id,
-                    {
-                        dishId,
-                        note: dishNotes[index],
-                        quantity: dishQuantities[index]
-                    });
+                try {
+                    await DeliveryBillDishService.getOne(dishId, deliveryBill.id);
+                    await DeliveryBillDishService.edit(dishId, deliveryBill.id,
+                        {
+                            note: dishNotes[index],
+                            quantity: dishQuantities[index]
+                        });
+                } catch (e) {
+                    await DeliveryBillDishService.create(deliveryBill.id,
+                        {
+                            dishId,
+                            note: dishNotes[index],
+                            quantity: dishQuantities[index]
+                        });
+                }
             }
         }
 
@@ -231,37 +264,25 @@ class DeliveryBillService {
             withCustomer: true,
             withPrepareBy: true,
             withShipBy: true,
-            withDishes: true
+            withDishes: true,
+            withStore: true
         });
     }
 
     /**
      * Select deliveryBill to prepare for chef 
      */
-    public async prepareDeliveryBill(id: number, data: { prepareByUuid: string }) {
-        const deliveryBill = await this.getOne(id, { withPrepareBy: true });
-        try {
-            deliveryBill.prepareBy = await UserService.getOne({ uuid: data.prepareByUuid });
-            deliveryBill.prepareAt = new Date();
-        } catch (_e) { throw new Error(__('delivery_bill.prepared_user_not_found')); }
-
-        await deliveryBill.save();
-
-        return await this.getOne(id, { withPrepareBy: true });
+    public async prepareDeliveryBill(id: number, editBy: User) {
+        return await this.edit(id, editBy, { prepareAt: new Date(), prepareByUuid: editBy.uuid });
     }
 
     /**
      * 
      * @param id DeliveryBill Id.
-     * @param updateByUuid Uuid of user who select this bill to confirm prepared.
+     * @param editBy User who select this bill to confirm prepared.
      */
-    public async preparedDeliveryBill(id: number, updateByUuid: string) {
-        const deliveryBill = await this.getOne(id, { withPrepareBy: true });
-        if (deliveryBill.prepareBy.uuid !== updateByUuid) {
-            throw new HttpError(HttpErrorCode.UNAUTHORIZED, 'delivery_bill.can_not_edit_bill_of_other_chef');
-        }
-        deliveryBill.preparedAt = new Date();
-        await deliveryBill.save();
+    public async preparedDeliveryBill(id: number, editBy: User) {
+        return await this.edit(id, editBy, { preparedAt: new Date() });
     }
 
     /**
@@ -269,43 +290,29 @@ class DeliveryBillService {
      * @param id Delivery bill id.
      * @param shipByUuid  Uuid of user who will ship this bill.
      */
-    public async shipDeliveryBill(id: number, shipByUuid: string) {
-        const deliveryBill = await this.getOne(id, { withShipBy: true });
-        try {
-            deliveryBill.shipBy = await UserService.getOne({ uuid: shipByUuid });
-            deliveryBill.shipAt = new Date();
-        } catch (_e) { throw new Error(__('delivery_bill.user_not_found')); }
-
-        await deliveryBill.save();
+    public async shipDeliveryBill(id: number, editBy: User) {
+        return await this.edit(id, editBy, { shipAt: new Date(), shipByUuid: editBy.uuid });
     }
 
     /**
      * Collect money of delivery bill for staff
      */
-    public async collectDeliveryBill(id: number, data: { collectByUuid: string, collectValue: number, note: string }) {
+    public async collectDeliveryBill(id: number, editBy: User, data: { collectValue: number, note: string }) {
 
         const deliveryBill = await this.getOne(id, { withShipBy: true });
 
-        if (data.collectByUuid) {
-
-            if (deliveryBill.shipBy.uuid !== data.collectByUuid) {
-                throw new HttpError(HttpErrorCode.UNAUTHORIZED, 'delivery_bill.can_not_edit_bill_of_other_shipper');
-            }
-
-            if (data.collectValue === null || data.collectValue === undefined) {
-                throw new Error(__('delivery_bill.collect_value_must_be_not_null'));
-            }
-
-            try {
-                deliveryBill.collectAt = new Date();
-                deliveryBill.collectValue = data.collectValue;
-                deliveryBill.note = data.note;
-            } catch (_e) { throw new Error(__('delivery_bill.user_not_found')); }
+        if (deliveryBill.shipBy.uuid !== editBy.uuid) {
+            throw new HttpError(HttpErrorCode.UNAUTHORIZED, 'delivery_bill.can_not_edit_bill_of_other_shipper');
         }
 
-        await deliveryBill.save();
+        if (data.collectValue === null || data.collectValue === undefined) {
+            throw new Error(__('delivery_bill.collect_value_must_be_not_null'));
+        }
+
+        return this.edit(id, editBy, { collectAt: new Date(), collectValue: data.collectValue, note: data.note });
     }
 
+    // Function for customer so don't need to check store.
     public async rateDeliveryBill(id: number, data: { customerUuid: string, rating: number }) {
         const deliveryBill = await this.getOne(id, { withCustomer: true });
 
@@ -333,7 +340,8 @@ class DeliveryBillService {
 
     public async getOne(id: number,
         options?: {
-            withShipBy?: boolean, withPrepareBy?: boolean, withCustomer?: boolean, withDishes?: boolean
+            withShipBy?: boolean, withPrepareBy?: boolean, withCustomer?: boolean,
+            withDishes?: boolean, withStore?: boolean
         }) {
 
         const relations = [];
@@ -341,6 +349,7 @@ class DeliveryBillService {
         if (options?.withPrepareBy) { relations.push('prepareBy'); }
         if (options?.withShipBy) { relations.push('shipBy'); }
         if (options?.withDishes) { relations.push('dishes'); }
+        if (options?.withStore) { relations.push('store'); }
 
         const deliveryBill = await DeliveryBill.findOne(id, { relations, where: { deleteAt: null } });
 

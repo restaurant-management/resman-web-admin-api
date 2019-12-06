@@ -51,7 +51,7 @@ describe('The DailyDish Router', () => {
     describe('when get daily dish info', () => {
         it('should return OK status', (done) => {
             return app
-                .get('/api/daily_dishes/get_by?day=2019-02-01&dishId=1&session=noon')
+                .get('/api/daily_dishes/get_by?day=2019-02-01&dishId=1&session=noon&storeId=1')
                 .set({
                     Authorization: adminToken
                 })

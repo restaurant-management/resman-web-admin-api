@@ -16,7 +16,8 @@
 	},
 	"error": {
 		"can_not_create_user_with_higher_level": "error.can_not_create_user_with_higher_level",
-		"missing_required_information": "error.missing_required_information"
+		"missing_required_information": "error.missing_required_information",
+		"no_storeId_is_provided": "error.no_storeId_is_provided"
 	},
 	"authentication": {
 		"no_token_provided": "authentication.no_token_provided",
@@ -82,7 +83,8 @@
 	},
 	"daily_dish": {
 		"delete_fail": "daily_dish.delete_fail",
-		"daily_dish_not_found": "daily_dish.daily_dish_not_found"
+		"daily_dish_not_found": "daily_dish.daily_dish_not_found",
+		"no_storeId_is_provided": "daily_dish.no_storeId_is_provided"
 	},
 	"bill": {
 		"create_bill_fail": "bill.create_bill_fail",
@@ -98,6 +100,9 @@
 		"customer_not_found": "delivery_bill.customer_not_found",
 		"user_not_found": "delivery_bill.user_not_found",
 		"collect_value_must_be_not_null": "delivery_bill.collect_value_must_be_not_null",
-		"bill_have_been_already_rated": "delivery_bill.bill_have_been_already_rated"
+		"bill_have_been_already_rated": "delivery_bill.bill_have_been_already_rated",
+		"can_not_rate_if_bill_not_done": "delivery_bill.can_not_rate_if_bill_not_done",
+		"could_not_mark_prepared_for_bill_with_no_chef_select": "delivery_bill.could_not_mark_prepared_for_bill_with_no_chef_select",
+		"could_not_ship_bill_did_not_prepare_yet": "delivery_bill.could_not_ship_bill_did_not_prepare_yet"
 	}
 }

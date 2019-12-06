@@ -7,6 +7,14 @@ const passwordHandler = {
 
     compare: (password: string, encodePassword: string): boolean => {
         return bcrypt.compareSync(password, encodePassword);
+    },
+
+    validate: (password: string) => {
+        if (password.length < (process.env.MIN_PASSWORD_LENGTH || 5)) {
+            return false;
+        }
+
+        return true;
     }
 };
 

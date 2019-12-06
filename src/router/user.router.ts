@@ -12,7 +12,7 @@ router.post('/login', UserController.login);
 CrudRouter(router, UserController, {
     listMiddleware: AuthorMiddleware([Permission.user.list]),
     createMiddleware: AuthorMiddleware([Permission.user.create]),
-    updateMiddleware: AuthorMiddleware([Permission.user.update]),
+    updateMiddleware: [UserAuth],
     deleteMiddleware: AuthorMiddleware([Permission.user.delete]),
     ignore: ['read']
 });
@@ -20,5 +20,6 @@ CrudRouter(router, UserController, {
 // Authorization in controller to check if user is owner
 router.get('/:username', UserAuth, UserController.getByUsername);
 router.get('/email/:email', UserAuth, UserController.getByEmail);
+router.put('/:username/password', UserAuth, UserController.changePassword);
 
 export { router as UserRouter };

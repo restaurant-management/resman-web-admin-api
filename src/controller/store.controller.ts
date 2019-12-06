@@ -10,21 +10,20 @@ class StoreController implements ICrudController {
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {
-        StoreService.create(req.body.name, req.body.address, req.body.hotline, req.body.description, req.body.logo)
+        StoreService.create(req.body)
             .then(value => {
                 return res.status(200).json(value);
             }).catch(e => next(e));
     }
 
     public read(req: Request, res: Response, next: NextFunction): void {
-        StoreService.getOne(parseInt(req.params.id, 10)).then((value) =>
+        StoreService.getOneWithAuthorization(parseInt(req.params.id, 10), req['user']).then((value) =>
             res.status(200).json(value)
         ).catch(e => next(e));
     }
 
     public update(req: Request, res: Response, next: NextFunction): void {
-        StoreService.edit(parseInt(req.params.id, 10), req.body.name, req.body.address, req.body.hotline,
-            req.body.description, req.body.logo).then(value =>
+        StoreService.edit(parseInt(req.params.id, 10), req.body).then(value =>
                 res.status(200).json(value)
             ).catch(e => next(e));
     }
