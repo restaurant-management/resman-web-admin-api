@@ -87,6 +87,7 @@ describe('The Bill Router', () => {
                 .send({
                     tableNumber: 1,
                     dishIds: [1, 2],
+                    storeId: 1,
                     dishNotes: ['Khong hanh', 'Khong kho hoa'],
                     dishQuantities: [3, 1],
                     voucherCode,
@@ -102,6 +103,7 @@ describe('The Bill Router', () => {
                         createBy: {
                             username: 'admin'
                         },
+                        store: { id: 1 },
                         customer: { uuid: customer.uuid },
                         voucherCode,
                         voucherValue: 10,
@@ -137,6 +139,7 @@ describe('The Bill Router', () => {
                 .send({
                     tableNumber: 1,
                     dishIds: [1, 2],
+                    storeId: 1,
                     dishNotes: ['Khong hanh', 'Khong kho hoa'],
                     dishQuantities: [3, 1],
                     voucherCode,

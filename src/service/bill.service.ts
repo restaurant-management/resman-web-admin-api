@@ -1,6 +1,7 @@
 import { __ } from 'i18n';
 import { Bill } from '../entity/bill';
 import { User } from '../entity/user';
+import { AuthorizationStore } from '../middleware/authorization';
 import { BillDishService } from './billDish.service';
 import { BillHistoryService } from './billHistory.service';
 import { CustomerService } from './customer.service';
@@ -27,9 +28,17 @@ class BillService {
         collectByUuid?: string, collectValue?: number, rating?: number, note?: string
         voucherCode?: string, discountCode?: string, customerUuid?: string
     }) {
-        if (!data.tableNumber || !data.dishIds || !data.createByUuid || data.storeId) {
+        if (!data.tableNumber || !data.dishIds || !data.createByUuid || !data.storeId) {
             throw new Error(__('error.missing_required_information'));
         }
+
+        let createBy: User;
+        try {
+            createBy = await UserService.getOne({ uuid: data.createByUuid },
+                { withRoles: true, withStores: true, withWarehouses: true });
+        } catch (_e) { throw new Error(__('bill.created_user_not_found')); }
+
+        AuthorizationStore(createBy, data.storeId);
 
         const newBill = new Bill();
         newBill.tableNumber = data.tableNumber;
@@ -39,10 +48,7 @@ class BillService {
 
         newBill.store = await StoreService.getOne(data.storeId);
 
-        // Created user must be not null by controller.
-        try {
-            newBill.createBy = await UserService.getOne({ uuid: data.createByUuid });
-        } catch (_e) { throw new Error(__('bill.created_user_not_found')); }
+        newBill.createBy = createBy;
 
         if (data.voucherCode) {
             const voucher = await VoucherCodeService.getOne(data.voucherCode);
@@ -130,8 +136,11 @@ class BillService {
         const bill = await this.getOne(id,
             {
                 withCollectBy: true, withCreateBy: true, withCustomer: true,
-                withPrepareBy: true, showDishesType: 'dishes'
-            });
+                withPrepareBy: true, showDishesType: 'dishes', withStore: true
+            }
+        );
+
+        AuthorizationStore(await UserService.getOne({ uuid: data.updateByUuid }, { withStores: true }), bill.store.id);
 
         // Save data
         if (data.tableNumber) {
@@ -223,10 +232,12 @@ class BillService {
             withCreateBy: true,
             withCustomer: !!data.customerUuid || data.customerUuid === '',
             withPrepareBy: !!data.prepareByUuid || data.prepareByUuid === '',
-            showDishesType: 'dishes'
+            showDishesType: 'dishes',
+            withStore: true
         });
     }
 
+    // Use by staff
     public async changeDishes(id: number, data: {
         updateByUuid: string, dishIds: number[], dishNotes?: string[], dishQuantities?: number[], note?: string
     }) {
@@ -236,15 +247,6 @@ class BillService {
             throw new Error(__('bill.bill_is_collected'));
         }
 
-        await BillHistoryService.create(bill.id, {
-            dishIds: data.dishIds,
-            dishNotes: data.dishNotes,
-            dishQuantities: data.dishQuantities,
-            userUuid: data.updateByUuid,
-            description: data.note,
-            createAt: new Date()
-        });
-
         return await this.edit(id, data);
     }
 
@@ -252,15 +254,7 @@ class BillService {
      * Select bill to prepare for chef 
      */
     public async prepareBill(id: number, data: { prepareByUuid: string }) {
-        const bill = await this.getOne(id, { withPrepareBy: true });
-        try {
-            bill.prepareBy = await UserService.getOne({ uuid: data.prepareByUuid });
-            bill.prepareAt = new Date();
-        } catch (_e) { throw new Error(__('bill.prepared_user_not_found')); }
-
-        await bill.save();
-
-        return await this.getOne(id, { withPrepareBy: true });
+        return this.edit(id, { updateByUuid: data.prepareByUuid, prepareByUuid: data.prepareByUuid });
     }
 
     /**
@@ -360,7 +354,8 @@ class BillService {
         options?: {
             withCreateBy?: boolean, withPrepareBy?: boolean, withCollectBy?: boolean,
             withStore?: boolean, withCustomer?: boolean, showDishesType?: 'dishes' | 'histories'
-        }) {
+        }
+    ) {
 
         const relations = [];
         relations.push('histories');
@@ -407,4 +402,3 @@ class BillService {
 const billService = new BillService();
 
 export { billService as BillService };
-
