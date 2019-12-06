@@ -214,15 +214,6 @@ class UserService {
         return await user.save();
     }
 
-    // For user
-    public async changePassword(username: string, editBy: User, password: string) {
-        if (!PasswordHandler.validate(password)) {
-            throw new Error(__('error.password_invalidate'));
-        }
-
-        return this.edit(username, editBy, { password });
-    }
-
     public async delete(username: string) {
         if (username === 'admin') {
             throw new Error(__('user.can_not_delete_admin_user'));
@@ -265,6 +256,24 @@ class UserService {
         }
 
         return user;
+    }
+
+    // For user
+    public async changePassword(editBy: User, data: { oldPassword: string, newPassword: string }) {
+        if (!PasswordHandler.validate(data.newPassword)) {
+            throw new Error(__('error.password_invalidate'));
+        }
+        if (data.newPassword === data.oldPassword) {
+            throw new Error(__('error.new_password_must_be_difference_old_password'));
+        }
+
+        const user = await User.findOne({ where: { username: editBy.username }, select: ['password'] });
+
+        if (!PasswordHandler.compare(data.oldPassword, user.password)) {
+            throw new Error(__('error.incorrect_old_password'));
+        }
+
+        return this.edit(editBy.username, editBy, { password: data.newPassword });
     }
 }
 

@@ -74,7 +74,7 @@ class UserController implements ICrudController {
 
     // For user change password.
     public changePassword(req: Request, res: Response, next: NextFunction) {
-        UserService.changePassword((req['user'] as User).username, req['user'], req.body.password).then(value => {
+        UserService.changePassword(req['user'], req.body).then(value => {
             return res.status(200).json(value);
         }).catch(e => next(e));
     }
