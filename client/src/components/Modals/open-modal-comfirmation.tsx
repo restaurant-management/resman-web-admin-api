@@ -7,7 +7,7 @@ export default class OpenModalDialog extends Component {
 
     private _renderOpenModalConfirmation() {
         return (
-            <a href={'#edit-user'} role='button' className='btn btn-red' data-toggle='modal'>Open Modal
+            <a href={'#modalConfirm'} role='button' className='btn btn-red' data-toggle='modal'>Open Modal
                 Confirmation</a>
         );
     }
@@ -39,6 +39,26 @@ export default class OpenModalDialog extends Component {
                                     <label htmlFor='placeholderInput'>Input with placeholder</label>
                                     <input type='text' className='form-control' id='placeholderInput'
                                         placeholder='This is a placeholder...' />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label>Normal textarea</label>
+                                    <textarea className='form-control' rows={3} />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label>Normal textarea</label>
+                                    <textarea className='form-control' rows={3} />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label>Normal textarea</label>
+                                    <textarea className='form-control' rows={3} />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label>Normal textarea</label>
+                                    <textarea className='form-control' rows={3} />
                                 </div>
 
                                 <div className='form-group'>

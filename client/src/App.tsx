@@ -6,7 +6,7 @@ import Components from './pages/components';
 import LogIn from './pages/login';
 import Page404 from './pages/page404';
 import Page500 from './pages/page500';
-import UserManagement from './pages/userManagement';
+import UserPage from './pages/user';
 import WelcomePage from './pages/welcomePage';
 
 class App extends Component {
@@ -17,7 +17,7 @@ class App extends Component {
                     <Route path='/blank-page' component={BlankPage} />
                     <Route path='/aggrid' component={AgGrid} />
                     <Route path='/components' component={Components} />
-                    <Route path='/users' component={UserManagement} />
+                    <Route path='/users' component={UserPage} />
                     <Route path='/login' component={LogIn} />
                     <Route path='/page500' component={Page500} />
                     <Route path='/page404' component={Page404} />

@@ -8,6 +8,7 @@ import { AgImage } from '../components/AgExtensions/agImage';
 import { AgImageTooltip } from '../components/AgExtensions/agImageTooltip';
 import { LoadScriptFile } from '../utils/loadScript';
 import { selectStyle } from '../utils/selectStyles';
+import OverlayIndicator from './overlayIndicator';
 
 interface DataTableProp<T> {
     pageSizeList?: number[];
@@ -17,6 +18,7 @@ interface DataTableProp<T> {
     exportFileName?: string;
     autoSizeColumns?: string[];
     header?: JSX.Element;
+    onCreate?: () => void;
     onView?: (item: T) => void;
     onDelete?: (item: T) => void;
     onMultiDelete?: (items: T[]) => void;
@@ -27,6 +29,7 @@ interface DataTableProp<T> {
 
 interface DataTableState {
     pagingSelected: { value: number, label: string };
+    reloading: boolean;
 }
 
 export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
@@ -38,7 +41,8 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            pagingSelected: this._pageSizeOptions[this.props.defaultPageSizeIndex || 1]
+            pagingSelected: this._pageSizeOptions[this.props.defaultPageSizeIndex || 1],
+            reloading: false
         };
 
         this.gridOptions = {
@@ -65,6 +69,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
     public render() {
         return (
             <section className='tile color transparent-black'>
+                <OverlayIndicator show={this.state.reloading} />
                 <ReactTooltip place='top' type='dark' effect='solid' />
                 <div className='tile-header'>
                     <div className='row' style={{ paddingTop: 10 }}>
@@ -83,7 +88,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                                 </button>
                                 <button
                                     data-tip='Add new'
-                                    onClick={this._export.bind(this)}
+                                    onClick={this.props.onCreate}
                                     className='resman-btn resman-success resman-no-border-radius'
                                 >
                                     <i className='fa fa-plus'></i>
@@ -119,7 +124,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                     </div>
                     <div className='controls'>
                         <a href='#/' className='minimize'><i className='fa fa-chevron-down' /></a>
-                        <a href='#/' className='refresh' onClick={this.props.onReload}>
+                        <a href='#/' className='refresh' onClick={this._reload.bind(this)}>
                             <i className='fa fa-refresh' />
                         </a>
                         <a href='#/' className='remove'><i className='fa fa-times' /></a>
@@ -175,10 +180,17 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
         );
     }
 
+    private _reload() {
+        this.setState({ reloading: true });
+        if (this.props.onReload) {
+            this.props.onReload();
+        }
+    }
+
     private _export() {
         if (this.gridOptions.api) {
             this.gridOptions.api.exportDataAsCsv({
-                fileName: `${this.props.exportFileName}.resman`
+                fileName: `Resman - ${this.props.exportFileName}`
             });
         }
     }

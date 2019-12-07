@@ -1,12 +1,12 @@
+import { Backdrop, Modal, Slide } from '@material-ui/core';
 import moment from 'moment';
 import React, { Component } from 'react';
 import { DataTableColumn } from '../components/basicDatatable';
 import { DataTable } from '../components/dataTable';
-import { FormModal } from '../components/formModal';
 import Scaffold from '../components/scaffold';
 import { User } from '../models/user';
 
-export default class UserManagement extends Component<any, any> {
+export default class UserPage extends Component<any, any> {
 
     public fakeData: User[] = [
         {
@@ -205,24 +205,96 @@ export default class UserManagement extends Component<any, any> {
         return <Scaffold title={'User manager'} subTitle={'Add, edit or delete user'}>
             <div className='row'>
                 <div className='col-md-12'>
-                    <button
-                        data-tip='Export to CSV'
-                        onClick={() => {
-                            console.log('aaaaaaaaaaaaaaaa');
-                            this.setState({ showModal: true });
+                    <Modal
+                        disableEnforceFocus
+                        open={this.state.showModal}
+                        onBackdropClick={() => this.setState({ showModal: false })}
+                        className='modal'
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            overflowY: 'auto'
                         }}
-                        className='resman-btn resman-cyan resman-left-border-radius'
+                        onClose={() => this.setState({ showModal: false })}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{ timeout: 500 }}
                     >
-                        <i className='fa fa-download'></i>
-                        <span> Export</span>
-                    </button>
-                    <FormModal id={'edit-user'} isShowing={true} />
+                        <Slide in={this.state.showModal} direction={'down'}>
+                            <div className='modal-content'>
+                                <div className='modal-header'>
+                                    <button type='button' className='close'
+                                        onClick={() => this.setState({ showModal: false })}>
+                                        Close
+                                    </button>
+                                    <h3 className='modal-title'>
+                                        <strong>Modal</strong> title
+                                        </h3>
+                                </div>
+                                <div className='modal-body'>
+                                    <form>
+
+                                        <div className='form-group'>
+                                            <label htmlFor='exampleInput'>Normal input field</label>
+                                            <input type='text' className='form-control' id='exampleInput' />
+                                        </div>
+
+                                        <div className='form-group'>
+                                            <label htmlFor='passwordInput'>Password input field</label>
+                                            <input type='password' className='form-control' id='passwordInput' />
+                                        </div>
+
+                                        <div className='form-group'>
+                                            <label htmlFor='placeholderInput'>Input with placeholder</label>
+                                            <input type='text' className='form-control' id='placeholderInput'
+                                                placeholder='This is a placeholder...' />
+                                        </div>
+
+                                        <div className='form-group'>
+                                            <label>Normal textarea</label>
+                                            <textarea className='form-control' rows={3} />
+                                        </div>
+
+                                        <div className='form-group'>
+                                            <label>Normal textarea</label>
+                                            <textarea className='form-control' rows={3} />
+                                        </div>
+
+                                        <div className='form-group'>
+                                            <label>Normal textarea</label>
+                                            <textarea className='form-control' rows={3} />
+                                        </div>
+
+                                        <div className='form-group'>
+                                            <label>Normal textarea</label>
+                                            <textarea className='form-control' rows={3} />
+                                        </div>
+
+                                        <div className='form-group'>
+                                            <label>Normal textarea</label>
+                                            <textarea className='form-control' rows={3} />
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div className='modal-footer'>
+                                    <button className='btn btn-red' data-dismiss='modal' aria-hidden='true'>
+                                        Close
+                                    </button>
+                                    <button className='btn btn-green'>Save changes</button>
+                                </div>
+                            </div>
+                        </Slide>
+                    </Modal>
+
                     <DataTable<User>
+                        exportFileName={'User'}
                         onView={(item) => console.log(item)}
                         onMultiDelete={(items => console.log(items))}
                         data={this.fakeData}
                         autoSizeColumns={['username', 'birthday', 'email', 'roles', 'avatar']}
                         header={(<h1><strong>User</strong> Table</h1>)}
+                        onCreate={() => this.setState({ showModal: true })}
                         columnDefs={[
                             {
                                 headerName: 'Username', field: 'username',

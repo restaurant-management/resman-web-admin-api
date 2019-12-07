@@ -66,19 +66,68 @@
     border-radius: 0px;
     border-right: 1px solid rgba(255, 255, 255, 0.3);
 }
+.resman-all-border-radius {
+    border-radius: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
 .resman-right-border-radius {
     border-radius: 0px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 }
-.modal ::-webkit-scrollbar {
-    width: 12px !important;
+
+::-webkit-scrollbar {
+    width: 6px !important;
     height: 6px !important;
     background-color: transparent !important;
 }
-.modal ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     height: 6px !important;
     border-radius: 10px !important;
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
     background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.modal-content {
+    height: max-content;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 100vh;
+}
+
+.modal {
+    overflow: auto;
+}
+
+#wrap #content {
+    overflow: auto;
+}
+
+.mask {
+    left: 0px;
+    right: 0px;
+}
+
+.resman-overlay {
+    z-index: 1000;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.6);
+    cursor: wait;
+    position: absolute;
+    border-radius: 4px;
+}
+
+.resman-reloader {
+    height: 15px;
+    width: 15px;
+    left: 50%;
+    top: 50%;
+    position: absolute;
 }

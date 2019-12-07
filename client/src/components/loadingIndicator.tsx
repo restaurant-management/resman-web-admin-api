@@ -1,9 +1,21 @@
-const loadingIndicator = document.createElement('div');
-loadingIndicator.className = 'mask';
+import { Fade } from '@material-ui/core';
+import React from 'react';
 
-const loader = document.createElement('div');
-loader.id = 'loader';
+// const loadingIndicator = document.createElement('div');
+// loadingIndicator.className = 'mask';
 
-loadingIndicator.appendChild(loader);
+// const loader = document.createElement('div');
+// loader.id = 'loader';
 
-export { loadingIndicator as LoadingIndicator };
+// loadingIndicator.appendChild(loader);
+
+// export { loadingIndicator as LoadingIndicator };
+
+// Auto hide by 
+export default function LoadingIndicator() {
+    return (
+        <div className={'mask'}>
+            <div id={'loader'} />
+        </div>
+    );
+}

@@ -14,7 +14,7 @@ import '../assets/css/jquery.videoBackground.css';
 import '../assets/css/minimal.css';
 import '../assets/css/resman.scss';
 import { Breadcrumb } from '../components/breadcrumb';
-import { LoadingIndicator } from '../components/loadingIndicator';
+import LoadingIndicator from '../components/loadingIndicator';
 import { Navbar } from '../components/navbar/navbar';
 import { VideoContent } from '../components/videoContent';
 import { LoadScriptFile } from '../utils/loadScript';
@@ -32,7 +32,6 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
 
         document.body.classList.add('bg-1');
         document.body.appendChild(VideoContent);
-        document.body.appendChild(LoadingIndicator);
 
         LoadScriptFile('/assets/js/jquery.js');
         LoadScriptFile('/assets/js/bootstrap.min.js');
@@ -54,10 +53,11 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
 
     public render() {
         return (<div id={'wrap'}>
+            <LoadingIndicator />
             <div className={'row'}>
                 <Navbar />
                 {/* <Mmenu /> */}
-                <div id='content' className='col-md-12' style={{ overflowY: 'scroll' }}>
+                <div id='content' className='col-md-12 resman-content'>
                     <div className='pageheader'>
                         <h2>
                             <i className={`fa ${this.props.icon ? this.props.icon : 'fa-file-o'}`} style={{ lineHeight: '48px', paddingLeft: 2 }} />
