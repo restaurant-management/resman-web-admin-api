@@ -27,6 +27,6 @@ export class DeliveryBillDish extends BaseEntity {
     @Column('smallint', { default: 1 })
     public quantity: number;
 
-    @Column('money', { nullable: true })
+    @Column('float', { nullable: true })
     public price: number;
 }
