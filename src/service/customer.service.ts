@@ -77,7 +77,7 @@ class CustomerService {
         const customer = await newCustomer.save();
         if (!customer) { throw new Error(__('customer.create_fail')); }
 
-        return customer;
+        return await this.getOne({ username: newCustomer.username }, { withAddresses: true });
     }
 
     public async edit(username: string, data: {

@@ -5,7 +5,8 @@
 		"user_not_found": "user.user_not_found",
 		"password_incorrect": "user.password_incorrect",
 		"phone_number_has_already_used": "user.phone_number_has_already_used",
-		"email_has_already_used": "user.email_has_already_used"
+		"email_has_already_used": "user.email_has_already_used",
+		"username_has_already_used": "user.username_has_already_used"
 	},
 	"daily_dish": {
 		"no_storeId_is_provided": "daily_dish.no_storeId_is_provided",

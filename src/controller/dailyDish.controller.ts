@@ -47,4 +47,3 @@ class DailyDishController implements ICrudController {
 const dailyDishController = new DailyDishController();
 
 export { dailyDishController as DailyDishController };
-
