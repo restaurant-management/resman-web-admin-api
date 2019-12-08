@@ -71,21 +71,33 @@ class DailyDishService {
     }
 
     // TODO fix get one with storeId
-    public async getOne(key: { day?: Date, dishId?: number, session?: string }) {
+    public async getOne(key: { day?: Date, dishId?: number, session?: string, storeId?: number }) {
         const dailyDish = await DailyDish.findOne({
             relations: ['confirmBy', 'dish'],
             where: { ...key }
         });
 
-        if (dailyDish) { return dailyDish; }
+        if (dailyDish) {
+            dailyDish.dish['price'] = await DishService.getRealPrice({ dish: dailyDish.dish });
+
+            return dailyDish;
+        }
         throw new Error(__('daily_dish.daily_dish_not_found'));
     }
 
     public async getBy(key: { day?: Date, dishId?: number, session?: string, storeId?: number }) {
-        return await DailyDish.find({
+        const dailyDishes = await DailyDish.find({
             relations: ['confirmBy', 'dish'],
             where: { ...key }
         });
+
+        dailyDishes.map(async item => {
+            item.dish['price'] = await DishService.getRealPrice({ dish: item.dish });
+
+            return item;
+        });
+
+        return dailyDishes;
     }
 }
 

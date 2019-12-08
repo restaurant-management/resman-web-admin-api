@@ -8,7 +8,7 @@ export class Stock extends BaseEntity {
     @Column({ length: 100 })
     public name: string;
 
-    @Column('money')
+    @Column('float')
     public price: number;
 
     @Column({ length: 20 })

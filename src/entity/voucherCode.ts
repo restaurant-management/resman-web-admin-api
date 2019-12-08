@@ -30,13 +30,13 @@ export class VoucherCode extends BaseEntity {
     @Column('timestamp with time zone')
     public endAt: Date;
 
-    @Column('money', { nullable: true })
+    @Column('float', { nullable: true })
     public minBillPrice: number;
 
     /**
      *   Maximum price this discount can reduce for a bill.
      */
-    @Column('money', { nullable: true })
+    @Column('float', { nullable: true })
     public maxPriceDiscount: number;
 
     @Column()

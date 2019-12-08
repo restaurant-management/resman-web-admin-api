@@ -25,7 +25,7 @@ export class Bill extends SoftDeleteEntity {
     @Column('timestamp with time zone', { nullable: true })
     public collectAt: Date;
 
-    @Column('money', { nullable: true })
+    @Column('float', { nullable: true })
     public collectValue: number;
 
     @Column({ length: 20, nullable: true })

@@ -14,6 +14,6 @@ export class Dish extends BaseEntity {
     @Column('text', { array: true })
     public images: string[];
 
-    @Column('money', { default: 0 })
+    @Column('float', { default: 0 })
     public defaultPrice: number;
 }

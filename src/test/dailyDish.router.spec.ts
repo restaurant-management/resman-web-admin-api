@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
 import { SuperTest, Test } from 'supertest';
-import { User } from '../entity/user';
 import { Application } from '../lib/application';
+import { AuthService } from '../service/authService';
+import { UserService } from '../service/user.service';
 
 describe('The DailyDish Router', () => {
     let app: SuperTest<Test>;
@@ -10,8 +10,7 @@ describe('The DailyDish Router', () => {
     beforeAll(async () => {
         try {
             app = await Application.getTestApp();
-            adminToken = jwt.sign({ uuid: (await User.findOne(1)).uuid },
-                process.env.JWT_SECRET_KEY, { expiresIn: `1 days` });
+            adminToken = AuthService.sign(await UserService.getOne({ username: 'admin' }));
         } catch (error) {
             console.error(error);
         }
@@ -51,7 +50,7 @@ describe('The DailyDish Router', () => {
     describe('when get daily dish info', () => {
         it('should return OK status', (done) => {
             return app
-                .get('/api/daily_dishes/get_by?day=2019-02-01&dishId=1&session=noon&storeId=1')
+                .get('/api/daily_dishes/get?day=2019-02-01&dishId=1&session=noon&storeId=1')
                 .set({
                     Authorization: adminToken
                 })
@@ -72,7 +71,7 @@ describe('The DailyDish Router', () => {
         });
     });
 
-    describe('when get all daily dishes', () => {
+    describe('when get all daily dishes by admin', () => {
         describe('with normal mode', () => {
             it('should return OK status and json array', () => {
                 return app
@@ -86,6 +85,18 @@ describe('The DailyDish Router', () => {
                             .toBeGreaterThanOrEqual(0);
                     });
             });
+        });
+    });
+
+    describe('when get today daily dishes for anyone', () => {
+        it('should return OK status and json array', () => {
+            return app
+                .get('/api/daily_dishes/today?storeId=1')
+                .expect(200)
+                .expect((res) => {
+                    expect(res.body.length)
+                        .toBeGreaterThanOrEqual(0);
+                });
         });
     });
 
