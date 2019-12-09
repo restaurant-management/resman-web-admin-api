@@ -11,6 +11,8 @@ const router = Router();
 
 router.post('/login', CustomerController.login);
 router.post('/register', CustomerController.create);
+router.get('/:username', CustomerAuth, CustomerController.getByUsername);
+router.get('/email/:email', CustomerAuth, CustomerController.getByEmail);
 router.patch('/password', CustomerAuth, CustomerController.changePassword);
 
 SubCrudRouter(router, AddressController, {
