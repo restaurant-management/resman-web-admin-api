@@ -5,9 +5,201 @@ import { DataTableColumn } from '../components/basicDatatable';
 import { DataTable } from '../components/dataTable';
 import Scaffold from '../components/scaffold';
 import { User } from '../models/user';
-import { Repository } from '../repository';
 
-export default class UserPage extends Component<any, any> {
+export default class DashBoard extends Component<any, any> {
+
+    public fakeData: User[] = [
+        {
+            uuid: '',
+            username: 'admin',
+            email: 'hienlh1298@gmail.com',
+            phoneNumber: '00000',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            roles: [
+                'Administrator'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'staff',
+            email: 'staff@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'Ha Noi'
+        }, {
+            uuid: '',
+            username: 'chef',
+            email: 'chef@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Chef'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        }, {
+            uuid: '',
+            username: 'ware_manager',
+            email: 'ware_manager@gmail.com',
+            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
+            phoneNumber: '00000',
+            roles: [
+                'Ware Manager',
+                'Staff'
+            ],
+            birthday: new Date(1998, 1, 1),
+            address: 'HCM City'
+        },
+    ];
 
     public fakeColumn: DataTableColumn[] = [
         { id: 'username', label: 'Username', sortType: 'sort-alpha', textCenter: true },
@@ -21,8 +213,7 @@ export default class UserPage extends Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-            showModal: false,
-            users: []
+            showModal: false
         };
     }
 
@@ -54,7 +245,7 @@ export default class UserPage extends Component<any, any> {
                                     </button>
                                     <h3 className='modal-title'>
                                         <strong>Modal</strong> title
-                                    </h3>
+                                        </h3>
                                 </div>
                                 <div className='modal-body'>
                                     <form>
@@ -111,15 +302,15 @@ export default class UserPage extends Component<any, any> {
                             </div>
                         </Slide>
                     </Modal>
+
                     <DataTable<User>
                         exportFileName={'User'}
                         onView={(item) => console.log(item)}
                         onMultiDelete={(items => console.log(items))}
-                        data={this.state.users}
+                        data={this.fakeData}
                         autoSizeColumns={['username', 'birthday', 'email', 'roles', 'avatar']}
                         header={(<h1><strong>User</strong> Table</h1>)}
                         onCreate={() => this.setState({ showModal: true })}
-                        onReload={this._loadData.bind(this)}
                         columnDefs={[
                             {
                                 headerName: 'Username', field: 'username',
@@ -132,13 +323,14 @@ export default class UserPage extends Component<any, any> {
                                 headerName: 'Avatar', field: 'avatar', sortable: false, filter: false,
                                 cellClass: 'grid-cell-center', suppressAutoSize: true,
                                 cellRenderer: 'AgImage', tooltipComponent: 'AgImageTooltip',
+                                tooltip: (params) => params.value,
                                 tooltipValueGetter: (params) => params.value,
                             }, {
                                 headerName: 'Roles', field: 'roles'
                             }, {
                                 headerName: 'Birthday', field: 'birthday',
                                 cellClass: 'grid-cell-center',
-                                cellRenderer: (params) => params.value ? moment(params.value).format('DD/MM/YYYY') : ''
+                                cellRenderer: (params) => moment(params.value).format('DD/MM/YYYY')
                             }, {
                                 headerName: 'Address', field: 'address', minWidth: 100,
                                 tooltipField: 'address',
@@ -148,15 +340,5 @@ export default class UserPage extends Component<any, any> {
                 </div>
             </div>
         </Scaffold>;
-    }
-
-    private _loadData(callback?: () => void) {
-        Repository.getAllUser().then(value => {
-            console.log(value);
-            this.setState({ users: value });
-            if (callback) {
-                callback();
-            }
-        });
     }
 }

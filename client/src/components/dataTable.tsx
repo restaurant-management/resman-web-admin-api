@@ -1,12 +1,12 @@
 import { AllCommunityModules, ColDef, ColGroupDef, GridOptions } from '@ag-grid-community/all-modules';
 import { AgGridReact } from '@ag-grid-community/react';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Select from 'react-select';
-import ReactTooltip from 'react-tooltip';
+// import ReactTooltip from 'react-tooltip';
 import { AgActions } from '../components/AgExtensions/agActions';
 import { AgImage } from '../components/AgExtensions/agImage';
 import { AgImageTooltip } from '../components/AgExtensions/agImageTooltip';
-import { LoadScriptFile } from '../utils/loadScript';
 import { selectStyle } from '../utils/selectStyles';
 import OverlayIndicator from './overlayIndicator';
 
@@ -24,7 +24,7 @@ interface DataTableProp<T> {
     onMultiDelete?: (items: T[]) => void;
     onEdit?: (item: T) => void;
     getSelected?: () => T[];
-    onReload?: () => void;
+    onReload?: (callback?: () => void) => void;
 }
 
 interface DataTableState {
@@ -62,15 +62,13 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                 }
             }
         };
-
-        LoadScriptFile('/assets/js/ag-grid-enterprise.min.js');
     }
 
     public render() {
         return (
             <section className='tile color transparent-black'>
                 <OverlayIndicator show={this.state.reloading} />
-                <ReactTooltip place='top' type='dark' effect='solid' />
+                {/* <ReactTooltip place='top' type='dark' effect='solid' /> */}
                 <div className='tile-header'>
                     <div className='row' style={{ paddingTop: 10 }}>
                         <div className='col-md-6'>
@@ -123,11 +121,13 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                         </div>
                     </div>
                     <div className='controls'>
-                        <a href='#/' className='minimize'><i className='fa fa-chevron-down' /></a>
-                        <a href='#/' className='refresh' onClick={this._reload.bind(this)}>
+                        <Link to='#' className='minimize'>
+                            <i className='fa fa-chevron-down' />
+                        </Link>
+                        <Link onClick={(_) => this._reload()} to='#'>
                             <i className='fa fa-refresh' />
-                        </a>
-                        <a href='#/' className='remove'><i className='fa fa-times' /></a>
+                        </Link>
+                        <Link to='#' className='remove'><i className='fa fa-times' /></Link>
                     </div>
                 </div>
                 <div className='tile-widget'>
@@ -139,6 +139,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                         }}
                     >
                         <AgGridReact
+                            multiSortKey={'ctrl'}
                             gridOptions={this.gridOptions}
                             domLayout={'autoHeight'}
                             onGridReady={(params) => {
@@ -182,8 +183,9 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
 
     private _reload() {
         this.setState({ reloading: true });
+        console.log('reload');
         if (this.props.onReload) {
-            this.props.onReload();
+            this.props.onReload(() => this.setState({ reloading: false }));
         }
     }
 

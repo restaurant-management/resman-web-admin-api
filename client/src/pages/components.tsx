@@ -1,17 +1,4 @@
 import React, { Component } from 'react';
-import '../assets/css/animate.css';
-import '../assets/css/bootstrap-checkbox.css';
-import '../assets/css/bootstrap-dropdown-multilevel.css';
-import '../assets/css/bootstrap.min.css';
-import '../assets/css/chosen-bootstrap.css';
-import '../assets/css/chosen.min.css';
-import '../assets/css/ColVis.css';
-import '../assets/css/component.css';
-import '../assets/css/dataTables.bootstrap.css';
-import '../assets/css/font-awesome.min.css';
-import '../assets/css/jquery.mmenu.all.css';
-import '../assets/css/jquery.videoBackground.css';
-import '../assets/css/minimal.css';
 import AdvancedTable from '../components/advancedtable';
 import Flip3DHorizontal from '../components/Modals/3d-flip-horizontal';
 import Flip3DVertical from '../components/Modals/3d-flip-vertical';

@@ -1,18 +1,5 @@
+import $ from 'jquery';
 import React, { Component } from 'react';
-import '../assets/css/animate.css';
-import '../assets/css/bootstrap-checkbox.css';
-import '../assets/css/bootstrap-dropdown-multilevel.css';
-import '../assets/css/bootstrap.min.css';
-import '../assets/css/chosen-bootstrap.css';
-import '../assets/css/chosen.min.css';
-import '../assets/css/ColVis.css';
-import '../assets/css/component.css';
-import '../assets/css/dataTables.bootstrap.css';
-import '../assets/css/font-awesome.min.css';
-import '../assets/css/jquery.mmenu.all.css';
-import '../assets/css/jquery.videoBackground.css';
-import '../assets/css/minimal.css';
-import '../assets/css/resman.scss';
 import { Breadcrumb } from '../components/breadcrumb';
 import LoadingIndicator from '../components/loadingIndicator';
 import { Navbar } from '../components/navbar/navbar';
@@ -29,22 +16,34 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
 
     constructor(props: ScaffoldProp) {
         super(props);
+        this.state = {
+            loading: true
+        };
 
         document.body.classList.add('bg-1');
         document.body.appendChild(VideoContent);
+    }
 
-        LoadScriptFile('/assets/js/jquery.js');
-        LoadScriptFile('/assets/js/bootstrap.min.js');
-        LoadScriptFile('/assets/js/bootstrap-dropdown-multilevel.js');
-        LoadScriptFile('/assets/js/run_prettifyf793.js');
-        LoadScriptFile('/assets/js/jquery.mmenu.min.js');
-        LoadScriptFile('/assets/js/jquery.sparkline.min.js');
-        LoadScriptFile('/assets/js/jquery.nicescroll.min.js');
-        LoadScriptFile('/assets/js/jquery.animateNumbers.js');
-        LoadScriptFile('/assets/js/jquery.videobackground.js');
-        LoadScriptFile('/assets/js/jquery.blockUI.js');
+    public componentDidMount() {
+        LoadScriptFile('/assets/js/jquery.js', true, 'wrap');
+        LoadScriptFile('/assets/js/bootstrap.min.js', true, 'wrap');
+        LoadScriptFile('/assets/js/bootstrap-dropdown-multilevel.js', true, 'wrap');
+        LoadScriptFile('/assets/js/run_prettifyf793.js', true, 'wrap');
+        LoadScriptFile('/assets/js/jquery.mmenu.min.js', true, 'wrap');
+        LoadScriptFile('/assets/js/jquery.sparkline.min.js', true, 'wrap');
+        LoadScriptFile('/assets/js/jquery.nicescroll.min.js', true, 'wrap');
+        LoadScriptFile('/assets/js/jquery.animateNumbers.js', true, 'wrap');
+        LoadScriptFile('/assets/js/jquery.videobackground.js', true, 'wrap');
+        LoadScriptFile('/assets/js/jquery.blockUI.js', true, 'wrap');
 
-        LoadScriptFile('/assets/js/minimal.min.js');
+        LoadScriptFile('/assets/js/ag-grid-enterprise.min.js');
+
+        LoadScriptFile('/assets/js/minimal.min.js', true, 'wrap');
+
+        $(window).ready(() => {
+            $('#loader').delay(500).fadeOut(300);
+            $('.mask').delay(800).fadeOut(300);
+        });
     }
 
     public componentWillUnmount = () => {
@@ -53,7 +52,7 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
 
     public render() {
         return (<div id={'wrap'}>
-            <LoadingIndicator />
+            <LoadingIndicator show={this.state.loading} />
             <div className={'row'}>
                 <Navbar />
                 {/* <Mmenu /> */}

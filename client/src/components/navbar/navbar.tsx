@@ -34,7 +34,7 @@ export class Navbar extends Component {
                         <i className='fa fa-search' /> <input type='text' placeholder='Search...' />
                     </div>
                     {/*/Search*/}
-                    <QuickActions user={User.fromJson({name: 'Hieren Lee', avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4'})} />
+                    <QuickActions user={User.fromJson({fullName: 'Hieren Lee', avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4'})} />
                     <SideBar />
                 </div>
             </div>

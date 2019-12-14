@@ -5,7 +5,7 @@ export default function OverlayIndicator(props: { show?: boolean }) {
     return (
         <Fade in={props.show}>
             <div className={'resman-overlay'}>
-                <img className={'resman-reloader'} src={'/assets/images/loader.gif'} />
+                <img className={'resman-reloader'} src={'/assets/images/loader.gif'} alt='' />
             </div>
         </Fade>
     );

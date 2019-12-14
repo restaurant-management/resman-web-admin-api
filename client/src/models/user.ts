@@ -1,11 +1,14 @@
 export class User {
 
     public static fromJson(jsonObject: any) {
-        // TODO implement this function
-        return jsonObject;
+        let user = new User();
+        user = { ...jsonObject };
+
+        return user;
     }
 
-    public readonly name?: string;
+    public readonly uuid: string;
+    public readonly fullName?: string;
     public readonly avatar?: string;
     public readonly username: string;
     public readonly email: string;
@@ -15,7 +18,8 @@ export class User {
     public readonly address: string;
 
     private constructor() {
-        this.name = '';
+        this.uuid = '';
+        this.fullName = '';
         this.avatar = '';
         this.username = '';
         this.email = '';
