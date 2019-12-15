@@ -1,5 +1,4 @@
 {
-	"welcome_resman": "Chào mừng bạn đến với Resman",
 	"user_service": {
 		"username_or_email_incorrect": "Tài khoản hoặc email không đúng.",
 		"password_incorrect": "mật khẩu không đúng.",
@@ -105,5 +104,6 @@
 		"can_not_rate_if_bill_not_done": "delivery_bill.can_not_rate_if_bill_not_done",
 		"could_not_mark_prepared_for_bill_with_no_chef_select": "delivery_bill.could_not_mark_prepared_for_bill_with_no_chef_select",
 		"could_not_ship_bill_did_not_prepare_yet": "delivery_bill.could_not_ship_bill_did_not_prepare_yet"
-	}
+	},
+	"welcome_to_resman": "Chào mừng bạn đến với Resman"
 }

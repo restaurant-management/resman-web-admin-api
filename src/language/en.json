@@ -67,5 +67,6 @@
 	"error": {
 		"no_storeId_is_provided": "error.no_storeId_is_provided",
 		"missing_required_information": "error.missing_required_information"
-	}
+	},
+	"welcome_to_resman": "Welcome to Resman"
 }
