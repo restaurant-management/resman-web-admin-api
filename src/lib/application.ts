@@ -11,7 +11,7 @@ import { Customer } from '../entity/customer';
 import { User } from '../entity/user';
 import { AuthorGraphMiddleware } from '../middleware/authorization';
 import errorHandler, { graphErrorHandler } from '../middleware/errorHandler';
-import { UserResolver } from '../resolver/userResolver';
+import { UserResolver } from '../resolver/user.resolver';
 import router from '../router';
 import seedData from '../seeder';
 import { AuthService } from '../service/authService';
@@ -43,7 +43,7 @@ export class Application {
                     authChecker: AuthorGraphMiddleware,
                     globalMiddlewares: [graphErrorHandler]
                 }),
-                playground: true,
+                playground: true, // TODO remove in production mode
                 introspection: true,
                 context: async ({ req, res }) => {
                     try {

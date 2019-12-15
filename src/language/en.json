@@ -6,7 +6,11 @@
 		"password_incorrect": "user.password_incorrect",
 		"phone_number_has_already_used": "user.phone_number_has_already_used",
 		"email_has_already_used": "user.email_has_already_used",
-		"username_has_already_used": "user.username_has_already_used"
+		"username_has_already_used": "user.username_has_already_used",
+		"change_password_success": "user.change_password_success",
+		"{{role}}_not_found": "user.{{role}}_not_found",
+		"can_not_delete_user_with_higher_level": "user.can_not_delete_user_with_higher_level",
+		"delete_success": "user.delete_success"
 	},
 	"daily_dish": {
 		"no_storeId_is_provided": "daily_dish.no_storeId_is_provided",
@@ -66,7 +70,9 @@
 	},
 	"error": {
 		"no_storeId_is_provided": "error.no_storeId_is_provided",
-		"missing_required_information": "error.missing_required_information"
+		"missing_required_information": "error.missing_required_information",
+		"new_password_must_be_difference_old_password": "error.new_password_must_be_difference_old_password",
+		"incorrect_old_password": "error.incorrect_old_password"
 	},
 	"welcome_to_resman": "Welcome to Resman"
 }
