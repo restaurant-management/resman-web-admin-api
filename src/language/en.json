@@ -48,7 +48,10 @@
 		"import_bill_not_found": "import_bill.import_bill_not_found"
 	},
 	"customer": {
-		"customer_not_found": "customer.customer_not_found"
+		"customer_not_found": "customer.customer_not_found",
+		"change_password_success": "customer.change_password_success",
+		"delete_success": "customer.delete_success",
+		"delete_address_success": "customer.delete_address_success"
 	},
 	"role": {
 		"role_not_found": "role.role_not_found"

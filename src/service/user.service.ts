@@ -202,8 +202,8 @@ class UserService {
             }
         }
 
-        user.password = PasswordHandler.encode(data.password);
-        user.phoneNumber = data.phoneNumber;
+        if (data.password) { user.password = PasswordHandler.encode(data.password); }
+        if (data.phoneNumber) { user.phoneNumber = data.phoneNumber; }
         if (data.address) { user.address = data.address; }
         if (data.fullName) { user.fullName = data.fullName; }
         if (data.avatar) { user.avatar = data.avatar; }

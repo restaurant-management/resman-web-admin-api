@@ -11,7 +11,7 @@ import { Customer } from '../entity/customer';
 import { User } from '../entity/user';
 import { AuthorGraphMiddleware } from '../middleware/authorization';
 import errorHandler, { graphErrorHandler } from '../middleware/errorHandler';
-import { UserResolver } from '../resolver/user.resolver';
+import { resolvers } from '../resolver';
 import router from '../router';
 import seedData from '../seeder';
 import { AuthService } from '../service/authService';
@@ -39,7 +39,7 @@ export class Application {
             // -------------Setup GraphQL------------
             const apolloServer = new ApolloServer({
                 schema: await buildSchema({
-                    resolvers: [UserResolver],
+                    resolvers,
                     authChecker: AuthorGraphMiddleware,
                     globalMiddlewares: [graphErrorHandler]
                 }),

@@ -33,7 +33,10 @@
 		"store_not_found": "warehouse.store_not_found"
 	},
 	"customer": {
-		"customer_not_found": "customer.customer_not_found"
+		"customer_not_found": "customer.customer_not_found",
+		"change_password_success": "customer.change_password_success",
+		"delete_success": "customer.delete_success",
+		"delete_address_success": "customer.delete_address_success"
 	},
 	"user": {
 		"user_not_found": "user.user_not_found",

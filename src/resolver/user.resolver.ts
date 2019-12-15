@@ -8,14 +8,28 @@ import { UserService } from '../service/user.service';
 
 export class UserResolver {
     @Query(() => String)
-    public async login(@Arg('usernameOrEmail') usernameOrEmail: string, @Arg('password') password: string) {
+    public async loginAsUser(@Arg('usernameOrEmail') usernameOrEmail: string, @Arg('password') password: string) {
         return await UserService.authenticate(usernameOrEmail, password);
     }
 
     @Query(() => User)
     @UseMiddleware(UserAuthGraph)
-    public async me(@Ctx() { payload }: GraphUserContext) {
+    public async meAsUser(@Ctx() { payload }: GraphUserContext) {
         return payload?.user;
+    }
+
+    @Mutation(() => User, { description: 'For admin' })
+    @UseMiddleware(UserAuthGraph)
+    public async changeProfileAsUser(
+        @Ctx() { payload }: GraphUserContext,
+        @Arg('address', { nullable: true }) address: string,
+        @Arg('phoneNumber', { nullable: true }) phoneNumber: string,
+        @Arg('fullName', { nullable: true }) fullName: string,
+        @Arg('avatar', { nullable: true }) avatar: string,
+        @Arg('birthday', { nullable: true }) birthday: Date
+    ) {return await UserService.edit(payload.user.username, payload.user, {
+            phoneNumber, fullName, address, avatar, birthday
+        });
     }
 
     @Query(() => [User], { description: 'For admin' })
@@ -38,7 +52,7 @@ export class UserResolver {
 
     @Mutation(() => String)
     @UseMiddleware(UserAuthGraph)
-    public async changePassword(
+    public async changePasswordAsUser(
         @Ctx() { payload }: GraphUserContext,
         @Arg('oldPassword') oldPassword: string,
         @Arg('newPassword') newPassword: string
