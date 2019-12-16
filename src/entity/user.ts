@@ -81,6 +81,7 @@ export class User extends BaseEntity {
     @JoinTable()
     public stores: Store[];
 
+    @Field(() => [Warehouse])
     @ManyToMany(_type => Warehouse)
     @JoinTable()
     public warehouses: Warehouse[];

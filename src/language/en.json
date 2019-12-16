@@ -69,7 +69,8 @@
 		"delete_success": "store.delete_success"
 	},
 	"warehouse": {
-		"warehouse_not_found": "warehouse.warehouse_not_found"
+		"warehouse_not_found": "warehouse.warehouse_not_found",
+		"delete_success": "warehouse.delete_success"
 	},
 	"stock": {
 		"stock_not_found": "stock.stock_not_found"

@@ -85,6 +85,7 @@ export class Store extends BaseEntity {
     @OneToMany(_type => StoreDish, dish => dish.store)
     public storeDishes: StoreDish[];
 
+    @Field(() => [Warehouse])
     @OneToMany(_type => Warehouse, warehouse => warehouse.store)
     public warehouses: Warehouse[];
 }

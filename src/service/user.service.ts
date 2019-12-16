@@ -6,6 +6,7 @@ import { User } from '../entity/user';
 import { PasswordHandler } from '../helper/passwordHandler';
 import { AuthService } from './authService';
 import { StoreService } from './store.service';
+import { WarehouseService } from './warehouse.service';
 
 class UserService {
     /**
@@ -278,6 +279,16 @@ class UserService {
         }
 
         return this.edit(editBy.username, editBy, { password: data.newPassword });
+    }
+
+    public async addWareHouse(username: string, warehouseId: number) {
+        const user = await this.getOne({ username }, { withWarehouses: true });
+        const warehouse = await WarehouseService.getOne(warehouseId);
+
+        user.warehouses.push(warehouse);
+        await user.save({ reload: true });
+
+        return this.getOne({ username }, { withRoles: true, withStores: true, withWarehouses: true });
     }
 }
 

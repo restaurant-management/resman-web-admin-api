@@ -1,5 +1,5 @@
 import { __ } from 'i18n';
-import { Arg, Authorized, Ctx, Int, Mutation, Query, UseMiddleware } from 'type-graphql';
+import { Arg, Authorized, Ctx, ID, Int, Mutation, Query, UseMiddleware } from 'type-graphql';
 import { Permission } from '../entity/permission';
 import { User } from '../entity/user';
 import { GraphUserContext } from '../lib/graphContext';
@@ -27,7 +27,8 @@ export class UserResolver {
         @Arg('fullName', { nullable: true }) fullName: string,
         @Arg('avatar', { nullable: true }) avatar: string,
         @Arg('birthday', { nullable: true }) birthday: Date
-    ) {return await UserService.edit(payload.user.username, payload.user, {
+    ) {
+        return await UserService.edit(payload.user.username, payload.user, {
             phoneNumber, fullName, address, avatar, birthday
         });
     }
@@ -118,5 +119,14 @@ export class UserResolver {
         await UserService.delete(username, payload.user);
 
         return __('user.delete_success');
+    }
+
+    @Mutation(() => User, { description: 'For admin' })
+    @Authorized([Permission.user.update])
+    public async addUserToWarehouse(
+        @Arg('username') username: string,
+        @Arg('warehouseId', () => ID) warehouseId: number
+    ) {
+        return await UserService.addWareHouse(username, warehouseId);
     }
 }
