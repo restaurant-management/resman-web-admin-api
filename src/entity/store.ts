@@ -12,15 +12,15 @@ import { Warehouse } from './warehouse';
 export const timeScalar = new GraphQLScalarType({
     name: 'time',
     description: 'Time use for store open time and close time',
-    parseValue(value: string) {
-        return moment(value, 'HH:mm:ss').toDate();
+    parseValue(value: Date) {
+        return value;
     },
-    serialize(value: Date) {
+    serialize(value: string) {
         return moment(value, 'HH:mm:ss').format('HH:mm:ss');
     },
     parseLiteral(ast) {
         if (ast.kind === Kind.STRING) {
-            return moment(ast.value, 'HH:mm:ss').toDate();
+            return new Date(ast.value);
         }
 
         return null;
@@ -66,6 +66,9 @@ export class Store extends BaseEntity {
     @Column('time', { nullable: true })
     public closeTime: Date;
 
+    @Field({ defaultValue: 0 })
+    public amountDishes: number;
+
     @ManyToMany(_type => User, user => user.stores)
     public users: User[];
 
@@ -78,6 +81,7 @@ export class Store extends BaseEntity {
     @ManyToMany(_type => DiscountCampaign, discountCampaign => discountCampaign.stores)
     public discountCampaigns: DiscountCampaign[];
 
+    @Field(() => [StoreDish], { nullable: true })
     @OneToMany(_type => StoreDish, dish => dish.store)
     public storeDishes: StoreDish[];
 

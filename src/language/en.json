@@ -63,7 +63,8 @@
 		"delete_fail": "dish.delete_fail"
 	},
 	"store": {
-		"store_not_found": "store.store_not_found"
+		"store_not_found": "store.store_not_found",
+		"delete_success": "store.delete_success"
 	},
 	"warehouse": {
 		"warehouse_not_found": "warehouse.warehouse_not_found"

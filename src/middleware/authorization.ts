@@ -20,7 +20,7 @@ const authorMiddleware = (requiredPermissions: string[]) => {
 };
 
 const authorGraphMiddleware: AuthChecker<GraphUserContext> = ({ context }, permissions) => {
-    return authorization(context.payload.user, permissions, true, 'normal');
+    return authorization(context.payload?.user, permissions, true, 'normal');
 };
 
 const authorStoreMiddleware = (substitutePermissions: string[]) => {
