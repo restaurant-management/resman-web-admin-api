@@ -25,4 +25,7 @@ export class Dish extends BaseEntity {
     @Field({ defaultValue: 0 })
     @Column('float', { default: 0 })
     public defaultPrice: number;
+
+    @Field({ defaultValue: 0 })
+    public price: number;
 }

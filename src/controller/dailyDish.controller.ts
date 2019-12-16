@@ -38,7 +38,7 @@ class DailyDishController implements ICrudController {
     }
 
     public delete(req: Request, res: Response, next: NextFunction): void {
-        DailyDishService.delete(req.query.day, req.query.dishId, req.query.session).then(() =>
+        DailyDishService.delete(req.query).then(() =>
             res.sendStatus(200)
         ).catch(e => next(e));
     }

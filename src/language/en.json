@@ -15,7 +15,9 @@
 	"daily_dish": {
 		"no_storeId_is_provided": "daily_dish.no_storeId_is_provided",
 		"daily_dish_not_found": "daily_dish.daily_dish_not_found",
-		"delete_fail": "daily_dish.delete_fail"
+		"delete_fail": "daily_dish.delete_fail",
+		"existed": "daily_dish.existed",
+		"delete_success": "daily_dish.delete_success"
 	},
 	"authentication": {
 		"unauthorized": "authentication.unauthorized",

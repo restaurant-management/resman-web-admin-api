@@ -1,5 +1,6 @@
 import { __ } from 'i18n';
 import { DailyDish, DaySession } from '../entity/dailyDish';
+import { onlyDate } from '../helper/onlyDate';
 import { DishService } from './dish.service';
 import { StoreService } from './store.service';
 import { UserService } from './user.service';
@@ -25,6 +26,10 @@ class DailyDishService {
 
         const store = await StoreService.getOne(storeId);
         if (!store) { throw new Error(__('daily_dish.store_not_found')); }
+
+        if (await this.getOne({ day, dishId, storeId, session: session || DaySession.None })) {
+            throw new Error(__('daily_dish.existed'));
+        }
 
         const newDailyDish = new DailyDish();
         newDailyDish.day = day;
@@ -61,12 +66,16 @@ class DailyDishService {
         return await this.getOne({ day, dishId, session });
     }
 
-    public async delete(day: Date, dishId: number, session: string) {
-        if (!day || !dishId || !session) {
+    public async delete(key: { day: Date, dishId: number, session: string, storeId: number }) {
+        if (!key.day || !key.dishId || !key.session) {
             throw new Error(__('error.missing_required_information'));
         }
 
-        const dailyDish = await this.getOne({ day, dishId, session });
+        if (onlyDate(key.day) < onlyDate(new Date())) {
+            throw new Error(__('daily_dish.error_can_not_delete_old_daily_dish'));
+        }
+
+        const dailyDish = await this.getOne(key);
         await dailyDish.remove();
     }
 
@@ -87,7 +96,7 @@ class DailyDishService {
 
     public async getBy(key: { day?: Date, dishId?: number, session?: string, storeId?: number }) {
         const dailyDishes = await DailyDish.find({
-            relations: ['confirmBy', 'dish'],
+            relations: ['confirmBy', 'dish', 'store'],
             where: { ...key }
         });
 
