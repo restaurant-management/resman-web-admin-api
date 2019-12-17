@@ -59,7 +59,10 @@
 		"delete_address_success": "customer.delete_address_success"
 	},
 	"role": {
-		"role_not_found": "role.role_not_found"
+		"role_not_found": "role.role_not_found",
+		"permission_{{permission}}_not_found": "role.permission_{{permission}}_not_found",
+		"existed": "role.existed",
+		"delete_success": "role.delete_success"
 	},
 	"address": {
 		"address_not_found": "address.address_not_found"

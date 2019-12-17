@@ -109,7 +109,10 @@
 		"bill_is_collected": "bill.bill_is_collected"
 	},
 	"role": {
-		"role_not_found": "role.role_not_found"
+		"role_not_found": "role.role_not_found",
+		"permission_{{permission}}_not_found": "role.permission_{{permission}}_not_found",
+		"existed": "role.existed",
+		"delete_success": "role.delete_success"
 	},
 	"delivery_bill": {
 		"delivery_bill_not_found": "delivery_bill.delivery_bill_not_found",
