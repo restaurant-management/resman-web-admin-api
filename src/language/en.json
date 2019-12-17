@@ -25,7 +25,9 @@
 		"fail_authenticate_token": "authentication.fail_authenticate_token"
 	},
 	"daily_report": {
-		"daily_report_not_found": "daily_report.daily_report_not_found"
+		"daily_report_not_found": "daily_report.daily_report_not_found",
+		"warehouse_not_have_enough_quantity": "daily_report.warehouse_not_have_enough_quantity",
+		"delete_success": "daily_report.delete_success"
 	},
 	"delivery_bill": {
 		"delivery_bill_not_found": "delivery_bill.delivery_bill_not_found",

@@ -74,7 +74,9 @@
 	"daily_report": {
 		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
 		"stock_{{id}}_not_exist_in_warehouse": "daily_report.stock_{{id}}_not_exist_in_warehouse",
-		"daily_report_not_found": "daily_report.daily_report_not_found"
+		"daily_report_not_found": "daily_report.daily_report_not_found",
+		"warehouse_not_have_enough_quantity": "daily_report.warehouse_not_have_enough_quantity",
+		"delete_success": "daily_report.delete_success"
 	},
 	"dish": {
 		"delete_fail": "dish.delete_fail",
