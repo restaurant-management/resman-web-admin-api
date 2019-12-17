@@ -18,7 +18,7 @@ class DailyDishController implements ICrudController {
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {
-        DailyDishService.create(req.body.day || new Date(), req.body.dishId, req.body.storeId, req.body.session)
+        DailyDishService.create(req.body)
             .then(value => {
                 return res.status(200).json(value);
             }).catch(e => next(e));

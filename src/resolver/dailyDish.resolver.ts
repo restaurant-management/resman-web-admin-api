@@ -43,7 +43,7 @@ export class DailyDishResolver {
         const result: DailyDish[] = [];
 
         for (const dishId of dishIds) {
-            result.push(await DailyDishService.create(day, dishId, storeId, session));
+            result.push(await DailyDishService.create({ day, dishId, storeId, session }));
         }
 
         return result;

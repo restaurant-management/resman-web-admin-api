@@ -102,7 +102,7 @@ class DeliveryBillService {
 
         // Check whether dish is daily dish.
         for (const dishId of data.dishIds) {
-            await DailyDishService.getOne({ day: time, dishId, session: DaySession.None });
+            await DailyDishService.getOne({ day: time, dishId, session: DaySession.None, storeId: data.storeId });
         }
 
         for (const [index, dishId] of data.dishIds.entries()) {
@@ -234,7 +234,9 @@ class DeliveryBillService {
         // Check whether dish is daily dish.
         if (data.dishIds) {
             for (const dishId of data.dishIds) {
-                await DailyDishService.getOne({ day: deliveryBill.createAt, dishId, session: DaySession.None });
+                await DailyDishService.getOne({
+                    day: deliveryBill.createAt, dishId, session: DaySession.None, storeId: deliveryBill.store.id
+                });
             }
             for (const [index, dishId] of data.dishIds.entries()) {
                 const dishNotes = data.dishNotes || [];

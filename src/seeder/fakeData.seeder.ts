@@ -54,11 +54,11 @@ const seedStore = async () => {
 
 const seedWarehouse = async () => {
     if (!await Warehouse.findOne(1)) {
-        await WarehouseService.create('Warehouse1', 'Warehouse1', '123456789', 'Warehouse1', 1);
+        await WarehouseService.create({ name: 'Warehouse1', address: 'Warehouse1', hotline: '123456789', description: 'Warehouse1', storeId: 1 });
     }
 
     if (!await Warehouse.findOne(2)) {
-        await WarehouseService.create('Warehouse2', 'Warehouse2', '123456789', 'Warehouse2', 1);
+        await WarehouseService.create({ name: 'Warehouse2', address: 'Warehouse2', hotline: '123456789', description: 'Warehouse2', storeId: 1 });
     }
 };
 
@@ -153,7 +153,7 @@ const seedDailyDish = async () => {
     } catch (e) {
         const listDish = await DishService.getAll({});
         for (const dish of listDish) {
-            await DailyDishService.create(new Date(), dish.id, 1, DaySession.None);
+            await DailyDishService.create({ day: new Date(), dishId: dish.id, storeId: 1, session: DaySession.None });
         }
     }
 };

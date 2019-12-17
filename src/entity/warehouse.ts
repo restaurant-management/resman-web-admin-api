@@ -35,6 +35,7 @@ export class Warehouse extends BaseEntity {
     @ManyToMany(() => User, user => user.warehouses)
     public users: User[];
 
+    @Field(() => WarehouseStock)
     @OneToMany(_type => WarehouseStock, warehouseStock => warehouseStock.warehouse)
     public warehouseStocks: WarehouseStock[];
 
