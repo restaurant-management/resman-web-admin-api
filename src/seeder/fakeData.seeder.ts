@@ -94,13 +94,15 @@ const seedStock = async () => {
 const seedImportBill = async () => {
     if (!await ImportBill.findOne(1)) {
         await ImportBillService.create(
-            [1, 2],
-            [5, 10],
-            1,
-            'admin',
-            'Test import bill',
-            [10, 20],
-            ['Gia re', 'ngon']
+            {
+                stockIds: [1, 2],
+                quantities: [5, 10],
+                warehouseId: 1,
+                username: 'admin',
+                note: 'Test import bill',
+                stockPrices: [10, 20],
+                stockNotes: ['Gia re', 'ngon']
+            }
         );
     }
 };

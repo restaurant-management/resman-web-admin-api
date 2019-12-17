@@ -61,7 +61,8 @@
 		"warehouse_not_found": "import_bill.warehouse_not_found",
 		"user_{{username}}_not_found": "import_bill.user_{{username}}_not_found",
 		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found",
-		"import_bill_not_found": "import_bill.import_bill_not_found"
+		"import_bill_not_found": "import_bill.import_bill_not_found",
+		"delete_success": "import_bill.delete_success"
 	},
 	"importBill": {
 		"importBill_not_found": "importBill.importBill_not_found"
