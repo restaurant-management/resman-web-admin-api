@@ -14,7 +14,8 @@ export class StoreDish extends BaseEntity {
     @PrimaryColumn()
     public storeId: number;
 
-    @ManyToOne(() => Dish, { nullable: false, onDelete: 'CASCADE' })
+    @Field(() => Dish)
+    @ManyToOne(() => Dish, { nullable: false, onDelete: 'CASCADE', eager: true })
     @JoinColumn({ name: 'dishId' })
     public dish: Dish;
 

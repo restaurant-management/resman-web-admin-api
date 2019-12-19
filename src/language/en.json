@@ -68,7 +68,8 @@
 		"address_not_found": "address.address_not_found"
 	},
 	"dish": {
-		"delete_fail": "dish.delete_fail"
+		"delete_fail": "dish.delete_fail",
+		"delete_success": "dish.delete_success"
 	},
 	"store": {
 		"store_not_found": "store.store_not_found",

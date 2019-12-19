@@ -66,9 +66,13 @@ class StoreService {
 
     public async edit(id: number, data: {
         name?: string, address?: string, hotline?: string, description?: string, logo?: string,
-        openTime?: Date, closeTime?: Date
+        openTime?: Date, closeTime?: Date, dishIds?: number[], dishPrices?: number[]
     }) {
-        const store = await Store.findOne(id);
+        if (data.dishIds && data.dishPrices && data.dishIds.length !== data.dishPrices.length) {
+            throw new Error('store.dishIds_length_not_same_dishPrices_length');
+        }
+
+        let store = await this.getOne(id);
 
         if (data.name) { store.name = data.name; }
         if (data.address) { store.address = data.address; }
@@ -80,7 +84,46 @@ class StoreService {
 
         await store.save();
 
-        return this.getOne(store.id);
+        store = await this.getOne(id, { withDishes: true });
+        if (data.dishIds) {
+            const dishes: Dish[] = [];
+            for (const dishId of data.dishIds) {
+                dishes.push(await DishService.getOne(dishId));
+            }
+
+            // Add new or save existed
+            for (const [index, dish] of dishes.entries()) {
+                const oldIndex = store.storeDishes.findIndex(item => item.dishId === dish.id);
+                if (oldIndex >= 0) {
+                    console.log(store.storeDishes[oldIndex]);
+                    store.storeDishes[oldIndex].price = data.dishPrices[index];
+                    await store.storeDishes[oldIndex].save();
+                } else {
+                    const storeDish = new StoreDish();
+                    storeDish.store = store;
+                    storeDish.dish = dish;
+                    storeDish.price = data.dishPrices[index];
+                    await storeDish.save();
+                }
+            }
+
+            // Remove
+            for (const storeDish of store.storeDishes) {
+                const oldIndex = dishes.findIndex(item => item.id === storeDish.dishId);
+                if (oldIndex < 0) {
+                    await storeDish.remove();
+                }
+            }
+        }
+
+        return this.getOne(store.id, {
+            withDiscountCampaigns: true,
+            withDiscountCodes: true,
+            withDishes: true,
+            withUsers: true,
+            withVoucherCodes: true,
+            withWarehouses: true
+        });
     }
 
     public async delete(id: number) {
@@ -148,12 +191,6 @@ class StoreService {
             withVoucherCodes: Authorization(user, [Permission.voucherCode.list], false),
             withWarehouses: Authorization(user, [Permission.warehouse.list], false),
         });
-    }
-
-    public async getDishes(id: number) {
-        const store = await this.getOne(id);
-
-        return store;
     }
 }
 

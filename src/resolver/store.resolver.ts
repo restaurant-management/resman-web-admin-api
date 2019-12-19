@@ -1,5 +1,5 @@
 import { __ } from 'i18n';
-import { Arg, Authorized, Float, Int, Mutation, Query } from 'type-graphql';
+import { Arg, Authorized, Float, ID, Int, Mutation, Query } from 'type-graphql';
 import { Permission } from '../entity/permission';
 import { Store, timeScalar } from '../entity/store';
 import { StoreService } from '../service/store.service';
@@ -46,10 +46,12 @@ export class StoreResolver {
         @Arg('description', { nullable: true }) description: string,
         @Arg('logo', { nullable: true }) logo: string,
         @Arg('openTime', () => timeScalar, { nullable: true }) openTime: Date,
-        @Arg('closeTime', () => timeScalar, { nullable: true }) closeTime: Date
+        @Arg('closeTime', () => timeScalar, { nullable: true }) closeTime: Date,
+        @Arg('dishIds', () => [ID], { nullable: true }) dishIds: number[],
+        @Arg('dishPrices', () => [Float], { nullable: true }) dishPrices: number[],
     ) {
         return await StoreService.edit(id, {
-            name, address, hotline, description, logo, openTime, closeTime
+            name, address, hotline, description, logo, openTime, closeTime, dishIds, dishPrices
         });
     }
 
