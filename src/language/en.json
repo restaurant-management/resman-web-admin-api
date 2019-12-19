@@ -43,7 +43,9 @@
 		"voucher_code_not_found": "voucher_code.voucher_code_not_found"
 	},
 	"discount_campaign": {
-		"discount_campaign_not_found": "discount_campaign.discount_campaign_not_found"
+		"discount_campaign_not_found": "discount_campaign.discount_campaign_not_found",
+		"dishIds_length_have_to_equal_discounts_length": "discount_campaign.dishIds_length_have_to_equal_discounts_length",
+		"delete_success": "discount_campaign.delete_success"
 	},
 	"discount_code": {
 		"discount_code_not_found": "discount_code.discount_code_not_found",

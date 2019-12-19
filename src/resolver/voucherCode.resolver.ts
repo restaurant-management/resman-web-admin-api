@@ -83,6 +83,6 @@ export class VoucherCodeResolver {
     ) {
         await VoucherCodeService.delete(code);
 
-        return __('discount_code.delete_success');
+        return __('voucher_code.delete_success');
     }
 }
