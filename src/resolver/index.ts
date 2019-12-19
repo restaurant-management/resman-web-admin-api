@@ -7,6 +7,7 @@ import { ImportBillResolver } from './importBill.resolver';
 import { RoleResolver } from './role.resolver';
 import { StoreResolver } from './store.resolver';
 import { UserResolver } from './user.resolver';
+import { VoucherCodeResolver } from './voucherCode.resolver';
 import { WarehouseResolver } from './warehouse.resolver';
 
 export const resolvers = [
@@ -19,5 +20,6 @@ export const resolvers = [
     DailyReportResolver,
     RoleResolver,
     DishResolver,
-    DiscountCodeResolver
+    DiscountCodeResolver,
+    VoucherCodeResolver
 ];

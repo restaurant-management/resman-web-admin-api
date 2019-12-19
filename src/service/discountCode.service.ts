@@ -15,6 +15,7 @@ class DiscountCodeService {
 
         return discountCode;
     }
+
     public async getAllByUser(user: User, length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
         const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
         const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
