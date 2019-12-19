@@ -1,5 +1,6 @@
 import { __ } from 'i18n';
 import { FindConditions } from 'typeorm';
+import { Customer } from '../entity/customer';
 import { DaySession } from '../entity/dailyDish';
 import { DeliveryBill } from '../entity/deliveryBill';
 import { User } from '../entity/user';
@@ -15,21 +16,43 @@ import { UserService } from './user.service';
 import { VoucherCodeService } from './voucherCode.service';
 
 class DeliveryBillService {
-    public async getAll(options: {
+    public async getAll(user: User, options?: {
         length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1' // Paging
         where?: FindConditions<DeliveryBill>;
     }) {
-        const order = options.orderId ?
-            { [options.orderId]: options.orderType === 'DESC' || options.orderType === '-1' ? -1 : 1 } : {};
-        const skip = (options.page - 1) * length >= 0 ? (options.page - 1) * length : 0;
-        const take = length;
+        const order = options?.orderId ?
+            { [options?.orderId]: options?.orderType === 'DESC' || options?.orderType === '-1' ? -1 : 1 } : {};
+        const skip = (options?.page - 1) * options?.length >= 0 ? (options?.page - 1) * options?.length : 0;
+        const take = options?.length;
 
-        const deliveryBill = await DeliveryBill.find({
+        const deliveryBills = await DeliveryBill.find({
             take, skip, order,
-            where: { ...options.where, deleteAt: null }
+            where: { ...options?.where, deleteAt: null },
+            relations: ['customer', 'prepareBy', 'shipBy', 'dishes', 'store']
         });
 
-        return deliveryBill;
+        return deliveryBills.filter(i => user.stores.findIndex(userStore => userStore.id === i.store.id) >= 0)
+            .filter((_store, index) => index >= skip && index < (take ? skip + take : deliveryBills.length));
+    }
+
+    public async getAllByCustomer(customer: Customer, options?: {
+        length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1' // Paging
+        where?: FindConditions<DeliveryBill>;
+    }) {
+        const order = options?.orderId ?
+            { [options?.orderId]: options?.orderType === 'DESC' || options?.orderType === '-1' ? -1 : 1 } : {};
+        const skip = (options?.page - 1) * options?.length >= 0 ? (options?.page - 1) * options?.length : 0;
+        const take = options?.length;
+
+        const deliveryBills = await DeliveryBill.find({
+            take, skip, order,
+            where: { ...options?.where, deleteAt: null },
+            relations: ['customer', 'prepareBy', 'shipBy', 'dishes', 'store']
+        });
+
+        return deliveryBills
+            .filter(i => i.customer.uuid === customer.uuid)
+            .filter((_store, index) => index >= skip && index < (take ? skip + take : deliveryBills.length));
     }
 
     public async create(data: {
@@ -52,12 +75,14 @@ class DeliveryBillService {
         // Created user must be not null by controller.
         try {
             newDeliveryBill.customer = await CustomerService.getOne({ uuid: data.customerUuid });
+        } catch (_e) { throw new Error(__('delivery_bill.customer_not_found')); }
+        if (newDeliveryBill.customer) {
             // Add address
             const address = await AddressService.getOne(newDeliveryBill.customer.username, data.addressId);
             newDeliveryBill.address = address.address;
             newDeliveryBill.longitude = address.longitude;
             newDeliveryBill.latitude = address.latitude;
-        } catch (_e) { throw new Error(__('delivery_bill.customer_not_found')); }
+        }
 
         if (data.voucherCode) {
             const voucher = await VoucherCodeService.getOne(data.voucherCode);
@@ -150,7 +175,8 @@ class DeliveryBillService {
                 withCustomer: true,
                 withPrepareBy: true,
                 withShipBy: true,
-                withStore: true
+                withStore: true,
+                withDishes: true
             }
         );
 
@@ -243,6 +269,7 @@ class DeliveryBillService {
                 const dishQuantities = data.dishQuantities || [];
 
                 try {
+                    // Check if have and edit
                     await DeliveryBillDishService.getOne(dishId, deliveryBill.id);
                     await DeliveryBillDishService.edit(dishId, deliveryBill.id,
                         {
@@ -250,6 +277,7 @@ class DeliveryBillService {
                             quantity: dishQuantities[index]
                         });
                 } catch (e) {
+                    // If don't have create a new one
                     await DeliveryBillDishService.create(deliveryBill.id,
                         {
                             dishId,
@@ -258,8 +286,17 @@ class DeliveryBillService {
                         });
                 }
             }
+
+            // Remove the rest dishes
+            for (const dish of deliveryBill.dishes) {
+                if (data.dishIds.findIndex(i => parseInt(i.toString(), 10) === dish.dishId) === -1) {
+                    await dish.remove();
+                }
+            }
         }
 
+        // Delete to avoid bug from typeorm
+        delete deliveryBill.dishes;
         await deliveryBill.save();
 
         return await this.getOne(deliveryBill.id, {

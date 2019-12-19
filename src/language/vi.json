@@ -128,7 +128,11 @@
 		"bill_have_been_already_rated": "delivery_bill.bill_have_been_already_rated",
 		"can_not_rate_if_bill_not_done": "delivery_bill.can_not_rate_if_bill_not_done",
 		"could_not_mark_prepared_for_bill_with_no_chef_select": "delivery_bill.could_not_mark_prepared_for_bill_with_no_chef_select",
-		"could_not_ship_bill_did_not_prepare_yet": "delivery_bill.could_not_ship_bill_did_not_prepare_yet"
+		"could_not_ship_bill_did_not_prepare_yet": "delivery_bill.could_not_ship_bill_did_not_prepare_yet",
+		"delete_success": "delivery_bill.delete_success"
 	},
-	"welcome_to_resman": "Chào mừng bạn đến với Resman"
+	"welcome_to_resman": "Chào mừng bạn đến với Resman",
+	"delivery_bill_dish": {
+		"delivery_bill_dish_not_found": "delivery_bill_dish.delivery_bill_dish_not_found"
+	}
 }

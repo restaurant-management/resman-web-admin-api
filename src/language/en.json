@@ -33,7 +33,9 @@
 		"delivery_bill_not_found": "delivery_bill.delivery_bill_not_found",
 		"can_not_rate_if_bill_not_done": "delivery_bill.can_not_rate_if_bill_not_done",
 		"could_not_mark_prepared_for_bill_with_no_chef_select": "delivery_bill.could_not_mark_prepared_for_bill_with_no_chef_select",
-		"could_not_ship_bill_did_not_prepare_yet": "delivery_bill.could_not_ship_bill_did_not_prepare_yet"
+		"could_not_ship_bill_did_not_prepare_yet": "delivery_bill.could_not_ship_bill_did_not_prepare_yet",
+		"customer_not_found": "delivery_bill.customer_not_found",
+		"delete_success": "delivery_bill.delete_success"
 	},
 	"bill": {
 		"bill_is_collected": "bill.bill_is_collected",
@@ -93,5 +95,8 @@
 		"new_password_must_be_difference_old_password": "error.new_password_must_be_difference_old_password",
 		"incorrect_old_password": "error.incorrect_old_password"
 	},
-	"welcome_to_resman": "Welcome to Resman"
+	"welcome_to_resman": "Welcome to Resman",
+	"delivery_bill_dish": {
+		"delivery_bill_dish_not_found": "delivery_bill_dish.delivery_bill_dish_not_found"
+	}
 }

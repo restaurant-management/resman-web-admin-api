@@ -60,7 +60,6 @@ export class Application {
                         }
                     } catch (e) {
                         return { req, res };
-
                     }
                 }
             });

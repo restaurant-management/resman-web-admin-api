@@ -110,39 +110,45 @@ const seedImportBill = async () => {
 const seedDish = async () => {
     if (!await Dish.findOne(1)) {
         await DishService.create(
-            'Canh chua cá diêu hồng',
-            'Canh chua cá diêu hồng là một món ăn mang đậm hương vị miền Nam, là món ăn được yêu thích của nhiều gia đình.',
-            [
-                'https://photo-1-baomoi.zadn.vn/w1000_r1/2018_09_04_353_27570465/e0623ac61d86f4d8ad97.jpg',
-                'https://media.cooky.vn/recipe/g3/20662/s800x500/recipe20662-636360895766543787.jpg'
-            ],
-            25000
+            {
+                name: 'Canh chua cá diêu hồng',
+                description: 'Canh chua cá diêu hồng là một món ăn mang đậm hương vị miền Nam, là món ăn được yêu thích của nhiều gia đình.',
+                images: [
+                    'https://photo-1-baomoi.zadn.vn/w1000_r1/2018_09_04_353_27570465/e0623ac61d86f4d8ad97.jpg',
+                    'https://media.cooky.vn/recipe/g3/20662/s800x500/recipe20662-636360895766543787.jpg'
+                ],
+                defaultPrice: 25000
+            }
         );
     }
 
     if (!await Dish.findOne(2)) {
         await DishService.create(
-            'Canh khổ qua nhồi thịt',
-            'Canh khổ qua nhồi thịt cũng là một món ăn ngon giàu dinh dưỡng và dễ làm mà các bạn có thể thực hiện.',
-            [
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt0-2019-06-07%2001:05:43?generation=1559887548010845&alt=media',
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt1-2019-06-07%2001:05:45?generation=1559887549908602&alt=media',
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt2-2019-06-07%2001:05:47?generation=1559887551753810&alt=media'
-            ],
-            25000
+            {
+                name: 'Canh khổ qua nhồi thịt',
+                description: 'Canh khổ qua nhồi thịt cũng là một món ăn ngon giàu dinh dưỡng và dễ làm mà các bạn có thể thực hiện.',
+                images: [
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt0-2019-06-07%2001:05:43?generation=1559887548010845&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt1-2019-06-07%2001:05:45?generation=1559887549908602&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt2-2019-06-07%2001:05:47?generation=1559887551753810&alt=media'
+                ],
+                defaultPrice: 25000
+            }
         );
     }
 
     if (!await Dish.findOne(3)) {
         await DishService.create(
-            'Canh khổ qua nhồi thịt Ver 2.0',
-            'Canh khổ qua nhồi thịt ver 2.0 y chan ver 1.0.',
-            [
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt0-2019-06-07%2001:05:43?generation=1559887548010845&alt=media',
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt1-2019-06-07%2001:05:45?generation=1559887549908602&alt=media',
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt2-2019-06-07%2001:05:47?generation=1559887551753810&alt=media'
-            ],
-            30000
+            {
+                name: 'Canh khổ qua nhồi thịt Ver 2.0',
+                description: 'Canh khổ qua nhồi thịt ver 2.0 y chan ver 1.0.',
+                images: [
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt0-2019-06-07%2001:05:43?generation=1559887548010845&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt1-2019-06-07%2001:05:45?generation=1559887549908602&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt2-2019-06-07%2001:05:47?generation=1559887551753810&alt=media'
+                ],
+                defaultPrice: 30000
+            }
         );
     }
 };

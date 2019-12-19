@@ -29,6 +29,7 @@ export class Customer extends BaseEntity {
     public email: string;
 
     @Field()
+    @Column()
     public password: string;
 
     @Field({ nullable: true })

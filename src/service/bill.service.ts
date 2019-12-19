@@ -25,6 +25,7 @@ class BillService {
         return bills.filter(i => user.stores.findIndex(userStore => userStore.id === i.store.id) >= 0)
             .filter((_store, index) => index >= skip && index < (take ? skip + take : bills.length));
     }
+
     public async getAllByUser(user: User, length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
         const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
         const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
