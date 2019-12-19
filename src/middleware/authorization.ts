@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { __ } from 'i18n';
+import { AuthChecker } from 'type-graphql';
 import { User } from '../entity/user';
+import { GraphUserContext } from '../lib/graphContext';
 import { HttpError } from '../lib/httpError';
 import { UserAuth } from './userAuth';
 
@@ -15,6 +17,10 @@ const authorMiddleware = (requiredPermissions: string[]) => {
             return next();
         }
     ];
+};
+
+const authorGraphMiddleware: AuthChecker<GraphUserContext> = ({ context }, permissions) => {
+    return authorization(context.payload?.user, permissions, true, 'normal');
 };
 
 const authorStoreMiddleware = (substitutePermissions: string[]) => {
@@ -38,12 +44,18 @@ const authorStoreMiddleware = (substitutePermissions: string[]) => {
     ];
 };
 
-const authorization = (currentUser: User, requiredPermissions: string[], throwError: boolean = true) => {
+const authorization = (currentUser: User, requiredPermissions: string[], throwError: boolean = true,
+    errorType: 'normal' | 'http' = 'http') => {
+
     let permissions: string[] = [];
 
     if (!currentUser || !currentUser.roles || currentUser.roles.length === 0) {
         if (throwError) {
-            throw new HttpError(401, __('authentication.unauthorized'));
+            if (errorType === 'http') {
+                throw new HttpError(401, __('authentication.unauthorized'));
+            } else {
+                throw new Error(__('authentication.unauthorized'));
+            }
         }
 
         return false;
@@ -56,7 +68,11 @@ const authorization = (currentUser: User, requiredPermissions: string[], throwEr
     for (const permission of requiredPermissions) {
         if (!permissions.find(p => permission === p)) {
             if (throwError) {
-                throw new HttpError(401, __('authentication.unauthorized'));
+                if (errorType === 'http') {
+                    throw new HttpError(401, __('authentication.unauthorized'));
+                } else {
+                    throw new Error(__('authentication.unauthorized'));
+                }
             }
 
             return false;
@@ -72,6 +88,10 @@ const authorizationStore = (currentUser: User, storeId: number) => {
     }
 
     const stores = currentUser?.stores || [];
+
+    if (typeof storeId === 'string') {
+        storeId = parseInt(storeId, 10);
+    }
 
     if (stores.findIndex(item => item.id === storeId) === -1) {
         throw new HttpError(401, 'authentication.unauthorized_store');
@@ -104,4 +124,4 @@ const authorizationOr = (requiredPermissions: string[]) => {
     ];
 };
 
-export { authorMiddleware as AuthorMiddleware, authorizationOr as AuthorizationOr, authorization as Authorization, authorizationStore as AuthorizationStore, authorStoreMiddleware as AuthorStoreMiddleware };
+export { authorMiddleware as AuthorMiddleware, authorizationOr as AuthorizationOr, authorization as Authorization, authorizationStore as AuthorizationStore, authorStoreMiddleware as AuthorStoreMiddleware, authorGraphMiddleware as AuthorGraphMiddleware };

@@ -13,43 +13,41 @@ class DailyReportService {
         const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
         const take = length;
 
-        const dailyReport = await DailyReport.find({ take, skip, order, relations: ['stocks'] });
+        const dailyReport = await DailyReport.find({ take, skip, order, relations: ['stocks', 'user'] });
 
         return dailyReport;
     }
 
-    public async create(stockIds: number[], quantities: number[], warehouseId: number, username: string,
-        note?: string, stockPrices?: number[], stockNotes?: string[]) {
-        if (!stockIds || !quantities || !warehouseId || !username) {
+    public async create(data: {
+        stockIds: number[], quantities: number[], warehouseId: number, username: string,
+        note?: string, stockNotes?: string[]
+    }) {
+        if (!data.stockIds || !data.quantities || !data.warehouseId || !data.username) {
             throw new Error(__('error.missing_required_information'));
         }
 
-        if (quantities.length !== stockIds.length) {
+        if (data.quantities.length !== data.stockIds.length) {
             throw new Error(__('daily_report.stockIds_length_have_to_equal_quantities_length'));
         }
 
-        if (stockPrices && stockPrices.length !== stockIds.length) {
-            throw new Error(__('daily_report.stockIds_length_have_to_equal_stockPrices_length'));
-        }
-
-        if (stockNotes && stockNotes.length !== stockIds.length) {
+        if (data.stockNotes && data.stockNotes.length !== data.stockIds.length) {
             throw new Error(__('daily_report.stockIds_length_have_to_equal_stockNotes_length'));
         }
 
-        const warehouse = await Warehouse.findOne(warehouseId);
+        const warehouse = await Warehouse.findOne(data.warehouseId);
         if (!warehouse) {
             throw new Error(__('daily_report.warehouse_not_found'));
         }
 
-        const user = await User.findOne({ where: { username } });
+        const user = await User.findOne({ where: { username: data.username } });
         if (!user) {
-            throw new Error(__('daily_report.user_{{username}}_not_found', { username }));
+            throw new Error(__('daily_report.user_{{username}}_not_found', { username: data.username }));
         }
 
         const newDailyReport = new DailyReport();
         newDailyReport.warehouse = warehouse;
         newDailyReport.user = user;
-        newDailyReport.note = note;
+        newDailyReport.note = data.note;
 
         const dailyReport = await newDailyReport.save();
 
@@ -57,23 +55,23 @@ class DailyReportService {
         const warehouseStocks = await WarehouseStock.find({ where: { warehouseId: warehouse.id } });
 
         // tslint:disable-next-line: prefer-for-of
-        for (let i = 0; i < stockIds.length; i++) {
-            const stock = await Stock.findOne(stockIds[i]);
+        for (let i = 0; i < data.stockIds.length; i++) {
+            const stock = await Stock.findOne(data.stockIds[i]);
             if (!stock) {
-                throw new Error(__('daily_report.stock_{{id}}_not_found', { id: stockIds[i].toString() }));
+                throw new Error(__('daily_report.stock_{{id}}_not_found', { id: data.stockIds[i].toString() }));
             }
 
             const dailyReportStock = new DailyReportStock();
             dailyReportStock.stock = stock;
-            dailyReportStock.quantity = quantities[i];
-            dailyReportStock.note = stockNotes ? stockNotes[i] : null;
+            dailyReportStock.quantity = data.quantities[i];
+            dailyReportStock.note = data.stockNotes ? data.stockNotes[i] : null;
             dailyReportStock.dailyReport = dailyReport;
 
             const index = warehouseStocks.findIndex(it => it.stockId === dailyReportStock.stock.id);
 
             if (index === -1) {
                 throw new Error(__('daily_report.stock_{{id}}_not_exist_in_warehouse',
-                    { id: stockIds[i].toString() }));
+                    { id: data.stockIds[i].toString() }));
             }
 
             if (warehouseStocks[index].quantity < dailyReportStock.quantity) {
@@ -92,23 +90,23 @@ class DailyReportService {
         return await DailyReport.findOne(dailyReport.id, { relations: ['user', 'stocks'] });
     }
 
-    public async edit(id: number, username?: string, note?: string) {
+    public async edit(id: number, data: { username?: string, note?: string }) {
         const dailyReport = await DailyReport.findOne(id);
         if (!dailyReport) {
             throw new Error(__('daily_report.daily_report_not_found'));
         }
 
-        if (username) {
-            const user = await User.findOne({ where: { username } });
+        if (data.username) {
+            const user = await User.findOne({ where: { username: data.username } });
             if (!user) {
-                throw new Error(__('daily_report.user_{{username}}_not_found', { username }));
+                throw new Error(__('daily_report.user_{{username}}_not_found', { username: data.username }));
             }
 
             dailyReport.user = user;
         }
 
-        if (note) {
-            dailyReport.note = note;
+        if (data.note) {
+            dailyReport.note = data.note;
         }
 
         await dailyReport.save();
@@ -142,8 +140,11 @@ class DailyReportService {
         await dailyReport.remove();
     }
 
-    public async getOne(id: number) {
-        const dailyReport = await DailyReport.findOne(id);
+    public async getOne(id: number, options?: { withUser?: boolean }) {
+        const relations = [];
+        if (options?.withUser) { relations.push('user'); }
+
+        const dailyReport = await DailyReport.findOne(id, { relations });
 
         if (!dailyReport) {
             throw new Error(__('daily_report.daily_report_not_found'));

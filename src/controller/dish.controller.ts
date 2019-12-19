@@ -10,7 +10,7 @@ class DishController implements ICrudController {
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {
-        DishService.create(req.body.name, req.body.description, req.body.images, req.body.defaultPrice)
+        DishService.create(req.body)
             .then(value => {
                 return res.status(200).json(value);
             }).catch(e => next(e));
@@ -23,8 +23,7 @@ class DishController implements ICrudController {
     }
 
     public update(req: Request, res: Response, next: NextFunction): void {
-        DishService.edit(parseInt(req.params.id, 10), req.body.name, req.body.description, req.body.images,
-            req.body.defaultPrice).then(value =>
+        DishService.edit(parseInt(req.params.id, 10), req.body).then(value =>
                 res.status(200).json(value)
             ).catch(e => next(e));
     }

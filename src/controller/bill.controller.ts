@@ -5,9 +5,10 @@ import { BillService } from '../service/bill.service';
 
 class BillController implements ICrudController {
     public async list(req: Request, res: Response, next: NextFunction) {
-        BillService.getAll(req.query.length, req.query.page, req.query.orderId, req.query.order).then(value => {
-            return res.status(200).json(value);
-        }).catch(e => next(e));
+        BillService.getAll(req['user'], req.query.length, req.query.page, req.query.orderId, req.query.order)
+            .then(value => {
+                return res.status(200).json(value);
+            }).catch(e => next(e));
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {

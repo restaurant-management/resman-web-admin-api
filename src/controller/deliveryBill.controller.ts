@@ -7,7 +7,7 @@ import { DeliveryBillService } from '../service/deliveryBill.service';
 
 class DeliveryBillController implements ICrudController {
     public async list(req: Request, res: Response, next: NextFunction) {
-        DeliveryBillService.getAll(req.query).then(value => {
+        DeliveryBillService.getAll(req['user'], req.query).then(value => {
             return res.status(200).json(value);
         }).catch(e => next(e));
     }

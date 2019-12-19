@@ -18,7 +18,7 @@ class DailyDishController implements ICrudController {
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {
-        DailyDishService.create(req.body.day || new Date(), req.body.dishId, req.body.storeId, req.body.session)
+        DailyDishService.create(req.body)
             .then(value => {
                 return res.status(200).json(value);
             }).catch(e => next(e));
@@ -38,7 +38,7 @@ class DailyDishController implements ICrudController {
     }
 
     public delete(req: Request, res: Response, next: NextFunction): void {
-        DailyDishService.delete(req.query.day, req.query.dishId, req.query.session).then(() =>
+        DailyDishService.delete(req.query).then(() =>
             res.sendStatus(200)
         ).catch(e => next(e));
     }

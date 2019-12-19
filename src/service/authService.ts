@@ -27,6 +27,10 @@ class AuthService {
     }
 
     public async verify(token: string): Promise<User | Customer> {
+        if (!token) {
+            throw new Error(__('authentication.no_token_provided'));
+        }
+
         let decoded = {};
         try {
             decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);

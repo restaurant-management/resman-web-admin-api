@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { MiddlewareFn } from 'type-graphql';
 import { HttpError } from '../lib/httpError';
 
 const errorHandler = (err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -15,6 +16,19 @@ const errorHandler = (err: any, _req: Request, res: Response, _next: NextFunctio
     }
 
     return res.status(500).json({ message: err.message });
+};
+
+export const graphErrorHandler: MiddlewareFn<any> = async (_, next) => {
+    try {
+        return await next();
+    } catch (err) {
+
+        if (err instanceof HttpError) {
+            throw new Error(err.message);
+        }
+
+        throw err;
+    }
 };
 
 export default errorHandler;

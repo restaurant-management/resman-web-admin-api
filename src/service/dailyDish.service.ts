@@ -1,5 +1,6 @@
 import { __ } from 'i18n';
 import { DailyDish, DaySession } from '../entity/dailyDish';
+import { onlyDate } from '../helper/onlyDate';
 import { DishService } from './dish.service';
 import { StoreService } from './store.service';
 import { UserService } from './user.service';
@@ -15,32 +16,39 @@ class DailyDishService {
         return dailyDishes;
     }
 
-    public async create(day: Date, dishId: number, storeId: number, session?: string) {
-        if (session && Object.keys(DaySession).map(i => DaySession[i]).indexOf(session) < 0) {
+    public async create(data: { day: Date, dishId: number, storeId: number, session?: string }) {
+        if (data.session && Object.keys(DaySession).map(i => DaySession[i]).indexOf(data.session) < 0) {
             throw new Error(__('daily_dish.session_not_found'));
         }
 
-        const dish = await DishService.getOne(dishId);
-        if (!dish) { throw new Error(__('daily_dish.dish_not_found')); }
+        const dish = await DishService.getOne(data.dishId);
+        const store = await StoreService.getOne(data.storeId);
 
-        const store = await StoreService.getOne(storeId);
-        if (!store) { throw new Error(__('daily_dish.store_not_found')); }
+        try {
+            await this.getOne({
+                day: data.day, dishId: data.dishId, storeId: data.storeId, session: data.session || DaySession.None
+            });
+            throw new Error(__('daily_dish.existed'));
+        // tslint:disable-next-line: no-empty
+        } catch (_) { }
 
         const newDailyDish = new DailyDish();
-        newDailyDish.day = day;
-        newDailyDish.session = session as DaySession;
+        newDailyDish.day = data.day;
+        newDailyDish.session = data.session as DaySession;
         newDailyDish.dish = dish;
         newDailyDish.store = store;
 
         const dailyDish = await newDailyDish.save({ reload: true });
         if (!dailyDish) { throw new Error(__('daily_dish.create_fail')); }
 
-        return await this.getOne({ day: dailyDish.day, dishId: dailyDish.dish.id, session: dailyDish.session });
+        return await this.getOne({
+            day: dailyDish.day, dishId: dailyDish.dish.id, session: dailyDish.session, storeId: dailyDish.storeId
+        });
     }
 
-    public async edit(day: Date, dishId: number, session: string, storeId?: number, confirmByUsername?: string,
+    public async edit(day: Date, dishId: number, session: string, storeId: number, confirmByUsername?: string,
         confirmAt?: Date) {
-        const dailyDish = await this.getOne({ day, dishId, session });
+        const dailyDish = await this.getOne({ day, dishId, session, storeId });
         if (!dailyDish) { throw new Error(__('daily_dish.daily_dish_not_found')); }
 
         // Update store whether storeID exist
@@ -58,20 +66,23 @@ class DailyDishService {
 
         await dailyDish.save();
 
-        return await this.getOne({ day, dishId, session });
+        return await this.getOne({ day, dishId, session, storeId });
     }
 
-    public async delete(day: Date, dishId: number, session: string) {
-        if (!day || !dishId || !session) {
+    public async delete(key: { day: Date, dishId: number, session: string, storeId: number }) {
+        if (!key.day || !key.dishId || !key.session) {
             throw new Error(__('error.missing_required_information'));
         }
 
-        const dailyDish = await this.getOne({ day, dishId, session });
+        if (onlyDate(key.day) < onlyDate(new Date())) {
+            throw new Error(__('daily_dish.error_can_not_delete_old_daily_dish'));
+        }
+
+        const dailyDish = await this.getOne(key);
         await dailyDish.remove();
     }
 
-    // TODO fix get one with storeId
-    public async getOne(key: { day?: Date, dishId?: number, session?: string, storeId?: number }) {
+    public async getOne(key: { day: Date, dishId: number, session: string, storeId: number }) {
         const dailyDish = await DailyDish.findOne({
             relations: ['confirmBy', 'dish'],
             where: { ...key }
@@ -87,7 +98,7 @@ class DailyDishService {
 
     public async getBy(key: { day?: Date, dishId?: number, session?: string, storeId?: number }) {
         const dailyDishes = await DailyDish.find({
-            relations: ['confirmBy', 'dish'],
+            relations: ['confirmBy', 'dish', 'store'],
             where: { ...key }
         });
 

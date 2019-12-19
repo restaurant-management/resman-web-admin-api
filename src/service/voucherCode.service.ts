@@ -1,4 +1,5 @@
 import { __ } from 'i18n';
+import { User } from '../entity/user';
 import { VoucherCode } from '../entity/voucherCode';
 import { RandomCode } from '../helper/randomCode';
 import { StoreService } from './store.service';
@@ -12,6 +13,18 @@ class VoucherCodeService {
         const voucherCode = await VoucherCode.find({ take, skip, order });
 
         return voucherCode;
+    }
+
+    public async getAllByUser(user: User, length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
+        const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
+        const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
+        const take = length;
+
+        const voucherCodes = await VoucherCode.find({ order, relations: ['stores'] });
+
+        return voucherCodes.filter(i =>
+            i.stores.findIndex(store => user.stores.findIndex(userStore => userStore.id === store.id) >= 0) >= 0)
+            .filter((_store, index) => index >= skip && index < (take ? skip + take : voucherCodes.length));
     }
 
     public async create(data: {

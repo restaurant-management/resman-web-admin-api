@@ -7,8 +7,8 @@ class RoleService {
     public async getAll(options: { length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1' }) {
         const order = options.orderId ?
             { [options.orderId]: options.orderType === 'DESC' || options.orderType === '-1' ? -1 : 1 } : {};
-        const skip = (options.page - 1) * length >= 0 ? (options.page - 1) * length : 0;
-        const take = length;
+        const skip = (options.page - 1) * options.length >= 0 ? (options.page - 1) * options.length : 0;
+        const take = options.length;
 
         const role = await Role.find({ take, skip, order });
 
@@ -19,6 +19,16 @@ class RoleService {
         name: string, slug?: string, description?: string, level?: number, permissions?: string[]
     }) {
         if (!data.slug) { data.slug = stringToSlug(data.name); }
+
+        let checkRole = null;
+        try {
+            checkRole = await this.getOne({ slug: data.slug });
+            // tslint:disable-next-line: no-empty
+        } catch (_) { }
+
+        if (checkRole) {
+            throw new Error(__('role.existed'));
+        }
 
         if (data.permissions) {
             for (const permission of data.permissions) {
@@ -31,8 +41,8 @@ class RoleService {
         try {
             await this.getOne({ slug: data.slug });
             throw new Error('role.role_existed');
-        // tslint:disable-next-line: no-empty
-        } catch (_) {  }
+            // tslint:disable-next-line: no-empty
+        } catch (_) { }
 
         const newRole = new Role();
         newRole.name = data.name;

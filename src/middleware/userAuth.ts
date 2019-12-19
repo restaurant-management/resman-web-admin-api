@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { __ } from 'i18n';
+import { MiddlewareFn } from 'type-graphql';
 import { User } from '../entity/user';
+import { GraphUserContext } from '../lib/graphContext';
 import { HttpError } from '../lib/httpError';
 import { AuthService } from '../service/authService';
 
@@ -8,27 +10,38 @@ const userAuth = async (req: Request, _res: Response, next: NextFunction) => {
     try {
         const token = req.headers.authorization;
 
-        if (!token) {
-            throw new HttpError(401, __('authentication.no_token_provided'));
-        }
+        req['user'] = await _userAuth(token);
 
-        try {
-            const user = await AuthService.verify(token);
-            if (!(user instanceof User)) {
-                throw new Error(__('authentication.fail_authenticate_token'));
-            }
-
-            const { password, ...userWithoutPassword } = user;
-
-            req['user'] = userWithoutPassword;
-
-            return next();
-        } catch (e) {
-            throw new HttpError(401, e.message);
-        }
+        return next();
     } catch (e) {
-        next(e);
+        return next(e);
     }
 };
 
-export { userAuth as UserAuth };
+const userAuthGraph: MiddlewareFn<GraphUserContext> = async ({ context }, next) => {
+
+    context.payload = { user: await _userAuth(context.req.headers.authorization) };
+
+    return next();
+};
+
+const _userAuth = async (token: string): Promise<User> => {
+    if (!token) {
+        throw new HttpError(401, __('authentication.no_token_provided'));
+    }
+
+    try {
+        const user = await AuthService.verify(token);
+
+        if (!(user instanceof User)) {
+            throw new Error(__('authentication.fail_authenticate_token'));
+        }
+
+        return user;
+
+    } catch (e) {
+        throw new HttpError(401, e.message);
+    }
+};
+
+export { userAuth as UserAuth, userAuthGraph as UserAuthGraph };

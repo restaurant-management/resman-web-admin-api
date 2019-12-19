@@ -1,13 +1,20 @@
+import { ApolloServer } from 'apollo-server-express';
 import bodyParser from 'body-parser';
 import express from 'express';
 import i18n from 'i18n';
 import logger from 'morgan';
 import path from 'path';
 import supertest, { SuperTest, Test } from 'supertest';
+import { buildSchema } from 'type-graphql';
 import { createConnection, getConnectionOptions } from 'typeorm';
-import errorHandler from '../middleware/errorHandler';
+import { Customer } from '../entity/customer';
+import { User } from '../entity/user';
+import { AuthorGraphMiddleware } from '../middleware/authorization';
+import errorHandler, { graphErrorHandler } from '../middleware/errorHandler';
+import { resolvers } from '../resolver';
 import router from '../router';
 import seedData from '../seeder';
+import { AuthService } from '../service/authService';
 
 export class Application {
 
@@ -29,6 +36,40 @@ export class Application {
 
             await seedData();
 
+            // -------------Setup GraphQL------------
+            const apolloServer = new ApolloServer({
+                schema: await buildSchema({
+                    resolvers,
+                    authChecker: AuthorGraphMiddleware,
+                    globalMiddlewares: [graphErrorHandler]
+                }),
+                playground: true, // TODO remove in production mode
+                introspection: true,
+                context: async ({ req, res }) => {
+                    try {
+                        if (!req.headers.authorization) {
+                            return { req, res };
+                        }
+
+                        const user = await AuthService.verify(req.headers.authorization);
+
+                        if (user instanceof User) {
+                            return { req, res, payload: { user } };
+                        } else if (user instanceof Customer) {
+                            return { req, res, payload: { customer: user } };
+                        }
+                    } catch (e) {
+                        return { req, res };
+                    }
+                }
+            });
+            apolloServer.applyMiddleware({
+                app: this._app,
+                path: '/graph',
+                bodyParserConfig: true
+            });
+
+            // --------------Setup Restful-------------
             this._app.use('/api', router);
             this._app.use(errorHandler);
 

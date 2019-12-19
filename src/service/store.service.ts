@@ -37,8 +37,8 @@ class StoreService {
         newStore.hotline = data.hotline;
         newStore.description = data.description;
         newStore.logo = data.logo;
-        if (data.openTime) { newStore.openTime = new Date(data.openTime); }
-        if (data.closeTime) { newStore.closeTime = new Date(data.closeTime); }
+        if (data.openTime) { newStore.openTime = data.openTime; }
+        if (data.closeTime) { newStore.closeTime = data.closeTime; }
         const dishes: Dish[] = [];
         if (data.dishIds) {
             for (const dishId of data.dishIds) {
@@ -52,19 +52,27 @@ class StoreService {
         if (data.dishIds) {
             for (const [index, dish] of dishes.entries()) {
                 const storeDish = new StoreDish();
+                storeDish.store = store;
                 storeDish.dish = dish;
                 storeDish.price = data.dishPrices[index];
+                try {
+                    await storeDish.save();
+                } catch (_) { console.log(_); }
             }
         }
 
-        return store;
+        return this.getOne(store.id);
     }
 
     public async edit(id: number, data: {
         name?: string, address?: string, hotline?: string, description?: string, logo?: string,
-        openTime?: Date, closeTime?: Date
+        openTime?: Date, closeTime?: Date, dishIds?: number[], dishPrices?: number[]
     }) {
-        const store = await Store.findOne(id);
+        if (data.dishIds && data.dishPrices && data.dishIds.length !== data.dishPrices.length) {
+            throw new Error('store.dishIds_length_not_same_dishPrices_length');
+        }
+
+        let store = await this.getOne(id);
 
         if (data.name) { store.name = data.name; }
         if (data.address) { store.address = data.address; }
@@ -74,7 +82,48 @@ class StoreService {
         if (data.openTime) { store.openTime = data.openTime; }
         if (data.closeTime) { store.closeTime = data.closeTime; }
 
-        return await store.save();
+        await store.save();
+
+        store = await this.getOne(id, { withDishes: true });
+        if (data.dishIds) {
+            const dishes: Dish[] = [];
+            for (const dishId of data.dishIds) {
+                dishes.push(await DishService.getOne(dishId));
+            }
+
+            // Add new or save existed
+            for (const [index, dish] of dishes.entries()) {
+                const oldIndex = store.storeDishes.findIndex(item => item.dishId === dish.id);
+                if (oldIndex >= 0) {
+                    console.log(store.storeDishes[oldIndex]);
+                    store.storeDishes[oldIndex].price = data.dishPrices[index];
+                    await store.storeDishes[oldIndex].save();
+                } else {
+                    const storeDish = new StoreDish();
+                    storeDish.store = store;
+                    storeDish.dish = dish;
+                    storeDish.price = data.dishPrices[index];
+                    await storeDish.save();
+                }
+            }
+
+            // Remove
+            for (const storeDish of store.storeDishes) {
+                const oldIndex = dishes.findIndex(item => item.id === storeDish.dishId);
+                if (oldIndex < 0) {
+                    await storeDish.remove();
+                }
+            }
+        }
+
+        return this.getOne(store.id, {
+            withDiscountCampaigns: true,
+            withDiscountCodes: true,
+            withDishes: true,
+            withUsers: true,
+            withVoucherCodes: true,
+            withWarehouses: true
+        });
     }
 
     public async delete(id: number) {
@@ -101,13 +150,15 @@ class StoreService {
         if (options?.withVoucherCodes) { relations.push('voucherCodes'); }
         if (options?.withDiscountCampaigns) { relations.push('discountCampaigns'); }
         if (options?.withWarehouses) { relations.push('warehouses'); }
-        if (options?.withDishes) { relations.push('storeDishes'); }
+        relations.push('storeDishes');
 
         const store = await Store.findOne(id, { relations });
 
         if (!store) {
             throw new Error(__('store.store_not_found'));
         }
+
+        store.amountDishes = store.storeDishes?.length || 0;
 
         if (options?.withDishes) {
             const dishes = [];
@@ -123,8 +174,9 @@ class StoreService {
                 dishes.push(dish);
             }
 
-            delete store.storeDishes;
             store['dishes'] = dishes;
+        } else {
+            delete store.storeDishes;
         }
 
         return store;
@@ -140,15 +192,8 @@ class StoreService {
             withWarehouses: Authorization(user, [Permission.warehouse.list], false),
         });
     }
-
-    public async getDishes(id: number) {
-        const store = await this.getOne(id);
-
-        return store;
-    }
 }
 
 const storeService = new StoreService();
 
 export { storeService as StoreService };
-

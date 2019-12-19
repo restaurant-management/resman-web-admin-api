@@ -6,6 +6,7 @@ import { User } from '../entity/user';
 import { PasswordHandler } from '../helper/passwordHandler';
 import { AuthService } from './authService';
 import { StoreService } from './store.service';
+import { WarehouseService } from './warehouse.service';
 
 class UserService {
     /**
@@ -26,7 +27,7 @@ class UserService {
 
         for (const slug of requireLevelRoles) {
             const role = await Role.findOne({ where: { slug } });
-            if (requireRoleLevel < role.level) {
+            if (role && requireRoleLevel < role.level) {
                 requireRoleLevel = role.level;
             }
         }
@@ -46,13 +47,13 @@ class UserService {
         let requireRoleLevel = 0;
 
         for (const role of user.roles) {
-            if (highestUserRoleLevel < role.level) {
+            if (role && highestUserRoleLevel < role.level) {
                 highestUserRoleLevel = role.level;
             }
         }
 
         for (const role of requireUser.roles) {
-            if (requireRoleLevel < role.level) {
+            if (role && requireRoleLevel < role.level) {
                 requireRoleLevel = role.level;
             }
         }
@@ -202,8 +203,8 @@ class UserService {
             }
         }
 
-        user.password = PasswordHandler.encode(data.password);
-        user.phoneNumber = data.phoneNumber;
+        if (data.password) { user.password = PasswordHandler.encode(data.password); }
+        if (data.phoneNumber) { user.phoneNumber = data.phoneNumber; }
         if (data.address) { user.address = data.address; }
         if (data.fullName) { user.fullName = data.fullName; }
         if (data.avatar) { user.avatar = data.avatar; }
@@ -214,12 +215,16 @@ class UserService {
         return await user.save();
     }
 
-    public async delete(username: string) {
+    public async delete(username: string, deleteBy: User) {
         if (username === 'admin') {
             throw new Error(__('user.can_not_delete_admin_user'));
         }
 
-        const user = await this.getOne({ username });
+        const user = await this.getOne({ username }, { withRoles: true });
+
+        if (!await this.checkRoleLevel(deleteBy.id, user.roles.map(i => i.slug))) {
+            throw new Error(__('user.can_not_delete_user_with_higher_level'));
+        }
 
         if (!user) {
             throw new Error(__('user.user_not_found'));
@@ -274,6 +279,16 @@ class UserService {
         }
 
         return this.edit(editBy.username, editBy, { password: data.newPassword });
+    }
+
+    public async addWareHouse(username: string, warehouseId: number) {
+        const user = await this.getOne({ username }, { withWarehouses: true });
+        const warehouse = await WarehouseService.getOne(warehouseId);
+
+        user.warehouses.push(warehouse);
+        await user.save({ reload: true });
+
+        return this.getOne({ username }, { withRoles: true, withStores: true, withWarehouses: true });
     }
 }
 

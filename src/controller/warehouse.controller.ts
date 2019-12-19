@@ -10,21 +10,20 @@ class WarehouseController implements ICrudController {
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {
-        WarehouseService.create(req.body.name, req.body.address, req.body.hotline, req.body.description)
+        WarehouseService.create(req.body)
             .then(value => {
                 return res.status(200).json(value);
             }).catch(e => next(e));
     }
 
     public read(req: Request, res: Response, next: NextFunction): void {
-        WarehouseService.getOne(parseInt(req.params.id, 10)).then((value) =>
+        WarehouseService.getOne(parseInt(req.params.id, 10), req.query).then((value) =>
             res.status(200).json(value)
         ).catch(e => next(e));
     }
 
     public update(req: Request, res: Response, next: NextFunction): void {
-        WarehouseService.edit(parseInt(req.params.id, 10), req.body.name, req.body.address, req.body.hotline,
-            req.body.description).then(value =>
+        WarehouseService.edit(parseInt(req.params.id, 10), req.body).then(value =>
                 res.status(200).json(value)
             ).catch(e => next(e));
     }

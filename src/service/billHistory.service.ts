@@ -30,11 +30,11 @@ class BillHistoryService {
         dishNotes?: string[], dishQuantities?: number[], description?: string, createAt?: Date
     }) {
         const time = data.createAt || new Date();
-        const bill = await BillService.getOne(billId, { showDishesType: 'dishes' });
+        const bill = await BillService.getOne(billId, { showDishesType: 'dishes', withStore: true });
 
         // Check whether dish is daily dish.
         for (const dishId of data.dishIds) {
-            await DailyDishService.getOne({day: time, dishId, session: DaySession.None});
+            await DailyDishService.getOne({ day: time, dishId, session: DaySession.None, storeId: bill.store.id });
         }
 
         const newBillHistory = new BillHistory();
@@ -57,7 +57,7 @@ class BillHistoryService {
                     note: dishNotes[index] || oldBillDish?.note,
                     quantity: dishQuantities[index] || oldBillDish?.quantity,
                     preparedAt: oldBillDish?.preparedAt,
-                    deliveredAt: oldBillDish?.deliveredAt
+                    deliveredAt: oldBillDish?.deliveryAt
                 });
         }
 
@@ -65,14 +65,14 @@ class BillHistoryService {
     }
 
     public async createRaw(data: {
-        dishIds: number[], userUuid: string, description?: string, createAt?: Date
+        dishIds: number[], userUuid: string, storeId: number, description?: string, createAt?: Date
     }): Promise<BillHistory> {
         const time = data.createAt || new Date();
 
         const dishes = [];
         for (const dishId of data.dishIds) {
             // Check whether dish is daily dish.
-            await DailyDishService.getOne({day: time, dishId, session: DaySession.None});
+            await DailyDishService.getOne({ day: time, dishId, session: DaySession.None, storeId: data.storeId });
             // Add to list dishes
             dishes.push(await DishService.getOne(dishId));
         }
