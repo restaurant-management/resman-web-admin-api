@@ -2,6 +2,7 @@ import { __ } from 'i18n';
 import { Bill } from '../entity/bill';
 import { DeliveryBill } from '../entity/deliveryBill';
 import { DiscountCode } from '../entity/discountCode';
+import { User } from '../entity/user';
 import { StoreService } from './store.service';
 
 class DiscountCodeService {
@@ -10,9 +11,20 @@ class DiscountCodeService {
         const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
         const take = length;
 
-        const discountCode = await DiscountCode.find({ take, skip, order });
+        const discountCode = await DiscountCode.find({ take, skip, order, relations: ['stores'] });
 
         return discountCode;
+    }
+    public async getAllByUser(user: User, length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
+        const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
+        const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
+        const take = length;
+
+        const discountCodes = await DiscountCode.find({ order, relations: ['stores'] });
+
+        return discountCodes.filter(i =>
+            i.stores.findIndex(store => user.stores.findIndex(userStore => userStore.id === store.id) >= 0) >= 0)
+            .filter((_store, index) => index >= skip && index < (take ? skip + take : discountCodes.length));
     }
 
     public async create(data: {
@@ -49,7 +61,7 @@ class DiscountCodeService {
     }
 
     public async edit(code: string, data: {
-        code: string, name?: string, startAt?: Date, endAt?: Date, discount?: number, storeIds?: number[]
+        name?: string, startAt?: Date, endAt?: Date, discount?: number, storeIds?: number[]
         description?: string, minBillPrice?: number, maxPriceDiscount?: number, maxNumber?: number, isActive?: boolean
     }) {
         const discountCode = await this.getOne(code);
@@ -127,4 +139,3 @@ class DiscountCodeService {
 const discountCodeService = new DiscountCodeService();
 
 export { discountCodeService as DiscountCodeService };
-

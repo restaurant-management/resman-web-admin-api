@@ -1,6 +1,7 @@
 import { CustomerResolver } from './customer.resolver';
 import { DailyDishResolver } from './dailyDish.resolver';
 import { DailyReportResolver } from './dailyReport.resolver';
+import { DiscountCodeResolver } from './discountCode.resolver';
 import { DishResolver } from './dish.resolver';
 import { ImportBillResolver } from './importBill.resolver';
 import { RoleResolver } from './role.resolver';
@@ -17,5 +18,6 @@ export const resolvers = [
     ImportBillResolver,
     DailyReportResolver,
     RoleResolver,
-    DishResolver
+    DishResolver,
+    DiscountCodeResolver
 ];
