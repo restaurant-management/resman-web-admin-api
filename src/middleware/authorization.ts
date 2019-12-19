@@ -89,6 +89,10 @@ const authorizationStore = (currentUser: User, storeId: number) => {
 
     const stores = currentUser?.stores || [];
 
+    if (typeof storeId === 'string') {
+        storeId = parseInt(storeId, 10);
+    }
+
     if (stores.findIndex(item => item.id === storeId) === -1) {
         throw new HttpError(401, 'authentication.unauthorized_store');
     }

@@ -47,6 +47,10 @@ export class Application {
                 introspection: true,
                 context: async ({ req, res }) => {
                     try {
+                        if (!req.headers.authorization) {
+                            return { req, res };
+                        }
+
                         const user = await AuthService.verify(req.headers.authorization);
 
                         if (user instanceof User) {

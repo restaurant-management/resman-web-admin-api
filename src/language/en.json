@@ -37,7 +37,9 @@
 	},
 	"bill": {
 		"bill_is_collected": "bill.bill_is_collected",
-		"bill_not_found": "bill.bill_not_found"
+		"bill_not_found": "bill.bill_not_found",
+		"created_by_must_be_staff": "bill.created_by_must_be_staff",
+		"delete_success": "bill.delete_success"
 	},
 	"voucher_code": {
 		"voucher_code_not_found": "voucher_code.voucher_code_not_found"

@@ -1,6 +1,7 @@
 import { __ } from 'i18n';
 import { Bill } from '../entity/bill';
 import { User } from '../entity/user';
+import { arrayCompare } from '../helper/arrayCompare';
 import { AuthorizationStore } from '../middleware/authorization';
 import { BillDishService } from './billDish.service';
 import { BillHistoryService } from './billHistory.service';
@@ -11,14 +12,36 @@ import { UserService } from './user.service';
 import { VoucherCodeService } from './voucherCode.service';
 
 class BillService {
-    public async getAll(length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
+    public async getAll(user: User, length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
         const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
         const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
         const take = length;
 
-        const bill = await Bill.find({ take, skip, order, where: { deleteAt: null } });
+        const bills = await Bill.find({
+            take, skip, order, where: { deleteAt: null },
+            relations: ['histories', 'collectBy', 'createBy', 'customer', 'prepareBy', 'store']
+        });
 
-        return bill;
+        return bills.filter(i => user.stores.findIndex(userStore => userStore.id === i.store.id) >= 0)
+            .filter((_store, index) => index >= skip && index < (take ? skip + take : bills.length));
+    }
+    public async getAllByUser(user: User, length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
+        const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
+        const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
+        const take = length;
+
+        const bills = await Bill.find({
+            take, skip, order, where: { deleteAt: null },
+            relations: ['histories', 'collectBy', 'createBy', 'customer', 'prepareBy', 'store']
+        });
+
+        return bills
+            .filter(i => i.collectBy.uuid === user.uuid
+                || i.createBy.uuid === user.uuid
+                || i.collectBy.uuid === user.uuid
+                || i.prepareBy.uuid === user.uuid
+            )
+            .filter((_store, index) => index >= skip && index < (take ? skip + take : bills.length));
     }
 
     public async create(data: {
@@ -37,6 +60,9 @@ class BillService {
             createBy = await UserService.getOne({ uuid: data.createByUuid },
                 { withRoles: true, withStores: true, withWarehouses: true });
         } catch (_e) { throw new Error(__('bill.created_user_not_found')); }
+        if (createBy.roles.findIndex(i => i.slug === 'staff') === -1) {
+            throw new Error(__('bill.created_by_must_be_staff'));
+        }
 
         AuthorizationStore(createBy, data.storeId);
 
@@ -139,6 +165,7 @@ class BillService {
                 withPrepareBy: true, showDishesType: 'dishes', withStore: true
             }
         );
+        delete bill.histories;
 
         AuthorizationStore(await UserService.getOne({ uuid: data.updateByUuid }, { withStores: true }), bill.store.id);
 
@@ -147,7 +174,8 @@ class BillService {
             bill.tableNumber = data.tableNumber;
         }
         // Create new history if dishIds existed.
-        if (data.dishIds) {
+        if (data.dishIds &&
+            !arrayCompare(data.dishIds.map(i => parseInt(i.toString(), 10)), bill.dishes.map(i => i.dishId))) {
             await BillHistoryService.create(bill.id, {
                 createAt: data.updateAt || new Date(),
                 dishIds: data.dishIds,
@@ -174,7 +202,7 @@ class BillService {
         if (data.collectAt) {
             bill.collectAt = data.collectAt;
         }
-        if (data.collectValue) {
+        if (data.collectValue !== null && data.collectValue !== undefined) {
             bill.collectValue = data.collectValue;
         }
         if (data.collectByUuid) {
@@ -188,7 +216,7 @@ class BillService {
             bill.collectValue = null;
         }
 
-        if (data.rating) {
+        if (data.rating !== null && data.rating !== undefined) {
             bill.rating = data.rating;
         }
 
@@ -228,10 +256,10 @@ class BillService {
         await bill.save();
 
         return await this.getOne(bill.id, {
-            withCollectBy: !!data.collectByUuid || data.collectByUuid === '',
+            withCollectBy: true,
             withCreateBy: true,
-            withCustomer: !!data.customerUuid || data.customerUuid === '',
-            withPrepareBy: !!data.prepareByUuid || data.prepareByUuid === '',
+            withCustomer: true,
+            withPrepareBy: true,
             showDishesType: 'dishes',
             withStore: true
         });
@@ -247,7 +275,16 @@ class BillService {
             throw new Error(__('bill.bill_is_collected'));
         }
 
-        return await this.edit(id, data);
+        await this.edit(id, data);
+
+        return await this.getOne(id, {
+            withCollectBy: true,
+            showDishesType: 'dishes',
+            withCreateBy: true,
+            withCustomer: true,
+            withPrepareBy: true,
+            withStore: true
+        });
     }
 
     /**
@@ -386,7 +423,7 @@ class BillService {
                 bill['updateAt'] = newestTime;
                 bill['updateBy'] = history.user;
                 bill['dishes'] = history.dishes;
-                delete bill.histories;
+                // delete bill.histories;
             } else {
                 bill['updateAt'] = null;
                 bill['updateBy'] = null;

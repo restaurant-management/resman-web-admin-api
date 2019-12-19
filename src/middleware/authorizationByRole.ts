@@ -1,10 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { __ } from 'i18n';
-import { AuthChecker } from 'type-graphql';
 import { User } from '../entity/user';
-import { GraphUserContext } from '../lib/graphContext';
 import { HttpError } from '../lib/httpError';
-import { UserAuth } from './userAuth';
+import { UserAuth, UserAuthGraph } from './userAuth';
 
 const authorizationByRole = (roleSlugs: string[]) => {
     return [
@@ -19,8 +17,16 @@ const authorizationByRole = (roleSlugs: string[]) => {
     ];
 };
 
-const authorRoleGraphMiddleware: AuthChecker<GraphUserContext> = ({ context }, roles) => {
-    return _authorizationByRole(context.payload.user, roles, true, 'normal');
+const authorRoleGraphMiddleware = (roleSlugs: string[]) => {
+    return [
+        UserAuthGraph,
+        async ({ context }, next) => {
+
+            _authorizationByRole(context.payload.user, roleSlugs, true, 'normal');
+
+            return next();
+        }
+    ];
 };
 
 const _authorizationByRole = (currentUser: User, requiredRoles: string[], throwError: boolean = true,
@@ -55,7 +61,5 @@ const _authorizationByRole = (currentUser: User, requiredRoles: string[], throwE
     return true;
 };
 
-export {
-    authorizationByRole as AuthorizationByRole,
-    authorRoleGraphMiddleware as AuthorRoleGraphMiddleware
-};
+export { authorizationByRole as AuthorizationByRole, authorRoleGraphMiddleware as AuthorRoleGraphMiddleware };
+
