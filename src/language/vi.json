@@ -81,7 +81,9 @@
 	"dish": {
 		"delete_fail": "dish.delete_fail",
 		"dish_not_found": "dish.dish_not_found",
-		"delete_success": "dish.delete_success"
+		"delete_success": "dish.delete_success",
+		"favourite_success": "dish.favourite_success",
+		"un_favourite_success": "dish.un_favourite_success"
 	},
 	"voucher_code": {
 		"voucher_code_not_found": "voucher_code.voucher_code_not_found"

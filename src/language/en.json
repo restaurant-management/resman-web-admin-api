@@ -76,7 +76,9 @@
 	},
 	"dish": {
 		"delete_fail": "dish.delete_fail",
-		"delete_success": "dish.delete_success"
+		"delete_success": "dish.delete_success",
+		"favourite_success": "dish.favourite_success",
+		"un_favourite_success": "dish.un_favourite_success"
 	},
 	"store": {
 		"store_not_found": "store.store_not_found",

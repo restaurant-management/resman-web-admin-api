@@ -34,6 +34,6 @@ export class Dish extends BaseEntity {
     @OneToMany(() => Comment, comment => comment.dish, { nullable: true })
     public comments: Comment[];
 
-    @ManyToMany(() => Customer, customer => customer.favoriteDishes, { nullable: true })
-    public favoriteCustomers: Customer[];
+    @ManyToMany(() => Customer, customer => customer.favouriteDishes, { nullable: true })
+    public favouriteCustomers: Customer[];
 }
