@@ -51,6 +51,7 @@ const permission = {
     stock: new PermissionByModule('stock'),
     importBill: new PermissionByModule('importBill'),
     dailyReport: new PermissionByModule('dailyReport'),
+    comment: new PermissionByModule('comment'),
     toArray: (): string[] => {
         let array = [];
         Object.keys(permission).forEach(key => {

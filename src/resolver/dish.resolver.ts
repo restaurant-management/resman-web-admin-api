@@ -1,8 +1,10 @@
 import { __ } from 'i18n';
 import { Arg, Authorized, Float, ID, Mutation, Query } from 'type-graphql';
+import { Comment } from '../entity/comment';
 import { Dish } from '../entity/dish';
 import { Permission } from '../entity/permission';
 import { DishService } from '../service/dish.service';
+import { CommentService } from '../service/comment.service';
 
 export class DishResolver {
     @Query(() => [Dish], { description: 'For admin' })

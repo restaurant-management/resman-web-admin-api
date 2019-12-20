@@ -134,5 +134,10 @@
 	"welcome_to_resman": "Chào mừng bạn đến với Resman",
 	"delivery_bill_dish": {
 		"delivery_bill_dish_not_found": "delivery_bill_dish.delivery_bill_dish_not_found"
+	},
+	"comment": {
+		"delete_success": "comment.delete_success",
+		"comment_not_found": "comment.comment_not_found",
+		"delete_failed": "comment.delete_failed"
 	}
 }

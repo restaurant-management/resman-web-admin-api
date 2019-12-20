@@ -1,6 +1,8 @@
 import { MaxLength } from 'class-validator';
 import { Field, ID, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Comment } from './comment';
+import { Customer } from './customer';
 
 @ObjectType()
 @Entity()
@@ -28,4 +30,10 @@ export class Dish extends BaseEntity {
 
     @Field({ defaultValue: 0 })
     public price: number;
+
+    @OneToMany(() => Comment, comment => comment.dish, { nullable: true })
+    public comments: Comment[];
+
+    @ManyToMany(() => Customer, customer => customer.favoriteDishes, { nullable: true })
+    public favoriteCustomers: Customer[];
 }
