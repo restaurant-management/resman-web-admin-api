@@ -1,4 +1,5 @@
 import { BillResolver } from './bill.resolver';
+import { CommentResolver } from './comment.resolver';
 import { CustomerResolver } from './customer.resolver';
 import { DailyDishResolver } from './dailyDish.resolver';
 import { DailyReportResolver } from './dailyReport.resolver';
@@ -27,5 +28,6 @@ export const resolvers = [
     VoucherCodeResolver,
     DiscountCampaignResolver,
     BillResolver,
-    DeliveryBillResolver
+    DeliveryBillResolver,
+    CommentResolver
 ];

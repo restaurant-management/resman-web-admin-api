@@ -45,7 +45,8 @@ class AuthService {
             return await UserService.getOne({ uuid: payload.uuid },
                 { withRoles: true, withStores: true, withWarehouses: true });
         } else if (payload.type === 'customer') {
-            return await CustomerService.getOne({ uuid: payload.uuid }, { withAddresses: true });
+            return await CustomerService.getOne({ uuid: payload.uuid },
+                { withAddresses: true, withFavouriteDishes: true });
         }
 
         throw new Error(__('authentication.fail_authenticate_token'));

@@ -1,9 +1,10 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class InitDatabase1575780737790 implements MigrationInterface {
-    name = 'InitDatabase1575780737790'
+export class InitDatabase1576837145226 implements MigrationInterface {
+    name = 'InitDatabase1576837145226'
 
     public async up(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.query(`CREATE TABLE "comment" ("id" SERIAL NOT NULL, "createAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "rating" double precision NOT NULL, "content" character varying(100) NOT NULL, "createById" integer, "dishId" integer, CONSTRAINT "PK_0b0e4bbc8415ec426f87f3a88e2" PRIMARY KEY ("id"))`, undefined);
         await queryRunner.query(`CREATE TABLE "dish" ("id" SERIAL NOT NULL, "name" character varying(100) NOT NULL, "description" character varying, "images" text array NOT NULL, "defaultPrice" double precision NOT NULL DEFAULT 0, CONSTRAINT "PK_59ac7b35af39b231276bfc4c00c" PRIMARY KEY ("id"))`, undefined);
         await queryRunner.query(`CREATE TABLE "bill_dish" ("billHistoryId" integer NOT NULL, "dishId" integer NOT NULL, "note" character varying, "preparedAt" TIMESTAMP WITH TIME ZONE, "deliveryAt" TIMESTAMP WITH TIME ZONE, "quantity" smallint NOT NULL DEFAULT 1, "price" double precision, CONSTRAINT "PK_9180acd08c6924e21d348fd4d17" PRIMARY KEY ("billHistoryId", "dishId"))`, undefined);
         await queryRunner.query(`CREATE TABLE "bill_history" ("id" SERIAL NOT NULL, "billId" integer NOT NULL, "description" character varying, "createAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "userId" integer NOT NULL, CONSTRAINT "PK_9462a962e4171a3a08408d6b268" PRIMARY KEY ("id"))`, undefined);
@@ -47,6 +48,11 @@ export class InitDatabase1575780737790 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "user_warehouses_warehouse" ("userId" integer NOT NULL, "warehouseId" integer NOT NULL, CONSTRAINT "PK_9a1c96593cfa51b45d5f49db006" PRIMARY KEY ("userId", "warehouseId"))`, undefined);
         await queryRunner.query(`CREATE INDEX "IDX_4a1c07017d4c85d84de4521208" ON "user_warehouses_warehouse" ("userId") `, undefined);
         await queryRunner.query(`CREATE INDEX "IDX_645be942211a40ef95001fdf85" ON "user_warehouses_warehouse" ("warehouseId") `, undefined);
+        await queryRunner.query(`CREATE TABLE "customer_favourite_dishes_dish" ("customerId" integer NOT NULL, "dishId" integer NOT NULL, CONSTRAINT "PK_f58a20a25416d40f3edcc665b42" PRIMARY KEY ("customerId", "dishId"))`, undefined);
+        await queryRunner.query(`CREATE INDEX "IDX_659e736ef16fba54ebfbe02270" ON "customer_favourite_dishes_dish" ("customerId") `, undefined);
+        await queryRunner.query(`CREATE INDEX "IDX_e9bc777a084c9afe30bec7d760" ON "customer_favourite_dishes_dish" ("dishId") `, undefined);
+        await queryRunner.query(`ALTER TABLE "comment" ADD CONSTRAINT "FK_4dec51468e269f2c2ba75817c30" FOREIGN KEY ("createById") REFERENCES "customer"("id") ON DELETE CASCADE ON UPDATE NO ACTION`, undefined);
+        await queryRunner.query(`ALTER TABLE "comment" ADD CONSTRAINT "FK_53a21422a1a8ab475cd5b23711e" FOREIGN KEY ("dishId") REFERENCES "dish"("id") ON DELETE CASCADE ON UPDATE NO ACTION`, undefined);
         await queryRunner.query(`ALTER TABLE "bill_dish" ADD CONSTRAINT "FK_300ed2db55edd0dce6c76d49ec1" FOREIGN KEY ("billHistoryId") REFERENCES "bill_history"("id") ON DELETE CASCADE ON UPDATE NO ACTION`, undefined);
         await queryRunner.query(`ALTER TABLE "bill_dish" ADD CONSTRAINT "FK_c17c4be1d7277409e8654c0081b" FOREIGN KEY ("dishId") REFERENCES "dish"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`, undefined);
         await queryRunner.query(`ALTER TABLE "bill_history" ADD CONSTRAINT "FK_860ffb38bae97a975bf900337e1" FOREIGN KEY ("billId") REFERENCES "bill"("id") ON DELETE CASCADE ON UPDATE NO ACTION`, undefined);
@@ -95,9 +101,13 @@ export class InitDatabase1575780737790 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "user_stores_store" ADD CONSTRAINT "FK_69e5e7682212a28bb9fd8f55038" FOREIGN KEY ("storeId") REFERENCES "store"("id") ON DELETE CASCADE ON UPDATE NO ACTION`, undefined);
         await queryRunner.query(`ALTER TABLE "user_warehouses_warehouse" ADD CONSTRAINT "FK_4a1c07017d4c85d84de45212084" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION`, undefined);
         await queryRunner.query(`ALTER TABLE "user_warehouses_warehouse" ADD CONSTRAINT "FK_645be942211a40ef95001fdf85b" FOREIGN KEY ("warehouseId") REFERENCES "warehouse"("id") ON DELETE CASCADE ON UPDATE NO ACTION`, undefined);
+        await queryRunner.query(`ALTER TABLE "customer_favourite_dishes_dish" ADD CONSTRAINT "FK_659e736ef16fba54ebfbe022703" FOREIGN KEY ("customerId") REFERENCES "customer"("id") ON DELETE CASCADE ON UPDATE NO ACTION`, undefined);
+        await queryRunner.query(`ALTER TABLE "customer_favourite_dishes_dish" ADD CONSTRAINT "FK_e9bc777a084c9afe30bec7d7609" FOREIGN KEY ("dishId") REFERENCES "dish"("id") ON DELETE CASCADE ON UPDATE NO ACTION`, undefined);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.query(`ALTER TABLE "customer_favourite_dishes_dish" DROP CONSTRAINT "FK_e9bc777a084c9afe30bec7d7609"`, undefined);
+        await queryRunner.query(`ALTER TABLE "customer_favourite_dishes_dish" DROP CONSTRAINT "FK_659e736ef16fba54ebfbe022703"`, undefined);
         await queryRunner.query(`ALTER TABLE "user_warehouses_warehouse" DROP CONSTRAINT "FK_645be942211a40ef95001fdf85b"`, undefined);
         await queryRunner.query(`ALTER TABLE "user_warehouses_warehouse" DROP CONSTRAINT "FK_4a1c07017d4c85d84de45212084"`, undefined);
         await queryRunner.query(`ALTER TABLE "user_stores_store" DROP CONSTRAINT "FK_69e5e7682212a28bb9fd8f55038"`, undefined);
@@ -146,6 +156,11 @@ export class InitDatabase1575780737790 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "bill_history" DROP CONSTRAINT "FK_860ffb38bae97a975bf900337e1"`, undefined);
         await queryRunner.query(`ALTER TABLE "bill_dish" DROP CONSTRAINT "FK_c17c4be1d7277409e8654c0081b"`, undefined);
         await queryRunner.query(`ALTER TABLE "bill_dish" DROP CONSTRAINT "FK_300ed2db55edd0dce6c76d49ec1"`, undefined);
+        await queryRunner.query(`ALTER TABLE "comment" DROP CONSTRAINT "FK_53a21422a1a8ab475cd5b23711e"`, undefined);
+        await queryRunner.query(`ALTER TABLE "comment" DROP CONSTRAINT "FK_4dec51468e269f2c2ba75817c30"`, undefined);
+        await queryRunner.query(`DROP INDEX "IDX_e9bc777a084c9afe30bec7d760"`, undefined);
+        await queryRunner.query(`DROP INDEX "IDX_659e736ef16fba54ebfbe02270"`, undefined);
+        await queryRunner.query(`DROP TABLE "customer_favourite_dishes_dish"`, undefined);
         await queryRunner.query(`DROP INDEX "IDX_645be942211a40ef95001fdf85"`, undefined);
         await queryRunner.query(`DROP INDEX "IDX_4a1c07017d4c85d84de4521208"`, undefined);
         await queryRunner.query(`DROP TABLE "user_warehouses_warehouse"`, undefined);
@@ -189,6 +204,7 @@ export class InitDatabase1575780737790 implements MigrationInterface {
         await queryRunner.query(`DROP TABLE "bill_history"`, undefined);
         await queryRunner.query(`DROP TABLE "bill_dish"`, undefined);
         await queryRunner.query(`DROP TABLE "dish"`, undefined);
+        await queryRunner.query(`DROP TABLE "comment"`, undefined);
     }
 
 }

@@ -1,6 +1,7 @@
 import { __ } from 'i18n';
 import { FindConditions, getConnection, ObjectLiteral } from 'typeorm';
 import { Dish } from '../entity/dish';
+import { CustomerService } from './customer.service';
 
 class DishService {
     public async getAll(options: {
@@ -68,6 +69,41 @@ class DishService {
 
         // TODO handle price with discount campaign
         return dish.defaultPrice;
+    }
+
+    public async favouriteDish(id: number, customerUuid: string) {
+        const customer = await CustomerService.getOne({ uuid: customerUuid }, { withFavouriteDishes: true });
+        const dish = await this.getOne(id);
+        try {
+            if (customer.favouriteDishes.findIndex(i => i.id === dish.id) >= 0) {
+                return;
+            }
+
+            customer.favouriteDishes = [...customer.favouriteDishes, dish];
+            await customer.save();
+        } catch (e) {
+            console.log(e);
+
+            throw new Error(__('dish.favourite_failed'));
+        }
+    }
+
+    public async unFavouriteDish(id: number, customerUuid: string) {
+        const customer = await CustomerService.getOne({ uuid: customerUuid }, { withFavouriteDishes: true });
+        const dish = await this.getOne(id);
+
+        if (customer.favouriteDishes.findIndex(i => i.id === dish.id) < 0) {
+            return;
+        }
+
+        try {
+            customer.favouriteDishes = customer.favouriteDishes.filter(i => i.id !== dish.id);
+            await customer.save();
+        } catch (e) {
+            console.log(e);
+
+            throw new Error(__('dish.favourite_failed'));
+        }
     }
 }
 

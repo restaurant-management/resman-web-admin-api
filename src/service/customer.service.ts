@@ -113,7 +113,7 @@ class CustomerService {
     }
 
     public async getOne(key: { id?: number, uuid?: string, username?: string, email?: string },
-        options?: { withAddresses?: boolean }) {
+        options?: { withAddresses?: boolean, withFavouriteDishes?: boolean }) {
 
         if (!key.id && !key.uuid && !key.username && !key.email) {
             throw new Error(__('customer.customer_not_found'));
@@ -124,6 +124,9 @@ class CustomerService {
 
         if (options?.withAddresses) {
             relations.push('addresses');
+        }
+        if (options?.withFavouriteDishes) {
+            relations.push('favouriteDishes');
         }
 
         if (key.id) {

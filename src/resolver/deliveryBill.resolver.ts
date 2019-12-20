@@ -88,7 +88,7 @@ export class DeliveryBillResolver {
 
     @Mutation(() => DeliveryBill, { description: 'For shipper' })
     @UseMiddleware(AuthorRoleGraphMiddleware(['shipper']))
-    public async deliveredBillDish(
+    public async deliveredDeliveryBillDish(
         @Arg('id', () => ID) id: number,
         @Ctx() { payload }: GraphUserContext,
     ) {
@@ -97,7 +97,7 @@ export class DeliveryBillResolver {
 
     @Mutation(() => DeliveryBill, { description: 'For shipper' })
     @UseMiddleware(AuthorRoleGraphMiddleware(['shipper']))
-    public async collectBill(
+    public async collectDeliveryBill(
         @Ctx() { payload }: GraphUserContext,
         @Arg('id', () => ID) id: number,
         @Arg('collectValue', () => Float) collectValue: number,

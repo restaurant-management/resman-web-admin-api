@@ -1,8 +1,10 @@
 import { Field, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, Entity, Generated, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, Generated, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Address } from './address';
 import { Bill } from './bill';
+import { Comment } from './comment';
 import { DeliveryBill } from './deliveryBill';
+import { Dish } from './dish';
 import { SettingsScalar } from './user';
 
 @ObjectType()
@@ -57,4 +59,12 @@ export class Customer extends BaseEntity {
 
     @OneToMany(_type => DeliveryBill, deliveryBill => deliveryBill.customer)
     public deliveryBills: DeliveryBill[];
+
+    @OneToMany(_type => Comment, comment => comment.createBy, { nullable: true })
+    public comments: Comment[];
+
+    @Field(() => [Dish], { nullable: true })
+    @ManyToMany(() => Dish, dish => dish.favouriteCustomers, { nullable: true })
+    @JoinTable()
+    public favouriteDishes: Dish[];
 }

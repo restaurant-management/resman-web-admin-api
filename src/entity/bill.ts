@@ -19,7 +19,6 @@ export class Bill extends SoftDeleteEntity {
     @Column()
     public tableNumber: number;
 
-    @Field()
     @CreateDateColumn({ type: 'timestamp with time zone' })
     public insertAt: Date;
 

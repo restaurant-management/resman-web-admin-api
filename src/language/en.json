@@ -76,7 +76,9 @@
 	},
 	"dish": {
 		"delete_fail": "dish.delete_fail",
-		"delete_success": "dish.delete_success"
+		"delete_success": "dish.delete_success",
+		"favourite_success": "dish.favourite_success",
+		"un_favourite_success": "dish.un_favourite_success"
 	},
 	"store": {
 		"store_not_found": "store.store_not_found",
@@ -98,5 +100,10 @@
 	"welcome_to_resman": "Welcome to Resman",
 	"delivery_bill_dish": {
 		"delivery_bill_dish_not_found": "delivery_bill_dish.delivery_bill_dish_not_found"
+	},
+	"comment": {
+		"delete_success": "comment.delete_success",
+		"comment_not_found": "comment.comment_not_found",
+		"delete_failed": "comment.delete_failed"
 	}
 }
