@@ -212,7 +212,9 @@ class UserService {
         user.roles = listRoles;
         user.stores = listStores;
 
-        return await user.save();
+        await user.save();
+
+        return await this.getOne({ username }, { withRoles: true, withStores: true, withWarehouses: true });
     }
 
     public async delete(username: string, deleteBy: User) {

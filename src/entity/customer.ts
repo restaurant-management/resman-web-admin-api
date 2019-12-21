@@ -3,6 +3,7 @@ import { BaseEntity, Column, Entity, Generated, JoinTable, ManyToMany, OneToMany
 import { Address } from './address';
 import { Bill } from './bill';
 import { Comment } from './comment';
+import { dateScalar } from './dailyDish';
 import { DeliveryBill } from './deliveryBill';
 import { Dish } from './dish';
 import { SettingsScalar } from './user';
@@ -30,7 +31,6 @@ export class Customer extends BaseEntity {
     @Column({ unique: true })
     public email: string;
 
-    @Field()
     @Column()
     public password: string;
 
@@ -38,7 +38,7 @@ export class Customer extends BaseEntity {
     @Column({ nullable: true })
     public avatar: string;
 
-    @Field({ nullable: true })
+    @Field(() => dateScalar, { nullable: true })
     @Column('date', { nullable: true })
     public birthday: Date;
 

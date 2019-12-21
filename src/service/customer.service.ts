@@ -177,7 +177,9 @@ class CustomerService {
         if (data.avatar) { customer.avatar = data.avatar; }
         if (data.birthday) { customer.birthday = data.birthday; }
 
-        return await customer.save();
+        await customer.save();
+
+        return await this.getOne({ username }, { withAddresses: true, withFavouriteDishes: true });
     }
 
     // For customer
