@@ -2,6 +2,7 @@ import { GraphQLScalarType, Kind } from 'graphql';
 import { Field, ObjectType } from 'type-graphql';
 import { BaseEntity, Column, Entity, Generated, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BillHistory } from './billHistory';
+import { dateScalar } from './dailyDish';
 import { Role } from './role';
 import { Store } from './store';
 import { Warehouse } from './warehouse';
@@ -55,7 +56,7 @@ export class User extends BaseEntity {
     @Column({ nullable: true })
     public avatar: string;
 
-    @Field({ nullable: true })
+    @Field(() => dateScalar, { nullable: true })
     @Column('date', { nullable: true })
     public birthday: Date;
 
