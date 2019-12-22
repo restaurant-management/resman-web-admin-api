@@ -1,7 +1,9 @@
 import { __ } from 'i18n';
+import { Customer } from '../entity/customer';
 import { User } from '../entity/user';
 import { VoucherCode } from '../entity/voucherCode';
 import { RandomCode } from '../helper/randomCode';
+import { CustomerService } from './customer.service';
 import { StoreService } from './store.service';
 
 class VoucherCodeService {
@@ -20,7 +22,7 @@ class VoucherCodeService {
         const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
         const take = length;
 
-        const voucherCodes = await VoucherCode.find({ order, relations: ['stores'] });
+        const voucherCodes = await VoucherCode.find({ order, relations: ['stores', 'customer'] });
 
         return voucherCodes.filter(i =>
             i.stores.findIndex(store => user.stores.findIndex(userStore => userStore.id === store.id) >= 0) >= 0)
@@ -30,7 +32,7 @@ class VoucherCodeService {
     public async create(data: {
         name: string, startAt: Date, endAt: Date, value: number, storeIds: number[]
         description?: string, image?: string, minBillPrice?: number, maxPriceDiscount?: number,
-        isActive?: boolean, isPercent?: boolean
+        isActive?: boolean, isPercent?: boolean, customerUuid?: string
     }) {
         // Generate unique code
         let code = '';
@@ -56,11 +58,14 @@ class VoucherCodeService {
         newVoucherCode.isActive = data.isActive;
         newVoucherCode.isPercent = data.isPercent;
         newVoucherCode.stores = stores;
+        if (data.customerUuid) {
+            newVoucherCode.customer = await CustomerService.getOne({ uuid: data.customerUuid });
+        }
 
         const voucherCode = await newVoucherCode.save();
         if (!voucherCode) { throw new Error(__('voucher_code.create_fail')); }
 
-        return await this.getOne(voucherCode.code);
+        return await this.getOne(voucherCode.code, { withCustomer: true, withStores: true });
     }
 
     public async edit(code: string, data: {
@@ -102,12 +107,23 @@ class VoucherCodeService {
     }
 
     public async getOne(code: string, options: {
-        withStores: boolean
+        withStores?: boolean,
+        withCustomer?: boolean,
+        customer?: Customer
     } = { withStores: true }) {
-        const voucherCode = await VoucherCode.findOne(code, options.withStores ? { relations: ['stores'] } : {});
+        const relations = [];
+
+        if (options?.withCustomer) { relations.push('customer'); }
+        if (options?.withStores) { relations.push('stores'); }
+
+        const voucherCode = await VoucherCode.findOne(code, { relations });
 
         if (!voucherCode) {
             throw new Error(__('voucher_code.voucher_code_not_found'));
+        }
+
+        if (options?.customer) {
+            await this.isValid(code, { customerUuid: options.customer.uuid });
         }
 
         return voucherCode;
@@ -117,8 +133,10 @@ class VoucherCodeService {
      * @param storeId If you have check code enable for this store. 
      * @throws Error If it has
      */
-    public async isValid(code: string, other?: { storeId?: number, billPrice?: number, time?: Date }) {
-        const voucherCode = await this.getOne(code);
+    public async isValid(code: string, other?: {
+        storeId?: number, billPrice?: number, time?: Date, customerUuid?: string
+    }) {
+        const voucherCode = await this.getOne(code, { withCustomer: true, withStores: true });
 
         if (!voucherCode.isActive) {
             throw new Error(__('discount_code.no_longer_valid'));
@@ -138,6 +156,10 @@ class VoucherCodeService {
 
         if (other?.billPrice && other.billPrice < voucherCode.minBillPrice) {
             throw new Error(__('discount_code.not_apply_for_this_price'));
+        }
+
+        if (voucherCode.customer && other?.customerUuid && other.customerUuid !== voucherCode.customer.uuid) {
+            throw new Error(__('discount_code.this_code_is_not_public'));
         }
     }
 }

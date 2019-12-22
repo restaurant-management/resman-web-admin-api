@@ -53,7 +53,8 @@
 	},
 	"discount_code": {
 		"discount_code_not_found": "discount_code.discount_code_not_found",
-		"delete_success": "discount_code.delete_success"
+		"delete_success": "discount_code.delete_success",
+		"no_longer_valid": "discount_code.no_longer_valid"
 	},
 	"import_bill": {
 		"import_bill_not_found": "import_bill.import_bill_not_found",

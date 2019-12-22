@@ -1,9 +1,8 @@
 import { __ } from 'i18n';
-import { Arg, Authorized, Ctx, Float, ID, Int, Mutation, Query, UseMiddleware } from 'type-graphql';
+import { Arg, Authorized, Ctx, Float, ID, Int, Mutation, Query } from 'type-graphql';
 import { DiscountCode } from '../entity/discountCode';
 import { Permission } from '../entity/permission';
 import { GraphUserContext } from '../lib/graphContext';
-import { UserAuthGraph } from '../middleware/userAuth';
 import { DiscountCodeService } from '../service/discountCode.service';
 
 export class DiscountCodeResolver {
@@ -16,21 +15,10 @@ export class DiscountCodeResolver {
     }
 
     @Query(() => DiscountCode)
-    @Authorized([Permission.discountCode.list])
     public async getDiscountCode(
         @Arg('code') code: string
     ) {
         return await DiscountCodeService.getOne(code, { withStores: true });
-    }
-
-    @Query(() => Boolean)
-    @UseMiddleware(UserAuthGraph)
-    public async isDiscountCodeValid(
-        @Arg('code') code: string
-    ) {
-        await DiscountCodeService.isValid(code);
-
-        return true;
     }
 
     @Mutation(() => DiscountCode)

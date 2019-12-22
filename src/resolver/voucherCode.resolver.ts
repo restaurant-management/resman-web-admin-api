@@ -2,7 +2,8 @@ import { __ } from 'i18n';
 import { Arg, Authorized, Ctx, Float, ID, Mutation, Query, UseMiddleware } from 'type-graphql';
 import { Permission } from '../entity/permission';
 import { VoucherCode } from '../entity/voucherCode';
-import { GraphUserContext } from '../lib/graphContext';
+import { GraphCustomerContext, GraphUserContext } from '../lib/graphContext';
+import { CustomerAuthGraph } from '../middleware/customerAuth';
 import { UserAuthGraph } from '../middleware/userAuth';
 import { VoucherCodeService } from '../service/voucherCode.service';
 
@@ -16,11 +17,22 @@ export class VoucherCodeResolver {
     }
 
     @Query(() => VoucherCode)
-    @Authorized([Permission.voucherCode.list])
+    @UseMiddleware(CustomerAuthGraph)
     public async getVoucherCode(
+        @Ctx() { payload }: GraphCustomerContext,
         @Arg('code') code: string
     ) {
-        return await VoucherCodeService.getOne(code, { withStores: true });
+        return await VoucherCodeService.getOne(code, {
+            withStores: true, withCustomer: true, customer: payload.customer
+        });
+    }
+
+    @Query(() => VoucherCode)
+    @Authorized([Permission.voucherCode.list])
+    public async getVoucherCodeByAdmin(
+        @Arg('code') code: string
+    ) {
+        return await VoucherCodeService.getOne(code, { withStores: true, withCustomer: true });
     }
 
     @Query(() => Boolean)
@@ -47,10 +59,11 @@ export class VoucherCodeResolver {
         @Arg('image', { nullable: true }) image: string,
         @Arg('isActive', () => Boolean, { nullable: true }) isActive: boolean,
         @Arg('isPercent', () => Boolean, { nullable: true }) isPercent: boolean,
+        @Arg('customerUuid', () => String, { nullable: true }) customerUuid: string,
     ) {
         return await VoucherCodeService.create({
             name, startAt, endAt, value, storeIds, description, minBillPrice, maxPriceDiscount, isActive, image,
-            isPercent
+            isPercent, customerUuid
         });
     }
 

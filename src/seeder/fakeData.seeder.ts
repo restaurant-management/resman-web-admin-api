@@ -111,6 +111,35 @@ const seedDish = async () => {
     if (!await Dish.findOne(1)) {
         await DishService.create(
             {
+                name: 'Canh gà lá giang',
+                description: 'Canh gà lá giang chua ngon nóng hổi và bổ dưỡng, ăn cùng cơm hoặc bún đều được. Bạn cũng có thể dùng như lẩu, đi kèm một vài loại rau nếu muốn.',
+                images: [
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20g%C3%A0%20l%C3%A1%20giang-0?generation=1560052815492246&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20g%C3%A0%20l%C3%A1%20giang-1?generation=1560054478380935&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20g%C3%A0%20l%C3%A1%20giang-2?generation=1560054479494337&alt=media'
+                ],
+                defaultPrice: 49000
+            }
+        );
+    }
+
+    if (!await Dish.findOne(2)) {
+        await DishService.create(
+            {
+                name: 'Cá lóc kho tộ',
+                description: 'Cá lóc kho tộ là món ăn ngon dễ làm, thích hợp dùng đổi mới khẩu vị, giúp bữa cơm gia đình thêm ngon miệng. Nếu chưa biết cách kho cá ngon thì bạn có thể học ngay cách kho cá hay cách làm cá lóc kho tộ béo ngon, đơn giản tại nhà được chia sẻ sau đây nhé. Cá kho tộ với từng khứa thịt cá được tẩm ướp đầy đủ gia vị, được kho liu riu trong nồi đất vừa lành, vừa giúp gia vị thấm đều và đậm đà hơn so với cách kho cá tương tự với nồi kim loại.',
+                images: [
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FC%C3%A1%20l%C3%B3c%20kho%20t%E1%BB%99-0?generation=1560052730026691&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FC%C3%A1%20l%C3%B3c%20kho%20t%E1%BB%99-1?generation=1560053675555009&alt=media'
+                ],
+                defaultPrice: 25000
+            }
+        );
+    }
+
+    if (!await Dish.findOne(3)) {
+        await DishService.create(
+            {
                 name: 'Canh chua cá diêu hồng',
                 description: 'Canh chua cá diêu hồng là một món ăn mang đậm hương vị miền Nam, là món ăn được yêu thích của nhiều gia đình.',
                 images: [
@@ -122,7 +151,7 @@ const seedDish = async () => {
         );
     }
 
-    if (!await Dish.findOne(2)) {
+    if (!await Dish.findOne(4)) {
         await DishService.create(
             {
                 name: 'Canh khổ qua nhồi thịt',
@@ -137,15 +166,15 @@ const seedDish = async () => {
         );
     }
 
-    if (!await Dish.findOne(3)) {
+    if (!await Dish.findOne(5)) {
         await DishService.create(
             {
-                name: 'Canh khổ qua nhồi thịt Ver 2.0',
-                description: 'Canh khổ qua nhồi thịt ver 2.0 y chan ver 1.0.',
+                name: 'Gà kho sả ớt',
+                description: 'Gà kho sả ớt là một món ăn thơm ngon hấp dẫn, tùy thuộc vào mỗi vùng miền khác nhau lại có những cách làm khác nhau',
                 images: [
-                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt0-2019-06-07%2001:05:43?generation=1559887548010845&alt=media',
-                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt1-2019-06-07%2001:05:45?generation=1559887549908602&alt=media',
-                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt2-2019-06-07%2001:05:47?generation=1559887551753810&alt=media'
+                    'https://www.hoidaubepaau.com/wp-content/uploads/2018/05/ga-kho-sa-ot.jpg',
+                    'http://giadinh.mediacdn.vn/2018/11/23/photo-2-1542938153038490252734.jpg',
+                    'https://i.ytimg.com/vi/BQnO9JnO_9s/maxresdefault.jpg'
                 ],
                 defaultPrice: 30000
             }
