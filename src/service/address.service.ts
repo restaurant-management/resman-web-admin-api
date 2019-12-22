@@ -21,6 +21,7 @@ class AddressService {
 
     public async create(customerUsername: string,
         data: { address: string, longitude?: number, latitude?: number }) {
+            console.log(data);
         const newAddress = new Address();
         newAddress.address = data.address;
         newAddress.customer = await CustomerService.getOne({ username: customerUsername });

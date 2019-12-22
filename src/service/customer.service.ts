@@ -3,6 +3,7 @@ import { getConnection } from 'typeorm';
 import { Customer } from '../entity/customer';
 import { PasswordHandler } from '../helper/passwordHandler';
 import { HttpError } from '../lib/httpError';
+import { AddressInput } from '../resolver/InputTypes/addressInput';
 import { AddressService } from './address.service';
 import { AuthService } from './authService';
 
@@ -81,12 +82,18 @@ class CustomerService {
     }
 
     public async edit(username: string, data: {
-        password?: string, phoneNumber?: string, fullName?: string, avatar?: string, birthday?: Date
+        password?: string, phoneNumber?: string, fullName?: string, avatar?: string, birthday?: Date,
+        addresses?: AddressInput[]
     }) {
-        const customer = await this.getOne({ username });
+        const customer = await this.getOne({ username }, { withAddresses: true });
 
         if (!customer) {
             throw new Error(__('customer.user_not_found'));
+        }
+
+        for (const address of data.addresses) {
+            if (!address.id) { continue; }
+            await AddressService.getOne(username, address.id);
         }
 
         if (data.phoneNumber && await Customer.findOne({ where: { phoneNumber: data.phoneNumber } })) {
@@ -99,7 +106,26 @@ class CustomerService {
         if (data.avatar) { customer.avatar = data.avatar; }
         if (data.birthday) { customer.birthday = data.birthday; }
 
-        return await customer.save();
+        // Create and edit address
+        for (const address of data.addresses) {
+            if (!address.id) {
+                await AddressService.create(username, address);
+            } else {
+                await AddressService.edit(username, address.id, address);
+            }
+        }
+        // Remove address
+        for (const address of customer.addresses) {
+            if (data.addresses.findIndex(i => i.id === address.id) === -1) {
+                await address.remove();
+            }
+        }
+
+        delete customer.addresses;
+
+        await customer.save();
+
+        return this.getOne({ username }, { withAddresses: true, withFavouriteDishes: true });
     }
 
     public async delete(username: string) {
@@ -204,3 +230,4 @@ class CustomerService {
 const customerService = new CustomerService();
 
 export { customerService as CustomerService };
+

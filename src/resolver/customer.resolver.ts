@@ -7,6 +7,7 @@ import { GraphCustomerContext } from '../lib/graphContext';
 import { CustomerAuthGraph } from '../middleware/customerAuth';
 import { AddressService } from '../service/address.service';
 import { CustomerService } from '../service/customer.service';
+import { AddressInput } from './InputTypes/addressInput';
 
 export class CustomerResolver {
     @Query(() => String)
@@ -119,9 +120,12 @@ export class CustomerResolver {
         @Arg('phoneNumber', { nullable: true }) phoneNumber: string,
         @Arg('fullName', { nullable: true }) fullName: string,
         @Arg('avatar', { nullable: true }) avatar: string,
-        @Arg('birthday', { nullable: true }) birthday: Date
+        @Arg('birthday', { nullable: true }) birthday: Date,
+        @Arg('addresses', () => [AddressInput], { nullable: true }) addresses: AddressInput[]
     ) {
-        return await CustomerService.edit(username, { password, phoneNumber, fullName, avatar, birthday });
+        return await CustomerService.edit(username, {
+            password, phoneNumber, fullName, avatar, birthday, addresses
+        });
     }
 
     @Mutation(() => String, { description: 'For admin' })
