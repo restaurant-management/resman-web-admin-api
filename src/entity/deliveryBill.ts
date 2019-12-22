@@ -45,11 +45,11 @@ export class DeliveryBill extends SoftDeleteEntity {
     @Column('text')
     public address: string;
 
-    @Field(() => Float)
+    @Field(() => Float, { nullable: true })
     @Column('float', { nullable: true })
     public longitude: number;
 
-    @Field(() => Float)
+    @Field(() => Float, { nullable: true })
     @Column('float', { nullable: true })
     public latitude: number;
 
