@@ -1,6 +1,7 @@
 import { MaxLength } from 'class-validator';
 import { Field, Float, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Customer } from './customer';
 import { Store } from './store';
 
 @ObjectType()
@@ -63,4 +64,9 @@ export class VoucherCode extends BaseEntity {
     @ManyToMany(_type => Store, store => store.voucherCodes, { onDelete: 'CASCADE' })
     @JoinTable()
     public stores: Store[];
+
+    @Field(() => Customer, {nullable: true})
+    @ManyToOne(() => Customer, customer => customer.voucherCodes, {onDelete: 'CASCADE'})
+    public customer: Customer;
+
 }

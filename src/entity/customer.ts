@@ -7,6 +7,7 @@ import { dateScalar } from './dailyDish';
 import { DeliveryBill } from './deliveryBill';
 import { Dish } from './dish';
 import { SettingsScalar } from './user';
+import { VoucherCode } from './voucherCode';
 
 @ObjectType()
 @Entity()
@@ -67,4 +68,8 @@ export class Customer extends BaseEntity {
     @ManyToMany(() => Dish, dish => dish.favouriteCustomers, { nullable: true })
     @JoinTable()
     public favouriteDishes: Dish[];
+
+    @Field(() => [VoucherCode], { nullable: true })
+    @OneToMany(() => VoucherCode, voucherCode => voucherCode.customer, { nullable: true })
+    public voucherCodes: VoucherCode[];
 }
