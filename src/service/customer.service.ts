@@ -78,7 +78,8 @@ class CustomerService {
         const customer = await newCustomer.save();
         if (!customer) { throw new Error(__('customer.create_fail')); }
 
-        return await this.getOne({ username: newCustomer.username }, { withAddresses: true });
+        return await this.getOne({ username: newCustomer.username },
+            { withAddresses: true, withFavouriteDishes: true, withVoucherCodes: true });
     }
 
     public async edit(username: string, data: {
@@ -125,7 +126,7 @@ class CustomerService {
 
         await customer.save();
 
-        return this.getOne({ username }, { withAddresses: true, withFavouriteDishes: true });
+        return this.getOne({ username }, { withAddresses: true, withFavouriteDishes: true, withVoucherCodes: true });
     }
 
     public async delete(username: string) {
@@ -139,7 +140,7 @@ class CustomerService {
     }
 
     public async getOne(key: { id?: number, uuid?: string, username?: string, email?: string },
-        options?: { withAddresses?: boolean, withFavouriteDishes?: boolean }) {
+        options?: { withAddresses?: boolean, withFavouriteDishes?: boolean, withVoucherCodes?: boolean }) {
 
         if (!key.id && !key.uuid && !key.username && !key.email) {
             throw new Error(__('customer.customer_not_found'));
@@ -153,6 +154,9 @@ class CustomerService {
         }
         if (options?.withFavouriteDishes) {
             relations.push('favouriteDishes');
+        }
+        if (options?.withVoucherCodes) {
+            relations.push('voucherCodes');
         }
 
         if (key.id) {
@@ -205,7 +209,8 @@ class CustomerService {
 
         await customer.save();
 
-        return await this.getOne({ username }, { withAddresses: true, withFavouriteDishes: true });
+        return await this.getOne({ username },
+            { withAddresses: true, withFavouriteDishes: true, withVoucherCodes: true });
     }
 
     // For customer
@@ -230,4 +235,3 @@ class CustomerService {
 const customerService = new CustomerService();
 
 export { customerService as CustomerService };
-

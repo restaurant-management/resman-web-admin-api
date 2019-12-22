@@ -60,13 +60,13 @@ export class VoucherCode extends BaseEntity {
     @Column()
     public value: number;
 
-    @Field(() => [Store])
-    @ManyToMany(_type => Store, store => store.voucherCodes, { onDelete: 'CASCADE' })
+    @Field(() => [Store], { nullable: true })
+    @ManyToMany(_type => Store, store => store.voucherCodes, { onDelete: 'CASCADE', eager: true })
     @JoinTable()
     public stores: Store[];
 
-    @Field(() => Customer, {nullable: true})
-    @ManyToOne(() => Customer, customer => customer.voucherCodes, {onDelete: 'CASCADE'})
+    @Field(() => Customer, { nullable: true })
+    @ManyToOne(() => Customer, customer => customer.voucherCodes, { onDelete: 'CASCADE' })
     public customer: Customer;
 
 }

@@ -76,7 +76,7 @@ export class CustomerResolver {
     ) {
         return await CustomerService.getOne(
             { username, email },
-            { withAddresses: true }
+            { withAddresses: true, withFavouriteDishes: true, withVoucherCodes: true }
         );
     }
 
