@@ -1,7 +1,7 @@
+import { Field, Float, ID, Int, ObjectType } from 'type-graphql';
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { BillHistory } from './billHistory';
 import { Dish } from './dish';
-import { ObjectType, Field, ID, Int, Float } from 'type-graphql';
 
 @ObjectType()
 @Entity()

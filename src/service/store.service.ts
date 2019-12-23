@@ -5,6 +5,7 @@ import { Store } from '../entity/store';
 import { StoreDish } from '../entity/storeDish';
 import { User } from '../entity/user';
 import { Authorization } from '../middleware/authorization';
+import { StoreDishInput } from '../resolver/InputTypes/storeDishInput';
 import { DishService } from './dish.service';
 
 class StoreService {
@@ -16,6 +17,7 @@ class StoreService {
         const stores = await Store.find({ take, skip, order, relations: ['storeDishes'] });
 
         for (const store of stores) {
+            console.log(store.storeDishes);
             store['amountDishes'] = store.storeDishes.length;
             delete store.storeDishes;
         }
@@ -66,12 +68,8 @@ class StoreService {
 
     public async edit(id: number, data: {
         name?: string, address?: string, hotline?: string, description?: string, logo?: string,
-        openTime?: Date, closeTime?: Date, dishIds?: number[], dishPrices?: number[]
+        openTime?: Date, closeTime?: Date, storeDishes?: StoreDishInput[]
     }) {
-        if (data.dishIds && data.dishPrices && data.dishIds.length !== data.dishPrices.length) {
-            throw new Error('store.dishIds_length_not_same_dishPrices_length');
-        }
-
         let store = await this.getOne(id);
 
         if (data.name) { store.name = data.name; }
@@ -85,31 +83,29 @@ class StoreService {
         await store.save();
 
         store = await this.getOne(id, { withDishes: true });
-        if (data.dishIds) {
-            const dishes: Dish[] = [];
-            for (const dishId of data.dishIds) {
-                dishes.push(await DishService.getOne(dishId));
-            }
+        if (data.storeDishes) {
 
             // Add new or save existed
-            for (const [index, dish] of dishes.entries()) {
+            for (const storeDishInput of data.storeDishes) {
+                const dish = await DishService.getOne(storeDishInput.dishId);
+
                 const oldIndex = store.storeDishes.findIndex(item => item.dishId === dish.id);
                 if (oldIndex >= 0) {
                     console.log(store.storeDishes[oldIndex]);
-                    store.storeDishes[oldIndex].price = data.dishPrices[index];
+                    store.storeDishes[oldIndex].price = storeDishInput.price;
                     await store.storeDishes[oldIndex].save();
                 } else {
                     const storeDish = new StoreDish();
                     storeDish.store = store;
                     storeDish.dish = dish;
-                    storeDish.price = data.dishPrices[index];
+                    storeDish.price = storeDishInput.price;
                     await storeDish.save();
                 }
             }
 
             // Remove
             for (const storeDish of store.storeDishes) {
-                const oldIndex = dishes.findIndex(item => item.id === storeDish.dishId);
+                const oldIndex = data.storeDishes.findIndex(item => item.dishId === storeDish.dishId);
                 if (oldIndex < 0) {
                     await storeDish.remove();
                 }

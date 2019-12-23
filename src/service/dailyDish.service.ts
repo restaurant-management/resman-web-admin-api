@@ -22,14 +22,18 @@ class DailyDishService {
         }
 
         const dish = await DishService.getOne(data.dishId);
-        const store = await StoreService.getOne(data.storeId);
+        const store = await StoreService.getOne(data.storeId, { withDishes: true });
+
+        if (store.storeDishes.findIndex(i => i.dishId === dish.id) === -1) {
+            throw new Error(__('daily_dish.dish_{{id}}_not_sell_in_this_store', { id: dish.id.toString() }));
+        }
 
         try {
             await this.getOne({
                 day: data.day, dishId: data.dishId, storeId: data.storeId, session: data.session || DaySession.None
             });
             throw new Error(__('daily_dish.existed'));
-        // tslint:disable-next-line: no-empty
+            // tslint:disable-next-line: no-empty
         } catch (_) { }
 
         const newDailyDish = new DailyDish();

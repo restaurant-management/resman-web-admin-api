@@ -62,4 +62,3 @@ const _authorizationByRole = (currentUser: User, requiredRoles: string[], throwE
 };
 
 export { authorizationByRole as AuthorizationByRole, authorRoleGraphMiddleware as AuthorRoleGraphMiddleware };
-
