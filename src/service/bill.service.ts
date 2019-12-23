@@ -1,4 +1,5 @@
 import { __ } from 'i18n';
+import { FindConditions } from 'typeorm';
 import { Bill } from '../entity/bill';
 import { User } from '../entity/user';
 import { arrayCompare } from '../helper/arrayCompare';
@@ -12,13 +13,18 @@ import { UserService } from './user.service';
 import { VoucherCodeService } from './voucherCode.service';
 
 class BillService {
-    public async getAll(user: User, length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
-        const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
-        const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
-        const take = length;
+    public async getAll(user: User, options?: {
+        length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1'
+        where?: FindConditions<Bill>
+    }) {
+        const order = options.orderId ? {
+            [options.orderId]: options.orderType === 'DESC' || options.orderType === '-1' ? -1 : 1
+        } : {};
+        const skip = (options.page - 1) * options.length >= 0 ? (options.page - 1) * options.length : 0;
+        const take = options.length;
 
         const bills = await Bill.find({
-            take, skip, order, where: { deleteAt: null },
+            take, skip, order, where: { ...options?.where, deleteAt: null },
             relations: ['histories', 'collectBy', 'createBy', 'customer', 'prepareBy', 'store']
         });
 
@@ -37,10 +43,9 @@ class BillService {
         });
 
         return bills
-            .filter(i => i.collectBy.uuid === user.uuid
-                || i.createBy.uuid === user.uuid
-                || i.collectBy.uuid === user.uuid
-                || i.prepareBy.uuid === user.uuid
+            .filter(i => i.collectBy?.uuid === user.uuid
+                || i.createBy?.uuid === user.uuid
+                || i.prepareBy?.uuid === user.uuid
             )
             .filter((_store, index) => index >= skip && index < (take ? skip + take : bills.length));
     }

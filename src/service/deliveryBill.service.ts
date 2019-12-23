@@ -55,6 +55,25 @@ class DeliveryBillService {
             .filter((_store, index) => index >= skip && index < (take ? skip + take : deliveryBills.length));
     }
 
+    public async getAllByUser(user: User, options?: {
+        length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1' // Paging
+        where?: FindConditions<DeliveryBill>;
+    }) {
+        const order = options?.orderId ?
+            { [options?.orderId]: options?.orderType === 'DESC' || options?.orderType === '-1' ? -1 : 1 } : {};
+        const skip = (options?.page - 1) * options?.length >= 0 ? (options?.page - 1) * options?.length : 0;
+        const take = options?.length;
+
+        const deliveryBills = await DeliveryBill.find({
+            take, skip, order,
+            where: { ...options?.where, deleteAt: null },
+            relations: ['customer', 'prepareBy', 'shipBy', 'dishes', 'store']
+        });
+
+        return deliveryBills.filter(i => i.shipBy?.uuid === user.uuid || i.prepareBy?.uuid === user.uuid)
+            .filter((_store, index) => index >= skip && index < (take ? skip + take : deliveryBills.length));
+    }
+
     public async create(data: {
         storeId: number, dishIds: number[], customerUuid: string, addressId: number,
         dishNotes?: string[], dishQuantities?: number[], shipAt?: Date, shipByUuid?: string,

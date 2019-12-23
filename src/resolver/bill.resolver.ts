@@ -1,12 +1,17 @@
 import { __ } from 'i18n';
+import moment from 'moment';
 import { Arg, Authorized, Ctx, Float, ID, Int, Mutation, Query, UseMiddleware } from 'type-graphql';
+import { Between } from 'typeorm';
 import { Bill } from '../entity/bill';
 import { Permission } from '../entity/permission';
+import { onlyDate } from '../helper/onlyDate';
 import { GraphUserContext } from '../lib/graphContext';
 import { Authorization } from '../middleware/authorization';
 import { AuthorRoleGraphMiddleware } from '../middleware/authorizationByRole';
 import { UserAuthGraph } from '../middleware/userAuth';
 import { BillService } from '../service/bill.service';
+import { DeliveryBillService } from '../service/deliveryBill.service';
+import { AllBill } from './ObjectTypes/allBill';
 
 export class BillResolver {
     @Query(() => [Bill], { description: 'Get by user' })
@@ -19,6 +24,37 @@ export class BillResolver {
         }
 
         return await BillService.getAllByUser(payload.user);
+    }
+
+    @Query(() => AllBill, { description: 'Get all bill today for chef' })
+    @UseMiddleware(AuthorRoleGraphMiddleware(['chef']))
+    public async todayAllBillsByChef(
+        @Ctx() { payload }: GraphUserContext,
+    ) {
+        return {
+            bills: await BillService.getAll(payload.user, {
+                where: {
+                    createAt: Between(onlyDate(new Date()), onlyDate(moment(new Date()).add(1, 'day').toDate()))
+                }
+            }),
+            deliveryBills: await DeliveryBillService.getAll(payload.user, {
+                where: {
+                    createAt: Between(onlyDate(new Date()), onlyDate(moment(new Date()).add(1, 'day').toDate()))
+                }
+            })
+        };
+    }
+
+    @Query(() => [Bill], { description: 'Get all bill today for staff' })
+    @UseMiddleware(AuthorRoleGraphMiddleware(['staff']))
+    public async todayAllBillsByStaff(
+        @Ctx() { payload }: GraphUserContext,
+    ) {
+        return await BillService.getAll(payload.user, {
+            where: {
+                createAt: Between(onlyDate(new Date()), onlyDate(moment(new Date()).add(1, 'day').toDate()))
+            }
+        });
     }
 
     @Query(() => Bill)
