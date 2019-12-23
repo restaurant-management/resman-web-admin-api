@@ -4,6 +4,9 @@ import { Bill } from '../entity/bill';
 import { User } from '../entity/user';
 import { arrayCompare } from '../helper/arrayCompare';
 import { AuthorizationStore } from '../middleware/authorization';
+import { socketServer } from '../socket';
+import { ChefBillSocketEvent } from '../socket/chefBill.socket';
+import { SocketRoute } from '../socket/socket.route';
 import { BillDishService } from './billDish.service';
 import { BillHistoryService } from './billHistory.service';
 import { CustomerService } from './customer.service';
@@ -135,7 +138,7 @@ class BillService {
             throw new Error(__('bill.create_bill_fail'));
         }
 
-        return await this.getOne(bill.id, {
+        const b = await this.getOne(bill.id, {
             withCollectBy: !!data.collectByUuid,
             withCreateBy: true,
             withCustomer: !!data.customerUuid,
@@ -143,6 +146,9 @@ class BillService {
             withStore: true,
             showDishesType: 'dishes'
         });
+        socketServer.of(SocketRoute.chefBill).emit(ChefBillSocketEvent.NEW_BILL, b);
+
+        return b;
     }
 
     public async createWithRestrict(data: {

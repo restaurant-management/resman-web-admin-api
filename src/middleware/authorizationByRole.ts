@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { __ } from 'i18n';
+import { Socket } from 'socket.io';
 import { User } from '../entity/user';
 import { HttpError } from '../lib/httpError';
 import { UserAuth, UserAuthGraph } from './userAuth';
@@ -15,6 +16,19 @@ const authorizationByRole = (roleSlugs: string[]) => {
             return next();
         }
     ];
+};
+
+const authorRoleSocketMW = (roleSlugs: string[]) => {
+    return async (socket: Socket, next: (err?: any) => void) => {
+        const currentUser: User = socket['user'];
+        try {
+            _authorizationByRole(currentUser, roleSlugs, true, 'normal');
+
+            return next();
+        } catch (e) {
+            return next(e);
+        }
+    };
 };
 
 const authorRoleGraphMiddleware = (roleSlugs: string[]) => {
@@ -61,4 +75,4 @@ const _authorizationByRole = (currentUser: User, requiredRoles: string[], throwE
     return true;
 };
 
-export { authorizationByRole as AuthorizationByRole, authorRoleGraphMiddleware as AuthorRoleGraphMiddleware };
+export { authorizationByRole as AuthorizationByRole, authorRoleGraphMiddleware as AuthorRoleGraphMiddleware, authorRoleSocketMW as AuthorRoleSocketMW };

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { __ } from 'i18n';
+import { Socket } from 'socket.io';
 import { MiddlewareFn } from 'type-graphql';
 import { User } from '../entity/user';
 import { GraphUserContext } from '../lib/graphContext';
@@ -11,6 +12,18 @@ const userAuth = async (req: Request, _res: Response, next: NextFunction) => {
         const token = req.headers.authorization;
 
         req['user'] = await _userAuth(token);
+
+        return next();
+    } catch (e) {
+        return next(e);
+    }
+};
+
+const socketUserAuth = async (socket: Socket, next: (err?: any) => void) => {
+    try {
+        const token = socket.request.headers.authorization;
+
+        socket['user'] = await _userAuth(token);
 
         return next();
     } catch (e) {
@@ -44,4 +57,4 @@ const _userAuth = async (token: string): Promise<User> => {
     }
 };
 
-export { userAuth as UserAuth, userAuthGraph as UserAuthGraph };
+export { userAuth as UserAuth, userAuthGraph as UserAuthGraph, socketUserAuth as SocketUserAuth };
