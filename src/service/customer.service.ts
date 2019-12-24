@@ -185,32 +185,19 @@ class CustomerService {
 
     // Edit profile for customer
     public async editProfile(username: string, editBy: Customer, data: {
-        password?: string, phoneNumber?: string, fullName?: string, avatar?: string, birthday?: Date
+        phoneNumber?: string, fullName?: string, avatar?: string, birthday?: Date, addresses: AddressInput[]
     }) {
         if (username !== editBy.username) {
             throw new HttpError(401, __('authentication.unauthorized'));
         }
 
-        const customer = await this.getOne({ username }, { withAddresses: true });
-
-        if (!customer) {
-            throw new Error(__('customer.user_not_found'));
-        }
-
-        if (data.phoneNumber && await Customer.findOne({ where: { phoneNumber: data.phoneNumber } })) {
-            throw new Error(__('customer.phone_number_has_already_used'));
-        }
-
-        if (data.password) { customer.password = PasswordHandler.encode(data.password); }
-        if (data.phoneNumber) { customer.phoneNumber = data.phoneNumber; }
-        if (data.fullName) { customer.fullName = data.fullName; }
-        if (data.avatar) { customer.avatar = data.avatar; }
-        if (data.birthday) { customer.birthday = data.birthday; }
-
-        await customer.save();
-
-        return await this.getOne({ username },
-            { withAddresses: true, withFavouriteDishes: true, withVoucherCodes: true });
+        return await this.edit(username, {
+            phoneNumber: data.phoneNumber,
+            addresses: data.addresses,
+            avatar: data.avatar,
+            fullName: data.fullName,
+            birthday: data.birthday,
+        });
     }
 
     // For customer

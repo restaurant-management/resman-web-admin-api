@@ -41,11 +41,12 @@ export class CustomerResolver {
         @Arg('phoneNumber', { nullable: true }) phoneNumber: string,
         @Arg('fullName', { nullable: true }) fullName: string,
         @Arg('avatar', { nullable: true }) avatar: string,
-        @Arg('birthday', { nullable: true }) birthday: Date
+        @Arg('birthday', { nullable: true }) birthday: Date,
+        @Arg('addresses', () => [AddressInput], { nullable: true }) addresses: AddressInput[]
     ) {
         return await CustomerService.editProfile(
             payload.customer.username, payload.customer,
-            { phoneNumber, fullName, avatar, birthday });
+            { phoneNumber, fullName, avatar, birthday, addresses });
     }
 
     @Mutation(() => Address)
