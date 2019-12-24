@@ -42,7 +42,9 @@
 		"bill_is_collected": "bill.bill_is_collected",
 		"bill_not_found": "bill.bill_not_found",
 		"created_by_must_be_staff": "bill.created_by_must_be_staff",
-		"delete_success": "bill.delete_success"
+		"delete_success": "bill.delete_success",
+		"you_selected_to_prepare_this_bill": "bill.you_selected_to_prepare_this_bill",
+		"bill_is_selected_by_other_chef": "bill.bill_is_selected_by_other_chef"
 	},
 	"voucher_code": {
 		"voucher_code_not_found": "voucher_code.voucher_code_not_found"

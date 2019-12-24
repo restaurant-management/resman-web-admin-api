@@ -110,6 +110,8 @@ class BillDishService {
 
         dish.deliveryAt = new Date();
         await dish.save();
+
+        return this.getOne(dishId, billHistoryId);
     }
 }
 

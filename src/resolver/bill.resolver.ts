@@ -36,12 +36,12 @@ export class BillResolver {
                 where: {
                     createAt: Between(onlyDate(new Date()), onlyDate(moment(new Date()).add(1, 'day').toDate()))
                 }
-            }),
+            }) || [],
             deliveryBills: await DeliveryBillService.getAll(payload.user, {
                 where: {
                     createAt: Between(onlyDate(new Date()), onlyDate(moment(new Date()).add(1, 'day').toDate()))
                 }
-            })
+            }) || []
         };
     }
 
@@ -103,19 +103,21 @@ export class BillResolver {
     @Mutation(() => Bill, { description: 'For chef' })
     @UseMiddleware(AuthorRoleGraphMiddleware(['chef']))
     public async preparedBillDish(
+        @Ctx() { payload }: GraphUserContext,
         @Arg('id', () => ID) id: number,
         @Arg('dishIds', () => ID) dishId: number,
     ) {
-        return await BillService.preparedBillDish(id, dishId);
+        return await BillService.preparedBillDish(id, payload.user, dishId);
     }
 
     @Mutation(() => Bill, { description: 'For staff' })
     @UseMiddleware(AuthorRoleGraphMiddleware(['staff']))
     public async deliveredBillDish(
+        @Ctx() { payload }: GraphUserContext,
         @Arg('id', () => ID) id: number,
         @Arg('dishIds', () => ID) dishId: number,
     ) {
-        return await BillService.deliveredBillDish(id, dishId);
+        return await BillService.deliveredBillDish(id, payload.user, dishId);
     }
 
     @Mutation(() => Bill, { description: 'For staff' })

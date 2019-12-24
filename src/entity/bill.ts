@@ -2,6 +2,7 @@ import { MaxLength } from 'class-validator';
 import { Field, Float, ID, Int, ObjectType } from 'type-graphql';
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { SoftDeleteEntity } from '../lib/softDeleteEntity';
+import { StaffSocketBill } from '../socket/staffBill.socket';
 import { BillDish } from './billDish';
 import { BillHistory } from './billHistory';
 import { Customer } from './customer';
@@ -96,4 +97,16 @@ export class Bill extends SoftDeleteEntity {
 
     @Field(() => [BillDish], { nullable: true })
     public dishes: BillDish[];
+
+    public toStaffSocketBill(): StaffSocketBill {
+        return {
+            billId: this.id,
+            tableNumber: this.tableNumber,
+            amountPreparedDishes: this.dishes.filter(dish => dish.preparedAt).length,
+            status: !this.prepareBy
+                ? 'no-prepare'
+                : (this.dishes.filter(dish => !dish.preparedAt && !dish.deliveryAt).length === 0)
+                    ? 'prepared' : 'preparing'
+        };
+    }
 }

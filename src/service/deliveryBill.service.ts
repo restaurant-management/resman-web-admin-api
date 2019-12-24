@@ -6,6 +6,9 @@ import { DeliveryBill } from '../entity/deliveryBill';
 import { User } from '../entity/user';
 import { HttpError, HttpErrorCode } from '../lib/httpError';
 import { AuthorizationStore } from '../middleware/authorization';
+import { socketServer } from '../socket';
+import { ChefBillSocketEvent } from '../socket/chefBill.socket';
+import { SocketRoute } from '../socket/socket.route';
 import { AddressService } from './address.service';
 import { CustomerService } from './customer.service';
 import { DailyDishService } from './dailyDish.service';
@@ -161,13 +164,18 @@ class DeliveryBillService {
                 });
         }
 
-        return await this.getOne(deliveryBill.id, {
+        const b = await this.getOne(deliveryBill.id, {
             withCustomer: !!data.customerUuid,
             withPrepareBy: !!data.prepareByUuid,
             withShipBy: !!data.shipByUuid,
             withDishes: !!data.dishIds,
             withStore: true
         });
+
+        // Notify to all chef about new delivery bill
+        socketServer.of(SocketRoute.chefBill).emit(ChefBillSocketEvent.NEW_D_BILL, b);
+
+        return b;
     }
 
     public async createWithRestrict(data: {
@@ -331,7 +339,11 @@ class DeliveryBillService {
      * Select deliveryBill to prepare for chef 
      */
     public async prepareDeliveryBill(id: number, editBy: User) {
-        return await this.edit(id, editBy, { prepareAt: new Date(), prepareByUuid: editBy.uuid });
+        const dBill = await this.edit(id, editBy, { prepareAt: new Date(), prepareByUuid: editBy.uuid });
+
+        socketServer.of(SocketRoute.chefBill).to(editBy.uuid).emit(ChefBillSocketEvent.NEW_PREPARE_BILL, dBill);
+
+        return dBill;
     }
 
     /**
@@ -340,7 +352,17 @@ class DeliveryBillService {
      * @param editBy User who select this bill to confirm prepared.
      */
     public async preparedDeliveryBill(id: number, editBy: User) {
-        return await this.edit(id, editBy, { preparedAt: new Date() });
+        let dBill = await this.getOne(id, { withPrepareBy: true });
+
+        if (dBill.prepareBy.uuid !== editBy.uuid) {
+            throw new Error(__('delivery_bill.can_not_edit_bill_of_other_chef'));
+        }
+
+        dBill = await this.edit(id, editBy, { preparedAt: new Date() });
+
+        socketServer.of(SocketRoute.chefBill).to(editBy.uuid).emit(ChefBillSocketEvent.NEW_PREPARE_D_BILL, dBill);
+
+        return dBill;
     }
 
     /**

@@ -4,7 +4,9 @@ import Socket from 'socket.io';
 import { AuthorRoleSocketMW } from '../middleware/authorizationByRole';
 import { SocketUserAuth } from '../middleware/userAuth';
 import { chefBillSocket } from './chefBill.socket';
+import { chefBillDetailSocket } from './chefBillDetail.socket';
 import { SocketRoute } from './socket.route';
+import { staffBillSocket } from './staffBill.socket';
 import { ChatMessage } from './userChat/chatMessage';
 import { ChatUser } from './userChat/chatUser';
 import { UserChatRepository } from './userChat/repository';
@@ -47,4 +49,10 @@ export const createSocket = (app: Server) => {
 
     socketServer.of(SocketRoute.chefBill).use(SocketUserAuth)
         .use(AuthorRoleSocketMW(['chef'])).on('connection', chefBillSocket);
+
+    socketServer.of(SocketRoute.staffBill).use(SocketUserAuth)
+        .use(AuthorRoleSocketMW(['staff'])).on('connection', staffBillSocket);
+
+    socketServer.of(SocketRoute.chefBillDetail).use(SocketUserAuth)
+        .use(AuthorRoleSocketMW(['chef'])).on('connection', chefBillDetailSocket);
 };
