@@ -97,7 +97,8 @@ class CustomerService {
             await AddressService.getOne(username, address.id);
         }
 
-        if (data.phoneNumber && await Customer.findOne({ where: { phoneNumber: data.phoneNumber } })) {
+        if (data.phoneNumber !== customer.phoneNumber
+            && await Customer.findOne({ where: { phoneNumber: data.phoneNumber } })) {
             throw new Error(__('customer.phone_number_has_already_used'));
         }
 
