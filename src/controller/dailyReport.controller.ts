@@ -10,8 +10,7 @@ class DailyReportController implements ICrudController {
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {
-        DailyReportService.create(req.body.stockIds, req.body.quantities, req.body.warehouseId, req.body.username,
-            req.body.note, req.body.stockPrices, req.body.stockNotes)
+        DailyReportService.create(req.body)
             .then(value => {
                 return res.status(200).json(value);
             }).catch(e => next(e));
@@ -24,7 +23,7 @@ class DailyReportController implements ICrudController {
     }
 
     public update(req: Request, res: Response, next: NextFunction): void {
-        DailyReportService.edit(parseInt(req.params.id, 10), req.body.username, req.body.note)
+        DailyReportService.edit(parseInt(req.params.id, 10), { note: req.body.note })
             .then(value =>
                 res.status(200).json(value)
             ).catch(e => next(e));

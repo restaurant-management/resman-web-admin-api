@@ -3,6 +3,7 @@ import { getConnection } from 'typeorm';
 import { Customer } from '../entity/customer';
 import { PasswordHandler } from '../helper/passwordHandler';
 import { HttpError } from '../lib/httpError';
+import { AddressInput } from '../resolver/InputTypes/addressInput';
 import { AddressService } from './address.service';
 import { AuthService } from './authService';
 
@@ -77,19 +78,29 @@ class CustomerService {
         const customer = await newCustomer.save();
         if (!customer) { throw new Error(__('customer.create_fail')); }
 
-        return await this.getOne({ username: newCustomer.username }, { withAddresses: true });
+        return await this.getOne({ username: newCustomer.username },
+            { withAddresses: true, withFavouriteDishes: true, withVoucherCodes: true });
     }
 
     public async edit(username: string, data: {
-        password?: string, phoneNumber?: string, fullName?: string, avatar?: string, birthday?: Date
+        password?: string, phoneNumber?: string, fullName?: string, avatar?: string, birthday?: Date,
+        addresses?: AddressInput[]
     }) {
-        const customer = await this.getOne({ username });
+        const customer = await this.getOne({ username }, { withAddresses: true });
 
         if (!customer) {
             throw new Error(__('customer.user_not_found'));
         }
 
-        if (data.phoneNumber && await Customer.findOne({ where: { phoneNumber: data.phoneNumber } })) {
+        if (data.addresses) {
+            for (const address of data.addresses) {
+                if (!address.id) { continue; }
+                await AddressService.getOne(username, address.id);
+            }
+        }
+
+        if (data.phoneNumber !== customer.phoneNumber
+            && await Customer.findOne({ where: { phoneNumber: data.phoneNumber } })) {
             throw new Error(__('customer.phone_number_has_already_used'));
         }
 
@@ -99,7 +110,29 @@ class CustomerService {
         if (data.avatar) { customer.avatar = data.avatar; }
         if (data.birthday) { customer.birthday = data.birthday; }
 
-        return await customer.save();
+        // Create and edit address
+        if (data.addresses) {
+            for (const address of data.addresses) {
+                if (!address.id) {
+                    await AddressService.create(username, address);
+                } else {
+                    await AddressService.edit(username, address.id, address);
+                }
+            }
+            // Remove address
+            for (const address of customer.addresses) {
+                if (data.addresses.findIndex(i => i.id === address.id) === -1) {
+                    await address.remove();
+                }
+            }
+        }
+
+        // Important
+        delete customer.addresses;
+
+        await customer.save();
+
+        return this.getOne({ username }, { withAddresses: true, withFavouriteDishes: true, withVoucherCodes: true });
     }
 
     public async delete(username: string) {
@@ -113,7 +146,7 @@ class CustomerService {
     }
 
     public async getOne(key: { id?: number, uuid?: string, username?: string, email?: string },
-        options?: { withAddresses?: boolean }) {
+        options?: { withAddresses?: boolean, withFavouriteDishes?: boolean, withVoucherCodes?: boolean }) {
 
         if (!key.id && !key.uuid && !key.username && !key.email) {
             throw new Error(__('customer.customer_not_found'));
@@ -124,6 +157,12 @@ class CustomerService {
 
         if (options?.withAddresses) {
             relations.push('addresses');
+        }
+        if (options?.withFavouriteDishes) {
+            relations.push('favouriteDishes');
+        }
+        if (options?.withVoucherCodes) {
+            relations.push('voucherCodes');
         }
 
         if (key.id) {
@@ -152,29 +191,19 @@ class CustomerService {
 
     // Edit profile for customer
     public async editProfile(username: string, editBy: Customer, data: {
-        password?: string, phoneNumber?: string, fullName?: string, avatar?: string, birthday?: Date
+        phoneNumber?: string, fullName?: string, avatar?: string, birthday?: Date, addresses: AddressInput[]
     }) {
         if (username !== editBy.username) {
             throw new HttpError(401, __('authentication.unauthorized'));
         }
 
-        const customer = await this.getOne({ username }, { withAddresses: true });
-
-        if (!customer) {
-            throw new Error(__('customer.user_not_found'));
-        }
-
-        if (data.phoneNumber && await Customer.findOne({ where: { phoneNumber: data.phoneNumber } })) {
-            throw new Error(__('customer.phone_number_has_already_used'));
-        }
-
-        if (data.password) { customer.password = PasswordHandler.encode(data.password); }
-        if (data.phoneNumber) { customer.phoneNumber = data.phoneNumber; }
-        if (data.fullName) { customer.fullName = data.fullName; }
-        if (data.avatar) { customer.avatar = data.avatar; }
-        if (data.birthday) { customer.birthday = data.birthday; }
-
-        return await customer.save();
+        return await this.edit(username, {
+            phoneNumber: data.phoneNumber,
+            addresses: data.addresses,
+            avatar: data.avatar,
+            fullName: data.fullName,
+            birthday: data.birthday,
+        });
     }
 
     // For customer

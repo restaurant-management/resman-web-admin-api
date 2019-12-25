@@ -54,11 +54,11 @@ const seedStore = async () => {
 
 const seedWarehouse = async () => {
     if (!await Warehouse.findOne(1)) {
-        await WarehouseService.create('Warehouse1', 'Warehouse1', '123456789', 'Warehouse1', 1);
+        await WarehouseService.create({ name: 'Warehouse1', address: 'Warehouse1', hotline: '123456789', description: 'Warehouse1', storeId: 1 });
     }
 
     if (!await Warehouse.findOne(2)) {
-        await WarehouseService.create('Warehouse2', 'Warehouse2', '123456789', 'Warehouse2', 1);
+        await WarehouseService.create({ name: 'Warehouse2', address: 'Warehouse2', hotline: '123456789', description: 'Warehouse2', storeId: 1 });
     }
 };
 
@@ -94,13 +94,15 @@ const seedStock = async () => {
 const seedImportBill = async () => {
     if (!await ImportBill.findOne(1)) {
         await ImportBillService.create(
-            [1, 2],
-            [5, 10],
-            1,
-            'admin',
-            'Test import bill',
-            [10, 20],
-            ['Gia re', 'ngon']
+            {
+                stockIds: [1, 2],
+                quantities: [5, 10],
+                warehouseId: 1,
+                username: 'admin',
+                note: 'Test import bill',
+                stockPrices: [10, 20],
+                stockNotes: ['Gia re', 'ngon']
+            }
         );
     }
 };
@@ -108,40 +110,83 @@ const seedImportBill = async () => {
 const seedDish = async () => {
     if (!await Dish.findOne(1)) {
         await DishService.create(
-            'Canh chua cá diêu hồng',
-            'Canh chua cá diêu hồng là một món ăn mang đậm hương vị miền Nam, là món ăn được yêu thích của nhiều gia đình.',
-            [
-                'https://photo-1-baomoi.zadn.vn/w1000_r1/2018_09_04_353_27570465/e0623ac61d86f4d8ad97.jpg',
-                'https://media.cooky.vn/recipe/g3/20662/s800x500/recipe20662-636360895766543787.jpg'
-            ],
-            25000
+            {
+                name: 'Canh gà lá giang',
+                description: 'Canh gà lá giang chua ngon nóng hổi và bổ dưỡng, ăn cùng cơm hoặc bún đều được. Bạn cũng có thể dùng như lẩu, đi kèm một vài loại rau nếu muốn.',
+                images: [
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20g%C3%A0%20l%C3%A1%20giang-0?generation=1560052815492246&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20g%C3%A0%20l%C3%A1%20giang-1?generation=1560054478380935&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20g%C3%A0%20l%C3%A1%20giang-2?generation=1560054479494337&alt=media'
+                ],
+                defaultPrice: 49000
+            }
         );
     }
 
     if (!await Dish.findOne(2)) {
         await DishService.create(
-            'Canh khổ qua nhồi thịt',
-            'Canh khổ qua nhồi thịt cũng là một món ăn ngon giàu dinh dưỡng và dễ làm mà các bạn có thể thực hiện.',
-            [
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt0-2019-06-07%2001:05:43?generation=1559887548010845&alt=media',
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt1-2019-06-07%2001:05:45?generation=1559887549908602&alt=media',
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt2-2019-06-07%2001:05:47?generation=1559887551753810&alt=media'
-            ],
-            25000
+            {
+                name: 'Cá lóc kho tộ',
+                description: 'Cá lóc kho tộ là món ăn ngon dễ làm, thích hợp dùng đổi mới khẩu vị, giúp bữa cơm gia đình thêm ngon miệng. Nếu chưa biết cách kho cá ngon thì bạn có thể học ngay cách kho cá hay cách làm cá lóc kho tộ béo ngon, đơn giản tại nhà được chia sẻ sau đây nhé. Cá kho tộ với từng khứa thịt cá được tẩm ướp đầy đủ gia vị, được kho liu riu trong nồi đất vừa lành, vừa giúp gia vị thấm đều và đậm đà hơn so với cách kho cá tương tự với nồi kim loại.',
+                images: [
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FC%C3%A1%20l%C3%B3c%20kho%20t%E1%BB%99-0?generation=1560052730026691&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FC%C3%A1%20l%C3%B3c%20kho%20t%E1%BB%99-1?generation=1560053675555009&alt=media'
+                ],
+                defaultPrice: 25000
+            }
         );
     }
 
     if (!await Dish.findOne(3)) {
         await DishService.create(
-            'Canh khổ qua nhồi thịt Ver 2.0',
-            'Canh khổ qua nhồi thịt ver 2.0 y chan ver 1.0.',
-            [
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt0-2019-06-07%2001:05:43?generation=1559887548010845&alt=media',
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt1-2019-06-07%2001:05:45?generation=1559887549908602&alt=media',
-                'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt2-2019-06-07%2001:05:47?generation=1559887551753810&alt=media'
-            ],
-            30000
+            {
+                name: 'Canh chua cá diêu hồng',
+                description: 'Canh chua cá diêu hồng là một món ăn mang đậm hương vị miền Nam, là món ăn được yêu thích của nhiều gia đình.',
+                images: [
+                    'https://photo-1-baomoi.zadn.vn/w1000_r1/2018_09_04_353_27570465/e0623ac61d86f4d8ad97.jpg',
+                    'https://media.cooky.vn/recipe/g3/20662/s800x500/recipe20662-636360895766543787.jpg'
+                ],
+                defaultPrice: 25000
+            }
         );
+    }
+
+    if (!await Dish.findOne(4)) {
+        await DishService.create(
+            {
+                name: 'Canh khổ qua nhồi thịt',
+                description: 'Canh khổ qua nhồi thịt cũng là một món ăn ngon giàu dinh dưỡng và dễ làm mà các bạn có thể thực hiện.',
+                images: [
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt0-2019-06-07%2001:05:43?generation=1559887548010845&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt1-2019-06-07%2001:05:45?generation=1559887549908602&alt=media',
+                    'https://www.googleapis.com/download/storage/v1/b/restaurant-management-storage.appspot.com/o/dishImages%2FCanh%20kh%E1%BB%95%20qua%20nh%E1%BB%93i%20th%E1%BB%8Bt2-2019-06-07%2001:05:47?generation=1559887551753810&alt=media'
+                ],
+                defaultPrice: 25000
+            }
+        );
+    }
+
+    if (!await Dish.findOne(5)) {
+        await DishService.create(
+            {
+                name: 'Gà kho sả ớt',
+                description: 'Gà kho sả ớt là một món ăn thơm ngon hấp dẫn, tùy thuộc vào mỗi vùng miền khác nhau lại có những cách làm khác nhau',
+                images: [
+                    'https://www.hoidaubepaau.com/wp-content/uploads/2018/05/ga-kho-sa-ot.jpg',
+                    'http://giadinh.mediacdn.vn/2018/11/23/photo-2-1542938153038490252734.jpg',
+                    'https://i.ytimg.com/vi/BQnO9JnO_9s/maxresdefault.jpg'
+                ],
+                defaultPrice: 30000
+            }
+        );
+    }
+
+    // Add dish to store
+
+    if ((await StoreService.getOne(1, { withDishes: true })).storeDishes.length === 0) {
+        await StoreService.edit(1, {
+            storeDishes: [{ dishId: 1 }, { dishId: 2 }, { dishId: 3 }, { dishId: 4 }, { dishId: 5 }]
+        });
     }
 };
 
@@ -153,7 +198,7 @@ const seedDailyDish = async () => {
     } catch (e) {
         const listDish = await DishService.getAll({});
         for (const dish of listDish) {
-            await DailyDishService.create(new Date(), dish.id, 1, DaySession.None);
+            await DailyDishService.create({ day: new Date(), dishId: dish.id, storeId: 1, session: DaySession.None });
         }
     }
 };

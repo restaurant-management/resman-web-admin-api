@@ -3,6 +3,7 @@ import { getManager } from 'typeorm';
 import { DiscountCampaign } from '../entity/discountCampaign';
 import { DiscountCampaignDish } from '../entity/discountCampaignDish';
 import { Dish } from '../entity/dish';
+import { User } from '../entity/user';
 import { DishService } from './dish.service';
 import { StoreService } from './store.service';
 
@@ -17,11 +18,25 @@ class DiscountCampaignService {
         return discountCampaign;
     }
 
+    public async getAllByUser(user: User, length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
+        const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
+        const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
+        const take = length;
+
+        const discountCampaigns = await DiscountCampaign.find({
+            order, relations: ['stores', 'dishes']
+        });
+
+        return discountCampaigns.filter(i =>
+            i.stores.findIndex(store => user.stores.findIndex(userStore => userStore.id === store.id) >= 0) >= 0)
+            .filter((_store, index) => index >= skip && index < (take ? skip + take : discountCampaigns.length));
+    }
+
     public async create(data: {
         name: string, startAt: Date, endAt: Date, defaultDiscount: number, storeIds: number[],
         dishIds?: number[], discounts?: number[], description?: string, banner?: string
     }) {
-        if (data.discounts.length !== data.dishIds.length) {
+        if (data.discounts?.length !== data.dishIds?.length) {
             throw new Error(__('discount_campaign.dishIds_length_have_to_equal_discounts_length'));
         }
 

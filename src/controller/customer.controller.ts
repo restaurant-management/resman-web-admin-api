@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
+import { Customer } from '../entity/customer';
+import { Permission } from '../entity/permission';
 import { ICrudController } from '../lib/ICrudController';
+import { Authorization } from '../middleware/authorization';
 import { CustomerService } from '../service/customer.service';
 
 class CustomerController implements ICrudController {
@@ -24,7 +27,7 @@ class CustomerController implements ICrudController {
     }
 
     public read(req: Request, res: Response, next: NextFunction): void {
-        CustomerService.getOne({ username: req.params.id }).then((value) =>
+        CustomerService.getOne({ username: req.params.id }, req.query).then((value) =>
             res.status(200).json(value)
         ).catch(e => next(e));
     }
@@ -53,6 +56,38 @@ class CustomerController implements ICrudController {
             .then(value => {
                 return res.status(200).json(value);
             }).catch(e => next(e));
+    }
+
+    public getByUsername(req: Request, res: Response, next: NextFunction) {
+        if ((req['customer'] as Customer).username !== req.params.username) {
+            try {
+                Authorization(req['customer'], [Permission.customer.list]);
+            } catch (e) {
+                return next(e);
+            }
+        }
+
+        CustomerService.getOne({ username: req.params.username }, req.query).then(value => {
+            const { password, id, ...exportedData } = value;
+
+            return res.status(200).json(exportedData);
+        }).catch(err => next(err));
+    }
+
+    public getByEmail(req: Request, res: Response, next: NextFunction) {
+        if ((req['customer'] as Customer).email !== req.params.email) {
+            try {
+                Authorization(req['customer'], [Permission.customer.list]);
+            } catch (e) {
+                return next(e);
+            }
+        }
+
+        CustomerService.getOne({ email: req.params.email }, req.query).then(value => {
+            const { password, id, ...exportedData } = value;
+
+            return res.status(200).json(exportedData);
+        }).catch(err => next(err));
     }
 }
 

@@ -26,8 +26,8 @@ class UserController implements ICrudController {
         }).catch(e => next(e));
     }
 
-    public create(req: Request, res: Response, next: NextFunction): void {
-        if (!UserService.checkRoleLevel((req['user'] as User).id, req.body.roles)) {
+    public async create(req: Request, res: Response, next: NextFunction) {
+        if (!(await UserService.checkRoleLevel((req['user'] as User).id, req.body.roles))) {
             return next(new Error(__('user.can_not_create_user_with_higher_level')));
         }
 
@@ -91,11 +91,7 @@ class UserController implements ICrudController {
     }
 
     public delete(req: Request, res: Response, next: NextFunction): void {
-        if (!UserService.checkRoleLevel((req['user'] as User).id, req.body.roles)) {
-            return next(new Error(__('user.can_not_delete_user_with_higher_level')));
-        }
-
-        UserService.delete(req.params.id).then(() =>
+        UserService.delete(req.params.id, req['user'] as User).then(() =>
             res.sendStatus(200)
         ).catch(e => next(e));
     }

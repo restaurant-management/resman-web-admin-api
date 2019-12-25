@@ -5,9 +5,10 @@ import { BillService } from '../service/bill.service';
 
 class BillController implements ICrudController {
     public async list(req: Request, res: Response, next: NextFunction) {
-        BillService.getAll(req.query.length, req.query.page, req.query.orderId, req.query.order).then(value => {
-            return res.status(200).json(value);
-        }).catch(e => next(e));
+        BillService.getAll(req['user'], req.query)
+            .then(value => {
+                return res.status(200).json(value);
+            }).catch(e => next(e));
     }
 
     public create(req: Request, res: Response, next: NextFunction): void {
@@ -83,15 +84,17 @@ class BillController implements ICrudController {
     }
 
     public prepared(req: Request, res: Response, next: NextFunction): void {
-        BillService.preparedBillDish(parseInt(req.params.id, 10), parseInt(req.params.dishId, 10)).then(() =>
-            res.sendStatus(200)
-        ).catch(e => next(e));
+        BillService.preparedBillDish(parseInt(req.params.id, 10), req['user'], parseInt(req.params.dishId, 10))
+            .then(() =>
+                res.sendStatus(200)
+            ).catch(e => next(e));
     }
 
     public delivered(req: Request, res: Response, next: NextFunction): void {
-        BillService.deliveredBillDish(parseInt(req.params.id, 10), parseInt(req.params.dishId, 10)).then(() =>
-            res.sendStatus(200)
-        ).catch(e => next(e));
+        BillService.deliveredBillDish(parseInt(req.params.id, 10), req['user'], parseInt(req.params.dishId, 10))
+            .then(() =>
+                res.sendStatus(200)
+            ).catch(e => next(e));
     }
 
     public collect(req: Request, res: Response, next: NextFunction): void {

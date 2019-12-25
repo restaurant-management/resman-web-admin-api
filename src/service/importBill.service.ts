@@ -18,38 +18,40 @@ class ImportBillService {
         return importBill;
     }
 
-    public async create(stockIds: number[], quantities: number[], warehouseId: number, username: string,
-        note?: string, stockPrices?: number[], stockNotes?: string[]) {
-        if (!stockIds || !quantities || !warehouseId || !username) {
+    public async create(data: {
+        stockIds: number[], quantities: number[], warehouseId: number, username: string,
+        note?: string, stockPrices?: number[], stockNotes?: string[]
+    }) {
+        if (!data.stockIds || !data.quantities || !data.warehouseId || !data.username) {
             throw new Error(__('error.missing_required_information'));
         }
 
-        if (quantities.length !== stockIds.length) {
+        if (data.quantities.length !== data.stockIds.length) {
             throw new Error(__('import_bill.stockIds_length_have_to_equal_quantities_length'));
         }
 
-        if (stockPrices && stockPrices.length !== stockIds.length) {
+        if (data.stockPrices && data.stockPrices.length !== data.stockIds.length) {
             throw new Error(__('import_bill.stockIds_length_have_to_equal_stockPrices_length'));
         }
 
-        if (stockNotes && stockNotes.length !== stockIds.length) {
+        if (data.stockNotes && data.stockNotes.length !== data.stockIds.length) {
             throw new Error(__('import_bill.stockIds_length_have_to_equal_stockNotes_length'));
         }
 
-        const warehouse = await Warehouse.findOne(warehouseId);
+        const warehouse = await Warehouse.findOne(data.warehouseId);
         if (!warehouse) {
             throw new Error(__('import_bill.warehouse_not_found'));
         }
 
-        const user = await User.findOne({ where: { username } });
+        const user = await User.findOne({ where: { username: data.username } });
         if (!user) {
-            throw new Error(__('import_bill.user_{{username}}_not_found', { username }));
+            throw new Error(__('import_bill.user_{{username}}_not_found', { username: data.username }));
         }
 
         const newImportBill = new ImportBill();
         newImportBill.warehouse = warehouse;
         newImportBill.user = user;
-        newImportBill.note = note;
+        newImportBill.note = data.note;
 
         const importBill = await newImportBill.save();
 
@@ -57,17 +59,17 @@ class ImportBillService {
         const warehouseStocks = await WarehouseStock.find({ where: { warehouseId: warehouse.id } });
 
         // tslint:disable-next-line: prefer-for-of
-        for (let i = 0; i < stockIds.length; i++) {
-            const stock = await Stock.findOne(stockIds[i]);
+        for (let i = 0; i < data.stockIds.length; i++) {
+            const stock = await Stock.findOne(data.stockIds[i]);
             if (!stock) {
-                throw new Error(__('import_bill.stock_{{id}}_not_found', { id: stockIds[i].toString() }));
+                throw new Error(__('import_bill.stock_{{id}}_not_found', { id: data.stockIds[i].toString() }));
             }
 
             const importBillStock = new ImportBillStock();
             importBillStock.stock = stock;
-            importBillStock.quantity = quantities[i];
-            importBillStock.price = stockPrices ? stockPrices[i] : stock.price;
-            importBillStock.note = stockNotes ? stockNotes[i] : null;
+            importBillStock.quantity = data.quantities[i];
+            importBillStock.price = data.stockPrices ? data.stockPrices[i] : stock.price;
+            importBillStock.note = data.stockNotes ? data.stockNotes[i] : null;
             importBillStock.importBill = importBill;
 
             await importBillStock.save();
@@ -92,23 +94,23 @@ class ImportBillService {
         return await ImportBill.findOne(importBill.id, { relations: ['user', 'stocks'] });
     }
 
-    public async edit(id: number, username?: string, note?: string) {
+    public async edit(id: number, data: { username?: string, note?: string }) {
         const importBill = await ImportBill.findOne(id);
         if (!importBill) {
             throw new Error(__('import_bill.import_bill_not_found'));
         }
 
-        if (username) {
-            const user = await User.findOne({ where: { username } });
+        if (data.username) {
+            const user = await User.findOne({ where: { username: data.username } });
             if (!user) {
-                throw new Error(__('import_bill.user_{{username}}_not_found', { username }));
+                throw new Error(__('import_bill.user_{{username}}_not_found', { username: data.username }));
             }
 
             importBill.user = user;
         }
 
-        if (note) {
-            importBill.note = note;
+        if (data.note) {
+            importBill.note = data.note;
         }
 
         await importBill.save();
@@ -142,8 +144,11 @@ class ImportBillService {
         await importBill.remove();
     }
 
-    public async getOne(id: number) {
-        const importBill = await ImportBill.findOne(id);
+    public async getOne(id: number, options?: { withUser?: boolean }) {
+        const relations = [];
+        if (options?.withUser) { relations.push('user'); }
+
+        const importBill = await ImportBill.findOne(id, { relations });
 
         if (!importBill) {
             throw new Error(__('import_bill.import_bill_not_found'));

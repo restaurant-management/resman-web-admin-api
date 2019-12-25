@@ -8,7 +8,6 @@ const router = Router();
 
 CrudRouter(router, DiscountCodeController, {
     listMiddleware: AuthorMiddleware([Permission.discountCode.list]),
-    readMiddleware: AuthorMiddleware([Permission.discountCode.list]),
     createMiddleware: AuthorMiddleware([Permission.discountCode.create]),
     updateMiddleware: AuthorMiddleware([Permission.discountCode.update]),
     deleteMiddleware: AuthorMiddleware([Permission.discountCode.delete]),

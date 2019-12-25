@@ -1,6 +1,7 @@
 import { __ } from 'i18n';
 import { FindConditions, getConnection, ObjectLiteral } from 'typeorm';
 import { Dish } from '../entity/dish';
+import { CustomerService } from './customer.service';
 
 class DishService {
     public async getAll(options: {
@@ -17,28 +18,32 @@ class DishService {
         return dish;
     }
 
-    public async create(name: string, description?: string, images: string[] = [], defaultPrice = 0) {
+    public async create(data: { name: string, description?: string, images?: string[], defaultPrice?: number }) {
         const newDish = new Dish();
-        newDish.name = name;
-        newDish.images = images;
-        newDish.defaultPrice = defaultPrice;
-        if (description) { newDish.description = description; }
+        newDish.name = data.name;
+        newDish.images = data.images || [];
+        newDish.defaultPrice = data.defaultPrice || 0;
+        if (data.description) { newDish.description = data.description; }
 
         const dish = await newDish.save({ reload: true });
         if (!dish) { throw new Error(__('dish.create_fail')); }
 
-        return dish;
+        return await this.getOne(dish.id);
     }
 
-    public async edit(id: number, _name?: string, _description?: string, _images?: string[], _defaultPrice?: number) {
-        const dish = await Dish.findOne(id);
-        if (!dish) { throw new Error(__('dish.dish_not_found')); }
-        if (_name) { dish.name = _name; }
-        if (_description) { dish.description = _description; }
-        dish.images = _images ? _images : [];
-        if (_defaultPrice) { dish.defaultPrice = _defaultPrice; }
+    public async edit(id: number,
+        data: { name?: string, description?: string, images?: string[], defaultPrice?: number }) {
 
-        return await dish.save();
+        const dish = await this.getOne(id);
+        if (!dish) { throw new Error(__('dish.dish_not_found')); }
+        if (data.name) { dish.name = data.name; }
+        if (data.description) { dish.description = data.description; }
+        dish.images = data.images ? data.images : [];
+        if (data.defaultPrice) { dish.defaultPrice = data.defaultPrice || 0; }
+
+        await dish.save();
+
+        return await this.getOne(id);
     }
 
     public async delete(id: number) {
@@ -64,6 +69,41 @@ class DishService {
 
         // TODO handle price with discount campaign
         return dish.defaultPrice;
+    }
+
+    public async favouriteDish(id: number, customerUuid: string) {
+        const customer = await CustomerService.getOne({ uuid: customerUuid }, { withFavouriteDishes: true });
+        const dish = await this.getOne(id);
+        try {
+            if (customer.favouriteDishes.findIndex(i => i.id === dish.id) >= 0) {
+                return;
+            }
+
+            customer.favouriteDishes = [...customer.favouriteDishes, dish];
+            await customer.save();
+        } catch (e) {
+            console.log(e);
+
+            throw new Error(__('dish.favourite_failed'));
+        }
+    }
+
+    public async unFavouriteDish(id: number, customerUuid: string) {
+        const customer = await CustomerService.getOne({ uuid: customerUuid }, { withFavouriteDishes: true });
+        const dish = await this.getOne(id);
+
+        if (customer.favouriteDishes.findIndex(i => i.id === dish.id) < 0) {
+            return;
+        }
+
+        try {
+            customer.favouriteDishes = customer.favouriteDishes.filter(i => i.id !== dish.id);
+            await customer.save();
+        } catch (e) {
+            console.log(e);
+
+            throw new Error(__('dish.favourite_failed'));
+        }
     }
 }
 

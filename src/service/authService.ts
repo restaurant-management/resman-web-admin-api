@@ -27,6 +27,10 @@ class AuthService {
     }
 
     public async verify(token: string): Promise<User | Customer> {
+        if (!token) {
+            throw new Error(__('authentication.no_token_provided'));
+        }
+
         let decoded = {};
         try {
             decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -41,7 +45,8 @@ class AuthService {
             return await UserService.getOne({ uuid: payload.uuid },
                 { withRoles: true, withStores: true, withWarehouses: true });
         } else if (payload.type === 'customer') {
-            return await CustomerService.getOne({ uuid: payload.uuid }, { withAddresses: true });
+            return await CustomerService.getOne({ uuid: payload.uuid },
+                { withAddresses: true, withFavouriteDishes: true, withVoucherCodes: true });
         }
 
         throw new Error(__('authentication.fail_authenticate_token'));
