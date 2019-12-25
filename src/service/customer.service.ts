@@ -92,9 +92,11 @@ class CustomerService {
             throw new Error(__('customer.user_not_found'));
         }
 
-        for (const address of data.addresses) {
-            if (!address.id) { continue; }
-            await AddressService.getOne(username, address.id);
+        if (data.addresses) {
+            for (const address of data.addresses) {
+                if (!address.id) { continue; }
+                await AddressService.getOne(username, address.id);
+            }
         }
 
         if (data.phoneNumber !== customer.phoneNumber
@@ -109,20 +111,23 @@ class CustomerService {
         if (data.birthday) { customer.birthday = data.birthday; }
 
         // Create and edit address
-        for (const address of data.addresses) {
-            if (!address.id) {
-                await AddressService.create(username, address);
-            } else {
-                await AddressService.edit(username, address.id, address);
+        if (data.addresses) {
+            for (const address of data.addresses) {
+                if (!address.id) {
+                    await AddressService.create(username, address);
+                } else {
+                    await AddressService.edit(username, address.id, address);
+                }
             }
-        }
-        // Remove address
-        for (const address of customer.addresses) {
-            if (data.addresses.findIndex(i => i.id === address.id) === -1) {
-                await address.remove();
+            // Remove address
+            for (const address of customer.addresses) {
+                if (data.addresses.findIndex(i => i.id === address.id) === -1) {
+                    await address.remove();
+                }
             }
         }
 
+        // Important
         delete customer.addresses;
 
         await customer.save();
