@@ -18,7 +18,8 @@
 		"delete_fail": "daily_dish.delete_fail",
 		"existed": "daily_dish.existed",
 		"delete_success": "daily_dish.delete_success",
-		"dish_{{id}}_not_sell_in_this_store": "daily_dish.dish_{{id}}_not_sell_in_this_store"
+		"dish_{{id}}_not_sell_in_this_store": "daily_dish.dish_{{id}}_not_sell_in_this_store",
+		"confirm_out_of_stock_success": "daily_dish.confirm_out_of_stock_success"
 	},
 	"authentication": {
 		"unauthorized": "authentication.unauthorized",

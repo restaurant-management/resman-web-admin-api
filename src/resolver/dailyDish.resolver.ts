@@ -1,7 +1,9 @@
 import { __ } from 'i18n';
-import { Arg, Authorized, ID, Mutation, Query } from 'type-graphql';
+import { Arg, Authorized, Ctx, ID, Mutation, Query, UseMiddleware } from 'type-graphql';
 import { DailyDish, dateScalar, DaySession } from '../entity/dailyDish';
 import { Permission } from '../entity/permission';
+import { GraphUserContext } from '../lib/graphContext';
+import { AuthorRoleGraphMiddleware } from '../middleware/authorizationByRole';
 import { DailyDishService } from '../service/dailyDish.service';
 
 export class DailyDishResolver {
@@ -60,5 +62,17 @@ export class DailyDishResolver {
         await DailyDishService.delete({ day, dishId, storeId, session: session || DaySession.None });
 
         return __('daily_dish.delete_success');
+    }
+
+    @Mutation(() => String, { description: 'For chef' })
+    @UseMiddleware(AuthorRoleGraphMiddleware(['chef']))
+    public async confirmOutOfStockDailyDish(
+        @Ctx() { payload }: GraphUserContext,
+        @Arg('dishId', () => ID) dishId: number,
+        @Arg('storeId', () => ID) storeId: number,
+    ) {
+        await DailyDishService.confirmOut(payload.user, dishId, storeId);
+
+        return __('daily_dish.confirm_out_of_stock_success');
     }
 }
