@@ -177,6 +177,8 @@ class BillService {
 
         // Notify to all chef about new bill
         socketServer.of(SocketRoute.chefBill).emit(ChefBillSocketEvent.NEW_BILL, b);
+        socketServer.of(SocketRoute.staffBill)
+            .emit(StaffBillSocketEvent.AMOUNT_PREPARED_BILL_DISH_CHANGE, b.toStaffSocketBill());
 
         return b;
     }
@@ -333,7 +335,9 @@ class BillService {
      * Select bill to prepare for chef 
      */
     public async prepareBill(id: number, data: { prepareByUuid: string }) {
-        const oldPrepareBy = (await this.getOne(id, { withPrepareBy: true })).prepareBy;
+        const bill = await this.getOne(id, { withPrepareBy: true, withCreateBy: true });
+
+        const oldPrepareBy = bill.prepareBy;
         if (oldPrepareBy) {
             if (oldPrepareBy.uuid === data.prepareByUuid) {
                 throw new Error(__('bill.you_selected_to_prepare_this_bill'));
@@ -342,12 +346,22 @@ class BillService {
             }
         }
 
-        const editedBill = await this.edit(id, { updateByUuid: data.prepareByUuid, prepareByUuid: data.prepareByUuid });
+        const editedBill = await this.edit(id, {
+            updateByUuid: data.prepareByUuid, prepareByUuid: data.prepareByUuid, prepareAt: new Date()
+        });
 
-        // Notify to room which have exactly chef
+        // Notify to other chefs
+        socketServer.of(SocketRoute.chefBill)
+            .emit(ChefBillSocketEvent.NEW_BILL_IS_SELECTED, { id: editedBill.id, prepareBy: editedBill.prepareBy });
+
+        // Notify too chef
         socketServer.of(SocketRoute.chefBill)
             .to(data.prepareByUuid)
             .emit(ChefBillSocketEvent.NEW_PREPARE_BILL, editedBill);
+
+        socketServer.of(SocketRoute.staffBill)
+            .to(bill.createBy.uuid)
+            .emit(StaffBillSocketEvent.AMOUNT_PREPARED_BILL_DISH_CHANGE, editedBill.toStaffSocketBill());
 
         return editedBill;
     }

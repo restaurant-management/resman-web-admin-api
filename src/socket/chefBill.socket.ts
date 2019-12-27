@@ -8,6 +8,7 @@ export enum ChefBillSocketEvent {
     NEW_PREPARED_BILL = 'new_prepared_bill', // When chef prepared all dish in bill
     NEW_PREPARE_D_BILL = 'new_prepare_d_bill', // When chef select a delivery bill to prepare
     NEW_PREPARED_D_BILL = 'new_prepared_d_bill', // When chef check prepared a delivery bill
+    NEW_BILL_IS_SELECTED = 'new_bill_is_selected', // When other chef prepare bill
 }
 
 export const chefBillSocket = async (socket: Socket.Socket) => {
