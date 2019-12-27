@@ -1,65 +1,65 @@
 {
 	"user_service": {
 		"username_or_email_incorrect": "Tài khoản hoặc email không đúng.",
-		"password_incorrect": "mật khẩu không đúng.",
+		"password_incorrect": "Mật khẩu không đúng.",
 		"username_has_already_used": "Tài khoản đã tồn tại.",
 		"email_has_already_used": "Email đã tồn tại.",
-		"phone_number_has_already_used": "user_service.phone_number_has_already_used",
-		"{{role}}_not_found": "user_service.{{role}}_not_found",
-		"user_not_found": "user_service.user_not_found",
-		"can_not_delete_admin_user": "user_service.can_not_delete_admin_user"
+		"phone_number_has_already_used": "Số điện thoại đã được sử dụng.",
+		"{{role}}_not_found": "Không tìm thấy vai trò {{role}}.",
+		"user_not_found": "Không tìm thấy người dùng.",
+		"can_not_delete_admin_user": "Không thể xóa tài khoản quản trị."
 	},
 	"common": {
-		"no_token_provided": "common.no_token_provided",
-		"unauthorized": "common.unauthorized"
+		"no_token_provided": "Thiếu mã xác thực.",
+		"unauthorized": "Bạn không có quyền thực hiện điều này."
 	},
 	"error": {
-		"can_not_create_user_with_higher_level": "error.can_not_create_user_with_higher_level",
-		"missing_required_information": "error.missing_required_information",
-		"no_storeId_is_provided": "error.no_storeId_is_provided",
-		"new_password_must_be_difference_old_password": "error.new_password_must_be_difference_old_password",
-		"incorrect_old_password": "error.incorrect_old_password"
+		"can_not_create_user_with_higher_level": "Không thể tạo tài khoản với quyền cao hơn quyền của bạn.",
+		"missing_required_information": "Thiếu các thông tin bắt buộc.",
+		"no_storeId_is_provided": "Thiếu storeId.",
+		"new_password_must_be_difference_old_password": "Mật khẩu mới phải khác mật khẩu cũ.",
+		"incorrect_old_password": "Sai mật khẩu cũ."
 	},
 	"authentication": {
-		"no_token_provided": "authentication.no_token_provided",
-		"fail_authenticate_token": "authentication.fail_authenticate_token",
-		"unauthorized": "authentication.unauthorized"
+		"no_token_provided": "Thiếu mã xác thực.",
+		"fail_authenticate_token": "Lỗi khi xác thực.",
+		"unauthorized": "Bạn không có quyền thực hiện điều này."
 	},
 	"store": {
-		"store_not_found": "store.store_not_found",
-		"delete_success": "store.delete_success"
+		"store_not_found": "Không tìm thấy cửa hàng.",
+		"delete_success": "Xóa cửa hàng thành công."
 	},
 	"warehouse": {
-		"warehouse_not_found": "warehouse.warehouse_not_found",
-		"store_not_found": "warehouse.store_not_found",
-		"delete_success": "warehouse.delete_success"
+		"warehouse_not_found": "Không tìm thấy kho.",
+		"store_not_found": "Không tìm thấy cửa hàng.",
+		"delete_success": "Xóa kho thành công."
 	},
 	"customer": {
-		"customer_not_found": "customer.customer_not_found",
-		"change_password_success": "customer.change_password_success",
-		"delete_success": "customer.delete_success",
-		"delete_address_success": "customer.delete_address_success",
-		"phone_number_has_already_used": "customer.phone_number_has_already_used"
+		"customer_not_found": "Không tìm thấy khách hàng.",
+		"change_password_success": "Sửa mật khẩu thành công.",
+		"delete_success": "Xóa khách hàng thành công.",
+		"delete_address_success": "Xóa địa chỉ thành công.",
+		"phone_number_has_already_used": "Số điện thoại đã được sử dụng."
 	},
 	"user": {
-		"user_not_found": "user.user_not_found",
-		"can_not_delete_admin_user": "user.can_not_delete_admin_user",
-		"username_or_email_incorrect": "user.username_or_email_incorrect",
-		"phone_number_has_already_used": "user.phone_number_has_already_used",
-		"username_has_already_used": "user.username_has_already_used",
-		"password_incorrect": "user.password_incorrect",
-		"email_has_already_used": "user.email_has_already_used",
-		"change_password_success": "user.change_password_success",
-		"{{role}}_not_found": "user.{{role}}_not_found",
-		"can_not_delete_user_with_higher_level": "user.can_not_delete_user_with_higher_level",
-		"delete_success": "user.delete_success"
+		"user_not_found": "Không tìm thấy người dùng.",
+		"can_not_delete_admin_user": "Không thể xóa tài khoản quản trị.",
+		"username_or_email_incorrect": "Tài khoản hoặc email không đúng.",
+		"phone_number_has_already_used": "Số điện thoại đã được sử dụng.",
+		"username_has_already_used": "Tên đăng nhập đã được sử dụng.",
+		"password_incorrect": "Mật khẩu không đúng.",
+		"email_has_already_used": "Email đã được sử dụng.",
+		"change_password_success": "Đổi mật khẩu thành công.",
+		"{{role}}_not_found": "Không tìm thấy vai trò {{role}}.",
+		"can_not_delete_user_with_higher_level": "Không thể tạo tài khoản với quyền cao hơn quyền của bạn.",
+		"delete_success": "Xóa người dùng thành công."
 	},
 	"stock": {
-		"stock_not_found": "stock.stock_not_found"
+		"stock_not_found": "Không tìm thấy mặt hàng."
 	},
 	"import_bill": {
 		"stockIds_length_have_to_equal_quantities_length": "import_bill.stockIds_length_have_to_equal_quantities_length",
-		"warehouse_not_found": "import_bill.warehouse_not_found",
+		"warehouse_not_found": "Không tìm thấy kho.",
 		"user_{{username}}_not_found": "import_bill.user_{{username}}_not_found",
 		"stock_{{id}}_not_found": "import_bill.stock_{{id}}_not_found",
 		"import_bill_not_found": "import_bill.import_bill_not_found",
@@ -80,20 +80,20 @@
 		"delete_success": "daily_report.delete_success"
 	},
 	"dish": {
-		"delete_fail": "dish.delete_fail",
-		"dish_not_found": "dish.dish_not_found",
-		"delete_success": "dish.delete_success",
-		"favourite_success": "dish.favourite_success",
-		"un_favourite_success": "dish.un_favourite_success"
+		"delete_fail": "Xóa thất bại.",
+		"dish_not_found": "Không tìm thấy món ăn.",
+		"delete_success": "Xóa món ăn thành công.",
+		"favourite_success": "Thêm vào yêu thích thành công.",
+		"un_favourite_success": "Bỏ yêu thích thành công."
 	},
 	"voucher_code": {
 		"voucher_code_not_found": "voucher_code.voucher_code_not_found"
 	},
 	"discount_code": {
-		"voucher_code_not_found": "discount_code.voucher_code_not_found",
-		"discount_code_not_found": "discount_code.discount_code_not_found",
-		"delete_success": "discount_code.delete_success",
-		"no_longer_valid": "discount_code.no_longer_valid"
+		"voucher_code_not_found": "Không tìm thấy voucher.",
+		"discount_code_not_found": "Không tìm thấy mã giảm giá.",
+		"delete_success": "Xóa mã giảm giá thành công.",
+		"no_longer_valid": "Mã giảm giá hết hạn."
 	},
 	"discount_campaign": {
 		"discount_campaign_not_found": "discount_campaign.discount_campaign_not_found",
@@ -101,7 +101,7 @@
 		"delete_success": "discount_campaign.delete_success"
 	},
 	"address": {
-		"address_not_found": "address.address_not_found"
+		"address_not_found": "Không tìm thấy địa chỉ."
 	},
 	"daily_dish": {
 		"delete_fail": "daily_dish.delete_fail",
@@ -112,14 +112,14 @@
 		"dish_{{id}}_not_sell_in_this_store": "daily_dish.dish_{{id}}_not_sell_in_this_store"
 	},
 	"bill": {
-		"create_bill_fail": "bill.create_bill_fail",
-		"bill_not_found": "bill.bill_not_found",
-		"collect_value_must_be_not_null": "bill.collect_value_must_be_not_null",
-		"bill_is_collected": "bill.bill_is_collected",
-		"created_by_must_be_staff": "bill.created_by_must_be_staff",
-		"delete_success": "bill.delete_success",
-		"you_selected_to_prepare_this_bill": "bill.you_selected_to_prepare_this_bill",
-		"bill_is_selected_by_other_chef": "bill.bill_is_selected_by_other_chef"
+		"create_bill_fail": "Tạo hóa đơn thất bại.",
+		"bill_not_found": "Không tìm thấy hóa đơn.",
+		"collect_value_must_be_not_null": "Số tiền thu được phải khác null.",
+		"bill_is_collected": "Hóa đơn đã được thu tiền.",
+		"created_by_must_be_staff": "Hóa đơn phải được tạo bởi nhân viên",
+		"delete_success": "Xóa hóa đơn thành công.",
+		"you_selected_to_prepare_this_bill": "Bạn đã chọn hóa đơn này để chuẩn bị rồi.",
+		"bill_is_selected_by_other_chef": "Hóa đơn đã được đầu bếp khác chuẩn bị."
 	},
 	"role": {
 		"role_not_found": "role.role_not_found",
@@ -128,14 +128,14 @@
 		"delete_success": "role.delete_success"
 	},
 	"delivery_bill": {
-		"delivery_bill_not_found": "delivery_bill.delivery_bill_not_found",
-		"customer_not_found": "delivery_bill.customer_not_found",
-		"user_not_found": "delivery_bill.user_not_found",
-		"collect_value_must_be_not_null": "delivery_bill.collect_value_must_be_not_null",
+		"delivery_bill_not_found": "Không tìm thấy hóa đơn.",
+		"customer_not_found": "Không tìm thấy khách hàng.",
+		"user_not_found": "Không tìm thấy người dùng.",
+		"collect_value_must_be_not_null": "Số tiền thu được phải khác null.",
 		"bill_have_been_already_rated": "delivery_bill.bill_have_been_already_rated",
 		"can_not_rate_if_bill_not_done": "delivery_bill.can_not_rate_if_bill_not_done",
 		"could_not_mark_prepared_for_bill_with_no_chef_select": "delivery_bill.could_not_mark_prepared_for_bill_with_no_chef_select",
-		"could_not_ship_bill_did_not_prepare_yet": "delivery_bill.could_not_ship_bill_did_not_prepare_yet",
+		"could_not_ship_bill_did_not_prepare_yet": "Không thể giao hóa đơn chưa chuẩn bị xong.",
 		"delete_success": "delivery_bill.delete_success"
 	},
 	"welcome_to_resman": "Chào mừng bạn đến với Resman",
@@ -143,8 +143,8 @@
 		"delivery_bill_dish_not_found": "delivery_bill_dish.delivery_bill_dish_not_found"
 	},
 	"comment": {
-		"delete_success": "comment.delete_success",
-		"comment_not_found": "comment.comment_not_found",
-		"delete_failed": "comment.delete_failed"
+		"delete_success": "Xóa bình luận thành công.",
+		"comment_not_found": "Không tìm thấy bình luận.",
+		"delete_failed": "Xóa bình luận thất bại."
 	}
 }
