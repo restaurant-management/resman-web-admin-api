@@ -70,7 +70,8 @@
 	},
 	"socket": {
 		"{{name}}_connected": "socket.{{name}}_connected",
-		"{{name}}_disconnected": "socket.{{name}}_disconnected"
+		"{{name}}_disconnected": "socket.{{name}}_disconnected",
+		"error_missing_bill_id": "socket.error_missing_bill_id"
 	},
 	"daily_report": {
 		"stockIds_length_have_to_equal_stockNotes_length": "daily_report.stockIds_length_have_to_equal_stockNotes_length",
@@ -119,7 +120,8 @@
 		"created_by_must_be_staff": "Hóa đơn phải được tạo bởi nhân viên",
 		"delete_success": "Xóa hóa đơn thành công.",
 		"you_selected_to_prepare_this_bill": "Bạn đã chọn hóa đơn này để chuẩn bị rồi.",
-		"bill_is_selected_by_other_chef": "Hóa đơn đã được đầu bếp khác chuẩn bị."
+		"bill_is_selected_by_other_chef": "Hóa đơn đã được đầu bếp khác chuẩn bị.",
+		"can_not_edit_bill_of_other_chef": "bill.can_not_edit_bill_of_other_chef"
 	},
 	"role": {
 		"role_not_found": "role.role_not_found",
@@ -146,5 +148,8 @@
 		"delete_success": "Xóa bình luận thành công.",
 		"comment_not_found": "Không tìm thấy bình luận.",
 		"delete_failed": "Xóa bình luận thất bại."
+	},
+	"bill_dish": {
+		"dish_is_not_prepared_yet": "bill_dish.dish_is_not_prepared_yet"
 	}
 }
