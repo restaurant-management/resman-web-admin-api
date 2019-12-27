@@ -414,6 +414,7 @@ class BillService {
             }
         }
 
+        return bill;
     }
 
     /**
@@ -431,7 +432,10 @@ class BillService {
             throw new Error(__('bill.you_have_not_selected_this_bill_yet'));
         }
 
-        const bill = await this.getOne(id, { showDishesType: 'histories' });
+        const bill = await this.getOne(id, {
+            showDishesType: 'dishes', withCollectBy: true, withCreateBy: true,
+            withCustomer: true, withPrepareBy: true, withStore: true
+        });
         const histories = bill.histories;
         if (bill.histories.length === 0) {
             throw new Error(__('bill.bill_does_not_have_history'));
@@ -456,6 +460,8 @@ class BillService {
                     .emit(ChefBillDetailSocketEvent.NEW_DELIVERED_BILL_DISH, newDish);
             }
         }
+
+        return bill;
     }
 
     /**
@@ -478,7 +484,10 @@ class BillService {
 
         await bill.save();
 
-        return await this.getOne(id, { withCollectBy: true });
+        return await this.getOne(id, {
+            withCollectBy: true, showDishesType: 'dishes', withCreateBy: true,
+            withCustomer: true, withPrepareBy: true, withStore: true
+        });
     }
 
     public async assignCustomer(id: number, data: { customerUuid: string }) {
