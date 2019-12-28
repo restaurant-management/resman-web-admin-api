@@ -11,6 +11,7 @@ import { selectStyle } from '../utils/selectStyles';
 import OverlayIndicator from './overlayIndicator';
 
 interface DataTableProp<T> {
+    loading?: boolean,
     pageSizeList?: number[];
     defaultPageSizeIndex?: number;
     data: T[];
@@ -67,7 +68,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
     public render() {
         return (
             <section className='tile color transparent-black'>
-                <OverlayIndicator show={this.state.reloading} />
+                <OverlayIndicator show={this.state.reloading || this.props.loading} />
                 {/* <ReactTooltip place='top' type='dark' effect='solid' /> */}
                 <div className='tile-header'>
                     <div className='row' style={{ paddingTop: 10 }}>

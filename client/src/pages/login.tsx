@@ -6,6 +6,7 @@ import { Checkbox } from '../components/checkbox';
 import LoadingIndicator from '../components/loadingIndicator';
 import { SnackBarContentWrapper } from '../components/snackBarContentWrapper';
 import { Repository } from '../repository';
+import { NotificationIndicator } from '../components/notificationIndicator';
 
 export default class LogIn extends Component<RouteProps,
     {
@@ -88,17 +89,7 @@ export default class LogIn extends Component<RouteProps,
                         </div>
                     </div>
                 </div>
-                <Snackbar
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                    }}
-                    open={this.state.hasError}
-                    autoHideDuration={6000}
-                    onClose={this._handleCloseSnackBar.bind(this)}
-                >
-                    <SnackBarContentWrapper title={'Login Fail:'} message={this.state.errorMessage} />
-                </Snackbar>
+                <NotificationIndicator message={this.state.errorMessage} variant={'error'} />
             </div>
         );
 

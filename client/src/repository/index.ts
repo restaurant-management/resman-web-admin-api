@@ -1,4 +1,5 @@
 import { Config } from '../config';
+import { GraphClient } from '../lib/graphClient';
 import { User } from '../models/user';
 import { getAllUsers, login } from '../service';
 
@@ -51,6 +52,10 @@ class Repository {
         const token = this._getToken();
 
         return await getAllUsers(token || '');
+    }
+
+    public getGraphAuthClient() {
+        return GraphClient.create(localStorage.getItem(StorageKey.AUTH_TOKEN) || '');
     }
 
     private _getToken() {

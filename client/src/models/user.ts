@@ -2,7 +2,7 @@ export class User {
 
     public static fromJson(jsonObject: any) {
         let user = new User();
-        user = { ...jsonObject };
+        user = { ...jsonObject, roles: jsonObject.roles ? jsonObject.roles.map((e: any) => e.name) : [] };
 
         return user;
     }

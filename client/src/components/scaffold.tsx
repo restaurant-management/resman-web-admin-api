@@ -30,6 +30,7 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
         LoadScriptFile('/assets/js/bootstrap-dropdown-multilevel.js', true, 'wrap');
         LoadScriptFile('/assets/js/run_prettifyf793.js', true, 'wrap');
         LoadScriptFile('/assets/js/jquery.mmenu.min.js', true, 'wrap');
+        LoadScriptFile('/assets/js/jquery.mmenu.min.js', true, 'wrap');
         LoadScriptFile('/assets/js/jquery.sparkline.min.js', true, 'wrap');
         LoadScriptFile('/assets/js/jquery.nicescroll.min.js', true, 'wrap');
         LoadScriptFile('/assets/js/jquery.animateNumbers.js', true, 'wrap');
