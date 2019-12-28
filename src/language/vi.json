@@ -122,7 +122,8 @@
 		"delete_success": "Xóa hóa đơn thành công.",
 		"you_selected_to_prepare_this_bill": "Bạn đã chọn hóa đơn này để chuẩn bị rồi.",
 		"bill_is_selected_by_other_chef": "Hóa đơn đã được đầu bếp khác chuẩn bị.",
-		"can_not_edit_bill_of_other_chef": "bill.can_not_edit_bill_of_other_chef"
+		"can_not_edit_bill_of_other_chef": "bill.can_not_edit_bill_of_other_chef",
+		"you_have_not_selected_this_bill_yet": "bill.you_have_not_selected_this_bill_yet"
 	},
 	"role": {
 		"role_not_found": "role.role_not_found",

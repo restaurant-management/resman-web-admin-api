@@ -15,7 +15,7 @@ export class StaffSocketBill {
     public readonly billId: number;
     public readonly tableNumber: number;
     public readonly amountPreparedDishes: number;
-    public readonly status: 'no-prepare' | 'preparing' | 'prepared';
+    public readonly status: 'no-prepare' | 'preparing' | 'prepared' | 'delivered';
 }
 
 export const staffBillSocket = async (socket: Socket.Socket) => {
