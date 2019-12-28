@@ -102,7 +102,8 @@ export class Bill extends SoftDeleteEntity {
         return {
             billId: this.id,
             tableNumber: this.tableNumber,
-            amountPreparedDishes: this.dishes.filter(dish => dish.preparedAt).length,
+            amountPreparedDishes:
+                this.dishes.filter(dish => dish.preparedAt).length - this.dishes.filter(dish => dish.deliveryAt).length,
             status: !this.prepareBy
                 ? 'no-prepare'
                 : (this.dishes.filter(dish => !dish.preparedAt).length > 0)

@@ -469,6 +469,14 @@ class BillService {
                 withPrepareBy: true, withStore: true
             }));
 
+        // Notify staff
+        socketServer.of(SocketRoute.staffBill)
+            .to(createBy.uuid)
+            .emit(StaffBillSocketEvent.AMOUNT_PREPARED_BILL_DISH_CHANGE, (await this.getOne(id, {
+                showDishesType: 'dishes', withCollectBy: true, withCreateBy: true, withCustomer: true,
+                withPrepareBy: true, withStore: true
+            })).toStaffSocketBill());
+
         return await this.getOne(id, {
             showDishesType: 'dishes', withCollectBy: true, withCreateBy: true, withCustomer: true,
             withPrepareBy: true, withStore: true
