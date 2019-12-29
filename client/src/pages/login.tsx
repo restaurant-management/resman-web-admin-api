@@ -1,12 +1,10 @@
-import { Snackbar } from '@material-ui/core';
 import React, { Component } from 'react';
 import { Redirect, RouteProps } from 'react-router-dom';
 import img_Login from '../assets/images/logo-big.png';
 import { Checkbox } from '../components/checkbox';
 import LoadingIndicator from '../components/loadingIndicator';
-import { SnackBarContentWrapper } from '../components/snackBarContentWrapper';
-import { Repository } from '../repository';
 import { NotificationIndicator } from '../components/notificationIndicator';
+import { Repository } from '../repository';
 
 export default class LogIn extends Component<RouteProps,
     {

@@ -1,6 +1,5 @@
 import React from 'react';
 import Select from 'react-select';
-import { Input } from './Input';
 
 export class RequiredSelect extends React.Component<any, any> {
     public state = {
@@ -9,7 +8,7 @@ export class RequiredSelect extends React.Component<any, any> {
 
     public selectRef = null;
     public setSelectRef = (ref: any) => {
-      this.selectRef = ref;
+        this.selectRef = ref;
     }
 
     public onChange = (value: any, actionMeta: any) => {
@@ -32,16 +31,19 @@ export class RequiredSelect extends React.Component<any, any> {
                     ref={this.setSelectRef}
                 />
                 <input
-                  tabIndex={-1}
-                  autoComplete='off'
-                  style={{
-                    opacity: 0,
-                    width: '100%',
-                    height: 0,
-                    position: 'absolute'
-                  }}
-                  value={this.getValue()}
-                  required
+                    tabIndex={-1}
+                    autoComplete='off'
+                    style={{
+                        opacity: 0,
+                        width: '100%',
+                        height: 0,
+                        position: 'absolute'
+                    }}
+                    onChange={() => {
+                        // noop
+                    }}
+                    value={this.getValue()}
+                    required
                 />
             </>
         );

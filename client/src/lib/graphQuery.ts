@@ -7,8 +7,8 @@ export class GraphQuery {
         }
     `;
 
-    public static GET_USER = gql`
-        query GET_USER {
+    public static users = gql`
+        query users {
             users {
                 uuid username email avatar birthday address roles {
                     name
@@ -17,8 +17,8 @@ export class GraphQuery {
         }
     `;
 
-    public static CREATE_USER = gql`
-        mutation CREATE_USER($address: String!, $email: String!, $password: String!, $phoneNumber: String!, $username: String!
+    public static createUser = gql`
+        mutation createUser($address: String!, $email: String!, $password: String!, $phoneNumber: String!, $username: String!
                             $storeIds: [Int!], $roles: [String!], $avatar: String, $birthday: DateTime, $fullName: String) {
             createUser(
                 phoneNumber: $phoneNumber,
@@ -37,16 +37,20 @@ export class GraphQuery {
         }
     `;
 
-    public static GET_ROLES = gql`
-        query GET_ROLES {
-            roles {
-                id description level name permissions slug
-            }
+    public static deleteUser = gql`
+        mutation deleteUser($username: String!) {
+            deleteUser(username: $username)
         }
     `;
 
-    public static GET_STORES = gql`
-        query GET_STORES {
+    public static roles = gql`
+        query roles {
+            roles { id slug name description level permissions }
+        }
+    `;
+
+    public static stores = gql`
+        query stores {
             stores {
                 id name amountDishes address closeTime openTime hotline logo
             }

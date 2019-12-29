@@ -1,61 +1,69 @@
-import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Backdrop, Modal, Slide } from '@material-ui/core';
-import React, { useState } from 'react';
+import { useSnackbar } from 'notistack';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import { Input } from '../../components/Input';
-import { NotificationIndicator } from '../../components/notificationIndicator';
 import OverlayIndicator from '../../components/overlayIndicator';
 import { RequiredSelect } from '../../components/requiredSelect';
-import { GraphQuery } from '../../lib/graphQuery';
 import { Role } from '../../models/role';
 import { Store } from '../../models/store';
+import { Repository } from '../../repository';
+import { UserService } from '../../service';
+import { RoleService } from '../../service/role.service';
+import { StoreService } from '../../service/store.service';
 
-export function CreateModal(props: { showModal?: boolean, onClose: () => void }) {
-    console.log('call');
+export function CreateModal(props: { showModal?: boolean, onClose: () => void, onSubmit?: () => void }) {
     const { showModal, onClose } = props;
 
     const { register, handleSubmit, errors: formErrors } = useForm();
 
-    const [createUser, { loading, error, data: createSuccess }] = useMutation(GraphQuery.CREATE_USER);
-    const { data: dataRoles, loading: loadingRoles } = useQuery(GraphQuery.GET_ROLES);
-    const { data: dataStores, loading: loadingStores } = useQuery(GraphQuery.GET_STORES);
+    const [creating, setCreating] = useState(false);
+    const [loadingRoles, setLoadingRoles] = useState(true);
+    const [loadingStores, setLoadingStores] = useState(true);
+    const { enqueueSnackbar } = useSnackbar();
 
     const [avatar, setAvatar] = useState<File>();
-    const [showError, setShowError] = useState<boolean>(true);
+    const [roles, setRoles] = useState<Role[]>([]);
     const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
+    const [stores, setStores] = useState<Store[]>([]);
     const [selectStores, setSelectedStores] = useState<Store[]>([]);
 
-    if (createSuccess) {
-        onClose();
-    }
+    useEffect(() => {
+        RoleService.getAll(Repository.token).then(value => {
+            setRoles(value);
+            setLoadingRoles(false);
+        });
+        StoreService.getAll().then(value => {
+            setStores(value);
+            setLoadingStores(false);
+        });
+    }, []);
 
-    let roles: Role[] = [];
-    if (dataRoles && dataRoles.roles) {
-        roles = dataRoles.roles.map((e: any) => Role.fromJson(e));
-    }
-
-    let stores: Store[] = [];
-    if (dataStores && dataStores.stores) {
-        stores = dataStores.stores.map((e: any) => Store.fromJson(e));
-    }
-
-    const onSave = (data: any) => {
-        createUser({
-            variables: {
+    const onSave = async (data: any) => {
+        setCreating(true);
+        try {
+            await UserService.createUser(Repository.token, {
                 username: data.username,
                 email: data.email,
                 password: data.password,
                 fullName: data.fullName,
                 address: data.address,
                 phoneNumber: data.phoneNumber,
-                birthday: data.birthday,
+                birthday: new Date(data.birthday),
                 avatar: avatar ? avatar.name : '',
                 roles: selectedRoles.map(e => e.slug),
-                stores: selectStores.map(e => e.id),
+                storeIds: selectStores.map(e => e.id)
+            });
+            enqueueSnackbar('Create user success', { variant: 'success' });
+            onClose();
+            if (props.onSubmit) {
+                props.onSubmit();
             }
-        });
-        setShowError(true);
+        } catch (e) {
+            enqueueSnackbar(e.toString(), { variant: 'error' });
+        }
+        setCreating(false);
     };
 
     return (
@@ -77,16 +85,10 @@ export function CreateModal(props: { showModal?: boolean, onClose: () => void })
             <Slide in={showModal} direction={'down'}>
                 <div className='modal-content'>
                     <form onSubmit={handleSubmit(onSave)}>
-                        <OverlayIndicator show={loading} />
-                        <NotificationIndicator
-                            show={showError && !!error}
-                            variant={'error'}
-                            onClose={() => setShowError(false)}
-                            message={error ? error.message : ''}
-                        />
+                        <OverlayIndicator show={creating} />
                         <div className='modal-header'>
                             <button type='button' className='close'
-                                onClick={onClose}>
+                                    onClick={onClose}>
                                 Close
                             </button>
                             <h3 className='modal-title'>
@@ -120,20 +122,20 @@ export function CreateModal(props: { showModal?: boolean, onClose: () => void })
 
                             <div className='form-group'>
                                 <Input type='text' placeholder='Full Name' register={register}
-                                    name={'fullName'} label={'Full Name'} />
+                                       name={'fullName'} label={'Full Name'} />
                             </div>
 
                             <div className='form-group'>
                                 <label htmlFor='exampleInput'>Address*</label>
                                 <textarea
                                     className={'form-control' +
-                                        (formErrors.address ? ' parsley-validated parsley-error' : '')}
+                                    (formErrors.address ? ' parsley-validated parsley-error' : '')}
                                     placeholder='Address'
                                     name={'address'} ref={register({ required: true })}
                                 />
                                 {formErrors.address && (
                                     <ul className={'parsley-error-list'}>
-                                        <li className='required' style={{ display: 'list-item' }} >
+                                        <li className='required' style={{ display: 'list-item' }}>
                                             {` This field is required.`}
                                         </li>
                                     </ul>
@@ -157,14 +159,14 @@ export function CreateModal(props: { showModal?: boolean, onClose: () => void })
                                 <div className='input-group'>
                                     <span className='input-group-btn'>
                                         <span className='btn btn-primary btn-file'>
-                                            <i className='fa fa-upload'></i>
+                                            <i className='fa fa-upload' />
                                             <input type='file' onChange={(event) =>
                                                 event.target.files && setAvatar(event.target.files[0])}
                                             />
                                         </span>
                                     </span>
                                     <input type='text' className='form-control' readOnly
-                                        value={avatar ? avatar.name : ''} />
+                                           value={avatar ? avatar.name : ''} />
                                 </div>
                             </div>
 
@@ -193,7 +195,7 @@ export function CreateModal(props: { showModal?: boolean, onClose: () => void })
                             </div>
                         </div>
                         <div className='modal-footer'>
-                            <button className='btn btn-red' data-dismiss='modal' aria-hidden='true' onClick={onClose}>
+                            <button className='btn btn-red' type='button' onClick={onClose}>
                                 {`Close`}
                             </button>
                             <button className='btn btn-green' type='submit'>

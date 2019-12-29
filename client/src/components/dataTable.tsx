@@ -3,15 +3,15 @@ import { AgGridReact } from '@ag-grid-community/react';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
-// import ReactTooltip from 'react-tooltip';
-import { AgActions } from '../components/AgExtensions/agActions';
-import { AgImage } from '../components/AgExtensions/agImage';
-import { AgImageTooltip } from '../components/AgExtensions/agImageTooltip';
+import ReactTooltip from 'react-tooltip';
 import { selectStyle } from '../utils/selectStyles';
+import { AgActions } from './AgExtensions/agActions';
+import { AgImage } from './AgExtensions/agImage';
+import { AgImageTooltip } from './AgExtensions/agImageTooltip';
 import OverlayIndicator from './overlayIndicator';
 
 interface DataTableProp<T> {
-    loading?: boolean,
+    loading?: boolean;
     pageSizeList?: number[];
     defaultPageSizeIndex?: number;
     data: T[];
@@ -37,7 +37,10 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
 
     public gridOptions: GridOptions;
 
-    private _pageSizeOptions = (this.props.pageSizeList || [10, 25, 50, 100]).map(value => ({ value, label: `${value} rows/page` }));
+    private _pageSizeOptions = (this.props.pageSizeList || [10, 25, 50, 100]).map(value => ({
+        value,
+        label: `${value} rows/page`
+    }));
 
     constructor(props: any) {
         super(props);
@@ -69,20 +72,20 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
         return (
             <section className='tile color transparent-black'>
                 <OverlayIndicator show={this.state.reloading || this.props.loading} />
-                {/* <ReactTooltip place='top' type='dark' effect='solid' /> */}
+                <ReactTooltip place='top' type='dark' effect='solid' />
                 <div className='tile-header'>
                     <div className='row' style={{ paddingTop: 10 }}>
                         <div className='col-md-6'>
                             {this.props.header}
                         </div>
                         <div className='col-md-4'>
-                            <div style={{ float: 'right' }} >
+                            <div style={{ float: 'right' }}>
                                 <button
                                     data-tip='Export to CSV'
                                     onClick={this._export.bind(this)}
                                     className='resman-btn resman-cyan resman-left-border-radius'
                                 >
-                                    <i className='fa fa-download'></i>
+                                    <i className='fa fa-download' />
                                     <span> Export</span>
                                 </button>
                                 <button
@@ -90,7 +93,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                                     onClick={this.props.onCreate}
                                     className='resman-btn resman-success resman-no-border-radius'
                                 >
-                                    <i className='fa fa-plus'></i>
+                                    <i className='fa fa-plus' />
                                     <span> Add</span>
                                 </button>
                                 <button
@@ -102,7 +105,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                                         }
                                     }}
                                 >
-                                    <i className='fa fa-trash-o'></i>{` Delete`}
+                                    <i className='fa fa-trash-o' />{` Delete`}
                                 </button>
                             </div>
                         </div>
@@ -154,7 +157,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                                 suppressSizeToFit: false,
                                 suppressAutoSize: false,
                                 sortable: true,
-                                filter: true,
+                                filter: true
                             }}
                             columnDefs={(this.props.columnDefs || []).concat({
                                 headerName: 'Actions',
@@ -164,18 +167,18 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                                 cellRendererParams: {
                                     onView: this.props.onView,
                                     onEdit: this.props.onEdit,
-                                    onDelete: this.props.onDelete,
+                                    onDelete: this.props.onDelete
                                 },
                                 pinned: 'right',
                                 filter: false,
                                 minWidth: 150,
                                 maxWidth: 200,
-                                sortable: false,
+                                sortable: false
                             })}
                             rowData={this.props.data}
                             modules={AllCommunityModules}
                             frameworkComponents={{ AgActions, AgImage }}
-                        ></AgGridReact>
+                        />
                     </div>
                 </div>
             </section>

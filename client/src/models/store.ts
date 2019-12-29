@@ -1,8 +1,8 @@
 export class Store {
 
     public static fromJson(jsonObject: any) {
-        let store = new Store();
-        store = { ...jsonObject };
+        let store: Store;
+        store = { ...jsonObject, id: parseInt(jsonObject.id, 10) };
 
         return store;
     }

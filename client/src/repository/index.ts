@@ -1,7 +1,7 @@
 import { Config } from '../config';
 import { GraphClient } from '../lib/graphClient';
 import { User } from '../models/user';
-import { getAllUsers, login } from '../service';
+import { UserService } from '../service';
 
 enum StorageKey {
     AUTH_TOKEN = 'auth_token',
@@ -10,8 +10,18 @@ enum StorageKey {
 
 class Repository {
 
-    public get isAuth(): boolean { return this._isAuth; }
-    public get isRemember(): boolean { return this._isRemember; }
+    public get isAuth(): boolean {
+        return this._isAuth;
+    }
+
+    public get isRemember(): boolean {
+        return this._isRemember;
+    }
+
+    public get token(): string {
+        return this._getToken() || '';
+    }
+
     private _currentUser: User | undefined;
 
     private _isAuth: boolean;
@@ -31,7 +41,7 @@ class Repository {
     }
 
     public async login(usernameOrEmail: string, password: string, remember: boolean = false) {
-        const token = await login(usernameOrEmail, password);
+        const token = await UserService.login(usernameOrEmail, password);
 
         localStorage.setItem(StorageKey.AUTH_TOKEN, token);
         if (remember) {
@@ -51,7 +61,7 @@ class Repository {
     public async getAllUser() {
         const token = this._getToken();
 
-        return await getAllUsers(token || '');
+        return await UserService.getAllUsers(token || '');
     }
 
     public getGraphAuthClient() {

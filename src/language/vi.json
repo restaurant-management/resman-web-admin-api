@@ -146,5 +146,6 @@
 		"delete_success": "comment.delete_success",
 		"comment_not_found": "comment.comment_not_found",
 		"delete_failed": "comment.delete_failed"
-	}
+	},
+	"welcome_resman": "Chào mừng bạn đến với Resman"
 }
