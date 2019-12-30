@@ -105,7 +105,7 @@ export class BillResolver {
     public async preparedBillDish(
         @Ctx() { payload }: GraphUserContext,
         @Arg('id', () => ID) id: number,
-        @Arg('dishIds', () => ID) dishId: number,
+        @Arg('dishId', () => ID) dishId: number,
     ) {
         return await BillService.preparedBillDish(id, payload.user, dishId);
     }
@@ -115,7 +115,7 @@ export class BillResolver {
     public async deliveredBillDish(
         @Ctx() { payload }: GraphUserContext,
         @Arg('id', () => ID) id: number,
-        @Arg('dishIds', () => ID) dishId: number,
+        @Arg('dishId', () => ID) dishId: number,
     ) {
         return await BillService.deliveredBillDish(id, payload.user, dishId);
     }

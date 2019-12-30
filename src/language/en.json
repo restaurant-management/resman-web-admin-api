@@ -18,7 +18,8 @@
 		"delete_fail": "daily_dish.delete_fail",
 		"existed": "daily_dish.existed",
 		"delete_success": "daily_dish.delete_success",
-		"dish_{{id}}_not_sell_in_this_store": "daily_dish.dish_{{id}}_not_sell_in_this_store"
+		"dish_{{id}}_not_sell_in_this_store": "daily_dish.dish_{{id}}_not_sell_in_this_store",
+		"confirm_out_of_stock_success": "daily_dish.confirm_out_of_stock_success"
 	},
 	"authentication": {
 		"unauthorized": "authentication.unauthorized",
@@ -44,7 +45,9 @@
 		"created_by_must_be_staff": "bill.created_by_must_be_staff",
 		"delete_success": "bill.delete_success",
 		"you_selected_to_prepare_this_bill": "bill.you_selected_to_prepare_this_bill",
-		"bill_is_selected_by_other_chef": "bill.bill_is_selected_by_other_chef"
+		"bill_is_selected_by_other_chef": "bill.bill_is_selected_by_other_chef",
+		"can_not_edit_bill_of_other_chef": "bill.can_not_edit_bill_of_other_chef",
+		"you_have_not_selected_this_bill_yet": "bill.you_have_not_selected_this_bill_yet"
 	},
 	"voucher_code": {
 		"voucher_code_not_found": "voucher_code.voucher_code_not_found"
@@ -111,5 +114,10 @@
 		"comment_not_found": "comment.comment_not_found",
 		"delete_failed": "comment.delete_failed"
 	},
-	"welcome_resman": "Welcome to Resman"
+	"socket": {
+		"error_missing_bill_id": "socket.error_missing_bill_id"
+	},
+	"bill_dish": {
+		"dish_is_not_prepared_yet": "bill_dish.dish_is_not_prepared_yet"
+	}
 }

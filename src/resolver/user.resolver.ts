@@ -8,6 +8,10 @@ import { UserService } from '../service/user.service';
 
 export class UserResolver {
     @Query(() => String)
+    public async testLanguage() {
+        return __('welcome_to_resman');
+    }
+    @Query(() => String)
     public async loginAsUser(@Arg('usernameOrEmail') usernameOrEmail: string, @Arg('password') password: string) {
         return await UserService.authenticate(usernameOrEmail, password);
     }

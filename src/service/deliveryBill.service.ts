@@ -339,7 +339,9 @@ class DeliveryBillService {
      * Select deliveryBill to prepare for chef 
      */
     public async prepareDeliveryBill(id: number, editBy: User) {
-        const dBill = await this.edit(id, editBy, { prepareAt: new Date(), prepareByUuid: editBy.uuid });
+        const dBill = await this.edit(id, editBy, {
+            prepareAt: new Date(), prepareByUuid: editBy.uuid
+        });
 
         socketServer.of(SocketRoute.chefBill).to(editBy.uuid).emit(ChefBillSocketEvent.NEW_PREPARE_BILL, dBill);
 

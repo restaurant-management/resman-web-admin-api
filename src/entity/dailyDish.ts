@@ -70,10 +70,12 @@ export class DailyDish extends BaseEntity {
     @PrimaryColumn()
     public dishId: number;
 
+    @Field(() => User, { nullable: true })
     @ManyToOne(() => User, { onDelete: 'NO ACTION' })
     @JoinColumn({ name: 'confirmById' })
     public confirmBy: User;
 
+    @Field({ nullable: true })
     @Column('timestamp with time zone', { nullable: true })
     public confirmAt: Date;
 }

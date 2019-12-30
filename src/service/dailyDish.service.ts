@@ -1,5 +1,6 @@
 import { __ } from 'i18n';
 import { DailyDish, DaySession } from '../entity/dailyDish';
+import { User } from '../entity/user';
 import { onlyDate } from '../helper/onlyDate';
 import { DishService } from './dish.service';
 import { StoreService } from './store.service';
@@ -113,6 +114,18 @@ class DailyDishService {
         });
 
         return dailyDishes;
+    }
+
+    public async confirmOut(editBy: User, dishId: number, storeId: number) {
+        this.getOne({ day: new Date(), dishId, session: DaySession.None, storeId });
+
+        const store = await StoreService.getOne(storeId, { withDishes: true });
+
+        if (store.storeDishes.findIndex(i => i.dishId.toString() === dishId.toString()) === -1) {
+            throw new Error(__('daily_dish.dish_{{id}}_not_sell_in_this_store', { id: dishId.toString() }));
+        }
+
+        return await this.edit(new Date(), dishId, DaySession.None, storeId, editBy.username, new Date());
     }
 }
 

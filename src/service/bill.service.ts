@@ -22,11 +22,11 @@ class BillService {
         length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1'
         where?: FindConditions<Bill>
     }) {
-        const order = options.orderId ? {
-            [options.orderId]: options.orderType === 'DESC' || options.orderType === '-1' ? -1 : 1
+        const order = options?.orderId ? {
+            [options?.orderId]: options?.orderType === 'DESC' || options?.orderType === '-1' ? -1 : 1
         } : {};
-        const skip = (options.page - 1) * options.length >= 0 ? (options.page - 1) * options.length : 0;
-        const take = options.length;
+        const skip = (options?.page - 1) * options?.length >= 0 ? (options?.page - 1) * options?.length : 0;
+        const take = options?.length;
 
         const bills = await Bill.find({
             take, skip, order, where: { ...options?.where, deleteAt: null },
@@ -177,6 +177,8 @@ class BillService {
 
         // Notify to all chef about new bill
         socketServer.of(SocketRoute.chefBill).emit(ChefBillSocketEvent.NEW_BILL, b);
+        socketServer.of(SocketRoute.staffBill)
+            .emit(StaffBillSocketEvent.AMOUNT_PREPARED_BILL_DISH_CHANGE, b.toStaffSocketBill());
 
         return b;
     }
@@ -333,7 +335,9 @@ class BillService {
      * Select bill to prepare for chef 
      */
     public async prepareBill(id: number, data: { prepareByUuid: string }) {
-        const oldPrepareBy = (await this.getOne(id, { withPrepareBy: true })).prepareBy;
+        const bill = await this.getOne(id, { withPrepareBy: true, withCreateBy: true });
+
+        const oldPrepareBy = bill.prepareBy;
         if (oldPrepareBy) {
             if (oldPrepareBy.uuid === data.prepareByUuid) {
                 throw new Error(__('bill.you_selected_to_prepare_this_bill'));
@@ -342,12 +346,22 @@ class BillService {
             }
         }
 
-        const editedBill = await this.edit(id, { updateByUuid: data.prepareByUuid, prepareByUuid: data.prepareByUuid });
+        const editedBill = await this.edit(id, {
+            updateByUuid: data.prepareByUuid, prepareByUuid: data.prepareByUuid, prepareAt: new Date()
+        });
 
-        // Notify to room which have exactly chef
+        // Notify to other chefs
+        socketServer.of(SocketRoute.chefBill)
+            .emit(ChefBillSocketEvent.NEW_BILL_IS_SELECTED, { id: editedBill.id, prepareBy: editedBill.prepareBy });
+
+        // Notify too chef
         socketServer.of(SocketRoute.chefBill)
             .to(data.prepareByUuid)
             .emit(ChefBillSocketEvent.NEW_PREPARE_BILL, editedBill);
+
+        socketServer.of(SocketRoute.staffBill)
+            .to(bill.createBy.uuid)
+            .emit(StaffBillSocketEvent.AMOUNT_PREPARED_BILL_DISH_CHANGE, editedBill.toStaffSocketBill());
 
         return editedBill;
     }
@@ -381,7 +395,10 @@ class BillService {
             // Notify staff about new dish prepared
             socketServer.of(SocketRoute.staffBill)
                 .to(bill.createBy.uuid)
-                .emit(StaffBillSocketEvent.AMOUNT_PREPARED_BILL_DISH_CHANGE, bill.toStaffSocketBill());
+                .emit(StaffBillSocketEvent.AMOUNT_PREPARED_BILL_DISH_CHANGE, (await this.getOne(id, {
+                    showDishesType: 'dishes', withCollectBy: true, withCreateBy: true, withCustomer: true,
+                    withPrepareBy: true, withStore: true
+                })).toStaffSocketBill());
         } else {
             const dishes = (await BillHistoryService.getOne(
                 id, histories[histories.length - 1].id, { withDishes: true })).dishes;
@@ -391,15 +408,25 @@ class BillService {
                 // Notify staff about new dish prepared
                 socketServer.of(SocketRoute.staffBill)
                     .to(bill.createBy.uuid)
-                    .emit(StaffBillSocketEvent.AMOUNT_PREPARED_BILL_DISH_CHANGE, bill.toStaffSocketBill());
+                    .emit(StaffBillSocketEvent.AMOUNT_PREPARED_BILL_DISH_CHANGE, (await this.getOne(id, {
+                        showDishesType: 'dishes', withCollectBy: true, withCreateBy: true, withCustomer: true,
+                        withPrepareBy: true, withStore: true
+                    })).toStaffSocketBill());
 
                 // Notify about prepared bill
                 socketServer.of(SocketRoute.chefBill)
                     .to(editBy.uuid)
-                    .emit(ChefBillSocketEvent.NEW_PREPARED_BILL, bill);
+                    .emit(ChefBillSocketEvent.NEW_PREPARED_BILL, (await this.getOne(id, {
+                        showDishesType: 'dishes', withCollectBy: true, withCreateBy: true, withCustomer: true,
+                        withPrepareBy: true, withStore: true
+                    })));
             }
         }
 
+        return await this.getOne(id, {
+            showDishesType: 'dishes', withCollectBy: true, withCreateBy: true, withCustomer: true,
+            withPrepareBy: true, withStore: true
+        });
     }
 
     /**
@@ -409,39 +436,51 @@ class BillService {
      * @param dishId Dish id, if null is delivered all
      */
     public async deliveredBillDish(id: number, editBy: User, dishId?: number) {
-        const prepareBy = (await this.getOne(id, { withPrepareBy: true })).prepareBy;
+        const bill = await this.getOne(id, {
+            showDishesType: 'dishes', withCollectBy: true, withCreateBy: true,
+            withCustomer: true, withPrepareBy: true, withStore: true
+        });
+        const createBy = bill.createBy;
+        const prepareBy = bill.prepareBy;
 
-        if (prepareBy && prepareBy.uuid !== editBy.uuid) {
-            throw new Error(__('bill.can_not_edit_bill_of_other_chef'));
-        } else if (!prepareBy) {
-            throw new Error(__('bill.you_have_not_selected_this_bill_yet'));
+        if (createBy && createBy.uuid !== editBy.uuid) {
+            throw new Error(__('bill.can_not_edit_bill_of_other_staff'));
         }
-
-        const bill = await this.getOne(id, { showDishesType: 'histories' });
         const histories = bill.histories;
         if (bill.histories.length === 0) {
             throw new Error(__('bill.bill_does_not_have_history'));
         }
 
         if (dishId) {
-            const dish = await BillDishService.delivered(dishId, histories[histories.length - 1].id);
-
-            // Notify chef
-            socketServer.of(SocketRoute.chefBillDetail)
-                .to(prepareBy.uuid + id)
-                .emit(ChefBillDetailSocketEvent.NEW_DELIVERED_BILL_DISH, dish);
+            await BillDishService.delivered(dishId, histories[histories.length - 1].id);
         } else {
             const dishes = (await BillHistoryService.getOne(
                 id, histories[histories.length - 1].id, { withDishes: true })).dishes;
             for (const dish of dishes) {
-                const newDish = await BillDishService.delivered(dish.dishId, dish.billHistoryId);
-
-                // Notify chef
-                socketServer.of(SocketRoute.chefBillDetail)
-                    .to(prepareBy.uuid + id)
-                    .emit(ChefBillDetailSocketEvent.NEW_DELIVERED_BILL_DISH, newDish);
+                await BillDishService.delivered(dish.dishId, dish.billHistoryId);
             }
         }
+
+        // Notify chef
+        socketServer.of(SocketRoute.chefBillDetail)
+            .to(prepareBy.uuid + id)
+            .emit(ChefBillDetailSocketEvent.NEW_DELIVERED_BILL_DISH, await this.getOne(id, {
+                showDishesType: 'dishes', withCollectBy: true, withCreateBy: true, withCustomer: true,
+                withPrepareBy: true, withStore: true
+            }));
+
+        // Notify staff
+        socketServer.of(SocketRoute.staffBill)
+            .to(createBy.uuid)
+            .emit(StaffBillSocketEvent.AMOUNT_PREPARED_BILL_DISH_CHANGE, (await this.getOne(id, {
+                showDishesType: 'dishes', withCollectBy: true, withCreateBy: true, withCustomer: true,
+                withPrepareBy: true, withStore: true
+            })).toStaffSocketBill());
+
+        return await this.getOne(id, {
+            showDishesType: 'dishes', withCollectBy: true, withCreateBy: true, withCustomer: true,
+            withPrepareBy: true, withStore: true
+        });
     }
 
     /**
@@ -464,7 +503,10 @@ class BillService {
 
         await bill.save();
 
-        return await this.getOne(id, { withCollectBy: true });
+        return await this.getOne(id, {
+            withCollectBy: true, showDishesType: 'dishes', withCreateBy: true,
+            withCustomer: true, withPrepareBy: true, withStore: true
+        });
     }
 
     public async assignCustomer(id: number, data: { customerUuid: string }) {
