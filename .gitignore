@@ -96,4 +96,3 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
-client/yarn.lock
