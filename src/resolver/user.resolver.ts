@@ -82,7 +82,7 @@ export class UserResolver {
         @Arg('roles', () => [String], { nullable: true }) roles: string[],
         @Arg('storeIds', () => [Int], { nullable: true }) storeIds: number[]
     ) {
-        if (!UserService.checkRoleLevel(payload.user.id, roles)) {
+        if (!await UserService.checkRoleLevel(payload.user.id, roles)) {
             throw new Error(__('user.can_not_create_user_with_higher_level'));
         }
 
@@ -95,10 +95,10 @@ export class UserResolver {
     @Authorized([Permission.user.update])
     public async editUser(
         @Ctx() { payload }: GraphUserContext,
-        @Arg('username') username: string,
-        @Arg('password') password: string,
-        @Arg('address') address: string,
-        @Arg('phoneNumber') phoneNumber: string,
+        @Arg('username', { nullable: true }) username: string,
+        @Arg('password', { nullable: true }) password: string,
+        @Arg('address', { nullable: true }) address: string,
+        @Arg('phoneNumber', { nullable: true }) phoneNumber: string,
         @Arg('fullName', { nullable: true }) fullName: string,
         @Arg('avatar', { nullable: true }) avatar: string,
         @Arg('birthday', { nullable: true }) birthday: Date,
@@ -121,6 +121,17 @@ export class UserResolver {
         @Arg('username') username: string
     ) {
         await UserService.delete(username, payload.user);
+
+        return __('user.delete_success');
+    }
+
+    @Mutation(() => String, { description: 'For admin' })
+    @Authorized([Permission.user.delete])
+    public async deleteUsers(
+        @Ctx() { payload }: GraphUserContext,
+        @Arg('usernames', () => [String]) usernames: string[]
+    ) {
+        await UserService.multiDelete(usernames, payload.user);
 
         return __('user.delete_success');
     }

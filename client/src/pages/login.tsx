@@ -1,69 +1,110 @@
-import React, {Component} from 'react';
-import '../assets/css/bootstrap-checkbox.css';
-import '../assets/css/bootstrap-dropdown-multilevel.css';
-import '../assets/css/bootstrap.min.css';
-import '../assets/css/font-awesome.min.css';
-import '../assets/css/minimal.css';
+import React, { Component } from 'react';
+import { Redirect, RouteProps } from 'react-router-dom';
 import img_Login from '../assets/images/logo-big.png';
+import { Checkbox } from '../components/checkbox';
+import LoadingIndicator from '../components/loadingIndicator';
+import { NotificationIndicator } from '../components/notificationIndicator';
+import { Repository } from '../repository';
 
-export default class LogIn extends Component {
-    // componentDidMount = () => {
-    //     document.body.classList.add('bg-1');
-    //     this.setState({showModal: true});
-    // }
-    // componentWillUnmount = () => {
-    //     document.body.classList.remove('bg-1');
-    //     this.setState({showModal: false});
-    // };
-    //
-    // loadScript = (src: string, withType: boolean = false) => {
-    //     let tag = document.createElement('script');
-    //     tag.async = false;
-    //     tag.src = src;
-    //     if (withType) tag.type = 'text/javascript';
-    //     document.getElementsByTagName('body')[0].appendChild(tag);
-    // };
+export default class LogIn extends Component<RouteProps,
+    {
+        username: string, password: string, remember: boolean, hasError: boolean, errorMessage: string,
+        loading: boolean, redirectToReferrer: boolean
+    }> {
+    constructor(props: {}) {
+        super(props);
+        this.state = {
+            username: '',
+            password: '',
+            remember: true,
+            hasError: false,
+            errorMessage: '',
+            loading: false,
+            redirectToReferrer: Repository.isAuth
+        };
+    }
+
     public render(): JSX.Element {
-        return(
-        <div className='bg-1'>
-        <div id='wrap'>
-            <div className='row'>
-                <div id='content' className='col-md-12 full-page login'>
-                    <div className='inside-block'>
-                        <img src= {img_Login} alt={''} className='logo'/>
+        const from = this.props.location && this.props.location.state
+            ? this.props.location.state.from : Repository.isAuth ? { pathname: '/dashboard' } : { pathname: '/' };
+
+        if (this.state.redirectToReferrer) {
+            return <Redirect to={from} push />;
+        }
+
+        return (
+            <div id='wrap'>
+                <LoadingIndicator show={this.state.loading} />
+                <div className='row'>
+                    <div id='content' className='col-md-12 full-page login' style={{ overflow: 'hidden' }}>
+                        <div className='inside-block'>
+                            <img src={img_Login} alt={''} className='logo' />
                             <h1><strong>Welcome</strong> Stranger</h1>
                             <h5>Resman</h5>
-                            <form id='form-signin' className='form-signin'>
+                            <div className='form'>
                                 <section>
                                     <div className='input-group'>
-                                        <input type='text' className='form-control' name='username'
-                                               placeholder='Username'/>
-                                            <div className='input-group-addon'><i className='fa fa-user'/></div>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            value={this.state.username}
+                                            placeholder='Username'
+                                            onChange={(event) => {
+                                                this.setState({ username: event.target.value });
+                                            }}
+                                        />
+                                        <div className='input-group-addon'><i className='fa fa-user' /></div>
                                     </div>
                                     <div className='input-group'>
-                                        <input type='password' className='form-control' name='password'
-                                               placeholder='Password'/>
-                                            <div className='input-group-addon'><i className='fa fa-key'/></div>
+                                        <input type='password' className='form-control'
+                                            placeholder='Password'
+                                            onChange={(event) => {
+                                                this.setState({ password: event.target.value });
+                                            }} />
+                                        <div className='input-group-addon'><i className='fa fa-key' /></div>
                                     </div>
                                 </section>
                                 <section className='controls'>
                                     <div className='checkbox check-transparent'>
-                                        <input type='checkbox' value='1' id='remember' checked/>
-                                            <label htmlFor='remember'>Remember me</label>
+                                        <Checkbox label={'Remember'} id={'remember'} checked={this.state.remember}
+                                            onChange={(value) => {
+                                                this.setState({ remember: value });
+                                            }}
+                                        />
                                     </div>
-                                    <a href='/#'>Forget password?</a>
+                                    <a href='#/'>Forget password?</a>
                                 </section>
                                 <section className='log-in'>
-                                    <a className='btn btn-greensea' href='/blank-page'>Log In</a>
-                                    <span>or</span>
-                                    <button className='btn btn-slategray'>Create an account</button>
+                                    <button
+                                        disabled={this.state.loading}
+                                        className='btn btn-greensea'
+                                        onClick={this._login.bind(this)}
+                                    >
+                                        Log In
+                                    </button>
                                 </section>
-                            </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <NotificationIndicator message={this.state.errorMessage} variant={'error'} />
             </div>
-        </div>
-        </div>);
+        );
 
-}
+    }
+
+    private _handleCloseSnackBar() {
+        this.setState({ hasError: false });
+    }
+
+    private async _login() {
+        this.setState({ loading: true });
+        try {
+            await Repository.login(this.state.username, this.state.password, this.state.remember);
+            this.setState({ redirectToReferrer: true });
+        } catch (e) {
+            console.log(e);
+            this.setState({ hasError: true, errorMessage: e.message });
+        }
+    }
 }

@@ -16,8 +16,10 @@
     "newline-before-return": true,
     "no-console": false,
     "object-literal-sort-keys": false,
+    "only-arrow-functions": false,
     "arrow-parens": false,
     "interface-name": false,
+    "space-before-function-paren": true,
     "no-trailing-whitespace": [
       true,
       "ignore-comments"

@@ -36,7 +36,7 @@ router.use('/delivery_bills', DeliveryBillRouter);
 
 router.get('/test', (_req: Request, res: Response) =>
     res.status(200).send({
-        message: __('welcome_to_resman')
+        message: __('welcome_resman')
     })
 );
 

@@ -1,16 +1,16 @@
 {
 	"user": {
-		"username_or_email_incorrect": "user.username_or_email_incorrect",
-		"can_not_delete_admin_user": "user.can_not_delete_admin_user",
-		"user_not_found": "user.user_not_found",
-		"password_incorrect": "user.password_incorrect",
+		"username_or_email_incorrect": "Username or email incorrect",
+		"can_not_delete_admin_user": "Can not delete admin user",
+		"user_not_found": "User not found",
+		"password_incorrect": "Password incorrect",
 		"phone_number_has_already_used": "user.phone_number_has_already_used",
 		"email_has_already_used": "user.email_has_already_used",
 		"username_has_already_used": "user.username_has_already_used",
 		"change_password_success": "user.change_password_success",
 		"{{role}}_not_found": "user.{{role}}_not_found",
 		"can_not_delete_user_with_higher_level": "user.can_not_delete_user_with_higher_level",
-		"delete_success": "user.delete_success"
+		"delete_success": "Delete user success"
 	},
 	"daily_dish": {
 		"no_storeId_is_provided": "daily_dish.no_storeId_is_provided",

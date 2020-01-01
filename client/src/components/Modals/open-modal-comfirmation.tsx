@@ -46,6 +46,26 @@ export default class OpenModalDialog extends Component {
                                     <textarea className='form-control' rows={3} />
                                 </div>
 
+                                <div className='form-group'>
+                                    <label>Normal textarea</label>
+                                    <textarea className='form-control' rows={3} />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label>Normal textarea</label>
+                                    <textarea className='form-control' rows={3} />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label>Normal textarea</label>
+                                    <textarea className='form-control' rows={3} />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label>Normal textarea</label>
+                                    <textarea className='form-control' rows={3} />
+                                </div>
+
                             </form>
                         </div>
                         <div className='modal-footer'>

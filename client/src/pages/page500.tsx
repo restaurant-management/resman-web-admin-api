@@ -1,9 +1,4 @@
 import React, {Component} from 'react';
-import '../assets/css/bootstrap-checkbox.css';
-import '../assets/css/bootstrap-dropdown-multilevel.css';
-import '../assets/css/bootstrap.min.css';
-import '../assets/css/font-awesome.min.css';
-import '../assets/css/minimal.css';
 import img_page404 from '../assets/images/logo-big.png';
 
 export default class Page500 extends Component {

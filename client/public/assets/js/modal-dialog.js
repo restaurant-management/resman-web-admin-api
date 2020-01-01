@@ -75,7 +75,7 @@ $(function() {
         $('.bootstrap-datetimepicker-widget').css('top', newtop + 'px');
     });
 
-    //initialize chosen
+    //initialize chosen: disable search input in chosen input
     $(".chosen-select").chosen({
         disable_search_threshold: 10
     });

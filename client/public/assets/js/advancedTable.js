@@ -12,8 +12,8 @@ $(function(){
         $(this).addClass(o);
     });
 
-    //chosen select input
-    $(".chosen-select").chosen({disable_search_threshold: 10});
+    //chosen select input: disable search input in chosen
+    // $(".chosen-select").chosen({disable_search_threshold: 10});
 
     //check toggling
     $('.check-toggler').on('click', function(){
