@@ -22,7 +22,11 @@ export class GraphClient {
         } catch (e) {
             if (e.graphQLErrors && e.graphQLErrors.length > 0) {
                 throw e.graphQLErrors[0].message;
-            } else { throw e.toString(); }
+            } else if (e.networkError) {
+                throw  e.networkError.result.errors[0];
+            } else {
+                throw e.toString();
+            }
         }
     }
 
@@ -36,7 +40,9 @@ export class GraphClient {
         } catch (e) {
             if (e.graphQLErrors && e.graphQLErrors.length > 0) {
                 throw e.graphQLErrors[0].message;
-            } else { throw e.toString(); }
+            } else {
+                throw e.toString();
+            }
         }
     }
 }

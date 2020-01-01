@@ -9,6 +9,7 @@ import { AgActions } from './AgExtensions/agActions';
 import { AgImage } from './AgExtensions/agImage';
 import { AgImageTooltip } from './AgExtensions/agImageTooltip';
 import OverlayIndicator from './overlayIndicator';
+import { Popconfirm } from 'antd';
 
 interface DataTableProp<T> {
     loading?: boolean;
@@ -96,17 +97,24 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                                     <i className='fa fa-plus' />
                                     <span> Add</span>
                                 </button>
-                                <button
-                                    data-tip='Delete all selected rows'
-                                    className='resman-btn resman-danger resman-right-border-radius'
-                                    onClick={() => {
+                                <Popconfirm
+                                    placement='top'
+                                    title={'Are you sure to delete all selected rows?'}
+                                    onConfirm={() => {
                                         if (this.props.onMultiDelete && this.gridOptions.api) {
                                             this.props.onMultiDelete(this.gridOptions.api.getSelectedRows());
                                         }
                                     }}
+                                    okText='Yes'
+                                    cancelText='No'
                                 >
-                                    <i className='fa fa-trash-o' />{` Delete`}
-                                </button>
+                                    <button
+                                        data-tip='Delete all selected rows'
+                                        className='resman-btn resman-danger resman-right-border-radius'
+                                    >
+                                        <i className='fa fa-trash-o' />{` Delete`}
+                                    </button>
+                                </Popconfirm>
                             </div>
                         </div>
                         <div className='col-md-2'>

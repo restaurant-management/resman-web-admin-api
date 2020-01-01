@@ -10,7 +10,7 @@
 		"change_password_success": "user.change_password_success",
 		"{{role}}_not_found": "user.{{role}}_not_found",
 		"can_not_delete_user_with_higher_level": "user.can_not_delete_user_with_higher_level",
-		"delete_success": "user.delete_success"
+		"delete_success": "Delete user success"
 	},
 	"daily_dish": {
 		"no_storeId_is_provided": "daily_dish.no_storeId_is_provided",

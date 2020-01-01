@@ -37,7 +37,7 @@ class UserService {
 
     /**
      *  Check if user have roles with level enough with require.
-     * @param userId  User to check. 
+     * @param userId  User to check.
      * @param requireLevelOfUserId   User to get list role slugs to get require level.
      */
     public async checkRoleLevelByUser(userId: number, requireLevelOfUserId: number): Promise<boolean> {
@@ -123,7 +123,9 @@ class UserService {
             for (const item of data.roles) {
                 const role = await Role.findOne({ where: { slug: item } });
 
-                if (!role) { throw new Error(__('user.{{role}}_not_found', { role: item })); }
+                if (!role) {
+                    throw new Error(__('user.{{role}}_not_found', { role: item }));
+                }
 
                 listRoles.push(role);
             }
@@ -150,7 +152,9 @@ class UserService {
         newUser.stores = listStores;
 
         const user = await newUser.save();
-        if (!user) { throw new Error(__('user.create_fail')); }
+        if (!user) {
+            throw new Error(__('user.create_fail'));
+        }
 
         return user;
     }
@@ -183,14 +187,18 @@ class UserService {
 
         let listRoles: Role[] = user.roles;
 
-        if (data.roles) {
-            listRoles = [];
-            for (const item of data.roles) {
-                const role = await Role.findOne({ where: { slug: item } });
+        if (user.username !== 'admin') {
+            if (data.roles) {
+                listRoles = [];
+                for (const item of data.roles) {
+                    const role = await Role.findOne({ where: { slug: item } });
 
-                if (!role) { throw new Error(__('user.{{role}}_not_found', { role: item })); }
+                    if (!role) {
+                        throw new Error(__('user.{{role}}_not_found', { role: item }));
+                    }
 
-                listRoles.push(role);
+                    listRoles.push(role);
+                }
             }
         }
 
@@ -203,12 +211,24 @@ class UserService {
             }
         }
 
-        if (data.password) { user.password = PasswordHandler.encode(data.password); }
-        if (data.phoneNumber) { user.phoneNumber = data.phoneNumber; }
-        if (data.address) { user.address = data.address; }
-        if (data.fullName) { user.fullName = data.fullName; }
-        if (data.avatar) { user.avatar = data.avatar; }
-        if (data.birthday) { user.birthday = data.birthday; }
+        if (data.password) {
+            user.password = PasswordHandler.encode(data.password);
+        }
+        if (data.phoneNumber) {
+            user.phoneNumber = data.phoneNumber;
+        }
+        if (data.address) {
+            user.address = data.address;
+        }
+        if (data.fullName || data.fullName === '') {
+            user.fullName = data.fullName;
+        }
+        if (data.avatar || data.avatar === '') {
+            user.avatar = data.avatar;
+        }
+        if (data.birthday) {
+            user.birthday = data.birthday;
+        }
         user.roles = listRoles;
         user.stores = listStores;
 
@@ -235,6 +255,15 @@ class UserService {
         await user.remove();
     }
 
+    public async multiDelete(usernames: string[], deleteBy: User) {
+        try {
+            await Promise.all(
+                usernames.map(username => this.delete(username, deleteBy))
+            );
+        // tslint:disable-next-line: no-empty
+        } catch (_) { }
+    }
+
     public async getOne(key: { id?: number, uuid?: string, username?: string, email?: string },
         options?: { withRoles?: boolean, withStores?: boolean, withWarehouses?: boolean }) {
 
@@ -244,9 +273,15 @@ class UserService {
 
         let user: User = null;
         const relations = [];
-        if (options?.withRoles) { relations.push('roles'); }
-        if (options?.withStores) { relations.push('stores'); }
-        if (options?.withWarehouses) { relations.push('warehouses'); }
+        if (options?.withRoles) {
+            relations.push('roles');
+        }
+        if (options?.withStores) {
+            relations.push('stores');
+        }
+        if (options?.withWarehouses) {
+            relations.push('warehouses');
+        }
 
         if (key.id) {
             user = await User.findOne({ relations, where: { id: key.id } });

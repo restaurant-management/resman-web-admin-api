@@ -1,3 +1,4 @@
+import { Firebase } from '../lib/firebase';
 import { GraphClient } from '../lib/graphClient';
 import { GraphQuery } from '../lib/graphQuery';
 import { User } from '../models/user';
@@ -31,20 +32,74 @@ export class UserService {
         return data.users.map((e: any) => User.fromJson(e));
     }
 
-    public static async createUser(token: string, data: {
-        address: string, email: string, password: string,
-        username: string, storeIds: number[], roles?: string[], avatar?: string,
-        birthday?: Date, fullName?: string, phoneNumber?: string
-    }) {
-        return User.fromJson(await GraphClient.mutation({
-            mutation: {
-                mutation: GraphQuery.createUser,
-                variables: {
-                    ...data,
-                    birthday: data.birthday ? data.birthday.toJSON() : undefined
-                }
+    public static async getUser(token: string, username: string): Promise<User> {
+        const data = await GraphClient.query({
+            query: {
+                query: GraphQuery.getUser,
+                variables: { username }
             }, token
-        }));
+        });
+
+        return User.fromJson(data.getUser);
+    }
+
+    public static async createUser(token: string, user: User) {
+        let avatarUrl = '';
+        if (user.avatarFile) {
+            avatarUrl = await Firebase.uploadImage(user.avatarFile, user.username);
+        }
+
+        try {
+            await GraphClient.mutation({
+                mutation: {
+                    mutation: GraphQuery.createUser,
+                    variables: {
+                        ...user,
+                        avatar: avatarUrl,
+                        birthday: user.birthday ? user.birthday.toJSON() : undefined
+                    }
+                }, token
+            });
+        } catch (e) {
+            if (avatarUrl) {
+                try {
+                    await Firebase.deleteImage(avatarUrl);
+                } catch (e) {
+                    throw e.message;
+                }
+            }
+            throw e;
+        }
+
+    }
+
+    public static async editUser(token: string, user: User) {
+        let avatarUrl = '';
+        if (user.avatarFile && !user.avatar) {
+            avatarUrl = await Firebase.uploadImage(user.avatarFile, user.username);
+        }
+
+        try {
+            await GraphClient.mutation({
+                mutation: {
+                    mutation: GraphQuery.editUser,
+                    variables: {
+                        ...user,
+                        avatar: avatarUrl || user.avatar,
+                        birthday: user.birthday ? user.birthday.toJSON() : undefined
+                    }
+                }, token
+            });
+        } catch (e) {
+            if (avatarUrl) {
+                try {
+                    await Firebase.deleteImage(avatarUrl);
+                } catch (e) {
+                    throw e.message;
+                }
+            }
+            throw e;
+        }
     }
 
     public static async deleteUser(token: string, username: string): Promise<string> {
@@ -56,5 +111,16 @@ export class UserService {
         });
 
         return data ? data.deleteUser : '';
+    }
+
+    public static async deleteUsers(token: string, usernames: string[]): Promise<string> {
+        const data = await GraphClient.mutation({
+            mutation: {
+                mutation: GraphQuery.deleteUsers,
+                variables: { usernames }
+            }, token
+        });
+
+        return data ? data.deleteUsers : '';
     }
 }

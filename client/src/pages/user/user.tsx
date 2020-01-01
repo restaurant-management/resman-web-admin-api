@@ -1,20 +1,20 @@
 import moment from 'moment';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { DataTable } from '../../components/dataTable';
 import Scaffold from '../../components/scaffold';
 import { User } from '../../models/user';
 import { Repository } from '../../repository';
 import { UserService } from '../../service';
-import { CreateModal } from './createModal';
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import { UserForm } from './userForm';
 
 export function UserPage() {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [editedUser, setEditedUser] = useState<User>();
 
     const loadData = () => {
         setLoading(true);
@@ -33,45 +33,55 @@ export function UserPage() {
     return <Scaffold title={'User manager'} subTitle={'Add, edit or delete user'}>
         <div className='row'>
             <div className='col-md-12'>
-                <CreateModal
-                    onClose={() => setShowCreateModal(false)}
-                    showModal={showCreateModal}
-                    onSubmit={() => loadData()}
+                <UserForm
+                    visible={showCreateModal}
+                    onCancel={() => setShowCreateModal(false)}
+                    onCreate={() => loadData()}
+                    user={editedUser}
                 />
                 <DataTable<User>
                     loading={loading}
                     exportFileName={'User'}
-                    onView={(item) => console.log(item)}
-                    onMultiDelete={(items => console.log(items))}
-                    onDelete={(user) => {
-                        confirmAlert({
-                            title: 'Confirm to delete',
-                            message: 'Are you sure to do this.',
-                            buttons: [
-                                {
-                                    label: 'Yes',
-                                    onClick: async () => {
-                                        try {
-                                            enqueueSnackbar(await UserService
-                                                    .deleteUser(Repository.token, user.username),
-                                                { variant: 'success' });
-                                            loadData();
-                                        } catch (e) {
-                                            enqueueSnackbar(e.toString(), { variant: 'error' });
-                                        }
-                                    }
-                                },
-                                {
-                                    label: 'No',
-                                    onClick: () => alert('Click No')
-                                }
-                            ]
-                        });
+                    onMultiDelete={(async (items) => {
+                        try {
+                            enqueueSnackbar(await UserService
+                                .deleteUsers(Repository.token, items.map(e => e.username)),
+                                { variant: 'success' });
+                            loadData();
+                        } catch (e) {
+                            enqueueSnackbar(e.toString(), { variant: 'error' });
+                        }
+                    })}
+                    onEdit={async (user) => {
+                        setLoading(true);
+                        UserService.getUser(Repository.token, user.username)
+                            .then(async (data) => {
+                                setEditedUser(data);
+                                setShowCreateModal(true);
+                                setLoading(false);
+                            })
+                            .catch((e) => {
+                                setLoading(false);
+                                enqueueSnackbar(e.toString(), { variant: 'error' });
+                            });
+                    }}
+                    onDelete={async (user) => {
+                        try {
+                            enqueueSnackbar(await UserService
+                                .deleteUser(Repository.token, user.username),
+                                { variant: 'success' });
+                            loadData();
+                        } catch (e) {
+                            enqueueSnackbar(e.toString(), { variant: 'error' });
+                        }
                     }}
                     data={users}
                     autoSizeColumns={['username', 'birthday', 'email', 'roles', 'avatar']}
                     header={(<h1><strong>User</strong> Table</h1>)}
-                    onCreate={() => setShowCreateModal(true)}
+                    onCreate={() => {
+                        setShowCreateModal(true);
+                        setEditedUser(undefined);
+                    }}
                     onReload={(callback) => {
                         loadData();
                         if (callback) {
@@ -92,11 +102,13 @@ export function UserPage() {
                             cellRenderer: 'AgImage', tooltipComponent: 'AgImageTooltip',
                             tooltipValueGetter: (params) => params.value
                         }, {
-                            headerName: 'Roles', field: 'roles'
+                            headerName: 'Roles', field: 'roleNames'
                         }, {
                             headerName: 'Birthday', field: 'birthday',
                             cellClass: 'grid-cell-center',
                             cellRenderer: (params) => params.value ? moment(params.value).format('DD/MM/YYYY') : ''
+                        }, {
+                            headerName: 'Phone number', field: 'phoneNumber', minWidth: 100
                         }, {
                             headerName: 'Address', field: 'address', minWidth: 100,
                             tooltipField: 'address'

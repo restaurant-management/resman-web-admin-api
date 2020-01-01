@@ -9,16 +9,17 @@ import { RequiredSelect } from '../../components/requiredSelect';
 import { Role } from '../../models/role';
 import { Store } from '../../models/store';
 import { Repository } from '../../repository';
-import { UserService } from '../../service';
 import { RoleService } from '../../service/role.service';
 import { StoreService } from '../../service/store.service';
 
-export function CreateModal(props: { showModal?: boolean, onClose: () => void, onSubmit?: () => void }) {
+export function CreateModal(props: {
+    showModal?: boolean, onClose: () => void, onSubmit?: () => void, username?: string
+}) {
     const { showModal, onClose } = props;
 
     const { register, handleSubmit, errors: formErrors } = useForm();
 
-    const [creating, setCreating] = useState(false);
+    const [saving, setSaving] = useState(false);
     const [loadingRoles, setLoadingRoles] = useState(true);
     const [loadingStores, setLoadingStores] = useState(true);
     const { enqueueSnackbar } = useSnackbar();
@@ -41,9 +42,9 @@ export function CreateModal(props: { showModal?: boolean, onClose: () => void, o
     }, []);
 
     const onSave = async (data: any) => {
-        setCreating(true);
+        setSaving(true);
         try {
-            await UserService.createUser(Repository.token, {
+            await Repository.createUser({
                 username: data.username,
                 email: data.email,
                 password: data.password,
@@ -51,10 +52,11 @@ export function CreateModal(props: { showModal?: boolean, onClose: () => void, o
                 address: data.address,
                 phoneNumber: data.phoneNumber,
                 birthday: new Date(data.birthday),
-                avatar: avatar ? avatar.name : '',
+                avatarFile: avatar,
                 roles: selectedRoles.map(e => e.slug),
                 storeIds: selectStores.map(e => e.id)
             });
+
             enqueueSnackbar('Create user success', { variant: 'success' });
             onClose();
             if (props.onSubmit) {
@@ -63,7 +65,7 @@ export function CreateModal(props: { showModal?: boolean, onClose: () => void, o
         } catch (e) {
             enqueueSnackbar(e.toString(), { variant: 'error' });
         }
-        setCreating(false);
+        setSaving(false);
     };
 
     return (
@@ -85,7 +87,7 @@ export function CreateModal(props: { showModal?: boolean, onClose: () => void, o
             <Slide in={showModal} direction={'down'}>
                 <div className='modal-content'>
                     <form onSubmit={handleSubmit(onSave)}>
-                        <OverlayIndicator show={creating} />
+                        <OverlayIndicator show={saving} />
                         <div className='modal-header'>
                             <button type='button' className='close'
                                     onClick={onClose}>

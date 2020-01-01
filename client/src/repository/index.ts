@@ -19,7 +19,11 @@ class Repository {
     }
 
     public get token(): string {
-        return this._getToken() || '';
+        return Repository._getToken() || '';
+    }
+
+    private static _getToken() {
+        return localStorage.getItem(StorageKey.AUTH_TOKEN);
     }
 
     private _currentUser: User | undefined;
@@ -30,7 +34,7 @@ class Repository {
     constructor() {
         const authAtString = localStorage.getItem(StorageKey.AUTH_AT);
 
-        this._isAuth = !!this._getToken();
+        this._isAuth = !!Repository._getToken();
         this._isRemember = this._isAuth ? !!authAtString : false;
 
         if (authAtString) {
@@ -59,7 +63,7 @@ class Repository {
     }
 
     public async getAllUser() {
-        const token = this._getToken();
+        const token = Repository._getToken();
 
         return await UserService.getAllUsers(token || '');
     }
@@ -68,11 +72,12 @@ class Repository {
         return GraphClient.create(localStorage.getItem(StorageKey.AUTH_TOKEN) || '');
     }
 
-    private _getToken() {
-        return localStorage.getItem(StorageKey.AUTH_TOKEN);
+    public async createUser(user: User) {
+        await UserService.createUser(this.token, user);
     }
 }
 
 const repository = new Repository();
 
 export { repository as Repository };
+

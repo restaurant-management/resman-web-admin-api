@@ -135,3 +135,15 @@
 .MuiSnackbarContent-message {
     font-size: 1rem !important;
 }
+
+.ant-form-item-label {
+    line-height: 20px !important;
+}
+
+.ant-form-item-label > label {
+    color: #717171 !important;
+}
+
+.ant-input {
+    min-height: 37px !important;
+}
