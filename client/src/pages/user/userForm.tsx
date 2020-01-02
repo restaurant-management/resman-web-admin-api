@@ -269,7 +269,7 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                             initialValue: user ? user.roles : undefined
                         })(
                             <Select mode='multiple' placeholder='Roles'>
-                                {roles.map(e => <Option value={e.slug}>{e.name}</Option>)}
+                                {roles.map(e => <Option key={e.slug} value={e.slug}>{e.name}</Option>)}
                             </Select>
                         )}
                     </Form.Item>
@@ -279,7 +279,7 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                             rules: [{ required: true, message: 'Please select store' }]
                         })(
                             <Select mode='multiple' placeholder='Stores'>
-                                {stores.map(e => <Option value={e.id}>{e.name}</Option>)}
+                                {stores.map(e => <Option key={e.id.toString()} value={e.id}>{e.name}</Option>)}
                             </Select>
                         )}
                     </Form.Item>
