@@ -23,7 +23,7 @@ interface Props extends FormComponentProps {
 }
 
 const userForm = Form.create<Props>({ name: 'UserForm' })(
-    function(props: Props) {
+    (props: Props) => {
         const { visible, onCancel, onCreate, user } = props;
         const { getFieldDecorator } = props.form;
 
@@ -279,7 +279,8 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                             rules: [{ required: true, message: 'Please select store' }]
                         })(
                             <Select mode='multiple' placeholder='Stores'>
-                                {stores.map(e => <Option key={e.id.toString()} value={e.id}>{e.name}</Option>)}
+                                {stores
+                                    .map(e => e.id ? <Option key={e.id.toString()} value={e.id}>{e.name}</Option> : null)}
                             </Select>
                         )}
                     </Form.Item>

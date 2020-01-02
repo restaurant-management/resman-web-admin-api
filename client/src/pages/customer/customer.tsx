@@ -31,7 +31,7 @@ export function CustomerPage() {
 
     useEffect(loadData, []);
 
-    return <Scaffold title={'Customer manager'} subTitle={'Add, edit or delete customer'}>
+    return <Scaffold title={'Customer manager'} subTitle={'Add, edit or delete customer'} icon={'crown'}>
         <div className='row'>
             <div className='col-md-12'>
                 <CustomerForm

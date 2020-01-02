@@ -30,7 +30,7 @@ export function UserPage() {
 
     useEffect(loadData, []);
 
-    return <Scaffold title={'User manager'} subTitle={'Add, edit or delete user'}>
+    return <Scaffold title={'User manager'} subTitle={'Add, edit or delete user'} icon={'fa-user'}>
         <div className='row'>
             <div className='col-md-12'>
                 <UserForm

@@ -26,15 +26,21 @@ export default class SideBar extends Component {
                             </Link>
                         </Li>
                         <Li>
+                            <Link to='/stores'>
+                                <Icon type='shop' />
+                                {` Store`}
+                            </Link>
+                        </Li>
+                        <Li>
                             <Link to='/users'>
                                 <i className='fa fa-user' />
-                                {` Users`}
+                                {` User`}
                             </Link>
                         </Li>
                         <Li>
                             <Link to='/customers'>
                                 <Icon type='crown' />
-                                {` Customers`}
+                                {` Customer`}
                             </Link>
                         </Li>
                     </ul>
@@ -42,8 +48,9 @@ export default class SideBar extends Component {
                 </li>
 
                 <li className='summary' id='order-summary'>
-                    <Link to='/#' className='sidebar-toggle underline' data-toggle='#order-summary'>Orders Summary <i
-                        className='fa fa-angle-up' /></Link>
+                    <Link to='/#' className='sidebar-toggle underline' data-toggle='#order-summary'>
+                        {`Orders Summary `}<i className='fa fa-angle-up' />
+                    </Link>
 
                     <div className='media'>
                         <Link className='pull-right' to='/#'>

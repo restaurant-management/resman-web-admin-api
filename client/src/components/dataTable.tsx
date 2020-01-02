@@ -92,29 +92,31 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                                 <button
                                     data-tip='Add new'
                                     onClick={this.props.onCreate}
-                                    className='resman-btn resman-success resman-no-border-radius'
+                                    className={`resman-btn resman-success ${ this.props.onMultiDelete ? 'resman-no-border-radius' : 'resman-right-border-radius'}`}
                                 >
                                     <i className='fa fa-plus' />
                                     <span> Add</span>
                                 </button>
-                                <Popconfirm
-                                    placement='top'
-                                    title={'Are you sure to delete all selected rows?'}
-                                    onConfirm={() => {
-                                        if (this.props.onMultiDelete && this.gridOptions.api) {
-                                            this.props.onMultiDelete(this.gridOptions.api.getSelectedRows());
-                                        }
-                                    }}
-                                    okText='Yes'
-                                    cancelText='No'
-                                >
-                                    <button
-                                        data-tip='Delete all selected rows'
-                                        className='resman-btn resman-danger resman-right-border-radius'
+                                {this.props.onMultiDelete && (
+                                    <Popconfirm
+                                        placement='top'
+                                        title={'Are you sure to delete all selected rows?'}
+                                        onConfirm={() => {
+                                            if (this.props.onMultiDelete && this.gridOptions.api) {
+                                                this.props.onMultiDelete(this.gridOptions.api.getSelectedRows());
+                                            }
+                                        }}
+                                        okText='Yes'
+                                        cancelText='No'
                                     >
-                                        <i className='fa fa-trash-o' />{` Delete`}
-                                    </button>
-                                </Popconfirm>
+                                        <button
+                                            data-tip='Delete all selected rows'
+                                            className='resman-btn resman-danger resman-right-border-radius'
+                                        >
+                                            <i className='fa fa-trash-o' />{` Delete`}
+                                        </button>
+                                    </Popconfirm>
+                                )}
                             </div>
                         </div>
                         <div className='col-md-2'>

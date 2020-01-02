@@ -15,6 +15,7 @@ import LogIn from './pages/login';
 import { Logout } from './pages/logout';
 import Page404 from './pages/page404';
 import Page500 from './pages/page500';
+import { StorePage } from './pages/store/store';
 import { UserPage } from './pages/user/user';
 import WelcomePage from './pages/welcomePage';
 import { Repository } from './repository';
@@ -62,6 +63,7 @@ class App extends Component<any, {currentUser?: User}> {
                                 <Route path='/components' component={Components} />
                                 <PrivateRoute path='/users' component={UserPage} />
                                 <PrivateRoute path='/customers' component={CustomerPage} />
+                                <PrivateRoute path='/stores' component={StorePage} />
                                 <Route path='/login' component={LogIn} />
                                 <Route path='/logout' component={Logout} />
                                 <Route path='/page500' component={Page500} />
