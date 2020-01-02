@@ -23,7 +23,7 @@ interface Props extends FormComponentProps {
 }
 
 const userForm = Form.create<Props>({ name: 'UserForm' })(
-    function (props: Props) {
+    function(props: Props) {
         const { visible, onCancel, onCreate, user } = props;
         const { getFieldDecorator } = props.form;
 

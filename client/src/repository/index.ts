@@ -49,7 +49,9 @@ class Repository {
     }
 
     public async me() {
-        return UserService.me(this.token);
+        this._currentUser = await UserService.me(this.token);
+
+        return this._currentUser;
     }
 
     public async login(usernameOrEmail: string, password: string, remember: boolean = false) {
@@ -61,6 +63,7 @@ class Repository {
             this._isRemember = true;
         }
 
+        this.me();
         this._isAuth = true;
     }
 
