@@ -22,6 +22,16 @@ export class UserService {
         }
     }
 
+    public static async me(token: string): Promise<User> {
+        const data = await GraphClient.query({
+            query: {
+                query: GraphQuery.meAsUser
+            }, token
+        });
+
+        return User.fromJson(data.meAsUser);
+    }
+
     public static async getAllUsers(token: string): Promise<User[]> {
         const data = await GraphClient.query({
             query: {

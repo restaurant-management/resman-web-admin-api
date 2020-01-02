@@ -22,6 +22,10 @@ class Repository {
         return Repository._getToken() || '';
     }
 
+    public get currentUser(): User | undefined {
+        return this._currentUser;
+    }
+
     private static _getToken() {
         return localStorage.getItem(StorageKey.AUTH_TOKEN);
     }
@@ -42,6 +46,10 @@ class Repository {
                 this.logout();
             }
         }
+    }
+
+    public async me() {
+        return UserService.me(this.token);
     }
 
     public async login(usernameOrEmail: string, password: string, remember: boolean = false) {
@@ -80,4 +88,3 @@ class Repository {
 const repository = new Repository();
 
 export { repository as Repository };
-

@@ -17,6 +17,29 @@ export class GraphQuery {
         }
     `;
 
+    public static meAsUser = gql`
+        query meAsUser {
+            meAsUser {
+                uuid
+                username
+                fullName
+                email
+                avatar
+                birthday
+                phoneNumber
+                address
+                roles {
+                slug
+                name
+                }
+                stores {
+                id
+                name
+                }
+            }
+        }
+    `;
+
     public static getUser = gql`
         query getUser($username: String!) {
             getUser(username: $username) {

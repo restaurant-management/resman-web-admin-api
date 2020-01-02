@@ -1,6 +1,6 @@
+import 'antd/dist/antd.css';
 import $ from 'jquery';
 import React, { Component } from 'react';
-import 'antd/dist/antd.css';
 import '../assets/css/agGridStyles.scss';
 import '../assets/css/animate.css';
 import '../assets/css/bootstrap-checkbox.css';

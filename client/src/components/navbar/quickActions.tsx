@@ -2,6 +2,7 @@ import { ClickAwayListener, Grow } from '@material-ui/core';
 import Image from 'material-ui-image';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../../App';
 import { User } from '../../models/user';
 
 export interface QuickActionsProp {
@@ -98,17 +99,25 @@ export class QuickActions extends Component<QuickActionsProp, QuickActionsState>
 
                 <ClickAwayListener onClickAway={this._onClickAway.bind(this)}>
                     <li className={`dropdown block user open`} id='current-user'>
-                        <div className='profile-photo'>
-                            <Image src={this.props.user.avatar || ''}/>
-                        </div>
-                        <Link
-                            className='dropdown-toggle options' to='#'
-                            onClick={() =>
-                                this.setState({ openUserBlock: !this.state.openUserBlock, openNotifyBlock: false })}
-                        >
-                            {`${this.props.user.fullName || this.props.user.username} `}
-                            <i className='fa fa-caret-down' />
-                        </Link>
+                        <UserContext.Consumer>
+                            {value => value && (
+                                <>
+                                    <div className='profile-photo'>
+                                        <Image src={value.avatar || ''} />
+                                    </div>
+                                    <Link
+                                        className='dropdown-toggle options' to='#'
+                                        onClick={() =>
+                                            this.setState({
+                                                openUserBlock: !this.state.openUserBlock, openNotifyBlock: false
+                                            })}
+                                    >
+                                        {`${value.fullName || value.username} `}
+                                        <i className='fa fa-caret-down' />
+                                    </Link>
+                                </>
+                            )}
+                        </UserContext.Consumer>
 
                         <Grow in={this.state.openUserBlock} style={{ transformOrigin: '50% 0 0' }}>
                             <ul className='dropdown-menu arrow settings'>
