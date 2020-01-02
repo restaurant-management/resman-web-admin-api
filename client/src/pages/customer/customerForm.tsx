@@ -2,66 +2,49 @@ import { Button, DatePicker, Form, Icon, Input, Modal, Select, Upload } from 'an
 import { FormComponentProps } from 'antd/lib/form/Form';
 import moment, { Moment } from 'moment';
 import { useSnackbar } from 'notistack';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import OverlayIndicator from '../../components/overlayIndicator';
-import { Role } from '../../models/role';
-import { Store } from '../../models/store';
-import { User } from '../../models/user';
+import { Customer } from '../../models/customer';
 import { Repository } from '../../repository';
-import { UserService } from '../../service';
-import { RoleService } from '../../service/role.service';
-import { StoreService } from '../../service/store.service';
+import { CustomerService } from '../../service/customer.service';
 import { Validator } from '../../utils/validator';
 
 const { Option } = Select;
 
 interface Props extends FormComponentProps {
     visible: boolean;
-    user?: User;
+    customer?: Customer;
     onCancel: any;
     onCreate?: any;
 }
 
-const userForm = Form.create<Props>({ name: 'UserForm' })(
-    function(props: Props) {
-        const { visible, onCancel, onCreate, user } = props;
-        const { getFieldDecorator } = props.form;
+const customerForm = Form.create<Props>({ name: 'CustomerForm' })(
+    (props: Props) => {
+        const { visible, onCancel, onCreate, customer } = props;
+        const { getFieldDecorator, getFieldValue } = props.form;
 
         const [loading, setLoading] = useState(false);
-        const [roles, setRoles] = useState<Role[]>([]);
-        const [stores, setStores] = useState<Store[]>([]);
         const [avatar, setAvatar] = useState<File>();
         const [imagePreview, setImagePreview] = useState<any>('');
         const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
         const { enqueueSnackbar } = useSnackbar();
 
-        useEffect(() => {
-            RoleService.getAll(Repository.token).then(value => {
-                setRoles(value);
-            });
-            StoreService.getAll().then(value => {
-                setStores(value);
-            });
-        }, []);
-
         const handleSubmit = () => {
             props.form.validateFieldsAndScroll((err, values) => {
                 if (!err) {
                     setLoading(true);
-                    if (!user) {
-                        Repository.createUser({
+                    if (!customer) {
+                        CustomerService.createCustomer(Repository.token, {
                             username: values.username,
                             email: values.email,
                             password: values.password,
                             fullName: values.fullName,
-                            address: values.address,
                             phoneNumber: values.prefix + values.phoneNumber,
                             birthday: (values.birthday as Moment).toDate(),
                             avatarFile: avatar,
-                            roles: values.roles,
-                            storeIds: values.stores
+                            addresses: values.addresses.map((e: string) => ({ address: e }))
                         }).then(() => {
-                            enqueueSnackbar('Create user success', { variant: 'success' });
+                            enqueueSnackbar('Create Customer success', { variant: 'success' });
                             setLoading(false);
                             setAvatar(undefined);
                             props.form.resetFields();
@@ -69,27 +52,28 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                             if (onCreate) {
                                 onCreate();
                             }
-                        }).catch(e => {
+                        }).catch((e: any) => {
                             setLoading(false);
                             console.log(e);
                             enqueueSnackbar(e.toString(), { variant: 'error' });
                         });
                     } else {
-                        UserService.editUser(Repository.token, {
-                            uuid: user.uuid,
+                        CustomerService.editCustomer(Repository.token, {
+                            uuid: customer.uuid,
                             username: values.username,
                             email: values.email,
                             password: values.password,
                             fullName: values.fullName,
-                            address: values.address,
                             phoneNumber: values.prefix + values.phoneNumber,
                             birthday: (values.birthday as Moment).toDate(),
-                            avatar: user.avatar,
+                            avatar: customer.avatar,
                             avatarFile: avatar,
-                            roles: values.roles,
-                            storeIds: values.stores
+                            addresses: values.addresses ? values.addresses.map((e: string, i: number) => ({
+                                address: e, id: customer && customer.addresses && customer.addresses[i]
+                                    ? customer.addresses[i].id : undefined
+                            })) : []
                         }).then(() => {
-                            enqueueSnackbar('Edit user success', { variant: 'success' });
+                            enqueueSnackbar('Edit Customer success', { variant: 'success' });
                             setLoading(false);
                             setAvatar(undefined);
                             props.form.resetFields();
@@ -113,9 +97,9 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
             <Modal
                 visible={visible}
                 title={<h3 className='modal-title'>
-                    {user ? 'Edit' : 'Create'} <strong>User</strong>
+                    {customer ? 'Edit' : 'Create'} <strong>Customer</strong>
                 </h3>}
-                okText={user ? 'Save' : 'Create'}
+                okText={customer ? 'Save' : 'Create'}
                 onCancel={onCancel}
                 destroyOnClose
                 onOk={() => {
@@ -126,11 +110,11 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                 <Form>
                     <Form.Item label='Username' hasFeedback>
                         {getFieldDecorator('username', {
-                            initialValue: user ? user.username : '',
+                            initialValue: customer ? customer.username : '',
                             rules: [{ required: true, message: 'Please input Username!' }]
                         })(
                             <Input
-                                disabled={!!user}
+                                disabled={!!customer}
                                 prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
                                 placeholder='Username'
                             />
@@ -138,7 +122,7 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                     </Form.Item>
                     <Form.Item label='E-mail' hasFeedback>
                         {getFieldDecorator('email', {
-                            initialValue: user ? user.email : '',
+                            initialValue: customer ? customer.email : '',
                             rules: [
                                 {
                                     type: 'email',
@@ -151,7 +135,7 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                             ]
                         })(
                             <Input
-                                disabled={!!user}
+                                disabled={!!customer}
                                 prefix={<Icon type='mail' style={{ color: 'rgba(0,0,0,.25)' }} />}
                                 placeholder='Email'
                             />
@@ -159,7 +143,7 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                     </Form.Item>
                     <Form.Item label={'Password'} hasFeedback>
                         {getFieldDecorator('password', {
-                            rules: [{ required: !user, message: 'Please input Password!' }]
+                            rules: [{ required: !customer, message: 'Please input Password!' }]
                         })(
                             <Input.Password
                                 prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -170,20 +154,14 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                     </Form.Item>
                     <Form.Item label='Full name' hasFeedback>
                         {getFieldDecorator('fullName', {
-                            initialValue: user && user.fullName ? user.fullName : undefined
+                            initialValue: customer && customer.fullName ? customer.fullName : undefined
                         })(<Input placeholder={'Full name'} />)}
-                    </Form.Item>
-                    <Form.Item label='Address' hasFeedback>
-                        {getFieldDecorator('address', {
-                            initialValue: user ? user.address : '',
-                            rules: [{ required: true, message: 'Please input Address' }]
-                        })(<Input type='textarea' />)}
                     </Form.Item>
                     <Form.Item label='Phone Number' hasFeedback>
                         {getFieldDecorator('phoneNumber', {
-                            initialValue: user && user.phoneNumber
-                                ? user.phoneNumber
-                                    .split('+84')[0] || user.phoneNumber.split('+84')[1] : '',
+                            initialValue: customer && customer.phoneNumber
+                                ? customer.phoneNumber
+                                    .split('+84')[0] || customer.phoneNumber.split('+84')[1] : '',
                             rules: [{
                                 required: true,
                                 message: 'Please input phone number!'
@@ -201,7 +179,7 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                     </Form.Item>
                     <Form.Item label='Birthday' hasFeedback>
                         {getFieldDecorator('birthday', {
-                            initialValue: user && user.birthday ? moment(user.birthday) : null,
+                            initialValue: customer && customer.birthday ? moment(customer.birthday) : null,
                             rules: [{ required: true, message: 'Please select birthday' }]
                         })(<DatePicker style={{ width: '100%' }} format={'DD/MM/YYYY'} />)}
                     </Form.Item>
@@ -230,14 +208,14 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                                     setShowImagePreview(true);
                                 }}
                                 onRemove={() => {
-                                    if (user && user.avatar) {
-                                        user.avatar = '';
+                                    if (customer && customer.avatar) {
+                                        customer.avatar = '';
                                     }
                                     setAvatar(undefined);
                                 }}
                                 beforeUpload={(file) => {
-                                    if (user && user.avatar) {
-                                        user.avatar = '';
+                                    if (customer && customer.avatar) {
+                                        customer.avatar = '';
                                     }
                                     setAvatar(file);
 
@@ -249,13 +227,13 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                                     size: avatar.size,
                                     originFileObj: avatar,
                                     type: avatar.type
-                                }] : user && user.avatar ? [{
+                                }] : customer && customer.avatar ? [{
                                     uid: 'avatar',
-                                    name: user.avatar,
+                                    name: customer.avatar,
                                     status: 'done',
                                     size: 1,
                                     type: 'image/jpeg',
-                                    url: user.avatar
+                                    url: customer.avatar
                                 }] : []}
                             >
                                 <Button>
@@ -264,24 +242,56 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                             </Upload>
                         )}
                     </Form.Item>
-                    <Form.Item label='Roles' hasFeedback>
-                        {getFieldDecorator('roles', {
-                            initialValue: user ? user.roles : undefined
-                        })(
-                            <Select mode='multiple' placeholder='Roles'>
-                                {roles.map(e => <Option key={e.slug} value={e.slug}>{e.name}</Option>)}
-                            </Select>
-                        )}
-                    </Form.Item>
-                    <Form.Item label='Stores' hasFeedback>
-                        {getFieldDecorator('stores', {
-                            initialValue: user && user.storeIds ? user.storeIds : undefined,
-                            rules: [{ required: true, message: 'Please select store' }]
-                        })(
-                            <Select mode='multiple' placeholder='Stores'>
-                                {stores.map(e => <Option key={e.id.toString()} value={e.id}>{e.name}</Option>)}
-                            </Select>
-                        )}
+                    {getFieldDecorator('addressKeys', {
+                        initialValue: customer && customer.addresses ? customer.addresses.map((it, i) => i) : []
+                    })}
+                    {
+                        getFieldValue('addressKeys').map((item: number, index: number) => (
+                            <Form.Item
+                                label={index === 0 ? 'Addresses' : ''}
+                                required={false} hasFeedback
+                                key={index}
+                            >
+                                {getFieldDecorator(`addresses[${item}]`, {
+                                    validateTrigger: ['onChange', 'onBlur'],
+                                    initialValue: customer && customer.addresses && customer.addresses[index]
+                                        ? customer.addresses[index].address : undefined,
+                                    rules: [
+                                        {
+                                            required: true,
+                                            whitespace: true,
+                                            message: 'Please input address or delete this field.',
+                                        },
+                                    ],
+                                })(<Input
+                                    placeholder='Address' style={{ width: '100%' }}
+                                    suffix={
+                                        <Icon
+                                            className='dynamic-delete-button'
+                                            type='minus-circle-o'
+                                            onClick={() => {
+                                                const addressKeys: number[] = getFieldValue('addressKeys') || [];
+                                                props.form.setFieldsValue({
+                                                    addressKeys: addressKeys.filter(key => key !== item),
+                                                });
+                                            }}
+                                        />
+                                    }
+                                />)}
+                            </Form.Item>
+                        ))
+                    }
+                    <Form.Item>
+                        <Button type='dashed' style={{ width: '100%' }}
+                            onClick={() => {
+                                const addressKeys: number[] = getFieldValue('addressKeys') || [];
+                                props.form.setFieldsValue({
+                                    addressKeys: [...addressKeys, addressKeys.length]
+                                });
+                            }}
+                        >
+                            <Icon type='plus' />{` Add address`}
+                        </Button>
                     </Form.Item>
                 </Form>
                 <Modal visible={showImagePreview} footer={null} onCancel={() => setShowImagePreview(false)}>
@@ -292,4 +302,4 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
     }
 );
 
-export { userForm as UserForm };
+export { customerForm as CustomerForm };

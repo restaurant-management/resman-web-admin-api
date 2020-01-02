@@ -25,7 +25,7 @@ export function useKey(key: string) {
             window.removeEventListener('keydown', onDown);
             window.removeEventListener('keyup', onUp);
         };
-    }, [key]);
+    }, [key, onDown, onUp]);
 
     return pressed;
 }

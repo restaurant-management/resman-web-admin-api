@@ -49,7 +49,7 @@ class CustomerService {
     }
 
     public async create(data: {
-        username: string, email: string, password: string,
+        username: string, email: string, password: string, addresses?: AddressInput[]
         phoneNumber?: string, fullName?: string, avatar?: string, birthday?: Date
     }) {
         if (!data.username || !data.email || !data.password) {
@@ -77,6 +77,16 @@ class CustomerService {
 
         const customer = await newCustomer.save();
         if (!customer) { throw new Error(__('customer.create_fail')); }
+
+        // Create and edit address
+        if (data.addresses) {
+            for (const address of data.addresses) {
+                try {
+                    await AddressService.create(customer.username, address);
+                // tslint:disable-next-line: no-empty
+                } catch (_) {}
+            }
+        }
 
         return await this.getOne({ username: newCustomer.username },
             { withAddresses: true, withFavouriteDishes: true, withVoucherCodes: true });
@@ -143,6 +153,15 @@ class CustomerService {
         }
 
         await customer.remove();
+    }
+
+    public async multiDelete(usernames: string[]) {
+        try {
+            await Promise.all(
+                usernames.map(username => this.delete(username))
+            );
+        // tslint:disable-next-line: no-empty
+        } catch (_) { }
     }
 
     public async getOne(key: { id?: number, uuid?: string, username?: string, email?: string },

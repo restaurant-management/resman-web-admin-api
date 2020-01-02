@@ -30,11 +30,11 @@ export class GraphQuery {
                 address
                 roles {
                 slug
-                name
+                    name
                 }
                 stores {
-                id
-                name
+                    id
+                    name
                 }
             }
         }

@@ -23,7 +23,7 @@ export class GraphClient {
             if (e.graphQLErrors && e.graphQLErrors.length > 0) {
                 throw e.graphQLErrors[0].message;
             } else if (e.networkError) {
-                throw  e.networkError.result.errors[0];
+                throw  e.networkError.result.errors[0].message;
             } else {
                 throw e.toString();
             }
@@ -40,6 +40,8 @@ export class GraphClient {
         } catch (e) {
             if (e.graphQLErrors && e.graphQLErrors.length > 0) {
                 throw e.graphQLErrors[0].message;
+            } else if (e.networkError) {
+                throw  e.networkError.result.errors[0].message;
             } else {
                 throw e.toString();
             }
