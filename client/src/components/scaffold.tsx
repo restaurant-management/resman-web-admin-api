@@ -1,3 +1,4 @@
+import { Icon } from 'antd';
 import 'antd/dist/antd.css';
 import $ from 'jquery';
 import React, { Component } from 'react';
@@ -76,6 +77,8 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
     }
 
     public render() {
+        const iconStyle = { lineHeight: '50px' };
+
         return (<ScaffoldContext.Provider value={this}>
             <div id={'wrap'}>
                 <LoadingIndicator show={this.state.loading} />
@@ -91,10 +94,14 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
                     <div id='content' className='col-md-12 resman-content'>
                         <div className='pageheader'>
                             <h2>
-                                <i
-                                    className={`fa ${this.props.icon ? this.props.icon : 'fa-file-o'}`}
-                                    style={{ lineHeight: '48px', paddingLeft: 2 }}
-                                />
+                                {this.props.icon && this.props.icon.search('fa-') < 0 ? (
+                                    <Icon type={this.props.icon} style={iconStyle} />
+                                ) : (
+                                        <i
+                                            className={`fa ${this.props.icon ? this.props.icon : 'fa-file-o'}`}
+                                            style={iconStyle}
+                                        />
+                                    )}
                                 {` ${this.props.title} `}
                                 <span> {this.props.subTitle && `${this.props.subTitle}.`}</span>
                             </h2>
