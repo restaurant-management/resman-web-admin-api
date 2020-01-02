@@ -86,6 +86,15 @@ class RoleService {
         await role.remove();
     }
 
+    public async multiDelete(keys: Array<{ slug?: string, id?: number }>) {
+        try {
+            await Promise.all(
+                keys.map(key => this.delete(key))
+            );
+        // tslint:disable-next-line: no-empty
+        } catch (_) { }
+    }
+
     public async getOne(key: { id?: number, slug?: string },
         options: { showPermissions: boolean } = { showPermissions: true }) {
         let role = null;

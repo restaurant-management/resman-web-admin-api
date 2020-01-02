@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Config } from './config';
 import { GraphClient } from './lib/graphClient';
 import { PrivateRoute } from './lib/privateRoute';
+import { Permission } from './models/permission';
 import { User } from './models/user';
 import BlankPage from './pages/blank-page';
 import Components from './pages/components';
@@ -13,8 +14,10 @@ import { CustomerPage } from './pages/customer/customer';
 import DashBoard from './pages/dashboard';
 import LogIn from './pages/login';
 import { Logout } from './pages/logout';
+import Page403 from './pages/page403';
 import Page404 from './pages/page404';
 import Page500 from './pages/page500';
+import { RolePage } from './pages/role/role';
 import { StorePage } from './pages/store/store';
 import { UserPage } from './pages/user/user';
 import WelcomePage from './pages/welcomePage';
@@ -23,7 +26,7 @@ import { Repository } from './repository';
 // tslint:disable-next-line: variable-name
 export const UserContext = React.createContext(Repository.currentUser);
 
-class App extends Component<any, {currentUser?: User}> {
+class App extends Component<any, { currentUser?: User }> {
 
     constructor(props: {}) {
         super(props);
@@ -33,7 +36,7 @@ class App extends Component<any, {currentUser?: User}> {
     }
 
     public componentDidMount() {
-        Repository.me().then(value => this.setState({currentUser: value}));
+        Repository.me().then(value => this.setState({ currentUser: value }));
     }
 
     public render() {
@@ -61,12 +64,17 @@ class App extends Component<any, {currentUser?: User}> {
                             <Switch>
                                 <Route path='/blank-page' component={BlankPage} />
                                 <Route path='/components' component={Components} />
-                                <PrivateRoute path='/users' component={UserPage} />
-                                <PrivateRoute path='/customers' component={CustomerPage} />
-                                <PrivateRoute path='/stores' component={StorePage} />
+                                <PrivateRoute permissions={[Permission.user.list]} path='/users' component={UserPage} />
+                                <PrivateRoute
+                                    permissions={[Permission.customer.list]} path='/customers' component={CustomerPage}
+                                />
+                                <PrivateRoute
+                                    permissions={[Permission.store.list]} path='/stores' component={StorePage} />
+                                <PrivateRoute permissions={[Permission.role.list]} path='/roles' component={RolePage} />
                                 <Route path='/login' component={LogIn} />
                                 <Route path='/logout' component={Logout} />
                                 <Route path='/page500' component={Page500} />
+                                <Route path='/403' component={Page403} />
                                 <Route path='/' exact component={WelcomePage} />
                                 <PrivateRoute path='/dashboard' exact component={DashBoard} />
                                 <Route component={Page404} />

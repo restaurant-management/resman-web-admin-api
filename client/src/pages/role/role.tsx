@@ -1,25 +1,24 @@
-import moment from 'moment';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { DataTable } from '../../components/dataTable';
 import Scaffold from '../../components/scaffold';
-import { Store } from '../../models/store';
+import { Role } from '../../models/role';
 import { Repository } from '../../repository';
-import { StoreService } from '../../service/store.service';
-import { StoreForm } from './storeForm';
+import { RoleService } from '../../service/role.service';
+import { RoleForm } from './roleForm';
 
-export function StorePage() {
+export function RolePage() {
     const [showForm, setShowForm] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
-    const [stores, setStores] = useState<Store[]>([]);
+    const [roles, setRoles] = useState<Role[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const [edited, setEdited] = useState<Store>();
+    const [edited, setEdited] = useState<Role>();
 
     const loadData = () => {
         setLoading(true);
-        StoreService.getAll().then((data) => {
-            setStores(data);
+        RoleService.getAll(Repository.token).then((data) => {
+            setRoles(data);
             setLoading(false);
         })
             .catch(e => {
@@ -30,22 +29,32 @@ export function StorePage() {
 
     useEffect(loadData, []);
 
-    return <Scaffold title={'Store manager'} subTitle={'Add, edit or delete store'} icon={'shop'}>
+    return <Scaffold title={'Role manager'} subTitle={'Add, edit or delete role'} icon={'safety'}>
         <div className='row'>
             <div className='col-md-12'>
-                <StoreForm
+                <RoleForm
                     visible={showForm}
                     onCancel={() => setShowForm(false)}
                     onCreate={() => loadData()}
-                    store={edited}
+                    role={edited}
                 />
-                <DataTable<Store>
+                <DataTable<Role>
                     loading={loading}
-                    exportFileName={'Store'}
+                    exportFileName={'Role'}
+                    onMultiDelete={(async (items) => {
+                        try {
+                            enqueueSnackbar(await RoleService
+                                .deleteMany(Repository.token, items.filter(e => !!e.slug).map(e => e.slug || '')),
+                                { variant: 'success' });
+                            loadData();
+                        } catch (e) {
+                            enqueueSnackbar(e.toString(), { variant: 'error' });
+                        }
+                    })}
                     onEdit={async (item) => {
-                        if (!item.id) { return; }
+                        if (!item.slug) { return; }
                         setLoading(true);
-                        StoreService.get(Repository.token, item.id)
+                        RoleService.get(Repository.token, item.slug)
                             .then(async (data) => {
                                 setEdited(data);
                                 setShowForm(true);
@@ -58,17 +67,17 @@ export function StorePage() {
                     }}
                     onDelete={async (item) => {
                         try {
-                            if (!item.id) { return; }
-                            enqueueSnackbar(await StoreService
-                                .delete(Repository.token, item.id),
+                            if (!item.slug) { return; }
+                            enqueueSnackbar(await RoleService
+                                .delete(Repository.token, item.slug),
                                 { variant: 'success' });
                             loadData();
                         } catch (e) {
                             enqueueSnackbar(e.toString(), { variant: 'error' });
                         }
                     }}
-                    data={stores}
-                    autoSizeColumns={['name', 'hotline', 'address', 'closeTime', 'openTime', 'amountDishes', 'logo']}
+                    data={roles}
+                    autoSizeColumns={['name', 'slug', 'description', 'level']}
                     onCreate={() => {
                         setShowForm(true);
                         setEdited(undefined);
@@ -81,27 +90,21 @@ export function StorePage() {
                     }}
                     columnDefs={[
                         {
-                            headerName: 'Logo', field: 'logo', sortable: false, filter: false,
-                            cellClass: 'grid-cell-center', suppressAutoSize: true,
-                            cellRenderer: 'AgImage', tooltipComponent: 'AgImageTooltip',
-                            tooltipValueGetter: (params) => params.value
+                            headerName: 'Slug', field: 'slug', cellClass: 'grid-cell-center', tooltipField: 'name',
+                            checkboxSelection: true, headerCheckboxSelection: true,
+                            headerCheckboxSelectionFilteredOnly: true
                         }, {
-                            headerName: 'Name', field: 'name', cellClass: 'grid-cell-center', tooltipField: 'name',
+                            headerName: 'Name', field: 'name', minWidth: 100, cellClass: 'grid-cell-center',
+                            tooltipField: 'name',
                         }, {
-                            headerName: 'Hotline', field: 'hotline', minWidth: 100, cellClass: 'grid-cell-center',
-                            tooltipField: 'hotline',
+                            headerName: 'Description', field: 'description', cellClass: 'grid-cell-center',
+                            tooltipField: 'description', minWidth: 100,
                         }, {
-                            headerName: 'Address', field: 'address', cellClass: 'grid-cell-center',
-                            tooltipField: 'address',
+                            headerName: 'Level', field: 'level', cellClass: 'grid-cell-center', minWidth: 100
                         }, {
-                            headerName: 'Open Time', field: 'openTime', cellClass: 'grid-cell-center',
-                            cellRenderer: (params) => params.value ? moment(params.value).format('HH:mm') : ''
-                        }, {
-                            headerName: 'Close Time', field: 'closeTime', cellClass: 'grid-cell-center',
-                            cellRenderer: (params) => params.value ? moment(params.value).format('HH:mm') : ''
-                        }, {
-                            headerName: 'Dishes', field: 'amountDishes', cellClass: 'grid-cell-center',
-                            cellRenderer: (params) => (params.value || 0) + ' dishes'
+                            headerName: 'Permissions', field: 'permissions', cellClass: 'grid-cell-center',
+                            cellRenderer: (params) => params.value ? params.value.join(', ') : '',
+                            tooltipField: 'permissions'
                         }
                     ]}
                 />

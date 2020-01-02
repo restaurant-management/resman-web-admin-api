@@ -280,7 +280,9 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                         })(
                             <Select mode='multiple' placeholder='Stores'>
                                 {stores
-                                    .map(e => e.id ? <Option key={e.id.toString()} value={e.id}>{e.name}</Option> : null)}
+                                    .map(e => e.id
+                                        ? <Option key={e.id.toString()} value={e.id}>{e.name}</Option>
+                                        : null)}
                             </Select>
                         )}
                     </Form.Item>

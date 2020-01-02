@@ -78,7 +78,6 @@ export function CustomerPage() {
                     }}
                     data={customers}
                     autoSizeColumns={['username', 'birthday', 'email', 'avatar', 'phoneNumber']}
-                    header={(<h1><strong>User</strong> Table</h1>)}
                     onCreate={() => {
                         setShowCreateModal(true);
                         setEdited(undefined);

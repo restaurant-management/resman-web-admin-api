@@ -54,4 +54,14 @@ export class RoleResolver {
 
         return __('role.delete_success');
     }
+
+    @Mutation(() => String, { description: 'For admin' })
+    @Authorized([Permission.role.delete])
+    public async deleteRoles(
+        @Arg('slugs', () => [String], { nullable: true }) slugs: string[]
+    ) {
+        await RoleService.multiDelete(slugs.map(e => ({slug: e})));
+
+        return __('role.delete_success');
+    }
 }
