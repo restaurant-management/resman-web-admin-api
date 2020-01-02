@@ -3,20 +3,15 @@ import Image from 'material-ui-image';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../App';
-import { User } from '../../models/user';
-
-export interface QuickActionsProp {
-    user: User;
-}
 
 export interface QuickActionsState {
     setting?: { background: string };
     openUserBlock: boolean;
 }
 
-export class QuickActions extends Component<QuickActionsProp, QuickActionsState> {
+export class QuickActions extends Component<any, QuickActionsState> {
 
-    constructor(props: QuickActionsProp) {
+    constructor(props: any) {
         super(props);
         this.state = {
             openUserBlock: false,

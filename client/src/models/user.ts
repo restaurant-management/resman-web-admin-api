@@ -5,7 +5,8 @@ export class User {
             ...jsonObject,
             roles: jsonObject.roles ? jsonObject.roles.map((e: any) => e.slug) : [],
             roleNames: jsonObject.roles ? jsonObject.roles.map((e: any) => e.name) : [],
-            storeIds: jsonObject.stores ? jsonObject.stores.map((e: any) => parseInt(e.id, 10)) : []
+            storeIds: jsonObject.stores ? jsonObject.stores.map((e: any) => parseInt(e.id, 10)) : [],
+            permissions: jsonObject.roles ? jsonObject.roles.map((e: any) => e.permissions).flat(1) : [],
         };
 
         return user;
@@ -24,4 +25,5 @@ export class User {
     public readonly birthday?: Date;
     public readonly address: string = '';
     public readonly storeIds: number[] = [];
+    public readonly permissions?: string[] = [];
 }

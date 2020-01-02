@@ -45,9 +45,7 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
 
         document.body.classList.add('bg-1');
         document.body.appendChild(VideoContent);
-    }
 
-    public componentDidMount() {
         LoadScriptFile('/assets/js/jquery.js');
         LoadScriptFile('/assets/js/bootstrap.min.js');
         LoadScriptFile('/assets/js/bootstrap-dropdown-multilevel.js');
@@ -62,6 +60,9 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
         LoadScriptFile('/assets/js/ag-grid-enterprise.min.js');
 
         LoadScriptFile('/assets/js/minimal.min.js');
+    }
+
+    public componentDidMount() {
         $(window).ready(() => {
             $('#loader').delay(500).fadeOut(300);
             $('.mask').delay(800).fadeOut(300);
@@ -77,8 +78,6 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
     }
 
     public render() {
-        const iconStyle = { lineHeight: '50px' };
-
         return (<ScaffoldContext.Provider value={this}>
             <div id={'wrap'}>
                 <LoadingIndicator show={this.state.loading} />
@@ -95,13 +94,10 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
                         <div className='pageheader'>
                             <h2>
                                 {this.props.icon && this.props.icon.search('fa-') < 0 ? (
-                                    <Icon type={this.props.icon} style={iconStyle} />
+                                    <Icon type={this.props.icon} />
                                 ) : (
-                                        <i
-                                            className={`fa ${this.props.icon ? this.props.icon : 'fa-file-o'}`}
-                                            style={iconStyle}
-                                        />
-                                    )}
+                                        <i className= {`fa ${this.props.icon ? this.props.icon : 'fa-file-o'}`}/>
+                            )}
                                 {` ${this.props.title} `}
                                 <span> {this.props.subTitle && `${this.props.subTitle}.`}</span>
                             </h2>

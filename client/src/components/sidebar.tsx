@@ -43,6 +43,12 @@ export default class SideBar extends Component {
                                 {` Customer`}
                             </Link>
                         </Li>
+                        <Li>
+                            <Link to='/roles'>
+                                <Icon type="safety" />
+                                {` Role`}
+                            </Link>
+                        </Li>
                     </ul>
 
                 </li>

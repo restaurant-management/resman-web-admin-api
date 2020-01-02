@@ -49,13 +49,35 @@ class Repository {
     }
 
     public async me() {
-        this._currentUser = await UserService.me(this.token);
+        if (!this._currentUser) {
+            try {
+                this._currentUser = await UserService.me(this.token);
+            } catch (e) {
+                console.log(e);
+                this.logout();
+
+                return;
+            }
+        }
 
         return this._currentUser;
     }
 
+    public author(permissions: string[]) {
+        if (this.currentUser && this.currentUser.permissions) {
+            for (const permission of permissions) {
+                if (this.currentUser.permissions.findIndex(e => e === permission) > -1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public async login(usernameOrEmail: string, password: string, remember: boolean = false) {
         const token = await UserService.login(usernameOrEmail, password);
+        await this.me();
 
         localStorage.setItem(StorageKey.AUTH_TOKEN, token);
         if (remember) {
@@ -63,12 +85,12 @@ class Repository {
             this._isRemember = true;
         }
 
-        this.me();
         this._isAuth = true;
     }
 
     public async logout() {
         this._isAuth = false;
+        this._currentUser = undefined;
         localStorage.removeItem(StorageKey.AUTH_TOKEN);
         localStorage.removeItem(StorageKey.AUTH_AT);
     }

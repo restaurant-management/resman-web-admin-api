@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { User } from '../../models/user';
 import SideBar from '../sidebar';
 import { QuickActions } from './quickActions';
 
@@ -29,12 +28,7 @@ export class Navbar extends Component {
                     </ul>
                     {/*/Page Refresh*/}
 
-                    {/*Search*/}
-                    <div className='search' id='main-search'>
-                        <i className='fa fa-search' /> <input type='text' placeholder='Search...' />
-                    </div>
-                    {/*/Search*/}
-                    <QuickActions user={User.fromJson({fullName: 'Hieren Lee', avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4'})} />
+                    <QuickActions />
                     <SideBar />
                 </div>
             </div>

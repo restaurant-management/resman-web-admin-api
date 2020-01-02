@@ -77,7 +77,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                 <div className='tile-header'>
                     <div className='row' style={{ paddingTop: 10 }}>
                         <div className='col-md-6'>
-                            {this.props.header}
+                            {this.props.header || (<h1><strong>{this.props.exportFileName}</strong> Table</h1>)}
                         </div>
                         <div className='col-md-4'>
                             <div style={{ float: 'right' }}>

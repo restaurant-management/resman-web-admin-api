@@ -31,6 +31,7 @@ export class GraphQuery {
                 roles {
                 slug
                     name
+                    permissions
                 }
                 stores {
                     id

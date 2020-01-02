@@ -25,7 +25,7 @@ export class Role extends BaseEntity {
     @Column({ type: 'int' })
     public level: number;
 
-    @Field(() => [String])
+    @Field(() => [String], { nullable: true })
     @Column('text', { array: true, nullable: true })
     public permissions: string[];
 
