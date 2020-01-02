@@ -108,9 +108,12 @@ export class CustomerResolver {
         @Arg('phoneNumber', { nullable: true }) phoneNumber: string,
         @Arg('fullName', { nullable: true }) fullName: string,
         @Arg('avatar', { nullable: true }) avatar: string,
-        @Arg('birthday', { nullable: true }) birthday: Date
+        @Arg('birthday', { nullable: true }) birthday: Date,
+        @Arg('addresses', () => [AddressInput], { nullable: true }) addresses: AddressInput[]
     ) {
-        return await CustomerService.create({ username, email, password, phoneNumber, fullName, avatar, birthday });
+        return await CustomerService.create({
+            username, email, password, phoneNumber, fullName, avatar, birthday, addresses
+        });
     }
 
     @Mutation(() => Customer, { description: 'For admin' })
@@ -135,6 +138,16 @@ export class CustomerResolver {
         @Arg('username') username: string
     ) {
         await CustomerService.delete(username);
+
+        return __('customer.delete_success');
+    }
+
+    @Mutation(() => String, { description: 'For admin' })
+    @Authorized([Permission.customer.delete])
+    public async deleteCustomers(
+        @Arg('usernames', () => [String]) usernames: string[]
+    ) {
+        await CustomerService.multiDelete(usernames);
 
         return __('customer.delete_success');
     }

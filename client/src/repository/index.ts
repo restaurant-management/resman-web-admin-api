@@ -22,6 +22,10 @@ class Repository {
         return Repository._getToken() || '';
     }
 
+    public get currentUser(): User | undefined {
+        return this._currentUser;
+    }
+
     private static _getToken() {
         return localStorage.getItem(StorageKey.AUTH_TOKEN);
     }
@@ -44,6 +48,12 @@ class Repository {
         }
     }
 
+    public async me() {
+        this._currentUser = await UserService.me(this.token);
+
+        return this._currentUser;
+    }
+
     public async login(usernameOrEmail: string, password: string, remember: boolean = false) {
         const token = await UserService.login(usernameOrEmail, password);
 
@@ -53,6 +63,7 @@ class Repository {
             this._isRemember = true;
         }
 
+        this.me();
         this._isAuth = true;
     }
 
@@ -80,4 +91,3 @@ class Repository {
 const repository = new Repository();
 
 export { repository as Repository };
-

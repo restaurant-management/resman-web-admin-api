@@ -2,6 +2,7 @@ import { ClickAwayListener, Grow } from '@material-ui/core';
 import Image from 'material-ui-image';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../../App';
 import { User } from '../../models/user';
 
 export interface QuickActionsProp {
@@ -11,7 +12,6 @@ export interface QuickActionsProp {
 export interface QuickActionsState {
     setting?: { background: string };
     openUserBlock: boolean;
-    openNotifyBlock: boolean;
 }
 
 export class QuickActions extends Component<QuickActionsProp, QuickActionsState> {
@@ -20,95 +20,33 @@ export class QuickActions extends Component<QuickActionsProp, QuickActionsState>
         super(props);
         this.state = {
             openUserBlock: false,
-            openNotifyBlock: false
         };
     }
 
     public render() {
         return (
             <ul className='nav navbar-nav quick-actions'>
-                {/* Notification Icon */}
-                <ClickAwayListener onClickAway={this._onClickAway.bind(this)}>
-                    <li className='dropdown divided open'>
-
-                        <Link
-                            className='dropdown-toggle button' to='#'
-                            onClick={() =>
-                                this.setState({ openNotifyBlock: !this.state.openNotifyBlock, openUserBlock: false })}
-                        >
-                            <i className='fa fa-bell' />
-                            <span className='label label-transparent-black'>3</span>
-                        </Link>
-
-                        <Grow in={this.state.openNotifyBlock} style={{ transformOrigin: '50% 0 0' }}>
-                            <ul className='dropdown-menu wide arrow nopadding bordered'>
-                                <li><h1>You have <strong>3</strong> new notifications</h1></li>
-
-                                <li>
-                                    <Link to='#'>
-                                        <span className='label label-green'><i className='fa fa-user' /></span>
-                                        New user registered.
-                                <span className='small'>18 mins</span>
-                                    </Link>
-                                </li>
-
-                                <li>
-                                    <Link to='#'>
-                                        <span className='label label-red'><i
-                                            className='fa fa-power-off' /></span>
-                                        Server down.
-                                <span className='small'>27 mins</span>
-                                    </Link>
-                                </li>
-
-                                <li>
-                                    <Link to='#'>
-                                        <span className='label label-orange'><i className='fa fa-plus' /></span>
-                                        New order.
-                                <span className='small'>36 mins</span>
-                                    </Link>
-                                </li>
-
-                                <li>
-                                    <Link to='#'>
-                                        <span className='label label-cyan'><i
-                                            className='fa fa-power-off' /></span>
-                                        Server restared.
-                                <span className='small'>45 mins</span>
-                                    </Link>
-                                </li>
-
-                                <li>
-                                    <Link to='#'>
-                                        <span className='label label-amethyst'>
-                                            <i className='fa fa-power-off' />
-                                        </span>
-                                        Server started.
-                                <span className='small'>50 mins</span>
-                                    </Link>
-                                </li>
-
-                                <li><Link to='#'>Check all notifications <i className='fa fa-angle-right' /></Link>
-                                </li>
-                            </ul>
-                        </Grow>
-                    </li>
-                </ClickAwayListener>
-                {/*END  Notification Icon */}
-
                 <ClickAwayListener onClickAway={this._onClickAway.bind(this)}>
                     <li className={`dropdown block user open`} id='current-user'>
-                        <div className='profile-photo'>
-                            <Image src={this.props.user.avatar || ''}/>
-                        </div>
-                        <Link
-                            className='dropdown-toggle options' to='#'
-                            onClick={() =>
-                                this.setState({ openUserBlock: !this.state.openUserBlock, openNotifyBlock: false })}
-                        >
-                            {`${this.props.user.fullName || this.props.user.username} `}
-                            <i className='fa fa-caret-down' />
-                        </Link>
+                        <UserContext.Consumer>
+                            {value => value && (
+                                <>
+                                    <div className='profile-photo'>
+                                        <Image src={value.avatar || ''} />
+                                    </div>
+                                    <Link
+                                        className='dropdown-toggle options' to='#'
+                                        onClick={() =>
+                                            this.setState({
+                                                openUserBlock: !this.state.openUserBlock
+                                            })}
+                                    >
+                                        {`${value.fullName || value.username} `}
+                                        <i className='fa fa-caret-down' />
+                                    </Link>
+                                </>
+                            )}
+                        </UserContext.Consumer>
 
                         <Grow in={this.state.openUserBlock} style={{ transformOrigin: '50% 0 0' }}>
                             <ul className='dropdown-menu arrow settings'>
@@ -220,6 +158,6 @@ export class QuickActions extends Component<QuickActionsProp, QuickActionsState>
     }
 
     private _onClickAway() {
-        this.setState({ openNotifyBlock: false, openUserBlock: false });
+        this.setState({ openUserBlock: false });
     }
 }
