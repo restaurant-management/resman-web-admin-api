@@ -169,7 +169,9 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                         )}
                     </Form.Item>
                     <Form.Item label='Full name' hasFeedback>
-                        {getFieldDecorator('fullName')(<Input placeholder={'Full name'} />)}
+                        {getFieldDecorator('fullName', {
+                            initialValue: user && user.fullName ? user.fullName : undefined
+                        })(<Input placeholder={'Full name'} />)}
                     </Form.Item>
                     <Form.Item label='Address' hasFeedback>
                         {getFieldDecorator('address', {
