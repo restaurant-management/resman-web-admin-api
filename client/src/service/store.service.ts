@@ -42,6 +42,8 @@ export class StoreService {
                         logo: logoUrl,
                         closeTime: store.closeTime ? moment(store.closeTime).format('HH:mm:ss') : undefined,
                         openTime: store.openTime ? moment(store.openTime).format('HH:mm:ss') : undefined,
+                        dishIds: store.storeDishes ? store.storeDishes.map(e => e.dishId) : undefined,
+                        dishPrices: store.storeDishes ? store.storeDishes.map(e => e.price) : undefined,
                     }
                 }, token
             });
@@ -73,6 +75,7 @@ export class StoreService {
                         logo: logoUrl || store.logo,
                         closeTime: store.closeTime ? moment(store.closeTime).format('HH:mm:ss') : undefined,
                         openTime: store.openTime ? moment(store.openTime).format('HH:mm:ss') : undefined,
+                        storeDishes: store.storeDishes ? store.storeDishes : undefined,
                     }
                 }, token
             });

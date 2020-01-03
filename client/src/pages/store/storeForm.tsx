@@ -1,11 +1,13 @@
-import { Button, Form, Icon, Input, Modal, Select, TimePicker, Upload } from 'antd';
+import { Button, Form, Icon, Input, InputNumber, Modal, Select, TimePicker, Upload } from 'antd';
 import { FormComponentProps } from 'antd/lib/form/Form';
 import moment, { Moment } from 'moment';
 import { useSnackbar } from 'notistack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import OverlayIndicator from '../../components/overlayIndicator';
+import { Dish } from '../../models/dish';
 import { Store } from '../../models/store';
 import { Repository } from '../../repository';
+import { DishService } from '../../service/dish.service';
 import { StoreService } from '../../service/store.service';
 import { Validator } from '../../utils/validator';
 
@@ -21,13 +23,22 @@ interface Props extends FormComponentProps {
 const storeForm = Form.create<Props>({ name: 'StoreForm' })(
     (props: Props) => {
         const { visible, onCancel, onCreate, store } = props;
-        const { getFieldDecorator } = props.form;
+        const { getFieldDecorator, getFieldValue } = props.form;
 
         const [loading, setLoading] = useState(false);
         const [logo, setLogo] = useState<File>();
+        const [dishes, setDishes] = useState<Dish[]>([]);
         const [imagePreview, setImagePreview] = useState<any>('');
         const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
         const { enqueueSnackbar } = useSnackbar();
+
+        useEffect(() => {
+            Promise.all([
+                DishService.getAll(Repository.token)
+            ]).then(([proDishes]) => {
+                setDishes(proDishes);
+            }).catch(e => console.log(e));
+        }, []);
 
         const handleSubmit = () => {
             props.form.validateFieldsAndScroll((err, values) => {
@@ -40,7 +51,11 @@ const storeForm = Form.create<Props>({ name: 'StoreForm' })(
                             address: values.address,
                             logoFile: logo,
                             openTime: values.openTime ? (values.openTime as Moment).toDate() : undefined,
-                            closeTime: values.closeTime ? (values.closeTime as Moment).toDate() : undefined
+                            closeTime: values.closeTime ? (values.closeTime as Moment).toDate() : undefined,
+                            storeDishes: values.dishIds.map((e: number, i: number) => ({
+                                dishId: e,
+                                price: values.dishPrices[i] || 0
+                            }))
                         }).then(() => {
                             enqueueSnackbar('Create Store success', { variant: 'success' });
                             setLoading(false);
@@ -63,7 +78,11 @@ const storeForm = Form.create<Props>({ name: 'StoreForm' })(
                             logoFile: logo,
                             logo: store.logo,
                             openTime: values.openTime ? (values.openTime as Moment).toDate() : undefined,
-                            closeTime: values.closeTime ? (values.closeTime as Moment).toDate() : undefined
+                            closeTime: values.closeTime ? (values.closeTime as Moment).toDate() : undefined,
+                            storeDishes: values.dishIds.filter((e: any) => !!e).map((e: number, i: number) => ({
+                                dishId: e,
+                                price: values.dishPrices[i] || 0
+                            }))
                         }).then(() => {
                             enqueueSnackbar('Edit Store success', { variant: 'success' });
                             setLoading(false);
@@ -84,6 +103,8 @@ const storeForm = Form.create<Props>({ name: 'StoreForm' })(
                 }
             });
         };
+
+        const storeDishes = store ? store.storeDishes : undefined;
 
         return (
             <Modal
@@ -203,6 +224,99 @@ const storeForm = Form.create<Props>({ name: 'StoreForm' })(
                                 </Button>
                             </Upload>
                         )}
+                    </Form.Item>
+                    {getFieldDecorator('storeDishKeys', {
+                        initialValue: store && store.storeDishes ? store.storeDishes.map((it, i) => i) : []
+                    })}
+                    {
+                        getFieldValue('storeDishKeys').map((item: number, index: number) => {
+                            const storeDish = storeDishes ? storeDishes[item] : undefined;
+
+                            return (
+                                <Form.Item
+                                    label={index === 0 ? 'Dishes' : ''}
+                                    required={false}
+                                    key={index}
+                                >
+                                    {getFieldDecorator(`dishIds[${item}]`, {
+                                        validateTrigger: ['onChange', 'onBlur'],
+                                        initialValue: storeDish ? storeDish.dishId : undefined,
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: 'Please select dish or delete this field.',
+                                            },
+                                        ],
+                                    })(<Select
+                                        placeholder='Store' style={{ width: '60%', marginRight: 10 }}
+                                        onChange={(value: number) => {
+                                            if (dishes) {
+                                                const dish = dishes.find(e => e.id === value);
+                                                if (dish) {
+                                                    props.form.setFieldsValue({
+                                                        [`dishPrices[${item}]`]: dish.defaultPrice,
+                                                    });
+                                                }
+                                            }
+                                        }}
+                                    >
+                                        {dishes
+                                            .map(e => e.id
+                                                ? <Option
+                                                    key={e.id.toString()} value={e.id}
+                                                    disabled={getFieldValue('dishIds') &&
+                                                        getFieldValue('dishIds').find((e2: any) => e2 === e.id)}
+                                                >
+                                                    {e.name}
+                                                </Option>
+                                                : null)}
+                                    </Select>)}
+                                    {getFieldDecorator(`dishPrices[${item}]`, {
+                                        validateTrigger: ['onChange', 'onBlur'],
+                                        initialValue: storeDish
+                                            ? (storeDish.price
+                                                ? storeDish.price
+                                                : (storeDish.dish && storeDish.dish.defaultPrice
+                                                    ? storeDish.dish.defaultPrice : 0))
+                                            : 0,
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: 'Please input money.',
+                                            },
+                                        ],
+                                    })(
+                                        <InputNumber
+                                            min={0} style={{ width: '30%', marginRight: 10 }} step={1000}
+                                            formatter={value => `${value} VNĐ`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                            parser={value => value ? value.replace(/\$\s?|(,*)/g, '') : 0}
+                                        />
+                                    )}
+                                    <Icon
+                                        className='dynamic-delete-button'
+                                        type='minus-circle-o'
+                                        onClick={() => {
+                                            const storeDishKeys: number[] = getFieldValue('storeDishKeys') || [];
+                                            props.form.setFieldsValue({
+                                                storeDishKeys: storeDishKeys.filter(key => key !== item),
+                                            });
+                                        }}
+                                    />
+                                </Form.Item>
+                            );
+                        })
+                    }
+                    <Form.Item>
+                        <Button type='dashed' style={{ width: '100%' }}
+                            onClick={() => {
+                                const storeDishKeys: number[] = getFieldValue('storeDishKeys') || [];
+                                props.form.setFieldsValue({
+                                    storeDishKeys: [...storeDishKeys, storeDishKeys.length]
+                                });
+                            }}
+                        >
+                            <Icon type='plus' />{` Add dish`}
+                        </Button>
                     </Form.Item>
                 </Form>
                 <Modal visible={showImagePreview} footer={null} onCancel={() => setShowImagePreview(false)}>

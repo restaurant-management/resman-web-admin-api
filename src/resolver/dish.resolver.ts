@@ -4,11 +4,12 @@ import { Dish } from '../entity/dish';
 import { Permission } from '../entity/permission';
 import { GraphCustomerContext } from '../lib/graphContext';
 import { CustomerAuthGraph } from '../middleware/customerAuth';
+import { UserAuthGraph } from '../middleware/userAuth';
 import { DishService } from '../service/dish.service';
 
 export class DishResolver {
-    @Query(() => [Dish], { description: 'For admin' })
-    @Authorized([Permission.dish.list])
+    @Query(() => [Dish], { description: 'For all user' })
+    @UseMiddleware(UserAuthGraph)
     public async dishes() {
         return await DishService.getAll({});
     }
@@ -64,7 +65,7 @@ export class DishResolver {
         return __('dish.delete_success');
     }
 
-    @Mutation(() => String, { description: 'For admin' })
+    @Mutation(() => String, { description: 'For customer' })
     @UseMiddleware(CustomerAuthGraph)
     public async favouriteDish(
         @Ctx() { payload }: GraphCustomerContext,
@@ -75,7 +76,7 @@ export class DishResolver {
         return __('dish.favourite_success');
     }
 
-    @Mutation(() => String, { description: 'For admin' })
+    @Mutation(() => String, { description: 'For customer' })
     @UseMiddleware(CustomerAuthGraph)
     public async unFavouriteDish(
         @Ctx() { payload }: GraphCustomerContext,

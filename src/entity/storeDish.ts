@@ -23,7 +23,7 @@ export class StoreDish extends BaseEntity {
     @PrimaryColumn()
     public dishId: number;
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ type: 'float', nullable: true })
     public price: number;
 }

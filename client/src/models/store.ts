@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { Dish } from './dish';
 
 export class Store {
 
@@ -9,6 +10,7 @@ export class Store {
             id: parseInt(jsonObject.id, 10),
             openTime: jsonObject.openTime ? moment(jsonObject.openTime, 'HH:mm:ss') : undefined,
             closeTime: jsonObject.closeTime ? moment(jsonObject.closeTime, 'HH:mm:ss') : undefined,
+            storeDishes: jsonObject.storeDishes
         };
 
         return store;
@@ -23,4 +25,9 @@ export class Store {
     public hotline: string = '';
     public logo?: string;
     public logoFile?: File;
+    public storeDishes?: Array<{
+        dishId?: number;
+        dish?: Dish;
+        price?: number;
+    }>;
 }

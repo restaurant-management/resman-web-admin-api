@@ -22,6 +22,16 @@ export class StoreQuery {
                 rating
                 openTime
                 closeTime
+                storeDishes {
+                    price
+                    dishId
+                    dish {
+                        id
+                        name
+                        defaultPrice
+                    }
+                    storeId
+                }
             }
         }
     `;
@@ -38,9 +48,9 @@ export class StoreQuery {
 
     public static editStore = gql`
         mutation editStore($id: Int!, $name: String, $hotline: String, $address: String, $closeTime: time, $openTime: time,
-                            $description: String, $logo: String) {
+                            $description: String, $logo: String, $storeDishes: [StoreDishInput!]) {
             editStore(id: $id, address: $address, closeTime: $closeTime, description: $description, hotline: $hotline,
-                        logo: $logo, openTime: $openTime, name: $name) {
+                        logo: $logo, openTime: $openTime, storeDishes: $storeDishes, name: $name) {
                 id
             }
         }
