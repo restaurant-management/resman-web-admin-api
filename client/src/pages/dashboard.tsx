@@ -1,37 +1,39 @@
-import { Backdrop, Modal, Slide } from '@material-ui/core';
-import moment from 'moment';
+import { Button, Icon, Input } from 'antd';
 import React, { Component } from 'react';
-import { DataTableColumn } from '../components/basicDatatable';
-import { DataTable } from '../components/dataTable';
+import Highlighter from 'react-highlight-words';
+import { AntDataTable } from '../components/antDataTable';
 import Scaffold from '../components/scaffold';
-import { User } from '../models/user';
 
 export default class DashBoard extends Component<any, any> {
 
-    public fakeData: User[] = [
+    public data = [
         {
-            uuid: '',
-            username: 'admin',
-            email: 'hienlh1298@gmail.com',
-            phoneNumber: '00000',
-            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
-            roles: [
-                'Administrator'
-            ],
-            birthday: new Date(1998, 1, 1),
-            address: 'HCM City',
-            storeIds: []
+            key: '1',
+            name: 'John Brown',
+            age: 32,
+            address: 'New York No. 1 Lake Park',
+        },
+        {
+            key: '2',
+            name: 'Joe Black',
+            age: 42,
+            address: 'London No. 1 Lake Park',
+        },
+        {
+            key: '3',
+            name: 'Jim Green',
+            age: 32,
+            address: 'Sidney No. 1 Lake Park',
+        },
+        {
+            key: '4',
+            name: 'Jim Red',
+            age: 32,
+            address: 'London No. 2 Lake Park',
         },
     ];
 
-    public fakeColumn: DataTableColumn[] = [
-        { id: 'username', label: 'Username', sortType: 'sort-alpha', textCenter: true },
-        { id: 'email', label: 'Email', sortType: 'sort-alpha' },
-        { id: 'avatar', label: 'Avatar', type: 'image', textCenter: true, sortType: 'no-sort', titleCenter: true },
-        { id: 'roles', label: 'Role', sortType: 'sort-alpha' },
-        { id: 'birthday', label: 'Birthday', sortType: 'sort-alpha', type: 'date' },
-        { id: 'address', label: 'Address', sortType: 'sort-alpha' },
-    ];
+    private searchInput: any;
 
     constructor(props: any) {
         super(props);
@@ -40,126 +42,101 @@ export default class DashBoard extends Component<any, any> {
         };
     }
 
+    public handleSearch = (selectedKeys: any, confirm: any, dataIndex: any) => {
+        confirm();
+        this.setState({
+            searchText: selectedKeys[0],
+            searchedColumn: dataIndex,
+        });
+    }
+
+    public handleReset = (clearFilters: any) => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    }
+
+    public getColumnSearchProps = (dataIndex: any) => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => {
+                        this.searchInput = node;
+                    }}
+                    placeholder={`Search ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Button
+                    type='primary'
+                    onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                    icon='search'
+                    size='small'
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    {'Search'}
+                </Button>
+                <Button onClick={() => this.handleReset(clearFilters)} size='small' style={{ width: 90 }}>
+                    {'Reset'}
+                </Button>
+            </div>
+        ),
+        filterIcon: (filtered: any) => (
+            <Icon type='search' style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+        onFilter: (value: any, record: any) =>
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+        onFilterDropdownVisibleChange: (visible: any) => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        },
+        render: (text: any) =>
+            this.state.searchedColumn === dataIndex ? (
+                <Highlighter
+                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    searchWords={[this.state.searchText]}
+                    autoEscape
+                    textToHighlight={text.toString()}
+                />
+            ) : (text),
+    })
+
     public render() {
+        const columns = [
+            {
+                title: 'Name',
+                dataIndex: 'name',
+                key: 'name',
+                width: '30%',
+                sorter: true,
+                ...this.getColumnSearchProps('name'),
+            },
+            {
+                title: 'Age',
+                dataIndex: 'age',
+                key: 'age',
+                width: '20%',
+                sorter: true,
+                ...this.getColumnSearchProps('age'),
+            },
+            {
+                title: 'Address',
+                dataIndex: 'address',
+                key: 'address',
+                sorter: true,
+                ...this.getColumnSearchProps('address'),
+            },
+        ];
+
         return <Scaffold title={'User manager'} subTitle={'Add, edit or delete user'}>
             <div className='row'>
                 <div className='col-md-12'>
-                    <Modal
-                        disableEnforceFocus
-                        open={this.state.showModal}
-                        onBackdropClick={() => this.setState({ showModal: false })}
-                        className='modal'
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            overflowY: 'auto'
-                        }}
-                        onClose={() => this.setState({ showModal: false })}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{ timeout: 500 }}
-                    >
-                        <Slide in={this.state.showModal} direction={'down'}>
-                            <div className='modal-content'>
-                                <div className='modal-header'>
-                                    <button type='button' className='close'
-                                        onClick={() => this.setState({ showModal: false })}>
-                                        Close
-                                    </button>
-                                    <h3 className='modal-title'>
-                                        <strong>Modal</strong> title
-                                        </h3>
-                                </div>
-                                <div className='modal-body'>
-                                    <form>
-
-                                        <div className='form-group'>
-                                            <label htmlFor='exampleInput'>Normal input field</label>
-                                            <input type='text' className='form-control' id='exampleInput' />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label htmlFor='passwordInput'>Password input field</label>
-                                            <input type='password' className='form-control' id='passwordInput' />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label htmlFor='placeholderInput'>Input with placeholder</label>
-                                            <input type='text' className='form-control' id='placeholderInput'
-                                                placeholder='This is a placeholder...' />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label>Normal textarea</label>
-                                            <textarea className='form-control' rows={3} />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label>Normal textarea</label>
-                                            <textarea className='form-control' rows={3} />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label>Normal textarea</label>
-                                            <textarea className='form-control' rows={3} />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label>Normal textarea</label>
-                                            <textarea className='form-control' rows={3} />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label>Normal textarea</label>
-                                            <textarea className='form-control' rows={3} />
-                                        </div>
-
-                                    </form>
-                                </div>
-                                <div className='modal-footer'>
-                                    <button className='btn btn-red' data-dismiss='modal' aria-hidden='true'>
-                                        Close
-                                    </button>
-                                    <button className='btn btn-green'>Save changes</button>
-                                </div>
-                            </div>
-                        </Slide>
-                    </Modal>
-
-                    <DataTable<User>
-                        exportFileName={'User'}
-                        onView={(item) => console.log(item)}
-                        onMultiDelete={(items => console.log(items))}
-                        data={this.fakeData}
-                        autoSizeColumns={['username', 'birthday', 'email', 'roles', 'avatar']}
-                        header={(<h1><strong>User</strong> Table</h1>)}
-                        onCreate={() => this.setState({ showModal: true })}
-                        columnDefs={[
-                            {
-                                headerName: 'Username', field: 'username',
-                                cellClass: 'grid-cell-center', checkboxSelection: true,
-                                headerCheckboxSelection: true,
-                                headerCheckboxSelectionFilteredOnly: true
-                            }, {
-                                headerName: 'Email', field: 'email'
-                            }, {
-                                headerName: 'Avatar', field: 'avatar', sortable: false, filter: false,
-                                cellClass: 'grid-cell-center', suppressAutoSize: true,
-                                cellRenderer: 'AgImage', tooltipComponent: 'AgImageTooltip',
-                                tooltip: (params) => params.value,
-                                tooltipValueGetter: (params) => params.value,
-                            }, {
-                                headerName: 'Roles', field: 'roles'
-                            }, {
-                                headerName: 'Birthday', field: 'birthday',
-                                cellClass: 'grid-cell-center',
-                                cellRenderer: (params) => moment(params.value).format('DD/MM/YYYY')
-                            }, {
-                                headerName: 'Address', field: 'address', minWidth: 100,
-                                tooltipField: 'address',
-                            }
-                        ]}
-                    />
+                    <AntDataTable data={this.data} columnDefs={columns} />
                 </div>
             </div>
         </Scaffold>;

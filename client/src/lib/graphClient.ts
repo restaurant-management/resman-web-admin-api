@@ -23,6 +23,9 @@ export class GraphClient {
             if (e.graphQLErrors && e.graphQLErrors.length > 0) {
                 throw e.graphQLErrors[0].message;
             } else if (e.networkError) {
+                if (e.networkError.result.message) {
+                    throw e.networkError.result.message;
+                }
                 throw e.networkError.result.errors[0].message;
             } else {
                 throw e.toString();

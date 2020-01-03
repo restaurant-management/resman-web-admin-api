@@ -89,13 +89,13 @@ class Repository {
 
     public async login(usernameOrEmail: string, password: string, remember: boolean = false) {
         const token = await UserService.login(usernameOrEmail, password);
-        await this.me(true);
 
         localStorage.setItem(StorageKey.AUTH_TOKEN, token);
         if (remember) {
             localStorage.setItem(StorageKey.AUTH_AT, new Date().toJSON());
             this._isRemember = true;
         }
+        await this.me(true);
 
         this._isAuth = true;
     }
