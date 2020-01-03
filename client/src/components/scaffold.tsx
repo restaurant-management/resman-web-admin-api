@@ -19,7 +19,6 @@ import '../assets/css/minimal.css';
 import '../assets/css/resman.scss';
 import LoadingIndicator from '../components/loadingIndicator';
 import { VideoContent } from '../components/videoContent';
-import { LoadScriptFile } from '../utils/loadScript';
 import { Breadcrumb } from './breadcrumb';
 import { Navbar } from './navbar/navbar';
 import { NotificationIndicator } from './notificationIndicator';
@@ -45,21 +44,6 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
 
         document.body.classList.add('bg-1');
         document.body.appendChild(VideoContent);
-
-        LoadScriptFile('/assets/js/jquery.js');
-        LoadScriptFile('/assets/js/bootstrap.min.js');
-        LoadScriptFile('/assets/js/bootstrap-dropdown-multilevel.js');
-        LoadScriptFile('/assets/js/jquery.mmenu.min.js');
-        LoadScriptFile('/assets/js/jquery.sparkline.min.js');
-        LoadScriptFile('/assets/js/jquery.nicescroll.min.js');
-        LoadScriptFile('/assets/js/jquery.animateNumbers.js');
-        LoadScriptFile('/assets/js/jquery.videobackground.js');
-        LoadScriptFile('/assets/js/jquery.blockUI.js');
-        LoadScriptFile('/assets/js/run_prettifyf793.js');
-
-        LoadScriptFile('/assets/js/ag-grid-enterprise.min.js');
-
-        LoadScriptFile('/assets/js/minimal.min.js');
     }
 
     public componentDidMount() {

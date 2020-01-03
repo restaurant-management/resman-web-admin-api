@@ -12,6 +12,7 @@ import BlankPage from './pages/blank-page';
 import Components from './pages/components';
 import { CustomerPage } from './pages/customer/customer';
 import DashBoard from './pages/dashboard';
+import { DishPage } from './pages/dish/dish';
 import LogIn from './pages/login';
 import { Logout } from './pages/logout';
 import Page403 from './pages/page403';
@@ -22,6 +23,7 @@ import { StorePage } from './pages/store/store';
 import { UserPage } from './pages/user/user';
 import WelcomePage from './pages/welcomePage';
 import { Repository } from './repository';
+import { LoadScriptFile } from './utils/loadScript';
 
 // tslint:disable-next-line: variable-name
 export const UserContext = React.createContext(Repository.currentUser);
@@ -36,6 +38,21 @@ class App extends Component<any, { currentUser?: User }> {
     }
 
     public componentDidMount() {
+        LoadScriptFile('/assets/js/jquery.js');
+        LoadScriptFile('/assets/js/bootstrap.min.js');
+        LoadScriptFile('/assets/js/bootstrap-dropdown-multilevel.js');
+        LoadScriptFile('/assets/js/jquery.mmenu.min.js');
+        LoadScriptFile('/assets/js/jquery.sparkline.min.js');
+        LoadScriptFile('/assets/js/jquery.nicescroll.min.js');
+        LoadScriptFile('/assets/js/jquery.animateNumbers.js');
+        LoadScriptFile('/assets/js/jquery.videobackground.js');
+        LoadScriptFile('/assets/js/jquery.blockUI.js');
+        LoadScriptFile('/assets/js/run_prettifyf793.js');
+
+        LoadScriptFile('/assets/js/ag-grid-enterprise.min.js');
+
+        LoadScriptFile('/assets/js/minimal.min.js');
+
         Repository.me().then(value => this.setState({ currentUser: value }));
     }
 
@@ -71,6 +88,8 @@ class App extends Component<any, { currentUser?: User }> {
                                 <PrivateRoute
                                     permissions={[Permission.store.list]} path='/stores' component={StorePage} />
                                 <PrivateRoute permissions={[Permission.role.list]} path='/roles' component={RolePage} />
+                                <PrivateRoute
+                                    permissions={[Permission.dish.list]} path='/dishes' component={DishPage} />
                                 <Route path='/login' component={LogIn} />
                                 <Route path='/logout' component={Logout} />
                                 <Route path='/page500' component={Page500} />

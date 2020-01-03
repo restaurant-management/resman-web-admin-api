@@ -22,9 +22,9 @@ class Firebase {
         app.initializeApp(firebaseConfig);
     }
 
-    public async uploadImage(image: File, fileName: string, folder?: string) {
+    public async uploadImage(image: File | Blob, fileName: string, folder?: string, withTime: boolean = true) {
         const storageRef = this.storage.ref();
-        const name = fileName + '-' + new Date().toJSON();
+        const name = fileName + (withTime ? '-' + new Date().toJSON() : '');
         const imageRef = storageRef.child(`${folder ? folder + '/' : ''}${name}`);
 
         const snapshot = await imageRef.put(image);

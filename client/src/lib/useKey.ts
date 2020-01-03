@@ -5,7 +5,7 @@ export function useKey(key: string) {
     const [pressed, setPressed] = useState(false);
 
     // Does an event match the key we're watching?
-    const match = (event: KeyboardEvent) => key.toLowerCase() === event.key.toLowerCase();
+    const match = (event: KeyboardEvent) => (key || '').toLowerCase() === (event.key || ' ').toLowerCase();
 
     // Event handlers
     const onDown = (event: KeyboardEvent) => {

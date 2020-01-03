@@ -32,6 +32,12 @@ export default class SideBar extends Component {
                             </Link>
                         </Li>
                         <Li>
+                            <Link to='/dishes'>
+                                <Icon type='gold' />
+                                {` Dish`}
+                            </Link>
+                        </Li>
+                        <Li>
                             <Link to='/users'>
                                 <i className='fa fa-user' />
                                 {` User`}
@@ -45,7 +51,7 @@ export default class SideBar extends Component {
                         </Li>
                         <Li>
                             <Link to='/roles'>
-                                <Icon type="safety" />
+                                <Icon type='safety' />
                                 {` Role`}
                             </Link>
                         </Li>

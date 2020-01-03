@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Select } from 'antd';
+import { Form, Input, Modal, Select, InputNumber } from 'antd';
 import { FormComponentProps } from 'antd/lib/form/Form';
 import { useSnackbar } from 'notistack';
 import React, { useState } from 'react';
@@ -104,6 +104,16 @@ const roleForm = Form.create<Props>({ name: 'RoleForm' })(
                             initialValue: role ? role.slug : ''
                         })(
                             <Input placeholder='Name' disabled={!!role} />
+                        )}
+                    </Form.Item>
+                    <Form.Item label='Level' hasFeedback>
+                        {getFieldDecorator('level', {
+                            initialValue: role ? role.level : 1
+                        })(
+                            <InputNumber
+                                min={1} max={5} defaultValue={1} style={{ width: '100%' }}
+                                parser={value => parseInt(value ? value.toString() : '1', 10)}
+                            />
                         )}
                     </Form.Item>
                     <Form.Item label='Description' hasFeedback>

@@ -5,7 +5,8 @@ import { UserService } from '../service';
 
 enum StorageKey {
     AUTH_TOKEN = 'auth_token',
-    AUTH_AT = 'auth_at'
+    AUTH_AT = 'auth_at',
+    USER = 'current_user'
 }
 
 class Repository {
@@ -46,17 +47,28 @@ class Repository {
                 this.logout();
             }
         }
+
+        const local = localStorage.getItem(StorageKey.USER);
+        if (local) {
+            this._currentUser = User.fromJson(JSON.parse(local));
+        }
     }
 
-    public async me() {
+    public async me(forceReload?: boolean) {
         if (!this._currentUser) {
+            const local = localStorage.getItem(StorageKey.USER);
+            if (local) {
+                this._currentUser = User.fromJson(JSON.parse(local));
+            }
+        }
+
+        if (forceReload || !this._currentUser) {
             try {
                 this._currentUser = await UserService.me(this.token);
+                this._saveAuth({ user: this._currentUser });
             } catch (e) {
-                console.log(e);
                 this.logout();
-
-                return;
+                throw e;
             }
         }
 
@@ -64,9 +76,9 @@ class Repository {
     }
 
     public author(permissions: string[]) {
-        if (this.currentUser && this.currentUser.permissions) {
+        if (this._currentUser && this._currentUser.permissions) {
             for (const permission of permissions) {
-                if (this.currentUser.permissions.findIndex(e => e === permission) > -1) {
+                if (this._currentUser.permissions.findIndex(e => e === permission) > -1) {
                     return true;
                 }
             }
@@ -77,7 +89,7 @@ class Repository {
 
     public async login(usernameOrEmail: string, password: string, remember: boolean = false) {
         const token = await UserService.login(usernameOrEmail, password);
-        await this.me();
+        await this.me(true);
 
         localStorage.setItem(StorageKey.AUTH_TOKEN, token);
         if (remember) {
@@ -91,8 +103,7 @@ class Repository {
     public async logout() {
         this._isAuth = false;
         this._currentUser = undefined;
-        localStorage.removeItem(StorageKey.AUTH_TOKEN);
-        localStorage.removeItem(StorageKey.AUTH_AT);
+        this._removeCache();
     }
 
     public async getAllUser() {
@@ -107,6 +118,23 @@ class Repository {
 
     public async createUser(user: User) {
         await UserService.createUser(this.token, user);
+    }
+
+    private _saveAuth(data: { token?: string, user?: User }) {
+        if (data.token) {
+            localStorage.setItem(StorageKey.AUTH_AT, new Date().toJSON());
+            localStorage.setItem(StorageKey.AUTH_TOKEN, data.token);
+        }
+
+        if (data.user) {
+            localStorage.setItem(StorageKey.USER, JSON.stringify(data.user));
+        }
+    }
+
+    private _removeCache() {
+        localStorage.removeItem(StorageKey.AUTH_TOKEN);
+        localStorage.removeItem(StorageKey.AUTH_AT);
+        localStorage.removeItem(StorageKey.USER);
     }
 }
 

@@ -54,6 +54,15 @@ class DishService {
         if (result.affected < 1) { throw new Error(__('dish.delete_fail')); }
     }
 
+    public async deleteMany(ids: number[]) {
+        try {
+            await Promise.all(
+                ids.map(id => this.delete(id))
+            );
+        // tslint:disable-next-line: no-empty
+        } catch (_) { }
+    }
+
     public async getOne(id: number) {
         const dish = await Dish.findOne(id);
 

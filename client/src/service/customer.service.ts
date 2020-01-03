@@ -52,7 +52,6 @@ export class CustomerService {
             }
             throw e;
         }
-
     }
 
     public static async editCustomer(token: string, customer: Customer) {

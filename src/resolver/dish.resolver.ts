@@ -55,6 +55,16 @@ export class DishResolver {
     }
 
     @Mutation(() => String, { description: 'For admin' })
+    @Authorized([Permission.dish.delete])
+    public async deleteDishes(
+        @Arg('ids', () => [ID]) ids: number[],
+    ) {
+        await DishService.deleteMany(ids);
+
+        return __('dish.delete_success');
+    }
+
+    @Mutation(() => String, { description: 'For admin' })
     @UseMiddleware(CustomerAuthGraph)
     public async favouriteDish(
         @Ctx() { payload }: GraphCustomerContext,

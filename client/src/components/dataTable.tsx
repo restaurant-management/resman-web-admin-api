@@ -1,5 +1,6 @@
 import { AllCommunityModules, ColDef, ColGroupDef, GridOptions } from '@ag-grid-community/all-modules';
 import { AgGridReact } from '@ag-grid-community/react';
+import { Popconfirm } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
@@ -7,9 +8,10 @@ import ReactTooltip from 'react-tooltip';
 import { selectStyle } from '../utils/selectStyles';
 import { AgActions } from './AgExtensions/agActions';
 import { AgImage } from './AgExtensions/agImage';
+import { AgImages } from './AgExtensions/agImages';
 import { AgImageTooltip } from './AgExtensions/agImageTooltip';
+import { AgImagesTooltip } from './AgExtensions/agImagesTooltip';
 import OverlayIndicator from './overlayIndicator';
-import { Popconfirm } from 'antd';
 
 interface DataTableProp<T> {
     loading?: boolean;
@@ -59,7 +61,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
             rowHeight: 32,
             sideBar: true,
             floatingFilter: true,
-            components: { AgImageTooltip },
+            components: { AgImageTooltip, AgImagesTooltip },
             suppressRowClickSelection: true,
             onFirstDataRendered: (params) => {
                 if (this.props.autoSizeColumns) {
@@ -187,7 +189,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                             })}
                             rowData={this.props.data}
                             modules={AllCommunityModules}
-                            frameworkComponents={{ AgActions, AgImage }}
+                            frameworkComponents={{ AgActions, AgImage, AgImages }}
                         />
                     </div>
                 </div>
