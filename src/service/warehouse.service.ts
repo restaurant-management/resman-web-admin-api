@@ -1,17 +1,26 @@
 import { __ } from 'i18n';
 import { DailyReport } from '../entity/dailyReport';
+import { User } from '../entity/user';
 import { Warehouse } from '../entity/warehouse';
 import { StoreService } from './store.service';
 
 class WarehouseService {
-    public async getAll(length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
-        const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
-        const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
-        const take = length;
+    public async getAll(options?: {
+        length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1',
+        user?: User
+    }) {
+        const order = options.orderId
+            ? { [options.orderId]: options.orderType === 'DESC' || options.orderType === '-1' ? -1 : 1 } : {};
+        const skip = (options.page - 1) * options.length >= 0 ? (options.page - 1) * options.length : 0;
+        const take = options.length;
 
-        const warehouse = await Warehouse.find({ take, skip, order });
+        const warehouses = await Warehouse.find({ take, skip, order });
 
-        return warehouse;
+        if (options.user) {
+            warehouses.filter(e => options.user.warehouses.find(e2 => e2.id.toString() === e.id.toString()));
+        }
+
+        return warehouses;
     }
 
     public async create(data: {
@@ -70,6 +79,15 @@ class WarehouseService {
         }
 
         await warehouse.remove();
+    }
+
+    public async deleteMany(ids: number[]) {
+        try {
+            await Promise.all(
+                ids.map(id => this.delete(id))
+            );
+        // tslint:disable-next-line: no-empty
+        } catch (_) { }
     }
 
     public async getOne(id: number, options?: {

@@ -11,6 +11,7 @@ import { Repository } from '../../repository';
 import { UserService } from '../../service';
 import { RoleService } from '../../service/role.service';
 import { StoreService } from '../../service/store.service';
+import { WarehouseService } from '../../service/warehouse.service';
 import { Validator } from '../../utils/validator';
 
 const { Option } = Select;
@@ -30,18 +31,22 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
         const [loading, setLoading] = useState(false);
         const [roles, setRoles] = useState<Role[]>([]);
         const [stores, setStores] = useState<Store[]>([]);
+        const [warehouses, setWarehouses] = useState<Store[]>([]);
         const [avatar, setAvatar] = useState<File>();
         const [imagePreview, setImagePreview] = useState<any>('');
         const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
         const { enqueueSnackbar } = useSnackbar();
 
         useEffect(() => {
-            RoleService.getAll(Repository.token).then(value => {
-                setRoles(value);
-            });
-            StoreService.getAll().then(value => {
-                setStores(value);
-            });
+            Promise.all([
+                RoleService.getAll(Repository.token),
+                StoreService.getAll(),
+                WarehouseService.getAll(Repository.token)
+            ]).then(([proRoles, proStores, proWare]) => {
+                setRoles(proRoles);
+                setStores(proStores);
+                setWarehouses(proWare);
+            }).catch(e => console.log(e));
         }, []);
 
         const handleSubmit = () => {
@@ -59,7 +64,8 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                             birthday: (values.birthday as Moment).toDate(),
                             avatarFile: avatar,
                             roles: values.roles,
-                            storeIds: values.stores
+                            storeIds: values.stores,
+                            warehouseIds: values.warehouses,
                         }).then(() => {
                             enqueueSnackbar('Create user success', { variant: 'success' });
                             setLoading(false);
@@ -87,7 +93,8 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                             avatar: user.avatar,
                             avatarFile: avatar,
                             roles: values.roles,
-                            storeIds: values.stores
+                            storeIds: values.stores,
+                            warehouseIds: values.warehouses,
                         }).then(() => {
                             enqueueSnackbar('Edit user success', { variant: 'success' });
                             setLoading(false);
@@ -280,6 +287,18 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
                         })(
                             <Select mode='multiple' placeholder='Stores'>
                                 {stores
+                                    .map(e => e.id
+                                        ? <Option key={e.id.toString()} value={e.id}>{e.name}</Option>
+                                        : null)}
+                            </Select>
+                        )}
+                    </Form.Item>
+                    <Form.Item label='Warehouses' hasFeedback>
+                        {getFieldDecorator('warehouses', {
+                            initialValue: user && user.warehouseIds ? user.warehouseIds : undefined,
+                        })(
+                            <Select mode='multiple' placeholder='Warehouses'>
+                                {warehouses
                                     .map(e => e.id
                                         ? <Option key={e.id.toString()} value={e.id}>{e.name}</Option>
                                         : null)}

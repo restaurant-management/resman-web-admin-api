@@ -8,6 +8,14 @@ import { UserAuthGraph } from '../middleware/userAuth';
 import { WarehouseService } from '../service/warehouse.service';
 
 export class WarehouseResolver {
+    @Query(() => [Warehouse])
+    @UseMiddleware(UserAuthGraph)
+    public async warehouses(
+        @Ctx() { payload }: GraphUserContext
+    ) {
+        return await WarehouseService.getAll({ user: payload.user });
+    }
+
     @Query(() => Warehouse)
     @UseMiddleware(UserAuthGraph)
     public async getWarehouse(
@@ -59,6 +67,16 @@ export class WarehouseResolver {
         @Arg('id', () => ID) id: number
     ) {
         await WarehouseService.delete(id);
+
+        return __('warehouse.delete_success');
+    }
+
+    @Mutation(() => String)
+    @Authorized([Permission.warehouse.delete])
+    public async deleteWarehouses(
+        @Arg('ids', () => [ID]) ids: number[]
+    ) {
+        await WarehouseService.deleteMany(ids);
 
         return __('warehouse.delete_success');
     }

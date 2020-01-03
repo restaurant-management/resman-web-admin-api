@@ -45,7 +45,7 @@ class App extends Component<any, { currentUser?: User }> {
         LoadScriptFile('/assets/js/bootstrap-dropdown-multilevel.js');
         LoadScriptFile('/assets/js/jquery.mmenu.min.js');
         LoadScriptFile('/assets/js/jquery.sparkline.min.js');
-        LoadScriptFile('/assets/js/jquery.nicescroll.min.js');
+        // LoadScriptFile('/assets/js/jquery.nicescroll.min.js');
         LoadScriptFile('/assets/js/jquery.animateNumbers.js');
         LoadScriptFile('/assets/js/jquery.videobackground.js');
         LoadScriptFile('/assets/js/jquery.blockUI.js');

@@ -17,12 +17,14 @@ export class GraphClient {
         query: QueryOptions
     }) {
         try {
-            return (await GraphClient.create(data.token)
-                .query(data.query)).data;
+            return (await GraphClient.create(data.token).query(data.query)).data;
         } catch (e) {
             if (e.graphQLErrors && e.graphQLErrors.length > 0) {
                 throw e.graphQLErrors[0].message;
             } else if (e.networkError) {
+                if (e.networkError.result.message && e.networkError.result.message !== '') {
+                    throw e.networkError.result.message;
+                }
                 throw e.networkError.result.errors[0].message;
             } else {
                 throw e.toString();
@@ -35,13 +37,12 @@ export class GraphClient {
         mutation: MutationOptions
     }) {
         try {
-            return (await GraphClient.create(data.token)
-                .mutate(data.mutation)).data;
+            return (await GraphClient.create(data.token).mutate(data.mutation)).data;
         } catch (e) {
             if (e.graphQLErrors && e.graphQLErrors.length > 0) {
                 throw e.graphQLErrors[0].message;
             } else if (e.networkError) {
-                if (e.networkError.result.message) {
+                if (e.networkError.result.message && e.networkError.result.message !== '') {
                     throw e.networkError.result.message;
                 }
                 throw e.networkError.result.errors[0].message;

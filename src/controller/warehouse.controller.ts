@@ -4,7 +4,7 @@ import { WarehouseService } from '../service/warehouse.service';
 
 class WarehouseController implements ICrudController {
     public async list(req: Request, res: Response, next: NextFunction) {
-        WarehouseService.getAll(req.query.length, req.query.page, req.query.orderId, req.query.order).then(value => {
+        WarehouseService.getAll({...req.query, user: req['user']}).then(value => {
             return res.status(200).json(value);
         }).catch(e => next(e));
     }

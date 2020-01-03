@@ -80,14 +80,15 @@ export class UserResolver {
         @Arg('birthday', { nullable: true }) birthday: Date,
         @Arg('avatar', { nullable: true }) avatar: string,
         @Arg('roles', () => [String], { nullable: true }) roles: string[],
-        @Arg('storeIds', () => [Int], { nullable: true }) storeIds: number[]
+        @Arg('storeIds', () => [Int], { nullable: true }) storeIds: number[],
+        @Arg('warehouseIds', () => [Int], { nullable: true }) warehouseIds: number[],
     ) {
         if (!await UserService.checkRoleLevel(payload.user.id, roles)) {
             throw new Error(__('user.can_not_create_user_with_higher_level'));
         }
 
         return await UserService.create({
-            username, email, password, phoneNumber, fullName, address, avatar, roles, storeIds, birthday
+            username, email, password, phoneNumber, fullName, address, avatar, roles, storeIds, birthday, warehouseIds
         });
     }
 
@@ -103,14 +104,15 @@ export class UserResolver {
         @Arg('avatar', { nullable: true }) avatar: string,
         @Arg('birthday', { nullable: true }) birthday: Date,
         @Arg('roles', () => [String], { nullable: true }) roles: string[],
-        @Arg('storeIds', () => [Int], { nullable: true }) storeIds: number[]
+        @Arg('storeIds', () => [Int], { nullable: true }) storeIds: number[],
+        @Arg('warehouseIds', () => [Int], { nullable: true }) warehouseIds: number[],
     ) {
         if (!(await UserService.checkRoleLevel(payload.user.id, roles))) {
             throw new Error(__('user.can_not_create_user_with_higher_level'));
         }
 
         return await UserService.edit(username, payload.user, {
-            password, phoneNumber, fullName, address, avatar, roles, storeIds, birthday
+            password, phoneNumber, fullName, address, avatar, roles, storeIds, birthday, warehouseIds
         });
     }
 

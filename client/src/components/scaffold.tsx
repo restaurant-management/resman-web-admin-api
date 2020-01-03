@@ -42,8 +42,8 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
             notificationVariant: null,
         };
 
-        document.body.classList.add('bg-1');
-        document.body.appendChild(VideoContent);
+        document.body.classList.add('bg-4');
+        // document.body.appendChild(VideoContent);
     }
 
     public componentDidMount() {

@@ -37,6 +37,10 @@ export class GraphQuery {
                     id
                     name
                 }
+                warehouses {
+                    id
+                    name
+                }
             }
         }
     `;
@@ -58,13 +62,17 @@ export class GraphQuery {
                 stores {
                     id
                 }
+                warehouses {
+                    id
+                    name
+                }
             }
         }
     `;
 
     public static createUser = gql`
         mutation createUser($address: String!, $email: String!, $password: String!, $phoneNumber: String!, $username: String!
-                            $storeIds: [Int!], $roles: [String!], $avatar: String, $birthday: DateTime, $fullName: String) {
+                $storeIds: [Int!], $roles: [String!], $avatar: String, $birthday: DateTime, $fullName: String, $warehouseIds: [Int!]) {
             createUser(
                 phoneNumber: $phoneNumber,
                 address: $address,
@@ -76,6 +84,7 @@ export class GraphQuery {
                 avatar: $avatar,
                 birthday: $birthday,
                 fullName: $fullName,
+                warehouseIds: $warehouseIds
             ) {
                 uuid
             }
@@ -83,7 +92,7 @@ export class GraphQuery {
     `;
 
     public static editUser = gql`
-        mutation editUser($address: String, $password: String, $phoneNumber: String, $username: String
+        mutation editUser($address: String, $password: String, $phoneNumber: String, $username: String, $warehouseIds: [Int!]
                             $storeIds: [Int!], $roles: [String!], $avatar: String, $birthday: DateTime, $fullName: String) {
             editUser(
                 username: $username,
@@ -95,6 +104,7 @@ export class GraphQuery {
                 avatar: $avatar,
                 birthday: $birthday,
                 fullName: $fullName,
+                warehouseIds: $warehouseIds,
             ) {
                 uuid
             }

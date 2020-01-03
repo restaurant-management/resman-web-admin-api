@@ -3,6 +3,7 @@ import { getConnection } from 'typeorm';
 import { Role } from '../entity/role';
 import { Store } from '../entity/store';
 import { User } from '../entity/user';
+import { Warehouse } from '../entity/warehouse';
 import { PasswordHandler } from '../helper/passwordHandler';
 import { AuthService } from './authService';
 import { StoreService } from './store.service';
@@ -102,7 +103,8 @@ class UserService {
 
     public async create(data: {
         username: string, email: string, password: string, phoneNumber: string, address: string,
-        fullName?: string, avatar?: string, birthday?: Date, roles?: string[], storeIds?: number[]
+        fullName?: string, avatar?: string, birthday?: Date, roles?: string[], storeIds?: number[],
+        warehouseIds?: number[],
     }) {
         if (!data.username || !data.email || !data.password || !data.phoneNumber) {
             throw new Error(__('error.missing_required_information'));
@@ -139,6 +141,14 @@ class UserService {
             }
         }
 
+        const listWarehouses: Warehouse[] = [];
+        if (data.warehouseIds) {
+            for (const item of data.warehouseIds) {
+                const wh = await WarehouseService.getOne(item);
+                listWarehouses.push(wh);
+            }
+        }
+
         const newUser = new User();
         newUser.username = data.username;
         newUser.fullName = data.fullName;
@@ -150,6 +160,7 @@ class UserService {
         newUser.address = data.address;
         newUser.roles = listRoles;
         newUser.stores = listStores;
+        newUser.warehouses = listWarehouses;
 
         const user = await newUser.save();
         if (!user) {
@@ -160,8 +171,8 @@ class UserService {
     }
 
     public async edit(username: string, editBy: User, data: {
-        password?: string, phoneNumber?: string, address?: string,
-        fullName?: string, avatar?: string, birthday?: Date, roles?: string[], storeIds?: number[]
+        password?: string, phoneNumber?: string, address?: string, storeIds?: number[]
+        fullName?: string, avatar?: string, birthday?: Date, roles?: string[], warehouseIds?: number[]
     }) {
         const user = await this.getOne({ username },
             { withRoles: true, withStores: true, withWarehouses: true });
@@ -211,6 +222,15 @@ class UserService {
             }
         }
 
+        let listWarehouses: Warehouse[] = user.warehouses;
+        if (data.warehouseIds) {
+            listWarehouses = [];
+            for (const item of data.warehouseIds) {
+                const wh = await WarehouseService.getOne(item);
+                listWarehouses.push(wh);
+            }
+        }
+
         if (data.password) {
             user.password = PasswordHandler.encode(data.password);
         }
@@ -231,6 +251,7 @@ class UserService {
         }
         user.roles = listRoles;
         user.stores = listStores;
+        user.warehouses = listWarehouses;
 
         await user.save();
 
@@ -260,7 +281,7 @@ class UserService {
             await Promise.all(
                 usernames.map(username => this.delete(username, deleteBy))
             );
-        // tslint:disable-next-line: no-empty
+            // tslint:disable-next-line: no-empty
         } catch (_) { }
     }
 
