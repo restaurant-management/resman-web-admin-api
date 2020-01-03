@@ -9,6 +9,9 @@ export class WarehouseQuery {
                 hotline
                 description
                 address
+                store {
+                    id name
+                }
             }
         }
     `;
@@ -25,6 +28,9 @@ export class WarehouseQuery {
                     quantity
                     stockId
                     warehouseId
+                }
+                store {
+                    id name
                 }
             }
         }

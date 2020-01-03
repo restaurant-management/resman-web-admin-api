@@ -21,7 +21,7 @@ export class GraphClient {
         } catch (e) {
             if (e.graphQLErrors && e.graphQLErrors.length > 0) {
                 throw e.graphQLErrors[0].message;
-            } else if (e.networkError) {
+            } else if (e.networkError && e.networkError.result) {
                 if (e.networkError.result.message && e.networkError.result.message !== '') {
                     throw e.networkError.result.message;
                 }

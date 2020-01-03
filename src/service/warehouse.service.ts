@@ -14,7 +14,7 @@ class WarehouseService {
         const skip = (options.page - 1) * options.length >= 0 ? (options.page - 1) * options.length : 0;
         const take = options.length;
 
-        const warehouses = await Warehouse.find({ take, skip, order });
+        const warehouses = await Warehouse.find({ take, skip, order, relations: ['store'] });
 
         if (options.user) {
             warehouses.filter(e => options.user.warehouses.find(e2 => e2.id.toString() === e.id.toString()));

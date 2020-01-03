@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Select, InputNumber } from 'antd';
+import { Form, Input, InputNumber, Modal, Select } from 'antd';
 import { FormComponentProps } from 'antd/lib/form/Form';
 import { useSnackbar } from 'notistack';
 import React, { useState } from 'react';
@@ -23,7 +23,6 @@ const roleForm = Form.create<Props>({ name: 'RoleForm' })(
         const { getFieldDecorator } = props.form;
 
         const [loading, setLoading] = useState(false);
-        const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
         const { enqueueSnackbar } = useSnackbar();
 
         const handleSubmit = () => {
@@ -147,3 +146,4 @@ const roleForm = Form.create<Props>({ name: 'RoleForm' })(
 );
 
 export { roleForm as RoleForm };
+

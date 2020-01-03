@@ -32,6 +32,12 @@ export default class SideBar extends Component {
                             </Link>
                         </Li>
                         <Li>
+                            <Link to='/warehouses'>
+                                <Icon type='database' />
+                                {` Warehouse`}
+                            </Link>
+                        </Li>
+                        <Li>
                             <Link to='/dishes'>
                                 <Icon type='gold' />
                                 {` Dish`}

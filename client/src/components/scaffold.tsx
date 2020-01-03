@@ -18,7 +18,6 @@ import '../assets/css/jquery.videoBackground.css';
 import '../assets/css/minimal.css';
 import '../assets/css/resman.scss';
 import LoadingIndicator from '../components/loadingIndicator';
-import { VideoContent } from '../components/videoContent';
 import { Breadcrumb } from './breadcrumb';
 import { Navbar } from './navbar/navbar';
 import { NotificationIndicator } from './notificationIndicator';

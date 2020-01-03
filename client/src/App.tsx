@@ -26,6 +26,7 @@ import { UserPage } from './pages/user/user';
 import WelcomePage from './pages/welcomePage';
 import { Repository } from './repository';
 import { LoadScriptFile } from './utils/loadScript';
+import { WarehousePage } from './pages/warehouse/warehouse';
 
 // tslint:disable-next-line: variable-name
 export const UserContext = React.createContext(Repository.currentUser);
@@ -87,6 +88,10 @@ class App extends Component<any, { currentUser?: User }> {
                                 />
                                 <PrivateRoute
                                     permissions={[Permission.store.list]} path='/stores' component={StorePage} />
+                                <PrivateRoute
+                                    permissions={[Permission.warehouse.list]} path='/warehouses'
+                                    component={WarehousePage}
+                                />
                                 <PrivateRoute permissions={[Permission.role.list]} path='/roles' component={RolePage} />
                                 <PrivateRoute
                                     permissions={[Permission.dish.list]} path='/dishes' component={DishPage} />

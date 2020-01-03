@@ -56,4 +56,15 @@ export class WarehouseService {
 
         return data ? data.deleteWarehouse : '';
     }
+
+    public static async deleteMany(token: string, ids: number[]): Promise<string> {
+        const data = await GraphClient.mutation({
+            mutation: {
+                mutation: WarehouseQuery.deleteWarehouses,
+                variables: { ids }
+            }, token
+        });
+
+        return data ? data.deleteWarehouses : '';
+    }
 }
