@@ -9,8 +9,8 @@ import { selectStyle } from '../utils/selectStyles';
 import { AgActions } from './AgExtensions/agActions';
 import { AgImage } from './AgExtensions/agImage';
 import { AgImages } from './AgExtensions/agImages';
-import { AgImageTooltip } from './AgExtensions/agImageTooltip';
 import { AgImagesTooltip } from './AgExtensions/agImagesTooltip';
+import { AgImageTooltip } from './AgExtensions/agImageTooltip';
 import OverlayIndicator from './overlayIndicator';
 
 interface DataTableProp<T> {
@@ -148,7 +148,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                 </div>
                 <div className='tile-widget'>
                     <div
-                        className='ag-theme-balham-dark'
+                        className='ag-theme-balham'
                         style={{
                             height: '100%',
                             width: '100%'

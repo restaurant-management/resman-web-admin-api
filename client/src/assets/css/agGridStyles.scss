@@ -21,18 +21,19 @@ $ag-range-selected-color-4: darken($ag-range-selected-color-1, 30%);
 $ag-icon-asc: '\f15d';
 $ag-icon-desc: '\f15e';
 
-.ag-theme-balham-dark {
+.ag-theme-balham {
     color: #fff !important;
     background-color: transparent !important;
     .ag-icon {
         // font-awesome Free has font-weight bold
         font-weight: bold;
+        color: #fff;
         &.ag-icon-checkbox-checked,
         &.ag-icon-checkbox-indeterminate,
         &.ag-icon-checkbox-unchecked {
             background-color: transparent;
             border-radius: 0;
-            color: $icon-color;
+            color: $icon-color !important;
         }
         font-family: 'FontAwesome' !important;
     }
@@ -145,17 +146,30 @@ $ag-icon-desc: '\f15e';
         transition: opacity 1s;
         background-color: white;
     }
-    
+
     .image-tooltip.ag-tooltip-hiding {
         opacity: 0;
     }
-    
+
     .image-tooltip p {
         margin: 5px;
         white-space: nowrap;
     }
-    
+
     .image-tooltip p:first-of-type {
         font-weight: bold;
+    }
+    .ag-paging-panel {
+        color: #fff;
+    }
+
+    .ag-ltr .ag-cell:not(.ag-cell-focus).ag-cell-first-right-pinned:not(.ag-cell-range-left),
+    .ag-ltr
+        .ag-cell.ag-cell-range-selected:not(.ag-cell-range-single-cell).ag-cell-first-right-pinned:not(.ag-cell-range-left),
+    .ag-ltr .ag-root:not(.ag-has-focus) .ag-cell.ag-cell-first-right-pinned:not(.ag-cell-range-left) {
+        border: 0px;
+    }
+    .ag-pinned-right-header {
+        border: 0px;
     }
 }

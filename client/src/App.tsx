@@ -1,4 +1,6 @@
 import { ApolloProvider } from '@apollo/react-hooks';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { SnackbarProvider } from 'notistack';
 import React, { Component } from 'react';
 import IdleTimer from 'react-idle-timer';
@@ -48,8 +50,6 @@ class App extends Component<any, { currentUser?: User }> {
         LoadScriptFile('/assets/js/jquery.videobackground.js');
         LoadScriptFile('/assets/js/jquery.blockUI.js');
         LoadScriptFile('/assets/js/run_prettifyf793.js');
-
-        LoadScriptFile('/assets/js/ag-grid-enterprise.min.js');
 
         LoadScriptFile('/assets/js/minimal.min.js');
 

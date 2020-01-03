@@ -17,6 +17,7 @@
     "@types/react-router-dom": "^5.1.0",
     "@types/react-scrollbar": "^0.5.1",
     "@types/react-tooltip": "^3.11.0",
+    "ag-grid-community": "^22.1.1",
     "antd": "^3.26.5",
     "apollo-boost": "^0.4.7",
     "bootstrap": "^4.4.1",
