@@ -51,6 +51,17 @@ class DailyDishService {
         });
     }
 
+    public async createMany(data: { day: Date, dishIds: number[], storeId: number, session?: string }) {
+        try {
+            await Promise.all(
+                data.dishIds.map(dishId => this.create({
+                    day: data.day, dishId, storeId: data.storeId, session: data.session
+                }))
+            );
+            // tslint:disable-next-line: no-empty
+        } catch (_) { }
+    }
+
     public async edit(day: Date, dishId: number, session: string, storeId: number, confirmByUsername?: string,
         confirmAt?: Date) {
         const dailyDish = await this.getOne({ day, dishId, session, storeId });
@@ -85,6 +96,17 @@ class DailyDishService {
 
         const dailyDish = await this.getOne(key);
         await dailyDish.remove();
+    }
+
+    public async deleteMany(key: { day: Date, dishIds: number[], session: string, storeId: number }) {
+        try {
+            await Promise.all(
+                key.dishIds.map(dishId => this.delete({
+                    day: key.day, dishId, storeId: key.storeId, session: key.session
+                }))
+            );
+            // tslint:disable-next-line: no-empty
+        } catch (_) { }
     }
 
     public async getOne(key: { day: Date, dishId: number, session: string, storeId: number }) {

@@ -38,6 +38,12 @@ export default class SideBar extends Component {
                             </Link>
                         </Li>
                         <Li>
+                            <Link to='/daily-dishes'>
+                                <Icon type='profile' />
+                                {` Daily Dish`}
+                            </Link>
+                        </Li>
+                        <Li>
                             <Link to='/dishes'>
                                 <Icon type='gold' />
                                 {` Dish`}

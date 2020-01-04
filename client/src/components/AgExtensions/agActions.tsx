@@ -1,5 +1,5 @@
 import { ICellRendererParams } from '@ag-grid-community/all-modules';
-import { Popconfirm } from 'antd';
+import { Popconfirm, Icon } from 'antd';
 import React, { Component } from 'react';
 
 interface AgActionsProp extends ICellRendererParams {
@@ -7,6 +7,9 @@ interface AgActionsProp extends ICellRendererParams {
     onEdit?: (data: any) => void;
     onDelete?: (data: any) => void;
     confirmDeleteTitle?: string;
+    editIcon?: string;
+    confirmEdit?: boolean;
+    confirmEditTitle?: string;
 }
 
 export class AgActions extends Component<AgActionsProp, any> {
@@ -29,17 +32,46 @@ export class AgActions extends Component<AgActionsProp, any> {
                         <i className='fa fa-eye' />
                     </button>
                 )}
-                <button
-                    className={`resman-btn resman-warning ${this.props.onView ? 'resman-no-border-radius' : 'resman-left-border-radius'}`}
-                    style={style}
-                    onClick={() => {
-                        if (this.props.onEdit) {
-                            this.props.onEdit(this.props.data);
-                        }
-                    }}
-                >
-                    <i className='fa fa-pencil' />
-                </button>
+                {this.props.confirmEdit ? (
+                    <Popconfirm
+                        placement='top'
+                        title={this.props.confirmEditTitle || 'Are you sure?'}
+                        onConfirm={() => {
+                            if (this.props.onEdit) {
+                                this.props.onEdit(this.props.data);
+                            }
+                        }}
+                        okText='Yes'
+                        cancelText='No'
+                    >
+                        <button
+                            className={`resman-btn resman-warning ${this.props.onView ? 'resman-no-border-radius' : 'resman-left-border-radius'}`}
+                            style={style}
+                        >
+                            {this.props.editIcon && this.props.editIcon.search('fa-') < 0 ? (
+                                <Icon type={this.props.editIcon} />
+                            ) : (
+                                    <i className={`fa ${this.props.editIcon ? this.props.editIcon : 'fa-pencil'}`} />
+                                )}
+                        </button>
+                    </Popconfirm>
+                ) : (
+                        <button
+                            className={`resman-btn resman-warning ${this.props.onView ? 'resman-no-border-radius' : 'resman-left-border-radius'}`}
+                            style={style}
+                            onClick={() => {
+                                if (this.props.onEdit) {
+                                    this.props.onEdit(this.props.data);
+                                }
+                            }}
+                        >
+                            {this.props.editIcon && this.props.editIcon.search('fa-') < 0 ? (
+                                <Icon type={this.props.editIcon} />
+                            ) : (
+                                    <i className={`fa ${this.props.editIcon ? this.props.editIcon : 'fa-pencil'}`} />
+                                )}
+                        </button>
+                    )}
                 <Popconfirm
                     placement='top'
                     title={this.props.confirmDeleteTitle || 'Are you sure?'}

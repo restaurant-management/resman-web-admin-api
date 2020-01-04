@@ -34,7 +34,7 @@ export class DailyDishResolver {
         return await DailyDishService.getOne({ day, storeId, dishId, session });
     }
 
-    @Mutation(() => [DailyDish], { description: 'For admin' })
+    @Mutation(() => String, { description: 'For admin' })
     @Authorized([Permission.dailyDish.create])
     public async addDailyDish(
         @Arg('day', () => dateScalar) day: Date,
@@ -42,13 +42,9 @@ export class DailyDishResolver {
         @Arg('storeId', () => ID) storeId: number,
         @Arg('session', () => DaySession, { nullable: true }) session: DaySession,
     ) {
-        const result: DailyDish[] = [];
+        await DailyDishService.createMany({ day, dishIds, storeId, session });
 
-        for (const dishId of dishIds) {
-            result.push(await DailyDishService.create({ day, dishId, storeId, session }));
-        }
-
-        return result;
+        return __('daily_dish.create_success');
     }
 
     @Mutation(() => String, { description: 'For admin' })
@@ -64,6 +60,19 @@ export class DailyDishResolver {
         return __('daily_dish.delete_success');
     }
 
+    @Mutation(() => String, { description: 'For admin' })
+    @Authorized([Permission.dailyDish.delete])
+    public async removeDailyDishes(
+        @Arg('day', () => dateScalar) day: Date,
+        @Arg('dishIds', () => [ID]) dishIds: number[],
+        @Arg('storeId', () => ID) storeId: number,
+        @Arg('session', () => DaySession, { nullable: true }) session: DaySession,
+    ) {
+        await DailyDishService.deleteMany({ day, dishIds, storeId, session: session || DaySession.None });
+
+        return __('daily_dish.delete_success');
+    }
+
     @Mutation(() => String, { description: 'For chef' })
     @UseMiddleware(AuthorRoleGraphMiddleware(['chef']))
     public async confirmOutOfStockDailyDish(
@@ -72,6 +81,19 @@ export class DailyDishResolver {
         @Arg('storeId', () => ID) storeId: number,
     ) {
         await DailyDishService.confirmOut(payload.user, dishId, storeId);
+
+        return __('daily_dish.confirm_out_of_stock_success');
+    }
+
+    @Mutation(() => String, { description: 'For chef' })
+    @Authorized([Permission.dailyDish.update])
+    public async confirmDailyDishForAdmin(
+        @Ctx() { payload }: GraphUserContext,
+        @Arg('day', () => dateScalar) day: Date,
+        @Arg('dishId', () => ID) dishId: number,
+        @Arg('storeId', () => ID) storeId: number,
+    ) {
+        await DailyDishService.edit(day, dishId, DaySession.None, storeId, payload.user.username, new Date());
 
         return __('daily_dish.confirm_out_of_stock_success');
     }

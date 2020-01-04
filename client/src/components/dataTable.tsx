@@ -22,6 +22,10 @@ interface DataTableProp<T> {
     exportFileName?: string;
     autoSizeColumns?: string[];
     header?: JSX.Element;
+    actions?: React.ReactNode[];
+    editButtonIcon?: string;
+    confirmEdit?: boolean;
+    confirmEditTitle?: string;
     onCreate?: () => void;
     onView?: (item: T) => void;
     onDelete?: (item: T) => void;
@@ -78,11 +82,12 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                 <ReactTooltip place='top' type='dark' effect='solid' />
                 <div className='tile-header'>
                     <div className='row' style={{ paddingTop: 10 }}>
-                        <div className='col-md-6'>
+                        <div className='col-md-4'>
                             {this.props.header || (<h1><strong>{this.props.exportFileName}</strong> Table</h1>)}
                         </div>
-                        <div className='col-md-4'>
+                        <div className='col-md-6'>
                             <div style={{ float: 'right' }}>
+                                {this.props.actions}
                                 <button
                                     data-tip='Export to CSV'
                                     onClick={this._export.bind(this)}
@@ -179,7 +184,10 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                                 cellRendererParams: {
                                     onView: this.props.onView,
                                     onEdit: this.props.onEdit,
-                                    onDelete: this.props.onDelete
+                                    onDelete: this.props.onDelete,
+                                    editIcon: this.props.editButtonIcon,
+                                    confirmEdit: this.props.confirmEdit,
+                                    confirmEditTitle: this.props.confirmEditTitle
                                 },
                                 pinned: 'right',
                                 filter: false,

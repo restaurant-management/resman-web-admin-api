@@ -9,17 +9,23 @@ import { StoreDishInput } from '../resolver/InputTypes/storeDishInput';
 import { DishService } from './dish.service';
 
 class StoreService {
-    public async getAll(length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
+    public async getAll(
+        user?: User, length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1'
+    ) {
         const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
         const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
         const take = length;
 
-        const stores = await Store.find({ take, skip, order, relations: ['storeDishes'] });
+        let stores = await Store.find({ take, skip, order, relations: ['storeDishes'] });
 
         for (const store of stores) {
             console.log(store.storeDishes);
             store['amountDishes'] = store.storeDishes.length;
             delete store.storeDishes;
+        }
+
+        if (user) {
+            stores = stores.filter(store => user.stores.find(store2 => store2.id === store.id));
         }
 
         return stores;

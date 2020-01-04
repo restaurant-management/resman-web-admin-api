@@ -1,7 +1,9 @@
 import { __ } from 'i18n';
-import { Arg, Authorized, Float, Int, Mutation, Query } from 'type-graphql';
+import { Arg, Authorized, Ctx, Float, Int, Mutation, Query, UseMiddleware } from 'type-graphql';
 import { Permission } from '../entity/permission';
 import { Store, timeScalar } from '../entity/store';
+import { GraphUserContext } from '../lib/graphContext';
+import { UserAuthGraph } from '../middleware/userAuth';
 import { StoreService } from '../service/store.service';
 import { StoreDishInput } from './InputTypes/storeDishInput';
 
@@ -17,6 +19,14 @@ export class StoreResolver {
         });
 
         return stores;
+    }
+
+    @Query(() => [Store])
+    @UseMiddleware(UserAuthGraph)
+    public async storesByUser(
+        @Ctx() { payload }: GraphUserContext,
+    ) {
+        return await StoreService.getAll(payload.user);
     }
 
     @Mutation(() => Store)

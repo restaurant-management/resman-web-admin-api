@@ -22,6 +22,7 @@ import Page404 from './pages/page404';
 import Page500 from './pages/page500';
 import { RolePage } from './pages/role/role';
 import { StorePage } from './pages/store/store';
+import { DailyDishPage } from './pages/dailyDish/dailyDish';
 import { UserPage } from './pages/user/user';
 import WelcomePage from './pages/welcomePage';
 import { Repository } from './repository';
@@ -95,6 +96,10 @@ class App extends Component<any, { currentUser?: User }> {
                                 <PrivateRoute permissions={[Permission.role.list]} path='/roles' component={RolePage} />
                                 <PrivateRoute
                                     permissions={[Permission.dish.list]} path='/dishes' component={DishPage} />
+                                <PrivateRoute
+                                    permissions={[Permission.dailyDish.list]} path='/daily-dishes'
+                                    component={DailyDishPage}
+                                />
                                 <Route path='/login' component={LogIn} />
                                 <Route path='/logout' component={Logout} />
                                 <Route path='/page500' component={Page500} />

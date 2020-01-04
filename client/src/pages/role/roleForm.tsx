@@ -146,4 +146,3 @@ const roleForm = Form.create<Props>({ name: 'RoleForm' })(
 );
 
 export { roleForm as RoleForm };
-

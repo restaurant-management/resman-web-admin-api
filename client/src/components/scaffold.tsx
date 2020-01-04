@@ -18,7 +18,6 @@ import '../assets/css/jquery.videoBackground.css';
 import '../assets/css/minimal.css';
 import '../assets/css/resman.scss';
 import LoadingIndicator from '../components/loadingIndicator';
-import { Breadcrumb } from './breadcrumb';
 import { Navbar } from './navbar/navbar';
 import { NotificationIndicator } from './notificationIndicator';
 
@@ -84,7 +83,7 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
                                 {` ${this.props.title} `}
                                 <span> {this.props.subTitle && `${this.props.subTitle}.`}</span>
                             </h2>
-                            <Breadcrumb />
+                            {/* <Breadcrumb /> */}
                         </div>
                         <div className='main'>
                             {this.props.children}

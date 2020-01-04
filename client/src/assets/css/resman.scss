@@ -147,3 +147,41 @@
 .ant-input {
     min-height: 37px !important;
 }
+
+.resman-select {
+    color: #fff;
+}
+
+.resman-select .ant-select-selection {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 0px;
+    height: 37px;
+}
+
+.resman-select .ant-select-selection__rendered {
+    line-height: 37px;
+}
+
+.resman-select .ant-select-arrow {
+    color: #fff;
+}
+
+.resman-date-picker {
+    color: #fff;
+    height: 32px;
+}
+
+.resman-date-picker .ant-input {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 0px;
+    color: #fff;
+    height: 32px;
+}
+
+.resman-date-picker .ant-calendar-picker-icon {
+    color: #fff;
+}
+
+.resman-date-picker .ant-calendar-picker-input .ant-input .ant-input-sm {
+    height: 32px;
+}

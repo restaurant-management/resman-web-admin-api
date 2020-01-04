@@ -183,11 +183,12 @@ const seedDish = async () => {
 
     // Add dish to store
 
-    if ((await StoreService.getOne(1, { withDishes: true })).storeDishes.length === 0) {
+    try {
         await StoreService.edit(1, {
             storeDishes: [{ dishId: 1 }, { dishId: 2 }, { dishId: 3 }, { dishId: 4 }, { dishId: 5 }]
         });
-    }
+    // tslint:disable-next-line: no-empty
+    } catch (e) { }
 };
 
 const seedDailyDish = async () => {
