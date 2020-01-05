@@ -42,6 +42,17 @@ export class UserService {
         return data.users.map((e: any) => User.fromJson(e));
     }
 
+    public static async getAllByRole(token: string, roleSlugs: string[]): Promise<User[]> {
+        const data = await GraphClient.query({
+            query: {
+                query: GraphQuery.usersByRole,
+                variables: { roleSlugs }
+            }, token
+        });
+
+        return data.usersByRole.map((e: any) => User.fromJson(e));
+    }
+
     public static async getUser(token: string, username: string): Promise<User> {
         const data = await GraphClient.query({
             query: {

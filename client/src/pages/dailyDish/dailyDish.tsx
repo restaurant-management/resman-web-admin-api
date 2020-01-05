@@ -36,7 +36,7 @@ export function DailyDishPage() {
 
     useEffect(() => {
         setLoading(true);
-        StoreService.getAll().then((proStores) => {
+        StoreService.getAllOfMe(Repository.token).then((proStores) => {
             setStores(proStores);
             setSelectedStore(proStores[0]);
 

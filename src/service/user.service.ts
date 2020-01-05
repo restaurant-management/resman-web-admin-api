@@ -91,12 +91,15 @@ class UserService {
         throw new Error(__('user.username_or_email_incorrect'));
     }
 
-    public async getAll(length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1') {
-        const order = orderId ? { [orderId]: orderType === 'DESC' || orderType === '-1' ? -1 : 1 } : {};
-        const skip = (page - 1) * length >= 0 ? (page - 1) * length : 0;
-        const take = length;
+    public async getAll(options?: {
+        length?: number, page?: number, orderId?: string, orderType?: 'ASC' | 'DESC' | '1' | '-1'
+    }) {
+        const order = options.orderId
+            ? { [options.orderId]: options.orderType === 'DESC' || options.orderType === '-1' ? -1 : 1 } : {};
+        const skip = (options.page - 1) * options.length >= 0 ? (options.page - 1) * options.length : 0;
+        const take = options.length;
 
-        const users = await User.find({ take, skip, order });
+        const users = await User.find({ take, skip, order, relations: ['roles'] });
 
         return users;
     }

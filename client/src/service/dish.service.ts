@@ -4,10 +4,11 @@ import { DishQuery } from '../lib/graphQueries/dish.query';
 import { Dish } from '../models/dish';
 
 export class DishService {
-    public static async getAll(token: string): Promise<Dish[]> {
+    public static async getAll(token: string, storeId?: number): Promise<Dish[]> {
         const data = await GraphClient.query({
             query: {
-                query: DishQuery.dishes
+                query: DishQuery.dishes,
+                variables: { storeId }
             }, token
         });
 

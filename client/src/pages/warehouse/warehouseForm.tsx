@@ -30,7 +30,7 @@ const warehouseForm = Form.create<Props>({ name: 'WarehouseForm' })(
 
         useEffect(() => {
             Promise.all([
-                StoreService.getAll()
+                StoreService.getAllOfMe(Repository.token)
             ]).then(([proStores]) => {
                 setStores(proStores);
             }).catch(e => console.log(e));

@@ -43,6 +43,15 @@ export class UserResolver {
         return await User.find({ relations: ['stores', 'roles'] });
     }
 
+    @Query(() => [User], { description: 'For admin' })
+    @Authorized([Permission.user.list, Permission.dish.create, Permission.dish.update])
+    public async usersByRole(
+        @Arg('roleSlugs', () => [String]) roleSlugs?: string[]) {
+        const users = await this.users();
+
+        return users.filter(e => e.roles.find(role => roleSlugs.find(roleSlug => roleSlug === role.slug)));
+    }
+
     @Query(() => User)
     @Authorized([Permission.user.list])
     public async getUser(

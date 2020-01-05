@@ -54,7 +54,7 @@ const storeForm = Form.create<Props>({ name: 'StoreForm' })(
                             closeTime: values.closeTime ? (values.closeTime as Moment).toDate() : undefined,
                             storeDishes: values.dishIds.map((e: number, i: number) => ({
                                 dishId: e,
-                                price: values.dishPrices[i] || 0
+                                price: parseFloat((values.dishPrices[i] || 0).toString())
                             }))
                         }).then(() => {
                             enqueueSnackbar('Create Store success', { variant: 'success' });
@@ -81,7 +81,7 @@ const storeForm = Form.create<Props>({ name: 'StoreForm' })(
                             closeTime: values.closeTime ? (values.closeTime as Moment).toDate() : undefined,
                             storeDishes: values.dishIds.filter((e: any) => !!e).map((e: number, i: number) => ({
                                 dishId: e,
-                                price: values.dishPrices[i] || 0
+                                price: parseFloat((values.dishPrices[i] || 0).toString())
                             }))
                         }).then(() => {
                             enqueueSnackbar('Edit Store success', { variant: 'success' });
@@ -248,7 +248,7 @@ const storeForm = Form.create<Props>({ name: 'StoreForm' })(
                                             },
                                         ],
                                     })(<Select
-                                        placeholder='Store' style={{ width: '60%', marginRight: 10 }}
+                                        placeholder='Dish' style={{ width: '60%', marginRight: 10 }}
                                         onChange={(value: number) => {
                                             if (dishes) {
                                                 const dish = dishes.find(e => e.id === value);
@@ -288,8 +288,6 @@ const storeForm = Form.create<Props>({ name: 'StoreForm' })(
                                     })(
                                         <InputNumber
                                             min={0} style={{ width: '30%', marginRight: 10 }} step={1000}
-                                            formatter={value => `${value} VNĐ`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                            parser={value => value ? value.replace(/\$\s?|(,*)/g, '') : 0}
                                         />
                                     )}
                                     <Icon

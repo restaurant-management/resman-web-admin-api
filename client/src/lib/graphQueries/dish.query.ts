@@ -2,13 +2,14 @@ import { gql } from 'apollo-boost';
 
 export class DishQuery {
     public static dishes = gql`
-        query dishes {
-            dishes {
+        query dishes($storeId: Int) {
+            dishes(storeId: $storeId) {
                 id
                 name
                 images
                 description
                 defaultPrice
+                price
             }
         }
     `;
@@ -21,6 +22,7 @@ export class DishQuery {
                 images
                 description
                 defaultPrice
+                price
             }
         }
     `;

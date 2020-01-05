@@ -18,4 +18,5 @@ export class Dish {
     public images?: string[];
     public uploadImages?: UploadFile[];
     public defaultPrice?: number;
+    public price?: number;
 }

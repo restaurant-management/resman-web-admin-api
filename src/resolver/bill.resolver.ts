@@ -1,7 +1,7 @@
 import { __ } from 'i18n';
 import moment from 'moment';
 import { Arg, Authorized, Ctx, Float, ID, Int, Mutation, Query, UseMiddleware } from 'type-graphql';
-import { Between } from 'typeorm';
+import { Between, FindConditions } from 'typeorm';
 import { Bill } from '../entity/bill';
 import { Permission } from '../entity/permission';
 import { onlyDate } from '../helper/onlyDate';
@@ -18,9 +18,26 @@ export class BillResolver {
     @UseMiddleware(UserAuthGraph)
     public async bills(
         @Ctx() { payload }: GraphUserContext,
+        @Arg('storeId', () => Int, { nullable: true }) storeId: number,
+        @Arg('startDay', { nullable: true }) startDay: Date,
+        @Arg('endDay', { nullable: true }) endDay: Date
     ) {
         if (Authorization(payload.user, [Permission.bill.list], false)) {
-            return await BillService.getAll(payload.user);
+            const where: FindConditions<Bill> = {};
+            if (storeId) {
+                where.store = { id: storeId };
+            }
+
+            const start = onlyDate(startDay || new Date());
+            const end = onlyDate(endDay || new Date());
+
+            if (start.getTime() !== end.getTime()) {
+                where.createAt = Between(start, end);
+            } else {
+                where.createAt = Between(start, moment(end).add(1, 'day').toDate());
+            }
+
+            return await BillService.getAll(payload.user, { where });
         }
 
         return await BillService.getAllByUser(payload.user);
@@ -29,7 +46,7 @@ export class BillResolver {
     @Query(() => AllBill, { description: 'Get all bill today for chef' })
     @UseMiddleware(AuthorRoleGraphMiddleware(['chef']))
     public async todayAllBillsByChef(
-        @Ctx() { payload }: GraphUserContext,
+        @Ctx() { payload }: GraphUserContext
     ) {
         return {
             bills: await BillService.getAll(payload.user, {
@@ -48,7 +65,7 @@ export class BillResolver {
     @Query(() => [Bill], { description: 'Get all bill today for staff' })
     @UseMiddleware(AuthorRoleGraphMiddleware(['staff']))
     public async todayAllBillsByStaff(
-        @Ctx() { payload }: GraphUserContext,
+        @Ctx() { payload }: GraphUserContext
     ) {
         return await BillService.getAll(payload.user, {
             where: {
@@ -83,7 +100,7 @@ export class BillResolver {
         @Arg('customerUuid', () => String, { nullable: true }) customerUuid: string,
         @Arg('discountCode', () => String, { nullable: true }) discountCode: string,
         @Arg('note', () => String, { nullable: true }) note: string,
-        @Arg('voucherCode', () => String, { nullable: true }) voucherCode: string,
+        @Arg('voucherCode', () => String, { nullable: true }) voucherCode: string
     ) {
         return await BillService.createWithRestrict({
             createByUuid: payload.user.uuid, tableNumber, dishIds, storeId, dishQuantities, customerUuid,
@@ -95,7 +112,7 @@ export class BillResolver {
     @UseMiddleware(AuthorRoleGraphMiddleware(['chef']))
     public async prepareBill(
         @Ctx() { payload }: GraphUserContext,
-        @Arg('id', () => ID) id: number,
+        @Arg('id', () => ID) id: number
     ) {
         return await BillService.prepareBill(id, { prepareByUuid: payload.user.uuid });
     }
@@ -105,7 +122,7 @@ export class BillResolver {
     public async preparedBillDish(
         @Ctx() { payload }: GraphUserContext,
         @Arg('id', () => ID) id: number,
-        @Arg('dishId', () => ID) dishId: number,
+        @Arg('dishId', () => ID) dishId: number
     ) {
         return await BillService.preparedBillDish(id, payload.user, dishId);
     }
@@ -115,7 +132,7 @@ export class BillResolver {
     public async deliveredBillDish(
         @Ctx() { payload }: GraphUserContext,
         @Arg('id', () => ID) id: number,
-        @Arg('dishId', () => ID) dishId: number,
+        @Arg('dishId', () => ID) dishId: number
     ) {
         return await BillService.deliveredBillDish(id, payload.user, dishId);
     }
@@ -126,7 +143,7 @@ export class BillResolver {
         @Ctx() { payload }: GraphUserContext,
         @Arg('id', () => ID) id: number,
         @Arg('collectValue', () => Float) collectValue: number,
-        @Arg('note', () => String) note: string,
+        @Arg('note', () => String) note: string
     ) {
         return await BillService.collectBill(id, { collectByUuid: payload.user.uuid, collectValue, note });
     }
@@ -135,7 +152,7 @@ export class BillResolver {
     @UseMiddleware(AuthorRoleGraphMiddleware(['staff']))
     public async assignCustomer(
         @Arg('id', () => ID) id: number,
-        @Arg('customerUuid', () => String) customerUuid: string,
+        @Arg('customerUuid', () => String) customerUuid: string
     ) {
         return await BillService.assignCustomer(id, { customerUuid });
     }
@@ -144,7 +161,7 @@ export class BillResolver {
     @UseMiddleware(AuthorRoleGraphMiddleware(['staff']))
     public async rateBill(
         @Arg('id', () => ID) id: number,
-        @Arg('rating', () => Float) rating: number,
+        @Arg('rating', () => Float) rating: number
     ) {
         return await BillService.rateBill(id, { rating });
     }
@@ -157,12 +174,12 @@ export class BillResolver {
         @Arg('dishIds', () => [ID]) dishIds: number[],
         @Arg('dishQuantities', () => [Int], { nullable: true }) dishQuantities: number[],
         @Arg('dishNotes', () => [String], { nullable: true }) dishNotes: string[],
-        @Arg('note', () => String, { nullable: true }) note: string,
+        @Arg('note', () => String, { nullable: true }) note: string
     ) {
         console.log(payload);
 
         return await BillService.changeDishes(id, {
-            updateByUuid: payload.user.uuid, dishIds, dishNotes, dishQuantities, note,
+            updateByUuid: payload.user.uuid, dishIds, dishNotes, dishQuantities, note
         });
     }
 
@@ -185,7 +202,7 @@ export class BillResolver {
         @Arg('createAt', { nullable: true }) createAt: Date,
         @Arg('prepareAt', { nullable: true }) prepareAt: Date,
         @Arg('prepareByUuid', () => String, { nullable: true }) prepareByUuid: string,
-        @Arg('rating', () => Float, { nullable: true }) rating: number,
+        @Arg('rating', () => Float, { nullable: true }) rating: number
     ) {
         return await BillService.create({
             createByUuid, tableNumber, dishIds, storeId, dishQuantities, customerUuid,
@@ -199,8 +216,8 @@ export class BillResolver {
     public async editBill(
         @Ctx() { payload }: GraphUserContext,
         @Arg('id', () => ID) id: number,
-        @Arg('tableNumber', () => Int) tableNumber: number,
-        @Arg('dishIds', () => [ID]) dishIds: number[],
+        @Arg('tableNumber', () => Int, { nullable: true }) tableNumber: number,
+        @Arg('dishIds', () => [ID], { nullable: true }) dishIds: number[],
         @Arg('dishQuantities', () => [Int], { nullable: true }) dishQuantities: number[],
         @Arg('customerUuid', () => String, { nullable: true }) customerUuid: string,
         @Arg('discountCode', () => String, { nullable: true }) discountCode: string,
@@ -212,7 +229,7 @@ export class BillResolver {
         @Arg('dishNotes', () => [String], { nullable: true }) dishNotes: string[],
         @Arg('prepareAt', { nullable: true }) prepareAt: Date,
         @Arg('prepareByUuid', () => String, { nullable: true }) prepareByUuid: string,
-        @Arg('rating', () => Float, { nullable: true }) rating: number,
+        @Arg('rating', () => Float, { nullable: true }) rating: number
     ) {
         return await BillService.edit(id, {
             updateByUuid: payload.user.uuid, tableNumber, dishIds, dishQuantities, customerUuid,

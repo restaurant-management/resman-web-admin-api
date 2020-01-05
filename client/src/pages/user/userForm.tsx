@@ -40,7 +40,7 @@ const userForm = Form.create<Props>({ name: 'UserForm' })(
         useEffect(() => {
             Promise.all([
                 RoleService.getAll(Repository.token),
-                StoreService.getAll(),
+                StoreService.getAllOfMe(Repository.token),
                 WarehouseService.getAll(Repository.token)
             ]).then(([proRoles, proStores, proWare]) => {
                 setRoles(proRoles);

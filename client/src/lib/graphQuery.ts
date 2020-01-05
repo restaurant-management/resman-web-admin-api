@@ -17,6 +17,16 @@ export class GraphQuery {
         }
     `;
 
+    public static usersByRole = gql`
+        query usersByRole($roleSlugs: [String!]!) {
+            usersByRole(roleSlugs: $roleSlugs) {
+                uuid username email avatar birthday phoneNumber address roles {
+                    name
+                }
+            }
+        }
+    `;
+
     public static meAsUser = gql`
         query meAsUser {
             meAsUser {

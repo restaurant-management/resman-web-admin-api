@@ -1,17 +1,27 @@
 import { __ } from 'i18n';
-import { Arg, Authorized, Ctx, Float, ID, Mutation, Query, UseMiddleware } from 'type-graphql';
+import { Arg, Authorized, Ctx, Float, ID, Int, Mutation, Query, UseMiddleware } from 'type-graphql';
 import { Dish } from '../entity/dish';
 import { Permission } from '../entity/permission';
 import { GraphCustomerContext } from '../lib/graphContext';
 import { CustomerAuthGraph } from '../middleware/customerAuth';
 import { UserAuthGraph } from '../middleware/userAuth';
 import { DishService } from '../service/dish.service';
+import { StoreService } from '../service/store.service';
 
 export class DishResolver {
     @Query(() => [Dish], { description: 'For all user' })
     @UseMiddleware(UserAuthGraph)
-    public async dishes() {
-        return await DishService.getAll({});
+    public async dishes(
+        @Arg('storeId', () => Int, { nullable: true }) storeId: number
+    ) {
+        if (!storeId) {
+            return await DishService.getAll({});
+        } else {
+            return (await StoreService.getOne(storeId, { withDishes: true })).storeDishes.map(e => ({
+                ...e.dish,
+                price: e.price
+            }));
+        }
     }
 
     @Query(() => Dish, { description: 'For admin' })

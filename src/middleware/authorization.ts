@@ -44,6 +44,7 @@ const authorStoreMiddleware = (substitutePermissions: string[]) => {
     ];
 };
 
+// authorization OR
 const authorization = (currentUser: User, requiredPermissions: string[], throwError: boolean = true,
     errorType: 'normal' | 'http' = 'http') => {
 
@@ -66,16 +67,16 @@ const authorization = (currentUser: User, requiredPermissions: string[], throwEr
     });
 
     for (const permission of requiredPermissions) {
-        if (!permissions.find(p => permission === p)) {
-            if (throwError) {
-                if (errorType === 'http') {
-                    throw new HttpError(401, __('authentication.unauthorized'));
-                } else {
-                    throw new Error(__('authentication.unauthorized'));
-                }
-            }
+        if (permissions.find(p => permission === p)) {
+            return true;
+        }
 
-            return false;
+        if (throwError) {
+            if (errorType === 'http') {
+                throw new HttpError(401, __('authentication.unauthorized'));
+            } else {
+                throw new Error(__('authentication.unauthorized'));
+            }
         }
     }
 

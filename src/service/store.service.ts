@@ -24,7 +24,7 @@ class StoreService {
             delete store.storeDishes;
         }
 
-        if (user) {
+        if (user && !Authorization(user, [Permission.store.list], false)) {
             stores = stores.filter(store => user.stores.find(store2 => store2.id === store.id));
         }
 

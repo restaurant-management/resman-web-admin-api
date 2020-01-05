@@ -168,20 +168,19 @@
 
 .resman-date-picker {
     color: #fff;
-    height: 32px;
 }
 
 .resman-date-picker .ant-input {
     background-color: rgba(0, 0, 0, 0.3);
     border: 0px;
     color: #fff;
-    height: 32px;
 }
 
 .resman-date-picker .ant-calendar-picker-icon {
     color: #fff;
 }
 
-.resman-date-picker .ant-calendar-picker-input .ant-input .ant-input-sm {
-    height: 32px;
+.resman-date-picker .ant-calendar-range-picker-separator {
+    color: #fff;
+    vertical-align: baseline;
 }

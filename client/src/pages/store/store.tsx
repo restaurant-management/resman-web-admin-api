@@ -18,7 +18,7 @@ export function StorePage() {
 
     const loadData = () => {
         setLoading(true);
-        StoreService.getAll().then((data) => {
+        StoreService.getAllOfMe(Repository.token).then((data) => {
             setStores(data);
             setLoading(false);
         })

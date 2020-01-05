@@ -16,6 +16,16 @@ export class StoreService {
         return data.stores.map((e: any) => Store.fromJson(e));
     }
 
+    public static async getAllOfMe(token: string): Promise<Store[]> {
+        const data = await GraphClient.query({
+            query: {
+                query: GraphQuery.stores
+            }, token
+        });
+
+        return data.stores.map((e: any) => Store.fromJson(e));
+    }
+
     public static async get(token: string, id: number): Promise<Store> {
         const data = await GraphClient.query({
             query: {
@@ -43,7 +53,8 @@ export class StoreService {
                         closeTime: store.closeTime ? moment(store.closeTime).format('HH:mm:ss') : undefined,
                         openTime: store.openTime ? moment(store.openTime).format('HH:mm:ss') : undefined,
                         dishIds: store.storeDishes ? store.storeDishes.map(e => e.dishId) : undefined,
-                        dishPrices: store.storeDishes ? store.storeDishes.map(e => e.price) : undefined,
+                        dishPrices: store.storeDishes ? store.storeDishes.map(e => e.price
+                            ? parseFloat(e.price.toString()) : 0.0) : undefined,
                     }
                 }, token
             });
@@ -75,7 +86,8 @@ export class StoreService {
                         logo: logoUrl || store.logo,
                         closeTime: store.closeTime ? moment(store.closeTime).format('HH:mm:ss') : undefined,
                         openTime: store.openTime ? moment(store.openTime).format('HH:mm:ss') : undefined,
-                        storeDishes: store.storeDishes ? store.storeDishes : undefined,
+                        dishPrices: store.storeDishes ? store.storeDishes.map(e => e.price
+                            ? parseFloat(e.price.toString()) : 0.0) : undefined,
                     }
                 }, token
             });

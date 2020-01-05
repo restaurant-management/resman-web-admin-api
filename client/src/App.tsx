@@ -10,9 +10,11 @@ import { GraphClient } from './lib/graphClient';
 import { PrivateRoute } from './lib/privateRoute';
 import { Permission } from './models/permission';
 import { User } from './models/user';
+import { BillPage } from './pages/bill/bill';
 import BlankPage from './pages/blank-page';
 import Components from './pages/components';
 import { CustomerPage } from './pages/customer/customer';
+import { DailyDishPage } from './pages/dailyDish/dailyDish';
 import DashBoard from './pages/dashboard';
 import { DishPage } from './pages/dish/dish';
 import LogIn from './pages/login';
@@ -22,12 +24,11 @@ import Page404 from './pages/page404';
 import Page500 from './pages/page500';
 import { RolePage } from './pages/role/role';
 import { StorePage } from './pages/store/store';
-import { DailyDishPage } from './pages/dailyDish/dailyDish';
 import { UserPage } from './pages/user/user';
+import { WarehousePage } from './pages/warehouse/warehouse';
 import WelcomePage from './pages/welcomePage';
 import { Repository } from './repository';
 import { LoadScriptFile } from './utils/loadScript';
-import { WarehousePage } from './pages/warehouse/warehouse';
 
 // tslint:disable-next-line: variable-name
 export const UserContext = React.createContext(Repository.currentUser);
@@ -89,6 +90,8 @@ class App extends Component<any, { currentUser?: User }> {
                                 />
                                 <PrivateRoute
                                     permissions={[Permission.store.list]} path='/stores' component={StorePage} />
+                                <PrivateRoute
+                                    permissions={[Permission.bill.list]} path='/bills' component={BillPage} />
                                 <PrivateRoute
                                     permissions={[Permission.warehouse.list]} path='/warehouses'
                                     component={WarehousePage}

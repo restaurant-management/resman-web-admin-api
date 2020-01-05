@@ -17,7 +17,7 @@ class UserController implements ICrudController {
     }
 
     public async list(req: Request, res: Response, next: NextFunction) {
-        UserService.getAll(req.query.length, req.query.page, req.query.orderId, req.query.order).then(value => {
+        UserService.getAll(req.query).then(value => {
             return res.status(200).json(value.map((item => {
                 const { password, id, ...exportedData } = item;
 

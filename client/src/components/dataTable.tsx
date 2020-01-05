@@ -26,6 +26,7 @@ interface DataTableProp<T> {
     editButtonIcon?: string;
     confirmEdit?: boolean;
     confirmEditTitle?: string;
+    suppressSizeColumnsToFit?: boolean;
     onCreate?: () => void;
     onView?: (item: T) => void;
     onDelete?: (item: T) => void;
@@ -99,7 +100,7 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                                 <button
                                     data-tip='Add new'
                                     onClick={this.props.onCreate}
-                                    className={`resman-btn resman-success ${ this.props.onMultiDelete ? 'resman-no-border-radius' : 'resman-right-border-radius'}`}
+                                    className={`resman-btn resman-success ${this.props.onMultiDelete ? 'resman-no-border-radius' : 'resman-right-border-radius'}`}
                                 >
                                     <i className='fa fa-plus' />
                                     <span> Add</span>
@@ -164,10 +165,14 @@ export class DataTable<T> extends Component<DataTableProp<T>, DataTableState> {
                             gridOptions={this.gridOptions}
                             domLayout={'autoHeight'}
                             onGridReady={(params) => {
-                                params.api.sizeColumnsToFit();
+                                if (!this.props.suppressSizeColumnsToFit) {
+                                    params.api.sizeColumnsToFit();
+                                }
                             }}
                             onGridSizeChanged={(params) => {
-                                params.api.sizeColumnsToFit();
+                                if (!this.props.suppressSizeColumnsToFit) {
+                                    params.api.sizeColumnsToFit();
+                                }
                             }}
                             defaultColDef={{
                                 resizable: true,

@@ -50,6 +50,12 @@ export default class SideBar extends Component {
                             </Link>
                         </Li>
                         <Li>
+                            <Link to='/bills'>
+                                <Icon type='file-done' />
+                                {` Bill`}
+                            </Link>
+                        </Li>
+                        <Li>
                             <Link to='/users'>
                                 <i className='fa fa-user' />
                                 {` User`}

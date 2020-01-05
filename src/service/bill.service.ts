@@ -138,7 +138,7 @@ class BillService {
         }
 
         if (data.collectByUuid) {
-            if (data.collectValue) {
+            if (!data.collectValue) {
                 throw new Error(__('bill.collect_value_must_be_not_null'));
             }
             try {
