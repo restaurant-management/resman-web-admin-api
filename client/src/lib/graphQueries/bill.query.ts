@@ -104,4 +104,15 @@ export class BillQuery {
             deleteBill(id: $id)
         }
     `;
+
+    public static countBill = gql`
+        query countBill($storeId: Int, $startDay: DateTime!, $endDay: DateTime!) {
+            countBill(storeId: $storeId, startDay: $startDay, endDay: $endDay)
+            {
+                day
+                count
+                countD
+            }
+        }
+    `;
 }

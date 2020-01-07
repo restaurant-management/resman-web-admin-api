@@ -94,24 +94,6 @@ export class QuickActions extends Component<any, QuickActionsState> {
                                 <li className='divider' />
 
                                 <li>
-                                    <Link to='#'><i className='fa fa-user' /> Profile</Link>
-                                </li>
-
-                                <li>
-                                    <Link to='#'><i className='fa fa-calendar' /> Calendar</Link>
-                                </li>
-
-                                <li>
-                                    <Link to='#'>
-                                        <i className='fa fa-envelope' />
-                                        {' Inbox '}
-                                        <span className='badge badge-red' id='user-inbox'>3</span>
-                                    </Link>
-                                </li>
-
-                                <li className='divider' />
-
-                                <li>
                                     <Link to={'/logout'}>
                                         <i className='fa fa-power-off' />
                                         {` Logout`}

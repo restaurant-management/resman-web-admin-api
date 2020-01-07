@@ -51,7 +51,9 @@
 		"you_have_not_selected_this_bill_yet": "You have not selected this bill yet",
 		"create_bill_fail": "Create bill fail",
 		"created_user_not_found": "Created user not found",
-		"collect_value_must_be_not_null": "Collect value must be not null"
+		"collect_value_must_be_not_null": "Collect value must be not null",
+		"exceeding_amount_days_is_60_days": "Exceeding amount days is 60 days.",
+		"start_day_must_be_less_then_end_day": "Start day must be less then end day."
 	},
 	"voucher_code": {
 		"voucher_code_not_found": "Voucher code not found"

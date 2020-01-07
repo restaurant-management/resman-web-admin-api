@@ -55,7 +55,7 @@ export class CustomerResolver {
         @Ctx() { payload }: GraphCustomerContext,
         @Arg('address') address: string,
         @Arg('latitude', { nullable: true }) latitude: number,
-        @Arg('longitude', { nullable: true }) longitude: number,
+        @Arg('longitude', { nullable: true }) longitude: number
     ) {
         return await AddressService.create(payload.customer.username, { address, latitude, longitude });
     }
@@ -64,7 +64,7 @@ export class CustomerResolver {
     @UseMiddleware(CustomerAuthGraph)
     public async removeCustomerAddress(
         @Ctx() { payload }: GraphCustomerContext,
-        @Arg('id') id: number,
+        @Arg('id') id: number
     ) {
         return await AddressService.delete(payload.customer.username, id);
     }
@@ -158,7 +158,7 @@ export class CustomerResolver {
         @Arg('customerUsername') customerUsername: string,
         @Arg('address') address: string,
         @Arg('latitude', { nullable: true }) latitude: number,
-        @Arg('longitude', { nullable: true }) longitude: number,
+        @Arg('longitude', { nullable: true }) longitude: number
     ) {
         return await AddressService.create(customerUsername, { address, latitude, longitude });
     }

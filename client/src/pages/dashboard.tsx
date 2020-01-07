@@ -1,167 +1,159 @@
-import { Backdrop, Modal, Slide } from '@material-ui/core';
+import { DatePicker, Select } from 'antd';
 import moment from 'moment';
-import React, { Component } from 'react';
-import { DataTableColumn } from '../components/basicDatatable';
-import { DataTable } from '../components/dataTable';
+import { useSnackbar } from 'notistack';
+import React, { useEffect, useState } from 'react';
+import Chart from 'react-apexcharts';
+import { Link } from 'react-router-dom';
+import OverlayIndicator from '../components/overlayIndicator';
 import Scaffold from '../components/scaffold';
-import { User } from '../models/user';
+import { Store } from '../models/store';
+import { Repository } from '../repository';
+import { BillService } from '../service/bill.service';
+import { StoreService } from '../service/store.service';
 
-export default class DashBoard extends Component<any, any> {
+const { RangePicker } = DatePicker;
 
-    public fakeData: User[] = [
-        {
-            uuid: '',
-            username: 'admin',
-            email: 'hienlh1298@gmail.com',
-            phoneNumber: '00000',
-            avatar: 'https://avatars1.githubusercontent.com/u/36977998?s=460&v=4',
-            roles: [
-                'Administrator'
-            ],
-            birthday: new Date(1998, 1, 1),
-            address: 'HCM City',
-            storeIds: []
-        },
-    ];
+const { Option } = Select;
 
-    public fakeColumn: DataTableColumn[] = [
-        { id: 'username', label: 'Username', sortType: 'sort-alpha', textCenter: true },
-        { id: 'email', label: 'Email', sortType: 'sort-alpha' },
-        { id: 'avatar', label: 'Avatar', type: 'image', textCenter: true, sortType: 'no-sort', titleCenter: true },
-        { id: 'roles', label: 'Role', sortType: 'sort-alpha' },
-        { id: 'birthday', label: 'Birthday', sortType: 'sort-alpha', type: 'date' },
-        { id: 'address', label: 'Address', sortType: 'sort-alpha' },
-    ];
+export default function DashBoard() {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [data, setData] = useState<Array<{day: Date, count: number, countD: number}>>();
+    const [stores, setStores] = useState<Store[]>();
+    const [selectedStore, setSelectedStore] = useState<Store>();
+    const [selectedStartDay, setSelectedStartDay] = useState<Date>(moment(new Date()).add(-1, 'week').toDate());
+    const [selectedEndDay, setSelectedEndDay] = useState<Date>(new Date());
+    const { enqueueSnackbar } = useSnackbar();
 
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            showModal: false
-        };
-    }
+    const loadData = (storeId?: number, startDay?: Date, endDay?: Date) => {
+        const id = storeId ? storeId : (selectedStore && selectedStore.id ? selectedStore.id : undefined);
+        const startD = startDay ? startDay : (selectedStartDay || moment(new Date()).add(-1, 'week').toDate());
+        const endD = endDay ? endDay : (selectedEndDay || new Date());
 
-    public render() {
-        return <Scaffold title={'User manager'} subTitle={'Add, edit or delete user'}>
-            <div className='row'>
-                <div className='col-md-12'>
-                    <Modal
-                        disableEnforceFocus
-                        open={this.state.showModal}
-                        onBackdropClick={() => this.setState({ showModal: false })}
-                        className='modal'
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            overflowY: 'auto'
-                        }}
-                        onClose={() => this.setState({ showModal: false })}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{ timeout: 500 }}
-                    >
-                        <Slide in={this.state.showModal} direction={'down'}>
-                            <div className='modal-content'>
-                                <div className='modal-header'>
-                                    <button type='button' className='close'
-                                        onClick={() => this.setState({ showModal: false })}>
-                                        Close
-                                    </button>
-                                    <h3 className='modal-title'>
-                                        <strong>Modal</strong> title
-                                        </h3>
-                                </div>
-                                <div className='modal-body'>
-                                    <form>
+        if (id) {
+            setLoading(true);
+            BillService.countBill(Repository.token, id, startD, endD).then((d) => {
+                setData(d);
+                setLoading(false);
+            })
+                .catch(e => {
+                    enqueueSnackbar(e.toString(), { variant: 'error' });
+                    setLoading(false);
+                });
+        }
+    };
 
-                                        <div className='form-group'>
-                                            <label htmlFor='exampleInput'>Normal input field</label>
-                                            <input type='text' className='form-control' id='exampleInput' />
-                                        </div>
+    useEffect(() => {
+        StoreService.getAllOfMe(Repository.token).then((proStores) => {
+            setStores(proStores);
+            setSelectedStore(proStores[0]);
 
-                                        <div className='form-group'>
-                                            <label htmlFor='passwordInput'>Password input field</label>
-                                            <input type='password' className='form-control' id='passwordInput' />
-                                        </div>
+            return loadData(proStores[0].id);
+        }).catch(e => {
+            enqueueSnackbar(e.toString(), { variant: 'error' });
+        });
+    }, []);
 
-                                        <div className='form-group'>
-                                            <label htmlFor='placeholderInput'>Input with placeholder</label>
-                                            <input type='text' className='form-control' id='placeholderInput'
-                                                placeholder='This is a placeholder...' />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label>Normal textarea</label>
-                                            <textarea className='form-control' rows={3} />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label>Normal textarea</label>
-                                            <textarea className='form-control' rows={3} />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label>Normal textarea</label>
-                                            <textarea className='form-control' rows={3} />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label>Normal textarea</label>
-                                            <textarea className='form-control' rows={3} />
-                                        </div>
-
-                                        <div className='form-group'>
-                                            <label>Normal textarea</label>
-                                            <textarea className='form-control' rows={3} />
-                                        </div>
-
-                                    </form>
-                                </div>
-                                <div className='modal-footer'>
-                                    <button className='btn btn-red' data-dismiss='modal' aria-hidden='true'>
-                                        Close
-                                    </button>
-                                    <button className='btn btn-green'>Save changes</button>
-                                </div>
+    return <Scaffold title={'Dashboard'}>
+        <div className='row'>
+            <div className='col-md-12'>
+                <section className='tile color transparent-black'>
+                    <OverlayIndicator show={loading} />
+                    <div className='tile-header'>
+                        <div className='row' style={{ paddingTop: 10 }}>
+                            <div className='col-md-4'>
+                                <h1><strong>{'Dashboard'}</strong></h1>
                             </div>
-                        </Slide>
-                    </Modal>
+                            <div className='col-md-8'>
+                                <RangePicker
+                                    key={0}
+                                    format={'DD/MM/YYYY'}
+                                    className={'resman-date-picker'}
+                                    size={'small'}
+                                    allowClear={false}
+                                    ranges={{
+                                        'Today': [moment(), moment()],
+                                        'This Week': [moment().startOf('week'), moment().endOf('week')],
+                                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                                        'Last 7 days': [moment().add(-1, 'week'), moment()],
+                                        'Last 30 days': [moment().add(-30, 'days'), moment()]
+                                    }}
+                                    value={[moment(selectedStartDay), moment(selectedEndDay)]}
+                                    onChange={([startD, endD]) => {
+                                        if (startD) {
+                                            setSelectedStartDay(startD.toDate());
+                                        }
+                                        if (endD) {
+                                            setSelectedEndDay(endD.toDate());
+                                        }
 
-                    <DataTable<User>
-                        exportFileName={'User'}
-                        onView={(item) => console.log(item)}
-                        onMultiDelete={(items => console.log(items))}
-                        data={this.fakeData}
-                        autoSizeColumns={['username', 'birthday', 'email', 'roles', 'avatar']}
-                        header={(<h1><strong>User</strong> Table</h1>)}
-                        onCreate={() => this.setState({ showModal: true })}
-                        columnDefs={[
-                            {
-                                headerName: 'Username', field: 'username',
-                                cellClass: 'grid-cell-center', checkboxSelection: true,
-                                headerCheckboxSelection: true,
-                                headerCheckboxSelectionFilteredOnly: true
-                            }, {
-                                headerName: 'Email', field: 'email'
-                            }, {
-                                headerName: 'Avatar', field: 'avatar', sortable: false, filter: false,
-                                cellClass: 'grid-cell-center', suppressAutoSize: true,
-                                cellRenderer: 'AgImage', tooltipComponent: 'AgImageTooltip',
-                                tooltip: (params) => params.value,
-                                tooltipValueGetter: (params) => params.value,
-                            }, {
-                                headerName: 'Roles', field: 'roles'
-                            }, {
-                                headerName: 'Birthday', field: 'birthday',
-                                cellClass: 'grid-cell-center',
-                                cellRenderer: (params) => moment(params.value).format('DD/MM/YYYY')
-                            }, {
-                                headerName: 'Address', field: 'address', minWidth: 100,
-                                tooltipField: 'address',
+                                        loadData(undefined,
+                                            startD ? startD.toDate() : undefined, endD ? endD.toDate() : undefined);
+                                    }}
+                                    style={{ marginRight: 10, width: 230 }}
+                                />
+                                <Select
+                                    key={1}
+                                    className={'resman-select'}
+                                    size={'default'}
+                                    style={{ width: 100, marginRight: 10 }}
+                                    placeholder='Store'
+                                    value={selectedStore && selectedStore.id ? selectedStore.id : undefined}
+                                    onChange={(value: any) => {
+                                        if (stores) {
+                                            setSelectedStore(stores.find(e => e.id === value));
+                                            loadData(value);
+                                        }
+                                    }}
+                                >
+                                    {(stores || []).map(e => e.id
+                                        ? <Option key={e.id.toString()} value={e.id}>{e.name}</Option>
+                                        : null)}
+                                </Select>
+                            </div>
+                        </div>
+                        <div className='controls'>
+                            <Link to='#' className='minimize'>
+                                <i className='fa fa-chevron-down' />
+                            </Link>
+                            <Link onClick={() => loadData()} to='#'>
+                                <i className='fa fa-refresh' />
+                            </Link>
+                            <Link to='#' className='remove'><i className='fa fa-times' /></Link>
+                        </div>
+                    </div>
+                    <Chart
+                        options={{
+                            chart: {
+                                id: 'Bill Report'
+                            },
+                            xaxis: {
+                                categories: data ? data.map(e => moment(e.day).format('DD/MM/YYYY')) : [],
+                            }, theme: {
+                                monochrome: {
+                                    enabled: true,
+                                    color: '#255aee',
+                                    shadeTo: 'light',
+                                    shadeIntensity: 0.65
+                                }
+                            },
+                            tooltip: {
+                                theme: 'dark'
                             }
+                        }}
+                        series={[
+                            {
+                                name: 'Bill',
+                                data: data ? data.map(e => e.count) : []
+                            },
+                            {
+                                name: 'Delivery Bill',
+                                data: data ? data.map(e => e.countD) : []
+                            },
                         ]}
+                        type='bar'
                     />
-                </div>
+                </section>
             </div>
-        </Scaffold>;
-    }
+        </div>
+    </Scaffold>;
 }

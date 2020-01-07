@@ -67,4 +67,16 @@ export class BillService {
 
         return data ? data.deleteBill : '';
     }
+
+    public static async countBill(token: string, storeId: number, startDay: Date, endDay: Date)
+        : Promise<Array<{ day: Date, count: number , countD: number }>> {
+        const data = await GraphClient.query({
+            query: {
+                query: BillQuery.countBill,
+                variables: { storeId, startDay, endDay }
+            }, token
+        });
+
+        return data.countBill;
+    }
 }

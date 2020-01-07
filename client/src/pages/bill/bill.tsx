@@ -29,10 +29,12 @@ export function BillPage() {
 
     const loadData = (storeId?: number, startDay?: Date, endDay?: Date) => {
         const id = storeId ? storeId : (selectedStore && selectedStore.id ? selectedStore.id : undefined);
+        const startD = startDay ? startDay : (selectedStartDay || moment(new Date()).add(-1, 'week').toDate());
+        const endD = endDay ? endDay : (selectedEndDay || new Date());
 
         if (id) {
             setLoading(true);
-            BillService.getAll(Repository.token, id, startDay, endDay).then((data) => {
+            BillService.getAll(Repository.token, id, startD, endD).then((data) => {
                 setBills(data);
                 setLoading(false);
             })
