@@ -78,7 +78,7 @@ class BillService {
                 || i.createBy?.uuid === user.uuid
                 || i.prepareBy?.uuid === user.uuid
             )
-            .filter((_store, index) => index >= skip && index < (take ? skip + take : bills.length));
+            .filter((_bill, index) => index >= skip && index < (take ? skip + take : bills.length));
     }
 
     public async create(data: {
@@ -96,7 +96,9 @@ class BillService {
         try {
             createBy = await UserService.getOne({ uuid: data.createByUuid },
                 { withRoles: true, withStores: true, withWarehouses: true });
-        } catch (_e) { throw new Error(__('bill.created_user_not_found')); }
+        } catch (_e) {
+            throw new Error(__('bill.created_user_not_found'));
+        }
         if (createBy.roles.findIndex(i => i.slug === 'staff') === -1) {
             throw new Error(__('bill.created_by_must_be_staff'));
         }
@@ -134,7 +136,9 @@ class BillService {
             try {
                 newBill.prepareBy = await UserService.getOne({ uuid: data.prepareByUuid });
                 newBill.prepareAt = data.prepareAt || new Date();
-            } catch (_e) { throw new Error(__('bill.prepared_user_not_found')); }
+            } catch (_e) {
+                throw new Error(__('bill.prepared_user_not_found'));
+            }
         }
 
         if (data.collectByUuid) {
@@ -145,11 +149,15 @@ class BillService {
                 newBill.collectBy = await UserService.getOne({ uuid: data.collectByUuid });
                 newBill.collectAt = data.collectAt || new Date();
                 newBill.collectValue = data.collectValue;
-            } catch (_e) { throw new Error(__('bill.collected_user_not_found')); }
+            } catch (_e) {
+                throw new Error(__('bill.collected_user_not_found'));
+            }
         }
 
         const bill = await newBill.save({ reload: true });
-        if (!bill) { throw new Error(__('bill.create_fail')); }
+        if (!bill) {
+            throw new Error(__('bill.create_fail'));
+        }
 
         try {
             await BillHistoryService.create(bill.id, {
@@ -236,7 +244,9 @@ class BillService {
         if (data.prepareByUuid) {
             try {
                 bill.prepareBy = await UserService.getOne({ uuid: data.prepareByUuid });
-            } catch (_e) { throw new Error(__('bill.prepared_user_not_found')); }
+            } catch (_e) {
+                throw new Error(__('bill.prepared_user_not_found'));
+            }
         }
         if (data.prepareByUuid === '') {
             bill.prepareBy = null;
@@ -252,7 +262,9 @@ class BillService {
         if (data.collectByUuid) {
             try {
                 bill.collectBy = await UserService.getOne({ uuid: data.collectByUuid });
-            } catch (_e) { throw new Error(__('bill.collected_user_not_found')); }
+            } catch (_e) {
+                throw new Error(__('bill.collected_user_not_found'));
+            }
         }
         if (data.collectByUuid === '') { // Remove time :v
             bill.collectBy = null;
@@ -332,7 +344,7 @@ class BillService {
     }
 
     /**
-     * Select bill to prepare for chef 
+     * Select bill to prepare for chef
      */
     public async prepareBill(id: number, data: { prepareByUuid: string }) {
         const bill = await this.getOne(id, { withPrepareBy: true, withCreateBy: true });
@@ -369,6 +381,7 @@ class BillService {
     /**
      * For chef
      * @param id Bill Id.
+     * @param editBy
      * @param dishId Prepared all if dish id is null.
      */
     public async preparedBillDish(id: number, editBy: User, dishId?: number) {
@@ -498,7 +511,9 @@ class BillService {
                 bill.collectAt = new Date();
                 bill.collectValue = data.collectValue;
                 bill.note = data.note;
-            } catch (_e) { throw new Error(__('bill.collected_user_not_found')); }
+            } catch (_e) {
+                throw new Error(__('bill.collected_user_not_found'));
+            }
         }
 
         await bill.save();
@@ -539,19 +554,29 @@ class BillService {
     }
 
     public async getOne(id: number,
-        options?: {
-            withCreateBy?: boolean, withPrepareBy?: boolean, withCollectBy?: boolean,
-            withStore?: boolean, withCustomer?: boolean, showDishesType?: 'dishes' | 'histories'
-        }
+                        options?: {
+                            withCreateBy?: boolean, withPrepareBy?: boolean, withCollectBy?: boolean,
+                            withStore?: boolean, withCustomer?: boolean, showDishesType?: 'dishes' | 'histories'
+                        }
     ) {
 
         const relations = [];
         relations.push('histories');
-        if (options?.withCollectBy) { relations.push('collectBy'); }
-        if (options?.withCreateBy) { relations.push('createBy'); }
-        if (options?.withCustomer) { relations.push('customer'); }
-        if (options?.withPrepareBy) { relations.push('prepareBy'); }
-        if (options?.withStore) { relations.push('store'); }
+        if (options?.withCollectBy) {
+            relations.push('collectBy');
+        }
+        if (options?.withCreateBy) {
+            relations.push('createBy');
+        }
+        if (options?.withCustomer) {
+            relations.push('customer');
+        }
+        if (options?.withPrepareBy) {
+            relations.push('prepareBy');
+        }
+        if (options?.withStore) {
+            relations.push('store');
+        }
 
         const bill = await Bill.findOne(id, { relations, where: { deleteAt: null } });
 

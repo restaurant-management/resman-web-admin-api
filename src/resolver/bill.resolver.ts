@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Arg, Authorized, Ctx, Float, ID, Int, Mutation, Query, UseMiddleware } from 'type-graphql';
 import { Between, FindConditions } from 'typeorm';
 import { Bill } from '../entity/bill';
+import { DeliveryBill } from '../entity/deliveryBill';
 import { Permission } from '../entity/permission';
 import { onlyDate } from '../helper/onlyDate';
 import { GraphUserContext } from '../lib/graphContext';
@@ -12,6 +13,7 @@ import { UserAuthGraph } from '../middleware/userAuth';
 import { BillService } from '../service/bill.service';
 import { DeliveryBillService } from '../service/deliveryBill.service';
 import { AllBill } from './ObjectTypes/allBill';
+import { CountBill } from './ObjectTypes/countBill';
 
 export class BillResolver {
     @Query(() => [Bill], { description: 'Get by user' })
@@ -22,7 +24,7 @@ export class BillResolver {
         @Arg('startDay', { nullable: true }) startDay: Date,
         @Arg('endDay', { nullable: true }) endDay: Date
     ) {
-        if (Authorization(payload.user, [Permission.bill.list], false)) {
+        if (!Authorization(payload.user, [Permission.bill.list], false)) {
             const where: FindConditions<Bill> = {};
             if (storeId) {
                 where.store = { id: storeId };
@@ -40,7 +42,7 @@ export class BillResolver {
             return await BillService.getAll(payload.user, { where });
         }
 
-        return await BillService.getAllByUser(payload.user);
+        return await BillService.getAll(payload.user);
     }
 
     @Query(() => AllBill, { description: 'Get all bill today for chef' })
@@ -247,5 +249,58 @@ export class BillResolver {
         await BillService.delete(id, payload.user);
 
         return __('bill.delete_success');
+    }
+
+    @Query(() => [CountBill], { description: 'For user' })
+    @UseMiddleware(UserAuthGraph)
+    public async countBill(
+        @Ctx() { payload }: GraphUserContext,
+        @Arg('storeId', () => Int, { nullable: true }) storeId: number,
+        @Arg('startDay') startDay: Date,
+        @Arg('endDay') endDay: Date
+    ) {
+        let listBill: Bill[];
+        let listDBill: DeliveryBill[];
+        let start = onlyDate(startDay || new Date());
+        const end = onlyDate(endDay || new Date());
+
+        if (!Authorization(payload.user, [Permission.bill.list], false)) {
+            const where: FindConditions<Bill> = {};
+            if (storeId) {
+                where.store = { id: storeId };
+            }
+
+            if (start.getTime() !== end.getTime()) {
+                where.createAt = Between(start, end);
+            } else {
+                where.createAt = Between(start, moment(end).add(1, 'day').toDate());
+            }
+
+            listBill = await BillService.getAll(payload.user, { where });
+            listDBill = await DeliveryBillService.getAll(payload.user, { where });
+        } else {
+            listBill = await BillService.getAll(payload.user);
+            listDBill = await DeliveryBillService.getAll(payload.user);
+        }
+
+        if ((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24) > 60) {
+            throw new Error(__('bill.exceeding_amount_days_is_60_days'));
+        }
+        if (start > end) {
+            throw new Error(__('bill.start_day_must_be_less_then_end_day'));
+        }
+
+        const result = [];
+
+        while (start <= end) {
+            const count = listBill.filter(e =>
+                moment(e.createAt).format('DD/MM/YYYY') === moment(start).format('DD/MM/YYYY')).length;
+            const countD = listDBill.filter(e =>
+                moment(e.createAt).format('DD/MM/YYYY') === moment(start).format('DD/MM/YYYY')).length;
+            result.push({ day: start, count, countD });
+            start = new Date(start.getTime() + 1000 * 60 * 60 * 24);
+        }
+
+        return result;
     }
 }
