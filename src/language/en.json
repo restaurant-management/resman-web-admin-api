@@ -4,125 +4,125 @@
 		"can_not_delete_admin_user": "Can not delete admin user",
 		"user_not_found": "User not found",
 		"password_incorrect": "Password incorrect",
-		"phone_number_has_already_used": "user.phone_number_has_already_used",
-		"email_has_already_used": "user.email_has_already_used",
-		"username_has_already_used": "user.username_has_already_used",
-		"change_password_success": "user.change_password_success",
-		"{{role}}_not_found": "user.{{role}}_not_found",
-		"can_not_delete_user_with_higher_level": "user.can_not_delete_user_with_higher_level",
+		"phone_number_has_already_used": "Phone number has already used",
+		"email_has_already_used": "Email has already used",
+		"username_has_already_used": "Username has already used",
+		"change_password_success": "Change password success",
+		"{{role}}_not_found": "{{role}} not found",
+		"can_not_delete_user_with_higher_level": "Can not delete user with higher level",
 		"delete_success": "Delete user success"
 	},
 	"daily_dish": {
-		"no_storeId_is_provided": "daily_dish.no_storeId_is_provided",
-		"daily_dish_not_found": "daily_dish.daily_dish_not_found",
-		"delete_fail": "daily_dish.delete_fail",
-		"existed": "daily_dish.existed",
-		"delete_success": "daily_dish.delete_success",
-		"dish_{{id}}_not_sell_in_this_store": "daily_dish.dish_{{id}}_not_sell_in_this_store",
-		"confirm_out_of_stock_success": "daily_dish.confirm_out_of_stock_success",
+		"no_storeId_is_provided": "No storeId is provided",
+		"daily_dish_not_found": "Daily dish not found",
+		"delete_fail": "Delete fail",
+		"existed": "Existed",
+		"delete_success": "Delete success",
+		"dish_{{id}}_not_sell_in_this_store": "Dish {{id}} not sell in this store",
+		"confirm_out_of_stock_success": "Confirm out of stock success",
 		"create_success": "daily_dish.create_success"
 	},
 	"authentication": {
-		"unauthorized": "authentication.unauthorized",
-		"no_token_provided": "authentication.no_token_provided",
-		"fail_authenticate_token": "authentication.fail_authenticate_token"
+		"unauthorized": "Unauthorized",
+		"no_token_provided": "No token provided",
+		"fail_authenticate_token": "Fail authenticate token"
 	},
 	"daily_report": {
-		"daily_report_not_found": "daily_report.daily_report_not_found",
-		"warehouse_not_have_enough_quantity": "daily_report.warehouse_not_have_enough_quantity",
-		"delete_success": "daily_report.delete_success"
+		"daily_report_not_found": "Daily report not found",
+		"warehouse_not_have_enough_quantity": "Warehouse not have enough quantity",
+		"delete_success": "Delete daily report success"
 	},
 	"delivery_bill": {
-		"delivery_bill_not_found": "delivery_bill.delivery_bill_not_found",
-		"can_not_rate_if_bill_not_done": "delivery_bill.can_not_rate_if_bill_not_done",
-		"could_not_mark_prepared_for_bill_with_no_chef_select": "delivery_bill.could_not_mark_prepared_for_bill_with_no_chef_select",
-		"could_not_ship_bill_did_not_prepare_yet": "delivery_bill.could_not_ship_bill_did_not_prepare_yet",
-		"customer_not_found": "delivery_bill.customer_not_found",
-		"delete_success": "delivery_bill.delete_success"
+		"delivery_bill_not_found": "Delivery bill not found",
+		"can_not_rate_if_bill_not_done": "Can not rate if bill not done",
+		"could_not_mark_prepared_for_bill_with_no_chef_select": "Could not mark prepared for bill with no chef select",
+		"could_not_ship_bill_did_not_prepare_yet": "Could not ship bill did not found",
+		"customer_not_found": "Customer not found",
+		"delete_success": "Delete delivery bill success"
 	},
 	"bill": {
-		"bill_is_collected": "bill.bill_is_collected",
-		"bill_not_found": "bill.bill_not_found",
-		"created_by_must_be_staff": "bill.created_by_must_be_staff",
-		"delete_success": "bill.delete_success",
-		"you_selected_to_prepare_this_bill": "bill.you_selected_to_prepare_this_bill",
-		"bill_is_selected_by_other_chef": "bill.bill_is_selected_by_other_chef",
-		"can_not_edit_bill_of_other_chef": "bill.can_not_edit_bill_of_other_chef",
-		"you_have_not_selected_this_bill_yet": "bill.you_have_not_selected_this_bill_yet",
-		"create_bill_fail": "bill.create_bill_fail",
-		"created_user_not_found": "bill.created_user_not_found",
-		"collect_value_must_be_not_null": "bill.collect_value_must_be_not_null"
+		"bill_is_collected": "Bill is collected",
+		"bill_not_found": "Bill not found",
+		"created_by_must_be_staff": "Created by must be staff",
+		"delete_success": "Delete bill success",
+		"you_selected_to_prepare_this_bill": "You selected to prepare this bill",
+		"bill_is_selected_by_other_chef": "Bill is selected by other chef",
+		"can_not_edit_bill_of_other_chef": "Can not edit bill of other chef",
+		"you_have_not_selected_this_bill_yet": "You have not selected this bill yet",
+		"create_bill_fail": "Create bill fail",
+		"created_user_not_found": "Created user not found",
+		"collect_value_must_be_not_null": "Collect value must be not null"
 	},
 	"voucher_code": {
-		"voucher_code_not_found": "voucher_code.voucher_code_not_found"
+		"voucher_code_not_found": "Voucher code not found"
 	},
 	"discount_campaign": {
-		"discount_campaign_not_found": "discount_campaign.discount_campaign_not_found",
-		"dishIds_length_have_to_equal_discounts_length": "discount_campaign.dishIds_length_have_to_equal_discounts_length",
-		"delete_success": "discount_campaign.delete_success"
+		"discount_campaign_not_found": "Discount campaign not found",
+		"dishIds_length_have_to_equal_discounts_length": "DishIds length have to equal discounts length",
+		"delete_success": "Delete discount campaign success"
 	},
 	"discount_code": {
-		"discount_code_not_found": "discount_code.discount_code_not_found",
-		"delete_success": "discount_code.delete_success",
-		"no_longer_valid": "discount_code.no_longer_valid"
+		"discount_code_not_found": "Discount code not found",
+		"delete_success": "Delete discount code success",
+		"no_longer_valid": "No longer valid"
 	},
 	"import_bill": {
-		"import_bill_not_found": "import_bill.import_bill_not_found",
-		"delete_success": "import_bill.delete_success",
-		"warehouse_not_found": "import_bill.warehouse_not_found"
+		"import_bill_not_found": "Import bill not found",
+		"delete_success": "Delete import bill success",
+		"warehouse_not_found": "Warehouse not found"
 	},
 	"customer": {
-		"customer_not_found": "customer.customer_not_found",
-		"change_password_success": "customer.change_password_success",
-		"delete_success": "customer.delete_success",
-		"delete_address_success": "customer.delete_address_success",
-		"phone_number_has_already_used": "customer.phone_number_has_already_used"
+		"customer_not_found": "Customer not found",
+		"change_password_success": "Change password success",
+		"delete_success": "Delete customer success",
+		"delete_address_success": "Delete customer of address success",
+		"phone_number_has_already_used": "Phone number has already used"
 	},
 	"role": {
-		"role_not_found": "role.role_not_found",
-		"permission_{{permission}}_not_found": "role.permission_{{permission}}_not_found",
-		"existed": "role.existed",
-		"delete_success": "role.delete_success"
+		"role_not_found": "Role not found",
+		"permission_{{permission}}_not_found": "Permission {{permission}} not found",
+		"existed": "Existed",
+		"delete_success": "Delete role success"
 	},
 	"address": {
-		"address_not_found": "address.address_not_found"
+		"address_not_found": "Address not found"
 	},
 	"dish": {
-		"delete_fail": "dish.delete_fail",
-		"delete_success": "dish.delete_success",
-		"favourite_success": "dish.favourite_success",
-		"un_favourite_success": "dish.un_favourite_success"
+		"delete_fail": "Delete dish fail",
+		"delete_success": "Delete dish success",
+		"favourite_success": "Favourite success",
+		"un_favourite_success": "Unfavourite dish success"
 	},
 	"store": {
-		"store_not_found": "store.store_not_found",
-		"delete_success": "store.delete_success"
+		"store_not_found": "Store not found",
+		"delete_success": "Delete store success"
 	},
 	"warehouse": {
-		"warehouse_not_found": "warehouse.warehouse_not_found",
-		"delete_success": "warehouse.delete_success"
+		"warehouse_not_found": "Warehouse not found",
+		"delete_success": "Delete warehouse success"
 	},
 	"stock": {
-		"stock_not_found": "stock.stock_not_found"
+		"stock_not_found": "Stock not found"
 	},
 	"error": {
-		"no_storeId_is_provided": "error.no_storeId_is_provided",
-		"missing_required_information": "error.missing_required_information",
-		"new_password_must_be_difference_old_password": "error.new_password_must_be_difference_old_password",
-		"incorrect_old_password": "error.incorrect_old_password"
+		"no_storeId_is_provided": "No storeId is provided",
+		"missing_required_information": "Missing required information",
+		"new_password_must_be_difference_old_password": "New password must be difference old password",
+		"incorrect_old_password": "Incorrect old password"
 	},
 	"welcome_to_resman": "Welcome to Resman",
 	"delivery_bill_dish": {
-		"delivery_bill_dish_not_found": "delivery_bill_dish.delivery_bill_dish_not_found"
+		"delivery_bill_dish_not_found": "Delivery bill dish not found"
 	},
 	"comment": {
-		"delete_success": "comment.delete_success",
-		"comment_not_found": "comment.comment_not_found",
-		"delete_failed": "comment.delete_failed"
+		"delete_success": "Delete comment success",
+		"comment_not_found": "Comment not found",
+		"delete_failed": "Delete comment failed"
 	},
 	"socket": {
-		"error_missing_bill_id": "socket.error_missing_bill_id"
+		"error_missing_bill_id": "Error missing billId"
 	},
 	"bill_dish": {
-		"dish_is_not_prepared_yet": "bill_dish.dish_is_not_prepared_yet"
+		"dish_is_not_prepared_yet": "Dish is not prepared yet"
 	}
 }
