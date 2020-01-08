@@ -45,6 +45,7 @@ export default class Scaffold extends Component<ScaffoldProp, any> {
     }
 
     public componentDidMount() {
+        document.title = 'Resman';
         $(window).ready(() => {
             $('#loader').delay(500).fadeOut(300);
             $('.mask').delay(800).fadeOut(300);

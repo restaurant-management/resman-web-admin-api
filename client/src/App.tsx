@@ -43,6 +43,7 @@ class App extends Component<any, { currentUser?: User }> {
     }
 
     public componentDidMount() {
+        document.title = 'Resman';
         LoadScriptFile('/assets/js/jquery.js');
         LoadScriptFile('/assets/js/bootstrap.min.js');
         LoadScriptFile('/assets/js/bootstrap-dropdown-multilevel.js');
