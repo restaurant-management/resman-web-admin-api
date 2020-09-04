@@ -55,7 +55,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "pg": "^7.12.1",
     "react-tooltip": "^3.11.1",
     "reflect-metadata": "^0.1.13",
