@@ -64,7 +64,7 @@
     "ts-node": "^8.4.1",
     "tslint": "^5.20.1",
     "type-graphql": "^0.17.5",
-    "typeorm": "^0.2.19",
+    "typeorm": "^0.2.25",
     "typescript": "^3.7.2"
   },
   "devDependencies": {
